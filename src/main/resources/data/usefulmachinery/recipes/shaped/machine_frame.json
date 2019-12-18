@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IGI",
+    "G#G",
+    "IGI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "G": {
+      "tag": "forge:glass"
+    },
+    "#": {
+      "tag": "forge:nuggets/gold"
+    }
+  },
+  "result": {
+    "item": "usefulmachinery:machine_frame",
+    "count": 1
+  }
+}

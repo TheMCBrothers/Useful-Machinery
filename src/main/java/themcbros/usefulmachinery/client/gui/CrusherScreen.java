@@ -34,9 +34,9 @@ public class CrusherScreen extends MachineScreen<CrusherContainer> {
         Rectangle bar = this.energyBar.rect;
         this.blit(bar.x + i, bar.y + j + bar.height - k, 246, bar.height - k, bar.width, k);
 
-        // Render arrow TODO
+        // Render arrow
         int l = this.container.getProgressScaled(24);
-        this.blit(58 + i, 34 + i, 176, 14, l, 17);
+        this.blit(58 + i, 34 + j, 176, 14, l, 17);
 
     }
 

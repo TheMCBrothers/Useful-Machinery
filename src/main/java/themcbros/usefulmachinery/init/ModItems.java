@@ -20,7 +20,7 @@ public class ModItems {
     public static final BlockItem COAL_GENERATOR = register("coal_generator", new BlockItem(ModBlocks.COAL_GENERATOR, new Item.Properties().group(ItemGroup.DECORATIONS)));
     public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(ItemGroup.DECORATIONS)));
 
-    public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(ItemGroup.MISC)));
+    public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)));
     public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(ItemGroup.MISC)));
 
     private static <T extends Item> T register(String registryName, T item) {
