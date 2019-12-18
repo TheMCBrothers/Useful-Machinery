@@ -100,6 +100,10 @@ public class CrusherRecipe implements IRecipe<IInventory> {
         return ModRecipeTypes.CRUSHING;
     }
 
+    public ItemStack getSecondRecipeOutput() {
+        return ItemStack.EMPTY;
+    }
+
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrusherRecipe> {
 
         @Override

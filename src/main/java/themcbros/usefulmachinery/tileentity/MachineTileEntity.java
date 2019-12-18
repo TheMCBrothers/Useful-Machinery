@@ -46,6 +46,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public CompoundNBT write(CompoundNBT compound) {
         compound.putInt("RedstoneMode", redstoneMode.ordinal());
         compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+        ItemStackHelper.saveAllItems(compound, this.stacks, false);
         return super.write(compound);
     }
 
@@ -53,6 +54,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public void read(CompoundNBT compound) {
         this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+        ItemStackHelper.loadAllItems(compound, this.stacks);
         super.read(compound);
     }
 

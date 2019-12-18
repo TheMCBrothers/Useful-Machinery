@@ -35,6 +35,8 @@ public class CrusherScreen extends MachineScreen<CrusherContainer> {
         this.blit(bar.x + i, bar.y + j + bar.height - k, 246, bar.height - k, bar.width, k);
 
         // Render arrow TODO
+        int l = this.container.getProgressScaled(24);
+        this.blit(58 + i, 34 + i, 176, 14, l, 17);
 
     }
 

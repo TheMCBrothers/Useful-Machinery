@@ -10,6 +10,9 @@ import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 import themcbros.usefulmachinery.tileentity.CrusherTileEntity;
@@ -20,16 +23,17 @@ public class CrusherContainer extends MachineContainer {
     private World world;
 
     public CrusherContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new CrusherTileEntity(), new IntArray(5));
+        this(id, playerInventory, new CrusherTileEntity(), new IntArray(7));
     }
 
     public CrusherContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
         super(ModContainers.CRUSHER, id, playerInventory, tileEntity, fields);
         this.world = playerInventory.player.world;
 
-        this.addSlot(new Slot(tileEntity, 0, 56, 17));
-        this.addSlot(new Slot(tileEntity, 1, 56, 53));
-        this.addSlot(new Slot(tileEntity, 2, 116, 35));
+        this.addSlot(new Slot(tileEntity, 0, 35, 35));
+        this.addSlot(new Slot(tileEntity, 1, 95, 24));
+        this.addSlot(new Slot(tileEntity, 2, 95, 48));
+        this.addSlot(new EnergySlot(tileEntity, 3, 134, 33));
 
         this.addPlayerSlots(playerInventory);
 
@@ -37,51 +41,57 @@ public class CrusherContainer extends MachineContainer {
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        ItemStack lvt_3_1_ = ItemStack.EMPTY;
-        Slot lvt_4_1_ = this.inventorySlots.get(index);
-        if (lvt_4_1_ != null && lvt_4_1_.getHasStack()) {
-            ItemStack lvt_5_1_ = lvt_4_1_.getStack();
-            lvt_3_1_ = lvt_5_1_.copy();
-            if (index == 2) {
-                if (!this.mergeItemStack(lvt_5_1_, 3, 39, true)) {
+        int i = this.machineTileEntity.getSizeInventory();
+        ItemStack itemstack1 = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack slotStack = slot.getStack();
+            itemstack1 = slotStack.copy();
+            if (index == 1 || index == 2) {
+                if (!this.mergeItemStack(slotStack, i, 36 + i, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                lvt_4_1_.onSlotChange(lvt_5_1_, lvt_3_1_);
-            } else if (index != 1 && index != 0) {
-                if (this.canCrush(lvt_5_1_)) {
-                    if (!this.mergeItemStack(lvt_5_1_, 0, 1, false)) {
+                slot.onSlotChange(slotStack, itemstack1);
+            } else if (index != 0) {
+                if (this.canCrush(slotStack)) {
+                    if (!this.mergeItemStack(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isItemFuel(lvt_5_1_)) {
-                    if (!this.mergeItemStack(lvt_5_1_, 1, 2, false)) {
+                } else if (this.isEnergyItem(slotStack)) {
+                    if (!this.mergeItemStack(slotStack, 3, 4, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 3 && index < 30) {
-                    if (!this.mergeItemStack(lvt_5_1_, 30, 39, false)) {
+                } else if (index >= i && index < 27 + i) {
+                    if (!this.mergeItemStack(slotStack, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 30 && index < 39 && !this.mergeItemStack(lvt_5_1_, 3, 30, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(slotStack, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(lvt_5_1_, 3, 39, false)) {
+            } else if (!this.mergeItemStack(slotStack, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (lvt_5_1_.isEmpty()) {
-                lvt_4_1_.putStack(ItemStack.EMPTY);
+            if (slotStack.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
-                lvt_4_1_.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (lvt_5_1_.getCount() == lvt_3_1_.getCount()) {
+            if (slotStack.getCount() == itemstack1.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            lvt_4_1_.onTake(playerIn, lvt_5_1_);
+            slot.onTake(playerIn, slotStack);
         }
 
-        return lvt_3_1_;
+        return itemstack1;
+    }
+
+    private boolean isEnergyItem(ItemStack itemstack1) {
+        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY)
+                .map(IEnergyStorage::canExtract).orElse(false);
     }
 
     protected boolean canCrush(ItemStack stack) {
@@ -90,8 +100,18 @@ public class CrusherContainer extends MachineContainer {
                 .isPresent();
     }
 
-    protected boolean isItemFuel(ItemStack stack) {
-        return AbstractFurnaceTileEntity.isFuel(stack);
+    public int getCrushTime() {
+        return this.fields.get(5);
+    }
+
+    public int getCrushTimeTotal() {
+        return this.fields.get(6);
+    }
+
+    public int getProgressScaled(int width) {
+        int i = this.getCrushTime();
+        int j = this.getCrushTimeTotal();
+        return i != 0 && j != 0 ? i * width / j : 0;
     }
 
 }
