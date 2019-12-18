@@ -1,0 +1,14 @@
+{
+  "block.usefulmachinery.coal_generator": "Coal Generator",
+  "block.usefulmachinery.crusher": "Crusher",
+  "container.usefulmachinery.coal_generator": "Coal Generator",
+  "container.usefulmachinery.crusher": "Crusher",
+
+  "jei.uselfulmachinery.crushing": "Crushing",
+
+  "misc.usefulmachinery.energy": "%s FE",
+  "misc.usefulmachinery.energyWithMax": "%s / %s FE",
+  "misc.usefulmachinery.redstoneMode": "Redstone Mode: %s",
+
+  "itemGroup.usefulmachinery": "Useful Machinery"
+}

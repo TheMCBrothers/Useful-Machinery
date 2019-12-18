@@ -1,0 +1,6 @@
+{
+  "parent": "usefulmachinery:block/machine",
+  "textures": {
+    "front": "usefulmachinery:block/coal_generator_front"
+  }
+}

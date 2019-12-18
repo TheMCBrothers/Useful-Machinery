@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/diamond"
+  },
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 2
+  }
+}

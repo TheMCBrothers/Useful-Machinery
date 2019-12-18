@@ -1,0 +1,7 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "usefulmachinery:block/machine_top",
+    "side": "usefulmachinery:block/machine_side"
+  }
+}
