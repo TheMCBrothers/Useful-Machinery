@@ -4,6 +4,8 @@
   "container.usefulmachinery.coal_generator": "Coal Generator",
   "container.usefulmachinery.crusher": "Crusher",
 
+  "item.usefulmachinery.battery": "Battery",
+
   "jei.uselfulmachinery.crushing": "Crushing",
 
   "misc.usefulmachinery.energy": "%s FE",

@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.blocks.MachineBlock;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
@@ -127,7 +128,7 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
         if (!world.isRemote) {
             if (this.burnTime > 0) {
                 --this.burnTime;
-                this.energyStorage.receiveEnergy(60, false);
+                this.energyStorage.modifyEnergyStored(60);
                 shouldLit = true;
             } else {
                 ItemStack generatorStack = this.stacks.get(0);
@@ -139,6 +140,8 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
                     generatorStack.shrink(1);
                 }
             }
+
+            this.sendEnergyToSlot(1);
 
             if (this.getBlockState().get(MachineBlock.LIT) != shouldLit) {
                 this.sendUpdate(shouldLit);

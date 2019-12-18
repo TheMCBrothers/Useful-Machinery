@@ -31,9 +31,11 @@ public class CrusherScreen extends MachineScreen<CrusherContainer> {
 
         // Render Energy Bar
         int k = this.container.getEnergyScaled((int) this.energyBar.rect.getHeight());
-
         Rectangle bar = this.energyBar.rect;
-        this.blit(bar.x + i, bar.y + j, 246, bar.height - k, bar.width, k);
+        this.blit(bar.x + i, bar.y + j + bar.height - k, 246, bar.height - k, bar.width, k);
+
+        // Render arrow TODO
+
     }
 
     @Override

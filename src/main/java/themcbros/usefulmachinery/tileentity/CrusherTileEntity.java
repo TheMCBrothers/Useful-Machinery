@@ -3,6 +3,7 @@ package themcbros.usefulmachinery.tileentity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -11,10 +12,10 @@ import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class CrusherTileEntity extends MachineTileEntity {
+
+    private static final int RF_PER_TICK = 10;
 
     private IIntArray fields = new IIntArray() {
         @Override
@@ -75,6 +76,22 @@ public class CrusherTileEntity extends MachineTileEntity {
 
     @Override
     public void tick() {
+
+        if (this.getEnergyStored() >= RF_PER_TICK) {
+
+            ItemStack stack = this.stacks.get(0);
+            if (!stack.isEmpty()) {
+                ItemStack stack1 = this.stacks.get(2);
+                if (stack1.isEmpty()) {
+                    this.stacks.set(2, stack.copy());
+                    stack1.shrink(stack1.getCount());
+                } else if (ItemStack.areItemsEqual(stack, stack1)) {
+                    this.stacks.get(2).grow(stack.getCount());
+                    stack1.shrink(stack1.getCount());
+                }
+            }
+
+        }
 
     }
 

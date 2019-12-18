@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
+import themcbros.usefulmachinery.items.BatteryItem;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class ModItems {
 
     public static final BlockItem COAL_GENERATOR = register("coal_generator", new BlockItem(ModBlocks.COAL_GENERATOR, new Item.Properties().group(ItemGroup.DECORATIONS)));
     public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(ItemGroup.DECORATIONS)));
+
+    public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(ItemGroup.MISC)));
 
     private static <T extends Item> T register(String registryName, T item) {
         item.setRegistryName(UsefulMachinery.getId(registryName));

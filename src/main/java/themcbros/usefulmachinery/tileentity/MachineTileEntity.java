@@ -14,13 +14,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import themcbros.usefulmachinery.blocks.MachineBlock;
-import themcbros.usefulmachinery.machine.MachineEnergyStorage;
+import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
 import javax.annotation.Nonnull;
@@ -154,4 +153,29 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public int getMaxEnergyStored() {
         return this.energyStorage.getMaxEnergyStored();
     }
+
+    // Util methods
+
+    protected void sendEnergyToSlot(int slotIndex) {
+        ItemStack energyStack = this.stacks.get(slotIndex);
+        if (!energyStack.isEmpty()) {
+            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            if (energy != null && energy.canReceive()) {
+                int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
+                this.energyStorage.modifyEnergyStored(-accepted);
+            }
+        }
+    }
+
+    protected void reciveEnergyFromSlot(int slotIndex) {
+        ItemStack energyStack = this.stacks.get(slotIndex);
+        if (!energyStack.isEmpty()) {
+            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            if (energy != null && energy.canExtract()) {
+                int accepted = energy.extractEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
+                this.energyStorage.modifyEnergyStored(accepted);
+            }
+        }
+    }
+
 }

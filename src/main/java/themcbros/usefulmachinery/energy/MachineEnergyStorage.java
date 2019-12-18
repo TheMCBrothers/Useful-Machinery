@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.machine;
+package themcbros.usefulmachinery.energy;
 
 import net.minecraftforge.energy.EnergyStorage;
 
