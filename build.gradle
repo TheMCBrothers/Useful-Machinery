@@ -97,7 +97,7 @@ dependencies {
     //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
     // Core Mod
-
+    //compile files("../Useful Foundation/build/libs/UsefulFoundation-0.1.0.jar")
 
 }
 

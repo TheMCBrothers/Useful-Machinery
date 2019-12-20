@@ -1,6 +1,6 @@
 package themcbros.usefulmachinery.client.gui.widget;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import themcbros.usefulmachinery.container.MachineContainer;
@@ -33,10 +33,10 @@ public class RedstoneModeButton extends Button {
     public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(container.getRedstoneMode().getIcon());
-//        GlStateManager.disableDepthTest(); TODO
+        RenderSystem.disableDepthTest();
 
         blit(this.x, this.y, 0, 0, this.width, this.height, 16, 16);
-//        GlStateManager.enableDepthTest(); TODO
+        RenderSystem.enableDepthTest();
     }
 
 }

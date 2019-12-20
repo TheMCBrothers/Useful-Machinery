@@ -3,7 +3,6 @@ package themcbros.usefulmachinery.init;
 import com.google.common.collect.Lists;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,11 +16,11 @@ public class ModItems {
 
     private static final List<Item> ITEMS = Lists.newArrayList();
 
-    public static final BlockItem COAL_GENERATOR = register("coal_generator", new BlockItem(ModBlocks.COAL_GENERATOR, new Item.Properties().group(ItemGroup.DECORATIONS)));
-    public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(ItemGroup.DECORATIONS)));
+    public static final BlockItem COAL_GENERATOR = register("coal_generator", new BlockItem(ModBlocks.COAL_GENERATOR, new Item.Properties().group(UsefulMachinery.GROUP)));
+    public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(UsefulMachinery.GROUP)));
 
-    public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)));
-    public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(ItemGroup.MISC)));
+    public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
+    public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(UsefulMachinery.GROUP)));
 
     private static <T extends Item> T register(String registryName, T item) {
         item.setRegistryName(UsefulMachinery.getId(registryName));

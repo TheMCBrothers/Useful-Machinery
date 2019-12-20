@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 public enum RedstoneMode implements IStringSerializable {
 
-    IGNORED(0, new ResourceLocation("textures/item/gunpowder")),
-    ON(1, new ResourceLocation("textures/block/redstone_torch")),
-    OFF(2, new ResourceLocation("textures/block/redstone_torch_off"));
+    IGNORED(0, new ResourceLocation("item/gunpowder")),
+    ON(1, new ResourceLocation("block/redstone_torch")),
+    OFF(2, new ResourceLocation("block/redstone_torch_off"));
 
     private static final RedstoneMode[] VALUES = values();
     private static final Map<String, RedstoneMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(RedstoneMode::getName, (p_199787_0_) -> p_199787_0_));
