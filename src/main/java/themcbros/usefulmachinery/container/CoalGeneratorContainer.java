@@ -31,6 +31,7 @@ public class CoalGeneratorContainer extends MachineContainer {
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        int i = this.machineTileEntity.getSizeInventory();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
@@ -45,14 +46,14 @@ public class CoalGeneratorContainer extends MachineContainer {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 2 && index < 29) {
-                    if (!this.mergeItemStack(itemstack1, 29, 38, false)) {
+                } else if (index >= i && index < 27 + i) {
+                    if (!this.mergeItemStack(itemstack1, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 28 && index < 38 && !this.mergeItemStack(itemstack1, 2, 29, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(itemstack1, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 2, 38, false)) {
+            } else if (!this.mergeItemStack(itemstack1, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 

@@ -3,7 +3,7 @@
   "pattern": [
     " R ",
     "#F#",
-    "IBI"
+    "GBG"
   ],
   "key": {
     "F": {
@@ -12,14 +12,14 @@
     "B": {
       "item": "usefulmachinery:battery"
     },
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
     "#": {
       "item": "minecraft:flint"
     },
     "R": {
       "tag": "forge:dusts/redstone"
+    },
+    "G": {
+      "tag": "forge:gears/copper"
     }
   },
   "result": {
