@@ -44,15 +44,13 @@ public class JEICompat implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModItems.COAL_GENERATOR), VanillaRecipeCategoryUid.FUEL);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CRUSHER), ModRecipeCategoryUid.CRUSHING);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ELECTRIC_SMELTER), VanillaRecipeCategoryUid.FURNACE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ELECTRIC_SMELTER), VanillaRecipeCategoryUid.BLASTING);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ELECTRIC_SMELTER), VanillaRecipeCategoryUid.FURNACE, VanillaRecipeCategoryUid.BLASTING);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CoalGeneratorScreen.class, 54, 34, 14, 14, VanillaRecipeCategoryUid.FUEL);
         registration.addRecipeClickArea(CrusherScreen.class, 58, 34, 28, 23, ModRecipeCategoryUid.CRUSHING);
-        registration.addRecipeClickArea(ElectricSmelterScreen.class, 58, 32, 24, 17, VanillaRecipeCategoryUid.FURNACE);
-        registration.addRecipeClickArea(ElectricSmelterScreen.class, 58, 32, 24, 17, VanillaRecipeCategoryUid.BLASTING);
+        registration.addRecipeClickArea(ElectricSmelterScreen.class, 58, 32, 24, 17, VanillaRecipeCategoryUid.FURNACE, VanillaRecipeCategoryUid.BLASTING);
     }
 }

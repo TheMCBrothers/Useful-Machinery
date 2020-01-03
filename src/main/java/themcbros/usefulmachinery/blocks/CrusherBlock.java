@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 
 public class CrusherBlock extends MachineBlock {
 
-    // TODO: Many things!!
     public CrusherBlock(Properties properties) {
         super(properties);
     }

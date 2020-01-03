@@ -119,7 +119,7 @@ public class CrusherTileEntity extends MachineTileEntity {
         assert this.world != null;
         if (!this.world.isRemote) {
 
-            this.reciveEnergyFromSlot(3);
+            this.receiveEnergyFromSlot(3);
 
             if (this.isActive() || this.energyStorage.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
                 CrusherRecipe crusherRecipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.CRUSHING, this, this.world).orElse(null);

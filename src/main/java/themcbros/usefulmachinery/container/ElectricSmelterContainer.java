@@ -13,8 +13,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.ModContainers;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
-import themcbros.usefulmachinery.tileentity.CrusherTileEntity;
+import themcbros.usefulmachinery.tileentity.ElectricSmelterTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class ElectricSmelterContainer extends MachineContainer {
@@ -22,7 +21,7 @@ public class ElectricSmelterContainer extends MachineContainer {
     private World world;
 
     public ElectricSmelterContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new CrusherTileEntity(), new IntArray(7));
+        this(id, playerInventory, new ElectricSmelterTileEntity(), new IntArray(7));
     }
 
     public ElectricSmelterContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
@@ -57,7 +56,7 @@ public class ElectricSmelterContainer extends MachineContainer {
                         return ItemStack.EMPTY;
                     }
                 } else if (this.isEnergyItem(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, 3, 4, false)) {
+                    if (!this.mergeItemStack(slotStack, i - 1, i, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {

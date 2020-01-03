@@ -114,6 +114,9 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
 
     @Override
     public void tick() {
-
+        assert this.world != null;
+        if (!this.world.isRemote) {
+            this.receiveEnergyFromSlot(2);
+        }
     }
 }

@@ -159,7 +159,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     // Util methods
 
     protected void sendEnergyToSlot(int slotIndex) {
-        ItemStack energyStack = this.stacks.get(slotIndex);
+        final ItemStack energyStack = this.stacks.get(slotIndex);
         if (!energyStack.isEmpty()) {
             IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
             if (energy != null && energy.canReceive()) {
@@ -169,13 +169,14 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
         }
     }
 
-    protected void reciveEnergyFromSlot(int slotIndex) {
-        ItemStack energyStack = this.stacks.get(slotIndex);
+    protected void receiveEnergyFromSlot(int slotIndex) {
+        final ItemStack energyStack = this.stacks.get(slotIndex);
         if (!energyStack.isEmpty()) {
             IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
             if (energy != null && energy.canExtract()) {
-                int accepted = energy.extractEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(accepted);
+                int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
+                if(this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
+                    this.energyStorage.modifyEnergyStored(energy.extractEnergy(accept, false));
             }
         }
     }
