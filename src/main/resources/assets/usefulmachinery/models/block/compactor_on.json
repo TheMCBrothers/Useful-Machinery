@@ -1,0 +1,6 @@
+{
+  "parent": "usefulmachinery:block/machine",
+  "textures": {
+    "front": "usefulmachinery:block/compactor_front_on"
+  }
+}

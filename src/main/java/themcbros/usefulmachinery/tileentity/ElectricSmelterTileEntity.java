@@ -3,6 +3,7 @@ package themcbros.usefulmachinery.tileentity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -69,6 +70,20 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
 
     public ElectricSmelterTileEntity() {
         super(ModTileEntities.ELECTRIC_SMELTER, false);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        compound.putInt("CookTime", this.cookTime);
+        compound.putInt("CookTimeTotal", this.cookTimeTotal);
+        return super.write(compound);
+    }
+
+    @Override
+    public void read(CompoundNBT compound) {
+        this.cookTime = compound.getInt("CookTime");
+        this.cookTimeTotal = compound.getInt("CookTimeTotal");
+        super.read(compound);
     }
 
     @Override

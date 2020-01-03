@@ -26,7 +26,7 @@ public class ElectricSmelterContainer extends MachineContainer {
     }
 
     public ElectricSmelterContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
-        super(ModContainers.CRUSHER, id, playerInventory, tileEntity, fields);
+        super(ModContainers.ELECTRIC_SMELTER, id, playerInventory, tileEntity, fields);
         this.world = playerInventory.player.world;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));

@@ -1,0 +1,6 @@
+{
+  "parent": "usefulmachinery:block/machine",
+  "textures": {
+    "front": "usefulmachinery:block/electric_smelter_front_on"
+  }
+}
