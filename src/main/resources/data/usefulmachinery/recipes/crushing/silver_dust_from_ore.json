@@ -1,0 +1,14 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/silver"
+  },
+  "result": {
+    "item": "usefulfoundation:silver_dust",
+    "count": 2
+  },
+  "secondary": {
+    "item": "usefulfoundation:lead_dust",
+    "chance": 0.1
+  }
+}

@@ -8,10 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.blocks.CoalGeneratorBlock;
-import themcbros.usefulmachinery.blocks.CrusherBlock;
-import themcbros.usefulmachinery.blocks.MachineBlock;
-import themcbros.usefulmachinery.blocks.WireBlock;
+import themcbros.usefulmachinery.blocks.*;
 
 import java.util.List;
 
@@ -22,6 +19,8 @@ public class ModBlocks {
 
     public static final MachineBlock COAL_GENERATOR = register("coal_generator", new CoalGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock CRUSHER = register("crusher", new CrusherBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
+    public static final MachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
+    public static final Block COMPACTOR = register("compactor", new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final WireBlock WIRE = register("wire", new WireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
 
     private static <T extends Block> T register(String registryName, T block) {

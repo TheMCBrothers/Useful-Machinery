@@ -1,13 +1,16 @@
 {
   "block.usefulmachinery.coal_generator": "Coal Generator",
   "block.usefulmachinery.crusher": "Crusher",
+  "block.usefulmachinery.electric_smelter": "Electric Smelter",
   "container.usefulmachinery.coal_generator": "Coal Generator",
   "container.usefulmachinery.crusher": "Crusher",
+  "container.usefulmachinery.electric_smelter": "Electric Smelter",
 
   "item.usefulmachinery.battery": "Battery",
   "item.usefulmachinery.machine_frame": "Machine Frame",
 
-  "jei.uselfulmachinery.crushing": "Crushing",
+  "jei.usefulmachinery.crushing": "Crushing",
+  "jei.usefulmachinery.electric_smelting": "Electric Smelting",
 
   "misc.usefulmachinery.energy": "%s FE",
   "misc.usefulmachinery.energyWithMax": "%s / %s FE",

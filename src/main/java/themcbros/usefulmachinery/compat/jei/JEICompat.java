@@ -1,5 +1,10 @@
 package themcbros.usefulmachinery.compat.jei;
 
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.registration.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import themcbros.usefulmachinery.UsefulMachinery;
@@ -10,8 +15,8 @@ import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.init.ModItems;
 
-//@JeiPlugin
-public class JEICompat /* implements IModPlugin {
+@JeiPlugin
+public class JEICompat implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
         return UsefulMachinery.getId("jeicompat");
@@ -31,7 +36,7 @@ public class JEICompat /* implements IModPlugin {
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(CoalGeneratorContainer.class, VanillaRecipeCategoryUid.FUEL, 0, 1, 2, 36);
-        registration.addRecipeTransferHandler(CrusherContainer.class, ModRecipeCategoryUid.CRUSHING, 0, 1, 3, 36);
+        registration.addRecipeTransferHandler(CrusherContainer.class, ModRecipeCategoryUid.CRUSHING, 0, 1, 4, 36);
     }
 
     @Override
@@ -43,6 +48,6 @@ public class JEICompat /* implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CoalGeneratorScreen.class, 54, 34, 14, 14, VanillaRecipeCategoryUid.FUEL);
-        registration.addRecipeClickArea(CrusherScreen.class, 78, 32, 28, 23, ModRecipeCategoryUid.CRUSHING);
+        registration.addRecipeClickArea(CrusherScreen.class, 58, 34, 28, 23, ModRecipeCategoryUid.CRUSHING);
     }
-}*/{}
+}

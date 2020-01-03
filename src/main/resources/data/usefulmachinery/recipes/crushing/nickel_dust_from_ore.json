@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/nickel"
+  },
+  "result": {
+    "item": "usefulfoundation:nickel_dust",
+    "count": 2
+  }
+}

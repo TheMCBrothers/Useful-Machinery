@@ -5,7 +5,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import themcbros.usefulmachinery.client.gui.CoalGeneratorScreen;
 import themcbros.usefulmachinery.client.gui.CrusherScreen;
-import themcbros.usefulmachinery.container.CoalGeneratorContainer;
+import themcbros.usefulmachinery.client.gui.ElectricSmelterScreen;
 import themcbros.usefulmachinery.init.ModContainers;
 
 public class ClientProxy extends CommonProxy {
@@ -18,6 +18,7 @@ public class ClientProxy extends CommonProxy {
     private void clientSetup(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(ModContainers.COAL_GENERATOR, CoalGeneratorScreen::new);
         ScreenManager.registerFactory(ModContainers.CRUSHER, CrusherScreen::new);
+        ScreenManager.registerFactory(ModContainers.ELECTRIC_SMELTER, ElectricSmelterScreen::new);
     }
 
 }

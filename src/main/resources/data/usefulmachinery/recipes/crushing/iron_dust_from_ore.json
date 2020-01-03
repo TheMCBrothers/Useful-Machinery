@@ -1,0 +1,14 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/iron"
+  },
+  "result": {
+    "item": "usefulfoundation:iron_dust",
+    "count": 2
+  },
+  "secondary": {
+    "item": "usefulfoundation:nickel_dust",
+    "chance": 0.1
+  }
+}

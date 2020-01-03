@@ -81,6 +81,49 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        name 'ForgeFS'
+        url 'https://files.minecraftforge.net/maven'
+    }
+    maven {
+        name 'amadornes'
+        url 'https://maven.amadornes.com/'
+    }
+    maven {
+        name 'prog'
+        url 'http://dvs1.progwml6.com/files/maven'
+    }
+    maven {
+        name 'curseforge'
+        url 'https://minecraft.curseforge.com/api/maven/'
+    }
+    maven {
+        name 'opencomputers'
+        url 'http://maven.cil.li/'
+    }
+    maven {
+        name 'hwyla'
+        url 'https://tehnut.info/maven'
+    }
+    maven {
+        name 'tterrag'
+        url 'https://maven.tterrag.com/'
+    }
+    maven {
+        name 'ic2'
+        url 'http://maven.ic2.player.to'
+    }
+    maven {
+        name 'BlameJared - Crafttweaker'
+        url 'https://maven.blamejared.com/'
+    }
+    maven {
+        name 'thiakil'
+        url 'https://maven.thiakil.com'
+    }
+}
+
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
@@ -88,7 +131,11 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     // Useful Foundation
-    // compile "curse.maven:useful-foundation:2846862"
+    compile fg.deobf("curse.maven:useful-foundation:2846862")
+
+    // Just Enough Items - Optional Dependency
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
 }
 

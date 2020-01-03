@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/tin"
+  },
+  "result": {
+    "item": "usefulfoundation:tin_dust",
+    "count": 2
+  }
+}

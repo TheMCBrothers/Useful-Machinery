@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/uranium"
+  },
+  "result": {
+    "item": "usefulfoundation:uranium_dust",
+    "count": 2
+  }
+}

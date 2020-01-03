@@ -1,0 +1,14 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/copper"
+  },
+  "result": {
+    "item": "usefulfoundation:copper_dust",
+    "count": 2
+  },
+  "secondary": {
+    "item": "usefulfoundation:gold_dust",
+    "chance": 0.1
+  }
+}

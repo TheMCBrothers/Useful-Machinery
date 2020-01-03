@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.container.CrusherContainer;
+import themcbros.usefulmachinery.container.ElectricSmelterContainer;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ModContainers {
 
     public static final ContainerType<CoalGeneratorContainer> COAL_GENERATOR = register("coal_generator", new ContainerType<>(CoalGeneratorContainer::new));
     public static final ContainerType<CrusherContainer> CRUSHER = register("crusher", new ContainerType<>(CrusherContainer::new));
+    public static final ContainerType<ElectricSmelterContainer> ELECTRIC_SMELTER = register("electric_smelter", new ContainerType<>(ElectricSmelterContainer::new));
 
     private static <T extends ContainerType<?>> T register(String registryName, T containerType) {
         containerType.setRegistryName(UsefulMachinery.getId(registryName));
