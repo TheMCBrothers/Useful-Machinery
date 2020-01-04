@@ -161,7 +161,7 @@ public class CrusherTileEntity extends MachineTileEntity {
     }
 
     private boolean canCrush(@Nullable CrusherRecipe recipe) {
-        if (!this.stacks.get(0).isEmpty() && recipe != null) {
+        if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
             ItemStack recipeOutputStack = recipe.getRecipeOutput();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
             if(!recipeSecondOutputStack.isEmpty()) {

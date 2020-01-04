@@ -130,7 +130,7 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
                 --this.burnTime;
                 this.energyStorage.modifyEnergyStored(60);
                 shouldLit = true;
-            } else {
+            } else if (this.redstoneMode.canRun(this)) {
                 ItemStack generatorStack = this.stacks.get(0);
                 if (AbstractFurnaceTileEntity.isFuel(generatorStack)) {
                     int time = ForgeHooks.getBurnTime(generatorStack);

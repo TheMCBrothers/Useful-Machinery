@@ -1,8 +1,10 @@
 package themcbros.usefulmachinery.machine;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -13,9 +15,9 @@ import java.util.stream.Collectors;
 
 public enum RedstoneMode implements IStringSerializable {
 
-    IGNORED(0, new ResourceLocation("textures/item/gunpowder")),
-    ON(1, new ResourceLocation("textures/block/redstone_torch")),
-    OFF(2, new ResourceLocation("textures/block/redstone_torch_off"));
+    IGNORED(0, new ResourceLocation("textures/item/gunpowder.png")),
+    ON(1, new ResourceLocation("textures/block/redstone_torch.png")),
+    OFF(2, new ResourceLocation("textures/block/redstone_torch_off.png"));
 
     private static final RedstoneMode[] VALUES = values();
     private static final Map<String, RedstoneMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(RedstoneMode::getName, (p_199787_0_) -> p_199787_0_));
@@ -50,7 +52,26 @@ public enum RedstoneMode implements IStringSerializable {
         return BY_INDEX[MathHelper.abs(index % BY_INDEX.length)];
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public ResourceLocation getIcon() {
         return icon;
     }
+
+    public boolean canRun(TileEntity tileEntity) {
+        if (tileEntity == null || tileEntity.getWorld() == null) return false;
+        boolean isPowered = tileEntity.getWorld().isBlockPowered(tileEntity.getPos());
+        if (this == ON) return isPowered;
+        else if (this == OFF) return !isPowered;
+        return true;
+    }
+
+    public boolean canRun(boolean isPowered) {
+        if (this == ON) return isPowered;
+        else if (this == OFF) return !isPowered;
+        return true;
+    }
+
 }

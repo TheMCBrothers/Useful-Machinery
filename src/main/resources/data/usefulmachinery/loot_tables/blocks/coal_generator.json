@@ -33,6 +33,11 @@
                   "source": "Items",
                   "target": "BlockEntityTag.Items",
                   "op": "replace"
+                },
+                {
+                  "source": "RedstoneMode",
+                  "target": "BlockEntityTag.RedstoneMode",
+                  "op": "replace"
                 }
               ]
             }

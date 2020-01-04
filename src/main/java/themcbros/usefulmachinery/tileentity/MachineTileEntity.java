@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -44,16 +45,18 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        compound.putInt("RedstoneMode", redstoneMode.ordinal());
-        compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+        if (redstoneMode != RedstoneMode.IGNORED) compound.putInt("RedstoneMode", redstoneMode.getIndex());
+        if (this.energyStorage.getEnergyStored() > 0) compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
         ItemStackHelper.saveAllItems(compound, this.stacks, false);
         return super.write(compound);
     }
 
     @Override
     public void read(CompoundNBT compound) {
-        this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+        if (compound.contains("RedstoneMode", Constants.NBT.TAG_INT))
+            this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
+        if (compound.contains("EnergyStored", Constants.NBT.TAG_INT))
+            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         ItemStackHelper.loadAllItems(compound, this.stacks);
         super.read(compound);
     }

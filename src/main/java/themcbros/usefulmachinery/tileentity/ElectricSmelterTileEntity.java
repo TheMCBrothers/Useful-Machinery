@@ -190,7 +190,7 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
     }
 
     private boolean canProcess(@Nullable AbstractCookingRecipe recipeIn) {
-        if (!this.stacks.get(0).isEmpty() && recipeIn != null) {
+        if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this)) {
             ItemStack itemstack = recipeIn.getRecipeOutput();
             if (itemstack.isEmpty()) {
                 return false;
