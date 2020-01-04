@@ -207,8 +207,33 @@ public class CrusherTileEntity extends MachineTileEntity {
     }
 
     private void crushItem(@Nullable CrusherRecipe recipe) {
-        if (recipe != null) {
-            ItemStack recipeOutput = recipe.getRecipeOutput();
+        if (recipe != null && this.canCrush(recipe)) {
+            ItemStack itemstack = this.stacks.get(0);
+            ItemStack itemstack1 = recipe.getRecipeOutput();
+            ItemStack itemstack2 = this.stacks.get(1);
+            if (itemstack2.isEmpty()) {
+                this.stacks.set(1, itemstack1.copy());
+            } else if (itemstack2.getItem() == itemstack1.getItem()) {
+                itemstack2.grow(itemstack1.getCount());
+            }
+
+            itemstack.shrink(1);
+        }
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        ItemStack itemstack = this.stacks.get(index);
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        this.stacks.set(index, stack);
+        if (stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
+        }
+
+        if (index == 0 && !flag) {
+            this.crushTimeTotal = this.getCrushTime();
+            this.crushTime = 0;
+            this.markDirty();
         }
     }
 
