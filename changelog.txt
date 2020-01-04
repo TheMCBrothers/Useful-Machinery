@@ -1,1 +1,14 @@
-empty
+0.0.1.1:
+- Added creative power cell
+
+0.0.1.0:
+- Added crusher functionality
+- Added electric smelter
+- Added functionality to redstone mode
+- Added compactor (not implemented yet)
+
+0.0.0.1:
+- Initial alpha release
+- Added coal generator
+- Added crusher (not working)
+- Added battery (can hold FE)

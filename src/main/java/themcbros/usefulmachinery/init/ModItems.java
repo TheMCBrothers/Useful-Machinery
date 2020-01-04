@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.items.BatteryItem;
+import themcbros.usefulmachinery.items.CreativePowerCellItem;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ModItems {
     public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem ELECTRIC_SMELTER = register("electric_smelter", new BlockItem(ModBlocks.ELECTRIC_SMELTER, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem COMPACTOR = register("compactor", new BlockItem(ModBlocks.COMPACTOR, new Item.Properties().group(UsefulMachinery.GROUP)));
+    public static final BlockItem CREATIVE_POWER_CELL = register("creative_power_cell", new CreativePowerCellItem(ModBlocks.CREATIVE_POWER_CELL, new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
 
     public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
     public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(UsefulMachinery.GROUP)));
