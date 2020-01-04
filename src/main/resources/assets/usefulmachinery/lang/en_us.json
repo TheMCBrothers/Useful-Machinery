@@ -19,5 +19,9 @@
   "misc.usefulmachinery.energyWithMax": "%s / %s FE",
   "misc.usefulmachinery.redstoneMode": "Redstone Mode: %s",
 
+  "stat.usefulmachinery.interact_with_crusher": "Interactions with Crusher",
+  "stat.usefulmachinery.interact_with_electric_smelter": "Interactions with Electric Smelter",
+  "stat.usefulmachinery.interact_with_coal_generator": "Interactions with Coal Generator",
+
   "itemGroup.usefulmachinery": "Useful Machinery"
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.ILightReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import themcbros.usefulmachinery.init.ModStats;
 
 import javax.annotation.Nullable;
 
@@ -27,9 +28,13 @@ public abstract class MachineBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public MachineBlock(Properties properties) {
+    @Nullable
+    private final ResourceLocation interactStat;
+
+    public MachineBlock(Properties properties, @Nullable ResourceLocation interactStat) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(LIT, Boolean.FALSE));
+        this.interactStat = interactStat;
     }
 
     @Override
@@ -67,6 +72,7 @@ public abstract class MachineBlock extends Block {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof INamedContainerProvider && player instanceof ServerPlayerEntity) {
             NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity);
+            if (interactStat != null) player.addStat(interactStat);
         }
         return ActionResultType.SUCCESS;
     }
