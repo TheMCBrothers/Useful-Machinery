@@ -156,17 +156,4 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
         return false;
     }
 
-    public void sendEnergy() {
-        // TODO implement side config
-        for (Direction facing : Direction.values()) {
-            assert this.world != null;
-            IEnergyStorage energy = EnergyUtils.getEnergy(this.world, this.pos.offset(facing), facing.getOpposite());
-            if (energy != null && energy.canReceive()) {
-                int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(-accepted);
-                if (this.getEnergyStored() <= 0) break;
-            }
-        }
-    }
-
 }

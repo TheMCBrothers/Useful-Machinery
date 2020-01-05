@@ -18,6 +18,7 @@ public class ModItems {
     private static final List<Item> ITEMS = Lists.newArrayList();
 
     public static final BlockItem COAL_GENERATOR = register("coal_generator", new BlockItem(ModBlocks.COAL_GENERATOR, new Item.Properties().group(UsefulMachinery.GROUP)));
+    public static final BlockItem LAVA_GENERATOR = register("lava_generator", new BlockItem(ModBlocks.LAVA_GENERATOR, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem CRUSHER = register("crusher", new BlockItem(ModBlocks.CRUSHER, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem ELECTRIC_SMELTER = register("electric_smelter", new BlockItem(ModBlocks.ELECTRIC_SMELTER, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem COMPACTOR = register("compactor", new BlockItem(ModBlocks.COMPACTOR, new Item.Properties().group(UsefulMachinery.GROUP)));

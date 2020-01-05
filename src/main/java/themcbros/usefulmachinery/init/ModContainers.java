@@ -9,6 +9,7 @@ import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
+import themcbros.usefulmachinery.container.LavaGeneratorContainer;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ModContainers {
     private static final List<ContainerType<?>> CONTAINER_TYPES = Lists.newArrayList();
 
     public static final ContainerType<CoalGeneratorContainer> COAL_GENERATOR = register("coal_generator", new ContainerType<>(CoalGeneratorContainer::new));
+    public static final ContainerType<LavaGeneratorContainer> LAVA_GENERATOR = register("lava_generator", new ContainerType<>(LavaGeneratorContainer::new));
     public static final ContainerType<CrusherContainer> CRUSHER = register("crusher", new ContainerType<>(CrusherContainer::new));
     public static final ContainerType<ElectricSmelterContainer> ELECTRIC_SMELTER = register("electric_smelter", new ContainerType<>(ElectricSmelterContainer::new));
 

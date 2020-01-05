@@ -1,0 +1,6 @@
+{
+  "parent": "usefulmachinery:block/machine",
+  "textures": {
+    "front": "usefulmachinery:block/lava_generator_front_on"
+  }
+}

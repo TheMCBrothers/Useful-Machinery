@@ -22,6 +22,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import themcbros.usefulmachinery.blocks.MachineBlock;
 import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.util.EnergyUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -180,6 +181,19 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
                 if(this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
                     this.energyStorage.modifyEnergyStored(energy.extractEnergy(accept, false));
+            }
+        }
+    }
+
+    public void sendEnergy() {
+        // TODO implement side config
+        for (Direction facing : Direction.values()) {
+            assert this.world != null;
+            IEnergyStorage energy = EnergyUtils.getEnergy(this.world, this.pos.offset(facing), facing.getOpposite());
+            if (energy != null && energy.canReceive()) {
+                int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
+                this.energyStorage.modifyEnergyStored(-accepted);
+                if (this.getEnergyStored() <= 0) break;
             }
         }
     }

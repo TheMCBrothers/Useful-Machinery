@@ -18,6 +18,7 @@ public class ModBlocks {
     private static final List<Block> BLOCKS = Lists.newArrayList();
 
     public static final MachineBlock COAL_GENERATOR = register("coal_generator", new CoalGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
+    public static final MachineBlock LAVA_GENERATOR = register("lava_generator", new LavaGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock CRUSHER = register("crusher", new CrusherBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final Block COMPACTOR = register("compactor", new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));

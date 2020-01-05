@@ -1,10 +1,12 @@
 {
   "block.usefulmachinery.coal_generator": "Coal Generator",
+  "block.usefulmachinery.lava_generator": "Lava Generator",
   "block.usefulmachinery.crusher": "Crusher",
   "block.usefulmachinery.electric_smelter": "Electric Smelter",
   "block.usefulmachinery.compactor": "Compactor",
   "block.usefulmachinery.creative_power_cell": "Creative Power Cell",
   "container.usefulmachinery.coal_generator": "Coal Generator",
+  "container.usefulmachinery.lava_generator": "Lava Generator",
   "container.usefulmachinery.crusher": "Crusher",
   "container.usefulmachinery.electric_smelter": "Electric Smelter",
   "container.usefulmachinery.compactor": "Compactor",
@@ -18,11 +20,15 @@
 
   "misc.usefulmachinery.energy": "%s FE",
   "misc.usefulmachinery.energyWithMax": "%s / %s FE",
+  "misc.usefulmachinery.empty": "Empty",
+  "misc.usefulmachinery.fluidWithMax": "%s / %s mB",
+  "misc.usefulmachinery.fluidWithMaxName": "%s: %s / %s mB",
   "misc.usefulmachinery.redstoneMode": "Redstone Mode: %s",
 
   "stat.usefulmachinery.interact_with_crusher": "Interactions with Crusher",
   "stat.usefulmachinery.interact_with_electric_smelter": "Interactions with Electric Smelter",
   "stat.usefulmachinery.interact_with_coal_generator": "Interactions with Coal Generator",
+  "stat.usefulmachinery.interact_with_lava_generator": "Interactions with Lava Generator",
 
   "itemGroup.usefulmachinery": "Useful Machinery"
 }
