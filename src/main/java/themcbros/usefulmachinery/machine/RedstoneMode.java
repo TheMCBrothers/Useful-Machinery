@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public enum RedstoneMode implements IStringSerializable {
 
     IGNORED(0, new ResourceLocation("textures/item/gunpowder.png")),
-    ON(1, new ResourceLocation("textures/block/redstone_torch.png")),
-    OFF(2, new ResourceLocation("textures/block/redstone_torch_off.png"));
+    HIGH(1, new ResourceLocation("textures/block/redstone_torch.png")),
+    LOW(2, new ResourceLocation("textures/block/redstone_torch_off.png"));
 
     private static final RedstoneMode[] VALUES = values();
     private static final Map<String, RedstoneMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(RedstoneMode::getName, (p_199787_0_) -> p_199787_0_));
@@ -63,14 +63,14 @@ public enum RedstoneMode implements IStringSerializable {
     public boolean canRun(TileEntity tileEntity) {
         if (tileEntity == null || tileEntity.getWorld() == null) return false;
         boolean isPowered = tileEntity.getWorld().isBlockPowered(tileEntity.getPos());
-        if (this == ON) return isPowered;
-        else if (this == OFF) return !isPowered;
+        if (this.getIndex() == 1) return isPowered;
+        else if (this.getIndex() == 2) return !isPowered;
         return true;
     }
 
     public boolean canRun(boolean isPowered) {
-        if (this == ON) return isPowered;
-        else if (this == OFF) return !isPowered;
+        if (this.getIndex() == 1) return isPowered;
+        else if (this.getIndex() == 2) return !isPowered;
         return true;
     }
 

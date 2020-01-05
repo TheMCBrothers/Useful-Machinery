@@ -31,6 +31,8 @@ public class RedstoneModeButton extends Button {
 
     @Override
     public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(container.getRedstoneMode().getIcon());
         RenderSystem.disableDepthTest();

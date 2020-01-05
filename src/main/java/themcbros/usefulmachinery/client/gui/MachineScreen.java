@@ -40,18 +40,22 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
     }
 
     @Override
+    protected void renderHoveredToolTip(int mouseX, int mouseY) {
+        super.renderHoveredToolTip(mouseX, mouseY);
+        for (Widget widget : this.buttons) {
+            if (widget.isHovered() && widget instanceof RedstoneModeButton) {
+                RedstoneMode mode = ((RedstoneModeButton) widget).getMode();
+                renderTooltip(TextUtils.translate("misc", "redstoneMode", mode.name()).getFormattedText(), mouseX, mouseY);
+            }
+        }
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = this.title.getFormattedText();
         this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F,
                 (float) (this.ySize - 96 + 2), 4210752);
-
-        for (Widget widget : this.buttons) {
-            if (widget.isHovered() && widget instanceof RedstoneModeButton) {
-                RedstoneMode mode = ((RedstoneModeButton) widget).getMode();
-                renderTooltip(TextUtils.translate("misc", "redstoneMode", mode.name()).getFormattedText(), mouseX - this.guiLeft, mouseY - this.guiTop);
-            }
-        }
     }
 
 }
