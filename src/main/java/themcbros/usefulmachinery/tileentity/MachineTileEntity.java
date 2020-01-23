@@ -37,6 +37,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public MachineEnergyStorage energyStorage;
     public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private boolean isGenerator;
+    private int cooldown = -1;
 
     MachineTileEntity(TileEntityType<?> tileEntityTypeIn, boolean isGenerator) {
         super(tileEntityTypeIn);
@@ -133,9 +134,17 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
         this.stacks.clear();
     }
 
+    @Override
+    public void tick() {
+        if (this.cooldown > 0) this.cooldown--;
+        if (this.cooldown < 0) sendUpdate(false);
+    }
+
     public void sendUpdate(boolean lit) {
+        if (lit) this.cooldown = 15;
         assert this.world != null;
-        this.world.setBlockState(this.pos, this.getBlockState().with(MachineBlock.LIT, lit));
+        boolean flag = this.getBlockState().get(MachineBlock.LIT) != lit;
+        if (flag) this.world.setBlockState(this.pos, this.getBlockState().with(MachineBlock.LIT, lit));
     }
 
     private LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());

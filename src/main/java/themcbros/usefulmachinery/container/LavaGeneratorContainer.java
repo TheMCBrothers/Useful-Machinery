@@ -88,7 +88,7 @@ public class LavaGeneratorContainer extends MachineContainer {
 
     public int getBurnTimeScaled() {
         int i = this.fields.get(5);
-        int j = LavaGeneratorTileEntity.TICKS_PER_MB;
+        int j = LavaGeneratorTileEntity.TICKS_PER_MB * LavaGeneratorTileEntity.MB_PER_USE;
         return i != 0 && j != 0 ? i * 13 / j : 0;
     }
 

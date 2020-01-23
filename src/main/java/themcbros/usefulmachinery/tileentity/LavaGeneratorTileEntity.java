@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -31,6 +32,7 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
 
     public static final int TANK_CAPACITY = 4000; // TODO config
     public static final int TICKS_PER_MB = 10; // TODO config
+    public static final int MB_PER_USE = 10; // TODO config
     public static final int RF_PER_TICK = 120; // TODO config
 
     private final IIntArray fields = new IIntArray() {
@@ -180,15 +182,14 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
         if (this.burnTime > 0) {
             --this.burnTime;
             this.energyStorage.modifyEnergyStored(RF_PER_TICK);
-        } else {
-            this.sendUpdate(false);
         }
 
+        super.tick();
         this.sendEnergy();
     }
 
     private boolean hasFuel() {
-        return this.lavaTank.getFluidAmount() > 0;
+        return this.lavaTank.getFluidAmount() >= MB_PER_USE;
     }
 
     private boolean canRun() {
@@ -197,8 +198,8 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
     }
 
     private void consumeFuel() {
-        this.lavaTank.drain(1, IFluidHandler.FluidAction.EXECUTE);
-        this.burnTime = TICKS_PER_MB;
+        FluidStack fluid = this.lavaTank.drain(MB_PER_USE, IFluidHandler.FluidAction.EXECUTE);
+        this.burnTime = TICKS_PER_MB * fluid.getAmount();
     }
 
     @Nonnull
