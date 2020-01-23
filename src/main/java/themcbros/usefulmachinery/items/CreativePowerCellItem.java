@@ -41,17 +41,17 @@ public class CreativePowerCellItem extends BlockItem implements IEnergyContainer
 
     @Override
     public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
-        return 0;
+        return maxReceive;
     }
 
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate) {
-        return 200_000;
+        return maxExtract;
     }
 
     @Override
     public int getEnergyStored(ItemStack container) {
-        return 2_000_000_000;
+        return this.getMaxEnergyStored(container);
     }
 
     @Override
