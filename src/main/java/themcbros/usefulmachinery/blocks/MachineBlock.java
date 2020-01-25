@@ -68,7 +68,7 @@ public abstract class MachineBlock extends Block {
     public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
 
     @Override
-    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof INamedContainerProvider && player instanceof ServerPlayerEntity) {
             NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity);
@@ -78,7 +78,7 @@ public abstract class MachineBlock extends Block {
     }
 
     @Override
-    public int getLightValue(BlockState state, ILightReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
         return state.get(LIT) ? 3 : 0;
     }
 }
