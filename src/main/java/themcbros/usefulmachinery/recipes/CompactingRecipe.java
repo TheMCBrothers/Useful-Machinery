@@ -22,14 +22,16 @@ public class CompactingRecipe implements IRecipe<IInventory> {
     private final ResourceLocation id;
     private final String group;
     private final Ingredient ingredient;
+    private final int count;
     private final ItemStack result;
     private final int processTime;
     private final CompactorMode compactorMode;
 
-    public CompactingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, int processTime, CompactorMode compactorMode) {
+    public CompactingRecipe(ResourceLocation id, String group, Ingredient ingredient, int count, ItemStack result, int processTime, CompactorMode compactorMode) {
         this.id = id;
         this.group = group;
         this.ingredient = ingredient;
+        this.count = count;
         this.result = result;
         this.processTime = processTime;
         this.compactorMode = compactorMode;
@@ -37,7 +39,7 @@ public class CompactingRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        return this.ingredient.test(inv.getStackInSlot(0));
+        return this.ingredient.test(inv.getStackInSlot(0)) && inv.getStackInSlot(0).getCount() >= this.count;
     }
 
     @Override
@@ -75,8 +77,16 @@ public class CompactingRecipe implements IRecipe<IInventory> {
         return ModRecipeTypes.COMPACTING;
     }
 
+    public int getProcessTime() {
+        return processTime;
+    }
+
     public CompactorMode getCompactorMode() {
         return compactorMode;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CompactingRecipe> {
@@ -84,8 +94,9 @@ public class CompactingRecipe implements IRecipe<IInventory> {
         @Override
         public CompactingRecipe read(ResourceLocation recipeId, JsonObject json) {
             String s = JSONUtils.getString(json, "group", "");
-            JsonElement jsonelement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
+            JsonElement jsonelement = JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient");
             Ingredient ingredient = Ingredient.deserialize(jsonelement);
+            int count = JSONUtils.isJsonArray(json, "ingredient") ? 1 : JSONUtils.getInt(jsonelement.getAsJsonObject(), "count", 1);
             if (!json.has("result")) throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
             ItemStack itemstack;
             if (json.get("result").isJsonObject()) itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
@@ -101,7 +112,7 @@ public class CompactingRecipe implements IRecipe<IInventory> {
             int i = JSONUtils.getInt(json, "processingtime", 200);
             if (!json.has("mode")) throw new com.google.gson.JsonSyntaxException("Missing mode, expected to find a string");
             CompactorMode mode = CompactorMode.byName(JSONUtils.getString(json, "mode"));
-            return new CompactingRecipe(recipeId, s, ingredient, itemstack, i, mode != null ? mode : CompactorMode.PLATE);
+            return new CompactingRecipe(recipeId, s, ingredient, count, itemstack, i, mode != null ? mode : CompactorMode.PLATE);
         }
 
         @Nullable
@@ -109,16 +120,18 @@ public class CompactingRecipe implements IRecipe<IInventory> {
         public CompactingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
             String s = buffer.readString(32767);
             Ingredient ingredient = Ingredient.read(buffer);
+            int count = buffer.readVarInt();
             ItemStack itemstack = buffer.readItemStack();
             int i = buffer.readVarInt();
             CompactorMode mode = CompactorMode.byIndex(buffer.readVarInt());
-            return new CompactingRecipe(recipeId, s, ingredient, itemstack, i, mode);
+            return new CompactingRecipe(recipeId, s, ingredient, count, itemstack, i, mode);
         }
 
         @Override
         public void write(PacketBuffer buffer, CompactingRecipe recipe) {
             buffer.writeString(recipe.group);
             recipe.ingredient.write(buffer);
+            buffer.writeVarInt(recipe.count);
             buffer.writeItemStack(recipe.result);
             buffer.writeVarInt(recipe.processTime);
             buffer.writeVarInt(recipe.compactorMode.getIndex());

@@ -4,8 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -115,7 +113,7 @@ public class CompactorTileEntity extends MachineTileEntity {
         }
 
         if (index == 0 && !flag) {
-            this.processTimeTotal = this.getCookTime();
+            this.processTimeTotal = this.getProcessTime();
             this.processTime = 0;
             this.markDirty();
         }
@@ -183,7 +181,7 @@ public class CompactorTileEntity extends MachineTileEntity {
                     this.processTime++;
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
-                        this.processTimeTotal = this.getCookTime();
+                        this.processTimeTotal = this.getProcessTime();
                         this.processItem(recipe);
                         flag1 = true;
                     }
@@ -203,11 +201,10 @@ public class CompactorTileEntity extends MachineTileEntity {
         }
     }
 
-    private int getCookTime() {
+    private int getProcessTime() {
         if (world == null) return 200;
-        return this.world.getRecipeManager().getRecipe(IRecipeType.BLASTING, this, this.world)
-                .map(AbstractCookingRecipe::getCookTime).orElse(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world)
-                        .map(AbstractCookingRecipe::getCookTime).orElse(200));
+        return this.world.getRecipeManager().getRecipe(ModRecipeTypes.COMPACTING, this, this.world)
+                .map(CompactingRecipe::getProcessTime).orElse(200);
     }
 
     private boolean canProcess(@Nullable CompactingRecipe recipeIn) {
@@ -243,7 +240,7 @@ public class CompactorTileEntity extends MachineTileEntity {
                 itemstack2.grow(itemstack1.getCount());
             }
 
-            itemstack.shrink(1);
+            itemstack.shrink(recipe.getCount());
         }
     }
 
