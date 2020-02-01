@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "usefulfoundation:hammer"
+    },
+    {
+      "tag": "forge:gears/gold"
+    },
+    {
+      "tag": "forge:plates/lead"
+    }
+  ],
+  "result": {
+    "item": "usefulmachinery:compactor_kit",
+    "count": 1
+  }
+}

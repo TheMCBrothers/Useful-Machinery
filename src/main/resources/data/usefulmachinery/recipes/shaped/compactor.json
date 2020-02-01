@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "RFR",
+    "GBG"
+  ],
+  "key": {
+    "F": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "B": {
+      "item": "usefulmachinery:battery"
+    },
+    "#": {
+      "item": "usefulmachinery:compactor_kit"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "G": {
+      "tag": "forge:gears/electrum"
+    }
+  },
+  "result": {
+    "item": "usefulmachinery:compactor",
+    "count": 1
+  }
+}

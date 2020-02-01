@@ -21,6 +21,11 @@ public class Networking {
                 .encoder(SetRedstoneModePacket::toBytes)
                 .consumer(SetRedstoneModePacket::handle)
                 .add();
+        channel.messageBuilder(SetCompactorModePacket.class, 2)
+                .decoder(SetCompactorModePacket::fromBytes)
+                .encoder(SetCompactorModePacket::toBytes)
+                .consumer(SetCompactorModePacket::handle)
+                .add();
     }
 
     private Networking() {}

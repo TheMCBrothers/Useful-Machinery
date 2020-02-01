@@ -1,6 +1,9 @@
 0.0.2.0:
 - Updated to 1.15.2
+- Added compactor
+- Added lava generator
 - Added creative power cell
+- Added new machine fronts
 
 0.0.1.0:
 - Added crusher functionality

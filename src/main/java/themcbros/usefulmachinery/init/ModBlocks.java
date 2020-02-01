@@ -21,7 +21,7 @@ public class ModBlocks {
     public static final MachineBlock LAVA_GENERATOR = register("lava_generator", new LavaGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock CRUSHER = register("crusher", new CrusherBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
-    public static final Block COMPACTOR = register("compactor", new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
+    public static final MachineBlock COMPACTOR = register("compactor", new CompactorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final WireBlock WIRE = register("wire", new WireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
     public static final CreativePowerCellBlock CREATIVE_POWER_CELL = register("creative_power_cell", new CreativePowerCellBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
 

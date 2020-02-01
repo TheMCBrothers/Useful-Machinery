@@ -19,6 +19,7 @@ public class ModTileEntities {
     public static final TileEntityType<LavaGeneratorTileEntity> LAVA_GENERATOR = register("lava_generator", TileEntityType.Builder.create(LavaGeneratorTileEntity::new, ModBlocks.LAVA_GENERATOR).build(null));
     public static final TileEntityType<CrusherTileEntity> CRUSHER = register("crusher", TileEntityType.Builder.create(CrusherTileEntity::new, ModBlocks.CRUSHER).build(null));
     public static final TileEntityType<ElectricSmelterTileEntity> ELECTRIC_SMELTER = register("electric_smelter", TileEntityType.Builder.create(ElectricSmelterTileEntity::new, ModBlocks.ELECTRIC_SMELTER).build(null));
+    public static final TileEntityType<CompactorTileEntity> COMPACTOR = register("compactor", TileEntityType.Builder.create(CompactorTileEntity::new, ModBlocks.COMPACTOR).build(null));
     public static final TileEntityType<WireTileEntity> WIRE = register("wire", TileEntityType.Builder.create(WireTileEntity::new, ModBlocks.WIRE).build(null));
     public static final TileEntityType<CreativePowerCellTileEntity> CREATIVE_POWER_CELL = register("creative_power_cell", TileEntityType.Builder.create(CreativePowerCellTileEntity::new, ModBlocks.CREATIVE_POWER_CELL).build(null));
 

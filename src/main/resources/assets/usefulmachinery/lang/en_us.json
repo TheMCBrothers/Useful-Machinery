@@ -13,6 +13,7 @@
 
   "item.usefulmachinery.battery": "Battery",
   "item.usefulmachinery.machine_frame": "Machine Frame",
+  "item.usefulmachinery.compactor_kit": "Compactor Kit",
 
   "jei.usefulmachinery.crushing": "Crushing",
   "jei.usefulmachinery.electric_smelting": "Electric Smelting",
@@ -24,9 +25,13 @@
   "misc.usefulmachinery.fluidWithMax": "%s / %s mB",
   "misc.usefulmachinery.fluidWithMaxName": "%s: %s / %s mB",
   "misc.usefulmachinery.redstoneMode": "Redstone Mode: %s",
+  "misc.usefulmachinery.compact_plate": "Plate Press",
+  "misc.usefulmachinery.compact_gear": "Gear Manufacturing",
+  "misc.usefulmachinery.compact_block": "Block Former",
 
   "stat.usefulmachinery.interact_with_crusher": "Interactions with Crusher",
   "stat.usefulmachinery.interact_with_electric_smelter": "Interactions with Electric Smelter",
+  "stat.usefulmachinery.interact_with_compactor": "Interactions with Compactor",
   "stat.usefulmachinery.interact_with_coal_generator": "Interactions with Coal Generator",
   "stat.usefulmachinery.interact_with_lava_generator": "Interactions with Lava Generator",
 

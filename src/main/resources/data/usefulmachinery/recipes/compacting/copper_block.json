@@ -1,0 +1,12 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/copper",
+    "count": 9
+  },
+  "result": {
+    "item": "usefulfoundation:copper_block",
+    "count": 1
+  },
+  "mode": "block"
+}

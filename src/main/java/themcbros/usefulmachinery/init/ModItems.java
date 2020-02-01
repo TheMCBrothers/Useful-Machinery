@@ -26,6 +26,7 @@ public class ModItems {
 
     public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
     public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(UsefulMachinery.GROUP)));
+    public static final Item COMPACTOR_KIT = register("compactor_kit", new Item(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
 
     private static <T extends Item> T register(String registryName, T item) {
         item.setRegistryName(UsefulMachinery.getId(registryName));

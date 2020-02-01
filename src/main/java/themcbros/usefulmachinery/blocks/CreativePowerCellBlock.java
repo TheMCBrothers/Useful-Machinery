@@ -19,4 +19,9 @@ public class CreativePowerCellBlock extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new CreativePowerCellTileEntity();
     }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
 }

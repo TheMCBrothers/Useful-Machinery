@@ -20,7 +20,7 @@ public class ModRecipeSerializers {
 
     public static final CrusherRecipe.Serializer CRUSHING = register("crushing", new CrusherRecipe.Serializer());
     public static final CookingRecipeSerializer<ElectricSmeltingRecipe> ELECTRIC_SMELTING = null; // register("electric_smelting", new CookingRecipeSerializer<>(ElectricSmeltingRecipe::new, 100));
-    public static final SingleItemRecipe.Serializer<CompactingRecipe> COMPACTING = null; // register("compacting", new SingleItemRecipe.Serializer(CompactingRecipe::new));
+    public static final CompactingRecipe.Serializer COMPACTING = register("compacting", new CompactingRecipe.Serializer());
 
     private static <T extends IRecipeSerializer<? extends IRecipe<?>>> T register(String registryName, T serializer) {
         serializer.setRegistryName(UsefulMachinery.getId(registryName));

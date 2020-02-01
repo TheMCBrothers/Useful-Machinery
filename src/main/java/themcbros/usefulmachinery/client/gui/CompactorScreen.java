@@ -1,24 +1,39 @@
 package themcbros.usefulmachinery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import themcbros.usefulmachinery.UsefulMachinery;
+import themcbros.usefulmachinery.client.gui.widget.CompactorModeButton;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.CrusherContainer;
-import themcbros.usefulmachinery.container.ElectricSmelterContainer;
+import themcbros.usefulmachinery.container.CompactorContainer;
+import themcbros.usefulmachinery.machine.CompactorMode;
+import themcbros.usefulmachinery.networking.Networking;
+import themcbros.usefulmachinery.networking.SetCompactorModePacket;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import java.awt.*;
 
-public class ElectricSmelterScreen extends MachineScreen<ElectricSmelterContainer> {
+public class CompactorScreen extends MachineScreen<CompactorContainer> {
 
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
-    public ElectricSmelterScreen(ElectricSmelterContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public CompactorScreen(CompactorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.energyBar = new EnergyBar(155, 17, 10, 50);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        CompactorModeButton compactorModeButton = new CompactorModeButton(this.container, this.guiLeft + 9, this.guiTop + 31, 20, 20, button -> {
+            CompactorMode mode = ((CompactorModeButton) button).getMode();
+            Networking.channel.sendToServer(new SetCompactorModePacket(mode));
+        });
+        this.addButton(compactorModeButton);
     }
 
     @Override
@@ -46,6 +61,12 @@ public class ElectricSmelterScreen extends MachineScreen<ElectricSmelterContaine
         Rectangle bar = this.energyBar.rect;
         if (isPointInRegion(bar.x, bar.y, bar.width, bar.height, mouseX, mouseY)) {
             this.renderTooltip(TextUtils.energyWithMax(this.container.getEnergyStored(), this.container.getMaxEnergyStored()).getFormattedText(), mouseX, mouseY);
+        }
+        for (Widget widget : this.buttons) {
+            if (widget.isHovered() && widget instanceof CompactorModeButton) {
+                CompactorMode mode = ((CompactorModeButton) widget).getMode();
+                renderTooltip(TextUtils.translate("misc", "compact_" + mode.getName()).getFormattedText(), mouseX, mouseY);
+            }
         }
         super.renderHoveredToolTip(mouseX, mouseY);
     }

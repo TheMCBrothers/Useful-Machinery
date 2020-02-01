@@ -6,7 +6,58 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "usefulmachinery:crusher"
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:set_contents",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "minecraft:contents"
+                }
+              ]
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "EnergyStored",
+                  "target": "BlockEntityTag.EnergyStored",
+                  "op": "replace"
+                },
+                {
+                  "source": "Items",
+                  "target": "BlockEntityTag.Items",
+                  "op": "replace"
+                },
+                {
+                  "source": "RedstoneMode",
+                  "target": "BlockEntityTag.RedstoneMode",
+                  "op": "replace"
+                },
+                {
+                  "source": "Mode",
+                  "target": "BlockEntityTag.Mode",
+                  "op": "replace"
+                },
+                {
+                  "source": "ProcessTime",
+                  "target": "BlockEntityTag.ProcessTime",
+                  "op": "replace"
+                },
+                {
+                  "source": "ProcessTimeTotal",
+                  "target": "BlockEntityTag.ProcessTimeTotal",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "usefulmachinery:compactor"
         }
       ],
       "conditions": [
