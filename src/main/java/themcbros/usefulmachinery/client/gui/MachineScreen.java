@@ -25,7 +25,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
     protected void init() {
         super.init();
 
-        RedstoneModeButton redstoneModeButton = new RedstoneModeButton(this.container, this.guiLeft - 16, this.guiTop, 16, 16, button -> {
+        RedstoneModeButton redstoneModeButton = new RedstoneModeButton(this.container, this.guiLeft - 16, this.guiTop, button -> {
             RedstoneMode mode = ((RedstoneModeButton) button).getMode();
             Networking.channel.sendToServer(new SetRedstoneModePacket(mode));
         });

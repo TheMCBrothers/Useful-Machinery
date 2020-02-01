@@ -4,6 +4,7 @@
 - Added lava generator
 - Added creative power cell
 - Added new machine fronts
+- Added background to redstone mode button
 
 0.0.1.0:
 - Added crusher functionality
