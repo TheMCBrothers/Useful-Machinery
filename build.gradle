@@ -127,6 +127,10 @@ repositories {
         name 'thiakil'
         url 'https://maven.thiakil.com'
     }
+    maven {
+        name 'patchouli'
+        url 'https://maven.blamejared.com'
+    }
 }
 
 dependencies {
@@ -141,6 +145,9 @@ dependencies {
     // Just Enough Items - Optional Dependency
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+    // Patchouli - Optional Dependency
+    compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
 }
 

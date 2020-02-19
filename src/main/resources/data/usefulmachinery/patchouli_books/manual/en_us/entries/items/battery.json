@@ -1,0 +1,16 @@
+{
+  "name": "Battery",
+  "icon": "usefulmachinery:battery",
+  "category": "items",
+  "pages": [
+    {
+      "title": "Battery",
+      "type": "text",
+      "text": "The $(thing)Battery$() has two usages. It is a crafting item for machines and it can hold Forge Energy"
+    },
+    {
+      "type": "crafting",
+      "recipe": "usefulmachinery:shaped/battery"
+    }
+  ]
+}

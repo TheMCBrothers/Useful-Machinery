@@ -1,0 +1,5 @@
+{
+  "name": "Machines",
+  "description": "Here you can find everything about our machines.$(br2)There are currently these machines in the mod:$(li)$(thing)Crusher$(li)Electric Smelter$(li)Compactor$(br2)$()Useful generator are the $(thing)Coal Generator$() and the $(thing)Lava Generator",
+  "icon": "usefulmachinery:crusher"
+}

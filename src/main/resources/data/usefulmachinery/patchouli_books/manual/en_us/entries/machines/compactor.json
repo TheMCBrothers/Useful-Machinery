@@ -1,0 +1,16 @@
+{
+  "name": "Compactor",
+  "icon": "usefulmachinery:compactor",
+  "category": "machines",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The $(thing)Compactor$() can compress materials into plates, gears and blocks."
+    },
+    {
+      "type": "crafting",
+      "recipe": "usefulmachinery:shaped/compactor",
+      "recipe2": "usefulmachinery:compactor_kit"
+    }
+  ]
+}

@@ -98,7 +98,7 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
         Fluid fluid = fluidStack.getFluid();
         FluidAttributes attributes = fluid.getAttributes();
         ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
-        return minecraft.getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+        return minecraft.getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
     }
 
     private static void setGLColorFromInt(int color) {
