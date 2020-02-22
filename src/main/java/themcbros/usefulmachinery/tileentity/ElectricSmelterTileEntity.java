@@ -1,13 +1,10 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -20,8 +17,6 @@ import javax.annotation.Nullable;
 public class ElectricSmelterTileEntity extends MachineTileEntity {
 
     private static final int RF_PER_TICK = 10;
-
-    private int cookTime, cookTimeTotal;
 
     private IIntArray fields = new IIntArray() {
         @Override
@@ -36,10 +31,10 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
                     ElectricSmelterTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
                     break;
                 case 5:
-                    ElectricSmelterTileEntity.this.cookTime = value;
+                    ElectricSmelterTileEntity.this.processTime = value;
                     break;
                 case 6:
-                    ElectricSmelterTileEntity.this.cookTimeTotal = value;
+                    ElectricSmelterTileEntity.this.processTimeTotal = value;
                     break;
             }
         }
@@ -64,10 +59,10 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
                     return ElectricSmelterTileEntity.this.redstoneMode.ordinal();
                 case 5:
                     // Crush time
-                    return ElectricSmelterTileEntity.this.cookTime;
+                    return ElectricSmelterTileEntity.this.processTime;
                 case 6:
                     // Total crush time
-                    return ElectricSmelterTileEntity.this.cookTimeTotal;
+                    return ElectricSmelterTileEntity.this.processTimeTotal;
                 default:
                     return 0;
             }
@@ -76,20 +71,6 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
 
     public ElectricSmelterTileEntity() {
         super(ModTileEntities.ELECTRIC_SMELTER, false);
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound.putInt("CookTime", this.cookTime);
-        compound.putInt("CookTimeTotal", this.cookTimeTotal);
-        return super.write(compound);
-    }
-
-    @Override
-    public void read(CompoundNBT compound) {
-        this.cookTime = compound.getInt("CookTime");
-        this.cookTimeTotal = compound.getInt("CookTimeTotal");
-        super.read(compound);
     }
 
     @Override
@@ -117,8 +98,8 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
         }
 
         if (index == 0 && !flag) {
-            this.cookTimeTotal = this.getCookTime();
-            this.cookTime = 0;
+            this.processTimeTotal = this.getProcessTime();
+            this.processTime = 0;
             this.markDirty();
         }
     }
@@ -135,7 +116,7 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
     }
 
     private boolean isActive() {
-        return this.cookTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
+        return this.processTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
     }
 
     @Override
@@ -154,20 +135,20 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
 
                 if (!this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    this.cookTime++;
+                    this.processTime++;
                 }
 
                 if (this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    this.cookTime++;
-                    if (this.cookTime == this.cookTimeTotal) {
-                        this.cookTime = 0;
-                        this.cookTimeTotal = this.getCookTime();
+                    this.processTime++;
+                    if (this.processTime == this.processTimeTotal) {
+                        this.processTime = 0;
+                        this.processTimeTotal = this.getProcessTime();
                         this.processItem(recipe);
                         flag1 = true;
                     }
                 } else {
-                    this.cookTime = 0;
+                    this.processTime = 0;
                 }
             }
 
@@ -182,7 +163,7 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
         }
     }
 
-    private int getCookTime() {
+    private int getProcessTime() {
         if (world == null) return 200;
         return this.world.getRecipeManager().getRecipe(IRecipeType.BLASTING, this, this.world)
                 .map(AbstractCookingRecipe::getCookTime).orElse(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world)

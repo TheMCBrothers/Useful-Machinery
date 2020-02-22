@@ -34,6 +34,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
+    public int processTime, processTimeTotal;
     public MachineEnergyStorage energyStorage;
     public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private boolean isGenerator;
@@ -47,6 +48,8 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
+        if (this.processTime > 0) compound.putInt("ProcessTime", this.processTime);
+        if (this.processTimeTotal > 0) compound.putInt("ProcessTimeTotal", this.processTimeTotal);
         if (redstoneMode != RedstoneMode.IGNORED) compound.putInt("RedstoneMode", redstoneMode.getIndex());
         if (this.energyStorage.getEnergyStored() > 0) compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
         ItemStackHelper.saveAllItems(compound, this.stacks, false);
@@ -55,6 +58,8 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     @Override
     public void read(CompoundNBT compound) {
+        if (compound.contains("ProcessTime", Constants.NBT.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
+        if (compound.contains("ProcessTimeTotal", Constants.NBT.TAG_INT)) this.processTimeTotal = compound.getInt("ProcessTimeTotal");
         if (compound.contains("RedstoneMode", Constants.NBT.TAG_INT))
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         if (compound.contains("EnergyStored", Constants.NBT.TAG_INT))

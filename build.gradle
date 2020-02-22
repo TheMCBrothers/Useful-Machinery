@@ -149,6 +149,9 @@ dependencies {
     // Patchouli - Optional Dependency
     compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
+    // The One Probe - Optional Dependency
+    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
+
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

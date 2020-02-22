@@ -5,6 +5,8 @@
 - Added creative power cell
 - Added new machine fronts
 - Added background to redstone mode button
+- Added machine compatibility for The One Probe
+- Added manual book using Patchouli
 
 0.0.1.0:
 - Added crusher functionality

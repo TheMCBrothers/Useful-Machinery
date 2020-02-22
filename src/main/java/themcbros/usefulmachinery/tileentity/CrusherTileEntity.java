@@ -20,8 +20,6 @@ public class CrusherTileEntity extends MachineTileEntity {
 
     private static final int RF_PER_TICK = 10;
 
-    private int crushTime, crushTimeTotal;
-
     private IIntArray fields = new IIntArray() {
         @Override
         public int size() {
@@ -35,10 +33,10 @@ public class CrusherTileEntity extends MachineTileEntity {
                     CrusherTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
                     break;
                 case 5:
-                    CrusherTileEntity.this.crushTime = value;
+                    CrusherTileEntity.this.processTime = value;
                     break;
                 case 6:
-                    CrusherTileEntity.this.crushTimeTotal = value;
+                    CrusherTileEntity.this.processTimeTotal = value;
                     break;
             }
         }
@@ -63,10 +61,10 @@ public class CrusherTileEntity extends MachineTileEntity {
                     return CrusherTileEntity.this.redstoneMode.ordinal();
                 case 5:
                     // Crush time
-                    return CrusherTileEntity.this.crushTime;
+                    return CrusherTileEntity.this.processTime;
                 case 6:
                     // Total crush time
-                    return CrusherTileEntity.this.crushTimeTotal;
+                    return CrusherTileEntity.this.processTimeTotal;
                 default:
                     return 0;
             }
@@ -75,20 +73,6 @@ public class CrusherTileEntity extends MachineTileEntity {
 
     public CrusherTileEntity() {
         super(ModTileEntities.CRUSHER, false);
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound.putInt("CrushTime", this.crushTime);
-        compound.putInt("CrushTimeTotal", this.crushTimeTotal);
-        return super.write(compound);
-    }
-
-    @Override
-    public void read(CompoundNBT compound) {
-        this.crushTime = compound.getInt("CrushTime");
-        this.crushTimeTotal = compound.getInt("CrushTimeTotal");
-        super.read(compound);
     }
 
     @Override
@@ -107,7 +91,7 @@ public class CrusherTileEntity extends MachineTileEntity {
     }
 
     private boolean isActive() {
-        return this.crushTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
+        return this.processTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
     }
 
     @Override
@@ -125,20 +109,20 @@ public class CrusherTileEntity extends MachineTileEntity {
                 CrusherRecipe crusherRecipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.CRUSHING, this, this.world).orElse(null);
                 if (!this.isActive() && this.canCrush(crusherRecipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    crushTime++;
+                    processTime++;
                 }
 
                 if (this.isActive() && this.canCrush(crusherRecipe)) {
-                    this.crushTime++;
+                    this.processTime++;
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    if (this.crushTime == this.crushTimeTotal) {
-                        this.crushTime = 0;
-                        this.crushTimeTotal = this.getCrushTime();
+                    if (this.processTime == this.processTimeTotal) {
+                        this.processTime = 0;
+                        this.processTimeTotal = this.getCrushTime();
                         this.crushItem(crusherRecipe);
                         flag1 = true;
                     }
                 } else {
-                    this.crushTime = 0;
+                    this.processTime = 0;
                 }
             }
 
@@ -231,8 +215,8 @@ public class CrusherTileEntity extends MachineTileEntity {
         }
 
         if (index == 0 && !flag) {
-            this.crushTimeTotal = this.getCrushTime();
-            this.crushTime = 0;
+            this.processTimeTotal = this.getCrushTime();
+            this.processTime = 0;
             this.markDirty();
         }
     }

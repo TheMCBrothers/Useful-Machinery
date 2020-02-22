@@ -81,7 +81,6 @@ public class CompactorTileEntity extends MachineTileEntity {
     };
 
     public CompactorMode compactorMode = CompactorMode.PLATE;
-    private int processTime, processTimeTotal;
 
     public CompactorTileEntity() {
         super(ModTileEntities.COMPACTOR, false);
@@ -90,16 +89,12 @@ public class CompactorTileEntity extends MachineTileEntity {
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         if (this.compactorMode != CompactorMode.PLATE) compound.putInt("Mode", this.compactorMode.getIndex());
-        if (this.processTime > 0) compound.putInt("ProcessTime", this.processTime);
-        if (this.processTimeTotal > 0) compound.putInt("ProcessTimeTotal", this.processTimeTotal);
         return super.write(compound);
     }
 
     @Override
     public void read(CompoundNBT compound) {
         if (compound.contains("Mode", Constants.NBT.TAG_INT)) this.compactorMode = CompactorMode.byIndex(compound.getInt("Mode"));
-        if (compound.contains("ProcessTime", Constants.NBT.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
-        if (compound.contains("ProcessTimeTotal", Constants.NBT.TAG_INT)) this.processTimeTotal = compound.getInt("ProcessTimeTotal");
         super.read(compound);
     }
 

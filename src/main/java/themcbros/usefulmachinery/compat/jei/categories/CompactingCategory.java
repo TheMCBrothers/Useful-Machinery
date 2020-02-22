@@ -1,6 +1,5 @@
-package themcbros.usefulmachinery.compat.jei.crusher;
+package themcbros.usefulmachinery.compat.jei.categories;
 
-import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -14,23 +13,19 @@ import net.minecraft.util.ResourceLocation;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.ModRecipeCategoryUid;
 import themcbros.usefulmachinery.init.ModItems;
-import themcbros.usefulmachinery.recipes.CrusherRecipe;
+import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.util.TextUtils;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-public class CrushingCategory implements IRecipeCategory<CrusherRecipe> {
-
-    private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/crusher.png");
+    private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
     private final IDrawable icon, background;
     private final IDrawableAnimated arrow, energyBar;
 
-    public CrushingCategory(IGuiHelper helper) {
+    public CompactingCategory(IGuiHelper helper) {
 
-        this.icon = helper.createDrawableIngredient(new ItemStack(ModItems.CRUSHER));
+        this.icon = helper.createDrawableIngredient(new ItemStack(ModItems.COMPACTOR));
         this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
 
         this.arrow = helper.drawableBuilder(TEXTURES, 176, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -39,24 +34,24 @@ public class CrushingCategory implements IRecipeCategory<CrusherRecipe> {
     }
 
     @Override
-    public void draw(CrusherRecipe recipe, double mouseX, double mouseY) {
-        this.arrow.draw(24, 18);
+    public void draw(CompactingRecipe recipe, double mouseX, double mouseY) {
+        this.arrow.draw(24, 16);
         this.energyBar.draw(121, 1);
     }
 
     @Override
     public ResourceLocation getUid() {
-        return ModRecipeCategoryUid.CRUSHING;
+        return ModRecipeCategoryUid.COMPACTING;
     }
 
     @Override
-    public Class<? extends CrusherRecipe> getRecipeClass() {
-        return CrusherRecipe.class;
+    public Class<? extends CompactingRecipe> getRecipeClass() {
+        return CompactingRecipe.class;
     }
 
     @Override
     public String getTitle() {
-        return TextUtils.translate("jei", "crushing").getFormattedText();
+        return TextUtils.translate("jei", "compacting").getFormattedText();
     }
 
     @Override
@@ -70,17 +65,17 @@ public class CrushingCategory implements IRecipeCategory<CrusherRecipe> {
     }
 
     @Override
-    public void setIngredients(CrusherRecipe crusherRecipe, IIngredients ingredients) {
-        ingredients.setInputIngredients(crusherRecipe.getIngredients());
-        ingredients.setOutput(VanillaTypes.ITEM, crusherRecipe.getRecipeOutput());
+    public void setIngredients(CompactingRecipe recipe, IIngredients ingredients) {
+        ingredients.setInputIngredients(recipe.getIngredients());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, CrusherRecipe crusherRecipe, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, CompactingRecipe recipe, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-        guiItemStacks.init(0, true, 0, 18);
-        guiItemStacks.init(1, false, 60, 7);
-        // guiItemStacks.init(2, false, 60, 31);
+        guiItemStacks.init(0, true, 0, 16);
+        guiItemStacks.init(1, false, 60, 16);
         guiItemStacks.set(ingredients);
     }
+
 }
