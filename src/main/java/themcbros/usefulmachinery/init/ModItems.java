@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.items.BatteryItem;
 import themcbros.usefulmachinery.items.CreativePowerCellItem;
+import themcbros.usefulmachinery.items.TierUpgradeItem;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ModItems {
     public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
     public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final Item COMPACTOR_KIT = register("compactor_kit", new Item(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
+    public static final TierUpgradeItem TIER_UPGRADE = register("tier_upgrade", new TierUpgradeItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
 
     private static <T extends Item> T register(String registryName, T item) {
         item.setRegistryName(UsefulMachinery.getId(registryName));

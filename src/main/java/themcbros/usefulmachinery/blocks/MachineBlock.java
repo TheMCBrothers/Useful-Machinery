@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -20,6 +21,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import themcbros.usefulmachinery.init.ModStats;
+import themcbros.usefulmachinery.items.UpgradeItem;
 
 import javax.annotation.Nullable;
 
@@ -69,6 +71,9 @@ public abstract class MachineBlock extends Block {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (player.getHeldItem(handIn).getItem() instanceof UpgradeItem) {
+            return player.getHeldItem(handIn).onItemUse(new ItemUseContext(player, handIn, hit));
+        }
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof INamedContainerProvider && player instanceof ServerPlayerEntity) {
             NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity);

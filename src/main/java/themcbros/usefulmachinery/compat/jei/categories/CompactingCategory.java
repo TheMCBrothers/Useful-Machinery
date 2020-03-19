@@ -9,12 +9,15 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.ModRecipeCategoryUid;
 import themcbros.usefulmachinery.init.ModItems;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.util.TextUtils;
+
+import java.util.Arrays;
 
 public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
 
@@ -66,7 +69,11 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
 
     @Override
     public void setIngredients(CompactingRecipe recipe, IIngredients ingredients) {
-        ingredients.setInputIngredients(recipe.getIngredients());
+        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
+        for (ItemStack stack : stacks) {
+            stack.setCount(recipe.getCount());
+        }
+        ingredients.setInputs(VanillaTypes.ITEM, Arrays.asList(stacks));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
     }
 

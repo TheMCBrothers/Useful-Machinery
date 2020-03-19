@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import themcbros.usefulmachinery.blocks.MachineBlock;
 import themcbros.usefulmachinery.energy.MachineEnergyStorage;
+import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.EnergyUtils;
 
@@ -36,6 +37,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     public int processTime, processTimeTotal;
     public MachineEnergyStorage energyStorage;
+    public MachineTier machineTier = MachineTier.LEADSTONE;
     public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private boolean isGenerator;
     private int cooldown = -1;
@@ -50,6 +52,7 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public CompoundNBT write(CompoundNBT compound) {
         if (this.processTime > 0) compound.putInt("ProcessTime", this.processTime);
         if (this.processTimeTotal > 0) compound.putInt("ProcessTimeTotal", this.processTimeTotal);
+        if (machineTier != MachineTier.LEADSTONE) compound.putInt("Tier", machineTier.ordinal());
         if (redstoneMode != RedstoneMode.IGNORED) compound.putInt("RedstoneMode", redstoneMode.getIndex());
         if (this.energyStorage.getEnergyStored() > 0) compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
         ItemStackHelper.saveAllItems(compound, this.stacks, false);
@@ -60,10 +63,11 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public void read(CompoundNBT compound) {
         if (compound.contains("ProcessTime", Constants.NBT.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
         if (compound.contains("ProcessTimeTotal", Constants.NBT.TAG_INT)) this.processTimeTotal = compound.getInt("ProcessTimeTotal");
+        if (compound.contains("Tier", Constants.NBT.TAG_INT)) this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
         if (compound.contains("RedstoneMode", Constants.NBT.TAG_INT))
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         if (compound.contains("EnergyStored", Constants.NBT.TAG_INT))
-            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal()+1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         ItemStackHelper.loadAllItems(compound, this.stacks);
         super.read(compound);
     }
