@@ -142,6 +142,9 @@ dependencies {
     // Useful Foundation
     compile fg.deobf("curse.maven:useful-foundation:2846862")
 
+    // CC: Tweaked
+    compile fg.deobf("curse.maven:cc-tweaked:2867087")
+
     // Just Enough Items - Optional Dependency
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")

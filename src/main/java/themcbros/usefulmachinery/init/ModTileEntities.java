@@ -23,6 +23,8 @@ public class ModTileEntities {
     public static final TileEntityType<WireTileEntity> WIRE = register("wire", TileEntityType.Builder.create(WireTileEntity::new, ModBlocks.WIRE).build(null));
     public static final TileEntityType<CreativePowerCellTileEntity> CREATIVE_POWER_CELL = register("creative_power_cell", TileEntityType.Builder.create(CreativePowerCellTileEntity::new, ModBlocks.CREATIVE_POWER_CELL).build(null));
 
+    public static final TileEntityType<?> FRAMED_BUNDLED_CABLE = register("bundled_cable", TileEntityType.Builder.create(FramedBundledCableTileEntity::new, ModBlocks.FRAMED_BUNDLED_CABLE).build(null));
+
     private static <T extends TileEntityType<?>> T register(String registryName, T tileEntityType) {
         tileEntityType.setRegistryName(UsefulMachinery.getId(registryName));
         TILE_ENTITY_TYPES.add(tileEntityType);

@@ -23,6 +23,8 @@ public class ModBlocks {
     public static final MachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final MachineBlock COMPACTOR = register("compactor", new CompactorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2f).sound(SoundType.METAL)));
     public static final WireBlock WIRE = register("wire", new WireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
+    public static final FramedBundledCableBlock FRAMED_BUNDLED_CABLE = register("framed_bundled_cable", new FramedBundledCableBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
+    public static final FramedRedstoneWireBlock FRAMED_REDSTONE_WIRE = register("framed_redstone_wire", new FramedRedstoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
     public static final CreativePowerCellBlock CREATIVE_POWER_CELL = register("creative_power_cell", new CreativePowerCellBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(.5f).sound(SoundType.METAL)));
 
     private static <T extends Block> T register(String registryName, T block) {

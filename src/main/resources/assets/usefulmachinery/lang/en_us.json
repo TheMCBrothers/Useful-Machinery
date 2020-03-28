@@ -5,6 +5,8 @@
   "block.usefulmachinery.electric_smelter": "Electric Smelter",
   "block.usefulmachinery.compactor": "Compactor",
   "block.usefulmachinery.creative_power_cell": "Creative Power Cell",
+  "block.usefulmachinery.framed_bundled_cable": "Framed Bundled Cable",
+  "block.usefulmachinery.framed_redstone_wire": "Framed Redstone Wire",
   "container.usefulmachinery.coal_generator": "Coal Generator",
   "container.usefulmachinery.lava_generator": "Lava Generator",
   "container.usefulmachinery.crusher": "Crusher",

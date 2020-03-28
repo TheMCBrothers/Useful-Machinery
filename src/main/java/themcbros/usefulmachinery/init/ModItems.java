@@ -24,6 +24,8 @@ public class ModItems {
     public static final BlockItem ELECTRIC_SMELTER = register("electric_smelter", new BlockItem(ModBlocks.ELECTRIC_SMELTER, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem COMPACTOR = register("compactor", new BlockItem(ModBlocks.COMPACTOR, new Item.Properties().group(UsefulMachinery.GROUP)));
     public static final BlockItem CREATIVE_POWER_CELL = register("creative_power_cell", new CreativePowerCellItem(ModBlocks.CREATIVE_POWER_CELL, new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
+    public static final BlockItem FRAMED_BUNDLED_CABLE = register("framed_bundled_cable", new BlockItem(ModBlocks.FRAMED_BUNDLED_CABLE, new Item.Properties().group(UsefulMachinery.GROUP)));
+    public static final BlockItem FRAMED_REDSTONE_WIRE = register("framed_redstone_wire", new BlockItem(ModBlocks.FRAMED_REDSTONE_WIRE, new Item.Properties().group(UsefulMachinery.GROUP)));
 
     public static final BatteryItem BATTERY = register("battery", new BatteryItem(new Item.Properties().group(UsefulMachinery.GROUP).maxStackSize(1)));
     public static final Item MACHINE_FRAME = register("machine_frame", new Item(new Item.Properties().group(UsefulMachinery.GROUP)));

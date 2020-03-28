@@ -14,6 +14,7 @@ public class TheOneProbeSupport implements Function<ITheOneProbe, Void> {
     public Void apply(ITheOneProbe theOneProbe) {
         UsefulMachinery.LOGGER.info("Enabling support for TheOneProbe");
         theOneProbe.registerProvider(MachineProbeProvider.INSTANCE);
+        theOneProbe.registerProvider(CableProbeProvider.INSTANCE);
         return null;
     }
 }
