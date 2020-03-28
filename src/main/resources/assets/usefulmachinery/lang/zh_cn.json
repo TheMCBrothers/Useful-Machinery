@@ -1,0 +1,39 @@
+{
+  "block.usefulmachinery.coal_generator": "燃煤发电机",
+  "block.usefulmachinery.lava_generator": "岩浆发电机",
+  "block.usefulmachinery.crusher": "粉碎机",
+  "block.usefulmachinery.electric_smelter": "电力熔炉",
+  "block.usefulmachinery.compactor": "压缩机",
+  "block.usefulmachinery.creative_power_cell": "创造能量单元",
+  "container.usefulmachinery.coal_generator": "燃煤发电机",
+  "container.usefulmachinery.lava_generator": "岩浆发电机",
+  "container.usefulmachinery.crusher": "粉碎机",
+  "container.usefulmachinery.electric_smelter": "电力熔炉",
+  "container.usefulmachinery.compactor": "压缩机",
+
+  "item.usefulmachinery.battery": "电池",
+  "item.usefulmachinery.machine_frame": "机器框架",
+  "item.usefulmachinery.compactor_kit": "压缩组件",
+
+  "jei.usefulmachinery.crushing": "粉碎",
+  "jei.usefulmachinery.electric_smelting": "电力冶炼",
+  "jei.usefulmachinery.compacting": "压缩",
+
+  "misc.usefulmachinery.energy": "%s FE",
+  "misc.usefulmachinery.energyWithMax": "%s / %s FE",
+  "misc.usefulmachinery.empty": "空",
+  "misc.usefulmachinery.fluidWithMax": "%s / %s mB",
+  "misc.usefulmachinery.fluidWithMaxName": "%s: %s / %s mB",
+  "misc.usefulmachinery.redstoneMode": "红石控制: %s",
+  "misc.usefulmachinery.compact_plate": "压制板材",
+  "misc.usefulmachinery.compact_gear": "制作齿轮",
+  "misc.usefulmachinery.compact_block": "方块成型",
+
+  "stat.usefulmachinery.interact_with_crusher": "与粉碎机交互",
+  "stat.usefulmachinery.interact_with_electric_smelter": "与电力熔炉交互",
+  "stat.usefulmachinery.interact_with_compactor": "与压缩机交互",
+  "stat.usefulmachinery.interact_with_coal_generator": "与燃煤发电机交互",
+  "stat.usefulmachinery.interact_with_lava_generator": "与岩浆发电机交互",
+
+  "itemGroup.usefulmachinery": "实用机械"
+}
