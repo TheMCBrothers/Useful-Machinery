@@ -1,34 +1,26 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.0"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-}
-
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
 
 group = 'themcbros.usefulmachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'usefulmachinery'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'snapshot', version: mcp_mappings
+    mappings channel: 'official', version: project.mc_version
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
+
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
@@ -86,88 +78,24 @@ minecraft {
     }
 }
 
-repositories {
-    maven {
-        name 'ForgeFS'
-        url 'https://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'amadornes'
-        url 'https://maven.amadornes.com/'
-    }
-    maven {
-        name 'prog'
-        url 'http://dvs1.progwml6.com/files/maven'
-    }
-    maven {
-        name 'curseforge'
-        url 'https://minecraft.curseforge.com/api/maven/'
-    }
-    maven {
-        name 'opencomputers'
-        url 'http://maven.cil.li/'
-    }
-    maven {
-        name 'hwyla'
-        url 'https://tehnut.info/maven'
-    }
-    maven {
-        name 'tterrag'
-        url 'https://maven.tterrag.com/'
-    }
-    maven {
-        name 'ic2'
-        url 'http://maven.ic2.player.to'
-    }
-    maven {
-        name 'BlameJared - Crafttweaker'
-        url 'https://maven.blamejared.com/'
-    }
-    maven {
-        name 'thiakil'
-        url 'https://maven.thiakil.com'
-    }
-    maven {
-        name 'patchouli'
-        url 'https://maven.blamejared.com'
-    }
-}
-
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-
-    // Useful Foundation
-    compile fg.deobf("curse.maven:useful-foundation:2846862")
-
-    // CC: Tweaked
-    compile fg.deobf("curse.maven:cc-tweaked:2867087")
-
-    // Just Enough Items - Optional Dependency
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-
-    // Patchouli - Optional Dependency
-    compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-
-    // The One Probe - Optional Dependency
-    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
-
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "usefulmachinery",
-            "Specification-Vendor": "themcbrothers",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"themcbrothers",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : "usefulmachinery",
+                "Specification-Vendor"    : "themcbrothers",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "themcbrothers",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
@@ -190,82 +118,6 @@ publishing {
     repositories {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
-
-String getChangelogText() {
-    def changelogFile = file('changelog.txt')
-    String str = ''
-    int lineCount = 0
-    boolean done = false
-    changelogFile.eachLine {
-        if (done || it == null) {
-            return
-        }
-        if (it.size() > 1) {
-            def temp = it
-            if (lineCount == 0) {
-                temp = "${modname} ${version}"
-                temp = "<h2>$temp</h2>"
-            } else if (it.startsWith('-')) {
-                temp = "&nbsp;&nbsp;&nbsp;$temp"
-                temp = temp.replaceAll("(\\S+\\/\\S+)#([0-9]+)\\b", "<a href=\"https://github.com/\$1/issues/\$2\">\$0</a>");
-                temp = temp.replaceAll("#([0-9]+)\\b(?!<\\/a>)", "<a href=\"https://github.com/$github_project/issues/\$1\">\$0</a>");
-            } else {
-                temp = "<h4>$temp</h4>"
-            }
-            str += "$temp<br/>"
-            lineCount++
-            return
-        } else {
-            done = true
-        }
-    }
-    return str
-}
-
-class Secrets {
-    def data = null
-
-    def getProperty(String key) {
-        return data ? data[key] : ''
-    }
-}
-
-import groovy.json.JsonSlurper
-
-def secretFile
-if (System.getenv().SECRET_FILE) {
-    secretFile = file System.getenv().SECRET_FILE
-} else {
-    secretFile = file 'secret.json'
-}
-
-project.ext.secret = new Secrets()
-if (secretFile.exists()) {
-    secretFile.withReader {
-        project.ext.secret.data = new JsonSlurper().parse it
-    }
-}
-
-curseforge {
-    if (project.hasProperty('curse_type') && project.hasProperty('projectId')) {
-        apiKey = secret.curseforge_key
-    }
-
-    project {
-        id = project.projectId
-        changelog = getChangelogText()
-        changelogType = 'html'
-        releaseType = project.curse_type
-        addGameVersion(project.mc_version)
-        mainArtifact(jar) {
-            displayName = "${modname} ${version}"
-            relations {
-                requiredDependency 'useful-foundation'
-                optionalDependency 'jei'
-            }
         }
     }
 }
