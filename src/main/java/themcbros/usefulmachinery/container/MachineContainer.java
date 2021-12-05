@@ -7,18 +7,18 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nullable;
 
 public class MachineContainer extends AbstractContainerMenu {
-    public MachineTileEntity machineTileEntity;
+    public AbstractMachineBlockEntity abstractMachineBlockEntity;
     private final RedstoneMode mode = RedstoneMode.IGNORED;
     protected ContainerData fields;
 
-    MachineContainer(@Nullable MenuType<?> type, int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
+    MachineContainer(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(type, id);
-        this.machineTileEntity = tileEntity;
+        this.abstractMachineBlockEntity = tileEntity;
 
         this.fields = fields;
         this.addDataSlots(fields);
@@ -39,7 +39,7 @@ public class MachineContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return this.machineTileEntity.stillValid(playerIn);
+        return this.abstractMachineBlockEntity.stillValid(playerIn);
     }
 
     public RedstoneMode getRedstoneMode() {

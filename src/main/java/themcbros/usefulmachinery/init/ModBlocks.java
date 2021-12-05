@@ -16,11 +16,11 @@ import java.util.List;
 public class ModBlocks {
     private static final List<Block> BLOCKS = Lists.newArrayList();
 
-    public static final MachineBlock COAL_GENERATOR = register("coal_generator", new CoalGeneratorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
-    public static final MachineBlock LAVA_GENERATOR = register("lava_generator", new LavaGeneratorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
-    public static final MachineBlock CRUSHER = register("crusher", new CrusherBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
-    public static final MachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
-    public static final MachineBlock COMPACTOR = register("compactor", new CompactorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
+    public static final AbstractMachineBlock COAL_GENERATOR = register("coal_generator", new CoalGeneratorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
+    public static final AbstractMachineBlock LAVA_GENERATOR = register("lava_generator", new LavaGeneratorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
+    public static final AbstractMachineBlock CRUSHER = register("crusher", new CrusherBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
+    public static final AbstractMachineBlock ELECTRIC_SMELTER = register("electric_smelter", new ElectricSmelterBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
+    public static final AbstractMachineBlock COMPACTOR = register("compactor", new CompactorBlock(Block.Properties.of(Material.METAL).explosionResistance(2f).sound(SoundType.METAL)));
     public static final CreativePowerCellBlock CREATIVE_POWER_CELL = register("creative_power_cell", new CreativePowerCellBlock(Block.Properties.of(Material.DECORATION).explosionResistance(.5f).sound(SoundType.METAL)));
 
     private static <T extends Block> T register(String registryName, T block) {

@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity.renderer;
+package themcbros.usefulmachinery.blockentity.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.machine.MachineTier;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
-public class MachineRenderer implements BlockEntityRenderer<MachineTileEntity> {
+public class MachineRenderer implements BlockEntityRenderer<AbstractMachineBlockEntity> {
     public MachineRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
     }
 
     @Override
-    public void render(MachineTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(AbstractMachineBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         MachineTier machineTier = tileEntityIn.machineTier;
 
         poseStack.pushPose();

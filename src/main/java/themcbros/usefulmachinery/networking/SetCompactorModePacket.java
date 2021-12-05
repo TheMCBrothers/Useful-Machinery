@@ -5,8 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import themcbros.usefulmachinery.container.MachineContainer;
 import themcbros.usefulmachinery.machine.CompactorMode;
-import themcbros.usefulmachinery.tileentity.CompactorTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -39,9 +39,9 @@ public class SetCompactorModePacket {
     private static void handlePacket(SetCompactorModePacket packet, ServerPlayer player) {
         if (player != null) {
             if (player.containerMenu instanceof MachineContainer) {
-                MachineTileEntity tileEntity = ((MachineContainer) player.containerMenu).machineTileEntity;
-                if (tileEntity instanceof CompactorTileEntity) {
-                    ((CompactorTileEntity) tileEntity).compactorMode = packet.mode;
+                AbstractMachineBlockEntity tileEntity = ((MachineContainer) player.containerMenu).abstractMachineBlockEntity;
+                if (tileEntity instanceof CompactorBlockEntity) {
+                    ((CompactorBlockEntity) tileEntity).compactorMode = packet.mode;
                 }
             }
         }

@@ -13,15 +13,15 @@ import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
-import themcbros.usefulmachinery.tileentity.CoalGeneratorTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class CoalGeneratorContainer extends MachineContainer {
     public CoalGeneratorContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new CoalGeneratorTileEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new CoalGeneratorBlockEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public CoalGeneratorContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
+    public CoalGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(ModContainers.COAL_GENERATOR, id, playerInventory, tileEntity, fields);
 
         this.addSlot(new Slot(tileEntity, 0, 80, 33));
@@ -32,7 +32,7 @@ public class CoalGeneratorContainer extends MachineContainer {
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        int i = this.machineTileEntity.getContainerSize();
+        int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +20,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-import themcbros.usefulmachinery.blocks.MachineBlock;
+import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.machine.RedstoneMode;
@@ -29,7 +29,7 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class MachineTileEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
 
@@ -42,7 +42,7 @@ public abstract class MachineTileEntity extends BlockEntity implements WorldlyCo
     private final boolean isGenerator;
     private int cooldown = -1;
 
-    MachineTileEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
+    AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
         this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
@@ -159,9 +159,9 @@ public abstract class MachineTileEntity extends BlockEntity implements WorldlyCo
         if (lit) this.cooldown = 15;
 
         assert this.level != null;
-        boolean flag = this.getBlockState().getValue(MachineBlock.LIT) != lit;
+        boolean flag = this.getBlockState().getValue(AbstractMachineBlock.LIT) != lit;
 
-        if (flag) this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MachineBlock.LIT, lit), 3);
+        if (flag) this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.LIT, lit), 3);
     }
 
     private final LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());

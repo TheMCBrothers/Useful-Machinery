@@ -15,10 +15,10 @@ import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 
-public abstract class MachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T> {
+public abstract class AbstractMachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T> {
     protected EnergyBar energyBar = null;
 
-    MachineScreen(T screenContainer, Inventory inv, Component titleIn) {
+    AbstractMachineScreen(T screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 

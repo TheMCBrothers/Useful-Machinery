@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class MachineProbeProvider implements IProbeInfoProvider {
 
@@ -20,10 +20,10 @@ public class MachineProbeProvider implements IProbeInfoProvider {
     @Override
     public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, PlayerEntity playerEntity, World world, BlockState blockState, IProbeHitData data) {
         TileEntity tileEntity = world.getTileEntity(data.getPos());
-        if (tileEntity instanceof MachineTileEntity) {
-            MachineTileEntity machineTileEntity = (MachineTileEntity) tileEntity;
-            int i = machineTileEntity.processTime;
-            int j = machineTileEntity.processTimeTotal;
+        if (tileEntity instanceof AbstractMachineBlockEntity) {
+            AbstractMachineBlockEntity abstractMachineBlockEntity = (AbstractMachineBlockEntity) tileEntity;
+            int i = abstractMachineBlockEntity.processTime;
+            int j = abstractMachineBlockEntity.processTimeTotal;
             if (i != 0 && j != 0) {
                 float progress = (float) i * 100 / (float) j;
                 IProgressStyle style = probeInfo.defaultProgressStyle()
@@ -35,9 +35,9 @@ public class MachineProbeProvider implements IProbeInfoProvider {
                 probeInfo.progress((long) progress, 100, style);
             }
 
-            if (machineTileEntity.machineTier.ordinal() > 0) {
+            if (abstractMachineBlockEntity.machineTier.ordinal() > 0) {
                 ITextStyle style = probeInfo.defaultTextStyle();
-                probeInfo.text("Tier: " + machineTileEntity.machineTier.getName(), style);
+                probeInfo.text("Tier: " + abstractMachineBlockEntity.machineTier.getName(), style);
             }
         }
     }

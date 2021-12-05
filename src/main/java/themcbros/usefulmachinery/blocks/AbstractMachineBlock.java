@@ -28,16 +28,14 @@ import themcbros.usefulmachinery.items.UpgradeItem;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-public abstract class MachineBlock extends BaseEntityBlock {
+public abstract class AbstractMachineBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     @Nullable
     private final ResourceLocation interactStat;
 
-    public MachineBlock(Properties properties, @Nullable ResourceLocation interactStat) {
+    public AbstractMachineBlock(Properties properties, @Nullable ResourceLocation interactStat) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.FALSE));
         this.interactStat = interactStat;

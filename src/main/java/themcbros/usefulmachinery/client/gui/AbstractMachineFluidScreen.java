@@ -18,7 +18,7 @@ import themcbros.usefulmachinery.container.MachineContainer;
 
 import javax.annotation.Nullable;
 
-public abstract class MachineFluidScreen<T extends MachineContainer> extends MachineScreen<T> {
+public abstract class AbstractMachineFluidScreen<T extends MachineContainer> extends AbstractMachineScreen<T> {
     private static final int DEFAULT_TANK_WIDTH = 10;
     private static final int DEFAULT_TANK_HEIGHT = 50;
 
@@ -30,7 +30,7 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
     private final int width;
     private final int height;
 
-    MachineFluidScreen(T screenContainer, Inventory inv, Component titleIn, int capacityMb) {
+    AbstractMachineFluidScreen(T screenContainer, Inventory inv, Component titleIn, int capacityMb) {
         super(screenContainer, inv, titleIn);
         this.capacityMb = capacityMb;
         this.width = DEFAULT_TANK_WIDTH;

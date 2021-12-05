@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CrusherTileEntity extends MachineTileEntity {
+public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private static final int RF_PER_TICK = 10;
 
     private ContainerData fields = new ContainerData() {
@@ -30,28 +30,28 @@ public class CrusherTileEntity extends MachineTileEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CrusherTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CrusherTileEntity.this.processTime = value;
-                case 6 -> CrusherTileEntity.this.processTimeTotal = value;
+                case 4 -> CrusherBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> CrusherBlockEntity.this.processTime = value;
+                case 6 -> CrusherBlockEntity.this.processTimeTotal = value;
             }
         }
 
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CrusherTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CrusherTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CrusherTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CrusherTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CrusherTileEntity.this.redstoneMode.ordinal();
-                case 5 -> CrusherTileEntity.this.processTime;
-                case 6 -> CrusherTileEntity.this.processTimeTotal;
+                case 0 -> CrusherBlockEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (CrusherBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CrusherBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CrusherBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CrusherBlockEntity.this.redstoneMode.ordinal();
+                case 5 -> CrusherBlockEntity.this.processTime;
+                case 6 -> CrusherBlockEntity.this.processTimeTotal;
                 default -> 0;
             };
         }
     };
 
-    public CrusherTileEntity(BlockPos blockPos, BlockState blockState) {
+    public CrusherBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModTileEntities.CRUSHER, blockPos, blockState, false);
     }
 

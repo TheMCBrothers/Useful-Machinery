@@ -7,7 +7,7 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,9 +16,9 @@ public class MachinePeripheral implements IPeripheral {
 
     private static final String TYPE = UsefulMachinery.getId("machine").toString();
 
-    private final MachineTileEntity machine;
+    private final AbstractMachineBlockEntity machine;
 
-    public MachinePeripheral(MachineTileEntity machine) {
+    public MachinePeripheral(AbstractMachineBlockEntity machine) {
         this.machine = machine;
     }
 

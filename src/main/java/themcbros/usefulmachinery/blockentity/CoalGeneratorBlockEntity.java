@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
-import themcbros.usefulmachinery.blocks.MachineBlock;
+import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
@@ -21,7 +21,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CoalGeneratorTileEntity extends MachineTileEntity {
+public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
@@ -31,9 +31,9 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CoalGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CoalGeneratorTileEntity.this.burnTime = value;
-                case 6 -> CoalGeneratorTileEntity.this.burnTimeTotal = value;
+                case 4 -> CoalGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> CoalGeneratorBlockEntity.this.burnTime = value;
+                case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal = value;
                 default -> {
                 }
             }
@@ -42,13 +42,13 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CoalGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CoalGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CoalGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CoalGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CoalGeneratorTileEntity.this.redstoneMode.ordinal();
-                case 5 -> CoalGeneratorTileEntity.this.burnTime;
-                case 6 -> CoalGeneratorTileEntity.this.burnTimeTotal;
+                case 0 -> CoalGeneratorBlockEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (CoalGeneratorBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CoalGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CoalGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CoalGeneratorBlockEntity.this.redstoneMode.ordinal();
+                case 5 -> CoalGeneratorBlockEntity.this.burnTime;
+                case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal;
                 default -> 0;
             };
         }
@@ -56,7 +56,7 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
 
     private int burnTime, burnTimeTotal;
 
-    public CoalGeneratorTileEntity(BlockPos blockPos, BlockState blockState) {
+    public CoalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModTileEntities.COAL_GENERATOR, blockPos, blockState, true);
     }
 
@@ -130,7 +130,7 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
 
             this.sendEnergyToSlot();
 
-            if (this.getBlockState().getValue(MachineBlock.LIT) != shouldLit) {
+            if (this.getBlockState().getValue(AbstractMachineBlock.LIT) != shouldLit) {
                 this.sendUpdate(shouldLit);
             }
         }

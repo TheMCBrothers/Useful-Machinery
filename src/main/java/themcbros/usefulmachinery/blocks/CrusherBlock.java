@@ -6,9 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.init.ModStats;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-public class CrusherBlock extends MachineBlock {
+public class CrusherBlock extends AbstractMachineBlock {
     public CrusherBlock(Properties properties) {
         super(properties, ModStats.INTERACT_WITH_CRUSHER);
     }

@@ -14,7 +14,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class CoalGeneratorScreen extends MachineScreen<CoalGeneratorContainer> {
+public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorContainer> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/coal_generator.png");
 
     public CoalGeneratorScreen(CoalGeneratorContainer screenContainer, Inventory inv, Component titleIn) {

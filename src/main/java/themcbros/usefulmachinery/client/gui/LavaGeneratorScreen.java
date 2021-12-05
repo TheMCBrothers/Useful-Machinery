@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.List;
 
-public class LavaGeneratorScreen extends MachineFluidScreen<LavaGeneratorContainer> {
+public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGeneratorContainer> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
 
     private final Rectangle lavaTankRect = new Rectangle(11, 17, 10, 50);

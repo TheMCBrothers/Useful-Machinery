@@ -15,17 +15,17 @@ import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
-import themcbros.usefulmachinery.tileentity.CrusherTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.CrusherBlockEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class CrusherContainer extends MachineContainer {
     private final Level level;
 
     public CrusherContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new CrusherTileEntity(BlockPos.ZERO, ModBlocks.CRUSHER.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new CrusherBlockEntity(BlockPos.ZERO, ModBlocks.CRUSHER.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public CrusherContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
+    public CrusherContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(ModContainers.CRUSHER, id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
@@ -39,7 +39,7 @@ public class CrusherContainer extends MachineContainer {
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        int i = this.machineTileEntity.getContainerSize();
+        int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

@@ -15,17 +15,17 @@ import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
-import themcbros.usefulmachinery.tileentity.ElectricSmelterTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.ElectricSmelterBlockEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class ElectricSmelterContainer extends MachineContainer {
     private final Level level;
 
     public ElectricSmelterContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ElectricSmelterTileEntity(BlockPos.ZERO, ModBlocks.ELECTRIC_SMELTER.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, ModBlocks.ELECTRIC_SMELTER.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public ElectricSmelterContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
+    public ElectricSmelterContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(ModContainers.ELECTRIC_SMELTER, id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
@@ -38,7 +38,7 @@ public class ElectricSmelterContainer extends MachineContainer {
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        int i = this.machineTileEntity.getContainerSize();
+        int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

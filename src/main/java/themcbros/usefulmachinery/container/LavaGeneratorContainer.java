@@ -20,17 +20,17 @@ import themcbros.usefulmachinery.container.slot.FluidItemSlot;
 import themcbros.usefulmachinery.container.slot.OutputSlot;
 import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
-import themcbros.usefulmachinery.tileentity.LavaGeneratorTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.LavaGeneratorBlockEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nonnull;
 
 public class LavaGeneratorContainer extends MachineContainer {
     public LavaGeneratorContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new LavaGeneratorTileEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(9));
+        this(id, playerInventory, new LavaGeneratorBlockEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(9));
     }
 
-    public LavaGeneratorContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
+    public LavaGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(ModContainers.LAVA_GENERATOR, id, playerInventory, tileEntity, fields);
 
         this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA)));
@@ -42,7 +42,7 @@ public class LavaGeneratorContainer extends MachineContainer {
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        int i = this.machineTileEntity.getContainerSize();
+        int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -90,7 +90,7 @@ public class LavaGeneratorContainer extends MachineContainer {
 
     public int getBurnTimeScaled() {
         int i = this.fields.get(5);
-        int j = LavaGeneratorTileEntity.TICKS_PER_MB * LavaGeneratorTileEntity.MB_PER_USE;
+        int j = LavaGeneratorBlockEntity.TICKS_PER_MB * LavaGeneratorBlockEntity.MB_PER_USE;
         return i != 0 && j != 0 ? i * 13 / j : 0;
     }
 
@@ -107,7 +107,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     }
 
     public int getTankCapacity() {
-        return this.fields.get(7) > 0 ? this.fields.get(7) : LavaGeneratorTileEntity.TANK_CAPACITY;
+        return this.fields.get(7) > 0 ? this.fields.get(7) : LavaGeneratorBlockEntity.TANK_CAPACITY;
     }
 
     public Fluid getTankFluid() {

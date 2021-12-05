@@ -7,9 +7,7 @@ import themcbros.usefulmachinery.init.ModStats;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-public class LavaGeneratorBlock extends MachineBlock {
+public class LavaGeneratorBlock extends AbstractMachineBlock {
     public LavaGeneratorBlock(Properties properties) {
         super(properties, ModStats.INTERACT_WITH_LAVA_GENERATOR);
     }

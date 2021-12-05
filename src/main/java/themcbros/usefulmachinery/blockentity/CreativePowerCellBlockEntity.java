@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,8 +15,8 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CreativePowerCellTileEntity extends BlockEntity implements IEnergyStorage {
-    public CreativePowerCellTileEntity(BlockPos blockPos, BlockState blockState) {
+public class CreativePowerCellBlockEntity extends BlockEntity implements IEnergyStorage {
+    public CreativePowerCellBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModTileEntities.CREATIVE_POWER_CELL, blockPos, blockState);
     }
 
@@ -59,7 +59,7 @@ public class CreativePowerCellTileEntity extends BlockEntity implements IEnergyS
         return super.getCapability(cap, side);
     }
 
-    public static void serverTick(Level level, BlockPos blockPos, BlockState blockState, CreativePowerCellTileEntity blockEntity) {
+    public static void serverTick(Level level, BlockPos blockPos, BlockState blockState, CreativePowerCellBlockEntity blockEntity) {
         if (!level.isClientSide) {
             blockEntity.sendEnergy(level, blockPos);
         }

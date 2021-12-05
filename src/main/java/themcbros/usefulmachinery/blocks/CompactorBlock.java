@@ -5,9 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.init.ModStats;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-public class CompactorBlock extends MachineBlock {
+public class CompactorBlock extends AbstractMachineBlock {
     public CompactorBlock(Properties properties) {
         super(properties, ModStats.INTERACT_WITH_COMPACTOR);
     }

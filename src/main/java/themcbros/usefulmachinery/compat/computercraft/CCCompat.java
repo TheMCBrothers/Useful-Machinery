@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,8 +30,8 @@ public class CCCompat implements IBundledRedstoneProvider, IPeripheralProvider {
     @Override
     public IPeripheral getPeripheral(@Nonnull World world, @Nonnull BlockPos blockPos, @Nonnull Direction direction) {
         TileEntity tileEntity = world.getTileEntity(blockPos);
-        if (tileEntity instanceof MachineTileEntity) {
-            return new MachinePeripheral((MachineTileEntity) tileEntity);
+        if (tileEntity instanceof AbstractMachineBlockEntity) {
+            return new MachinePeripheral((AbstractMachineBlockEntity) tileEntity);
         }
         return null;
     }

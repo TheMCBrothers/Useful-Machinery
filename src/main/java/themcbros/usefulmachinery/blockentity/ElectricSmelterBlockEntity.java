@@ -1,97 +1,58 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import themcbros.usefulmachinery.container.CompactorContainer;
+import themcbros.usefulmachinery.container.ElectricSmelterContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
-import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CompactorTileEntity extends MachineTileEntity {
-    private static final int RF_PER_TICK = 15;
+public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
+    private static final int RF_PER_TICK = 10;
 
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 8;
+            return 7;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CompactorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CompactorTileEntity.this.processTime = value;
-                case 6 -> CompactorTileEntity.this.processTimeTotal = value;
-                case 7 -> CompactorTileEntity.this.compactorMode = CompactorMode.byIndex(value);
+                case 4 -> ElectricSmelterBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> ElectricSmelterBlockEntity.this.processTime = value;
+                case 6 -> ElectricSmelterBlockEntity.this.processTimeTotal = value;
             }
         }
 
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CompactorTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CompactorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CompactorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CompactorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CompactorTileEntity.this.redstoneMode.ordinal();
-                case 5 -> CompactorTileEntity.this.processTime;
-                case 6 -> CompactorTileEntity.this.processTimeTotal;
-                case 7 -> CompactorTileEntity.this.compactorMode.getIndex();
+                case 0 -> ElectricSmelterBlockEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (ElectricSmelterBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> ElectricSmelterBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (ElectricSmelterBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> ElectricSmelterBlockEntity.this.redstoneMode.ordinal();
+                case 5 -> ElectricSmelterBlockEntity.this.processTime;
+                case 6 -> ElectricSmelterBlockEntity.this.processTimeTotal;
                 default -> 0;
             };
         }
     };
 
-    public CompactorMode compactorMode = CompactorMode.PLATE;
-
-    public CompactorTileEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.COMPACTOR, blockPos, blockState, false);
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
-
-        if (this.compactorMode != CompactorMode.PLATE) compound.putInt("Mode", this.compactorMode.getIndex());
-    }
-
-    @Override
-    public void load(CompoundTag compound) {
-        if (compound.contains("Mode", Tag.TAG_INT))
-            this.compactorMode = CompactorMode.byIndex(compound.getInt("Mode"));
-
-        super.load(compound);
-    }
-
-    @Override
-    public void setItem(int index, ItemStack stack) {
-        ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
-        this.stacks.set(index, stack);
-        if (stack.getCount() > this.getMaxEnergyStored()) {
-            stack.setCount(this.getMaxEnergyStored());
-        }
-
-        if (index == 0 && !flag) {
-            this.processTimeTotal = this.getProcessTime();
-            this.processTime = 0;
-            this.setChanged();
-        }
+    public ElectricSmelterBlockEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.ELECTRIC_SMELTER, blockPos, blockState, false);
     }
 
     @Override
@@ -110,25 +71,31 @@ public class CompactorTileEntity extends MachineTileEntity {
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return index != 1;
-    }
+    public void setItem(int index, ItemStack stack) {
+        ItemStack itemstack = this.stacks.get(index);
+        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
+        this.stacks.set(index, stack);
+        if (stack.getCount() > this.getMaxEnergyStored()) {
+            stack.setCount(this.getMaxEnergyStored());
+        }
 
-    @Override
-    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
-        return index == 1;
+        if (index == 0 && !flag) {
+            this.processTimeTotal = this.getProcessTime();
+            this.processTime = 0;
+            this.setChanged();
+        }
     }
 
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return TextUtils.translate("container", "compactor");
+        return new TranslatableComponent("container.usefulmachinery.electric_smelter");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CompactorContainer(id, playerInventory, this, this.fields);
+        return new ElectricSmelterContainer(id, playerInventory, this, this.fields);
     }
 
     private boolean isActive() {
@@ -141,11 +108,14 @@ public class CompactorTileEntity extends MachineTileEntity {
         boolean flag1 = false;
 
         assert this.level != null;
+
         if (!this.level.isClientSide) {
             this.receiveEnergyFromSlot(2);
 
             if (this.isActive() || this.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, this, this.level).orElse(null);
+                AbstractCookingRecipe recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level).orElse(null);
+                if (recipe == null)
+                    recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
@@ -159,6 +129,7 @@ public class CompactorTileEntity extends MachineTileEntity {
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
                         this.processTimeTotal = this.getProcessTime();
+
                         this.processItem(recipe);
 
                         flag1 = true;
@@ -180,13 +151,14 @@ public class CompactorTileEntity extends MachineTileEntity {
     }
 
     private int getProcessTime() {
-        if (level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, this, this.level)
-                .map(CompactingRecipe::getProcessTime).orElse(200);
+        if (this.level == null) return 200;
+        return this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level)
+                .map(AbstractCookingRecipe::getCookingTime).orElse(this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level)
+                        .map(AbstractCookingRecipe::getCookingTime).orElse(200));
     }
 
-    private boolean canProcess(@Nullable CompactingRecipe recipeIn) {
-        if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this) && recipeIn.getCompactorMode().equals(this.compactorMode)) {
+    private boolean canProcess(@Nullable AbstractCookingRecipe recipeIn) {
+        if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this)) {
             ItemStack itemstack = recipeIn.getResultItem();
 
             if (itemstack.isEmpty()) {
@@ -209,7 +181,7 @@ public class CompactorTileEntity extends MachineTileEntity {
         }
     }
 
-    private void processItem(@Nullable CompactingRecipe recipe) {
+    private void processItem(@Nullable AbstractCookingRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
             ItemStack itemstack1 = recipe.getResultItem();
@@ -221,8 +193,7 @@ public class CompactorTileEntity extends MachineTileEntity {
                 itemstack2.grow(itemstack1.getCount());
             }
 
-            itemstack.shrink(recipe.getCount());
+            itemstack.shrink(1);
         }
     }
-
 }

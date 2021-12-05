@@ -14,7 +14,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class CrusherScreen extends MachineScreen<CrusherContainer> {
+public class CrusherScreen extends AbstractMachineScreen<CrusherContainer> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/crusher.png");
 
     public CrusherScreen(CrusherContainer screenContainer, Inventory inv, Component titleIn) {

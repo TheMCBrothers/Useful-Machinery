@@ -1,6 +1,6 @@
-@MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package themcbros.usefulmachinery.tileentity.renderer;
+@MethodsReturnNonnullByDefault
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

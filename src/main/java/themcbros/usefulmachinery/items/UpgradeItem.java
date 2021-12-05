@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nonnull;
 
@@ -24,7 +24,7 @@ public class UpgradeItem extends Item {
         final ItemStack stack = context.getItemInHand();
         final BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        if (blockEntity instanceof MachineTileEntity machineTileEntity) {
+        if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
             //Todo interaction upgrade per item logic
         }
 

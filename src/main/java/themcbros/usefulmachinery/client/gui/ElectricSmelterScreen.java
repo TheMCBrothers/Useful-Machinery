@@ -14,7 +14,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class ElectricSmelterScreen extends MachineScreen<ElectricSmelterContainer> {
+public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelterContainer> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
     public ElectricSmelterScreen(ElectricSmelterContainer screenContainer, Inventory inv, Component titleIn) {

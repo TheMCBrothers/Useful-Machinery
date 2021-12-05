@@ -11,7 +11,7 @@ import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.init.ModItems;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.MachineTier;
-import themcbros.usefulmachinery.tileentity.renderer.MachineRenderer;
+import themcbros.usefulmachinery.blockentity.renderer.MachineRenderer;
 
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {

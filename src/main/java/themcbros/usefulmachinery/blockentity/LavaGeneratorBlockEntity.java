@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.tileentity;
+package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,7 +30,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class LavaGeneratorTileEntity extends MachineTileEntity {
+public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int TANK_CAPACITY = 4000; // TODO config
     public static final int TICKS_PER_MB = 10; // TODO config
     public static final int MB_PER_USE = 10; // TODO config
@@ -45,8 +45,8 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> LavaGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> LavaGeneratorTileEntity.this.burnTime = value;
+                case 4 -> LavaGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> LavaGeneratorBlockEntity.this.burnTime = value;
                 default -> {
                 }
             }
@@ -55,15 +55,15 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> LavaGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (LavaGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> LavaGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (LavaGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> LavaGeneratorTileEntity.this.redstoneMode.ordinal();
-                case 5 -> LavaGeneratorTileEntity.this.burnTime;
-                case 6 -> LavaGeneratorTileEntity.this.lavaTank.getFluidAmount();
-                case 7 -> LavaGeneratorTileEntity.this.lavaTank.getCapacity();
-                case 8 -> Registry.FLUID.getId(LavaGeneratorTileEntity.this.lavaTank.getFluid().getFluid());
+                case 0 -> LavaGeneratorBlockEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (LavaGeneratorBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> LavaGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (LavaGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> LavaGeneratorBlockEntity.this.redstoneMode.ordinal();
+                case 5 -> LavaGeneratorBlockEntity.this.burnTime;
+                case 6 -> LavaGeneratorBlockEntity.this.lavaTank.getFluidAmount();
+                case 7 -> LavaGeneratorBlockEntity.this.lavaTank.getCapacity();
+                case 8 -> Registry.FLUID.getId(LavaGeneratorBlockEntity.this.lavaTank.getFluid().getFluid());
                 default -> 0;
             };
         }
@@ -72,7 +72,7 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
     private int burnTime;
     private final FluidTank lavaTank;
 
-    public LavaGeneratorTileEntity(BlockPos blockPos, BlockState blockState) {
+    public LavaGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModTileEntities.LAVA_GENERATOR, blockPos, blockState, true);
         this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
     }

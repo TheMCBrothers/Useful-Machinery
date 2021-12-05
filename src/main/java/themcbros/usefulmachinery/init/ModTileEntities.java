@@ -6,7 +6,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.tileentity.*;
+import themcbros.usefulmachinery.blockentity.*;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import java.util.List;
 public class ModTileEntities {
     private static final List<BlockEntityType<?>> TILE_ENTITY_TYPES = Lists.newArrayList();
 
-    public static final BlockEntityType<CoalGeneratorTileEntity> COAL_GENERATOR = register("coal_generator", BlockEntityType.Builder.of(CoalGeneratorTileEntity::new, ModBlocks.COAL_GENERATOR).build(null));
-    public static final BlockEntityType<LavaGeneratorTileEntity> LAVA_GENERATOR = register("lava_generator", BlockEntityType.Builder.of(LavaGeneratorTileEntity::new, ModBlocks.LAVA_GENERATOR).build(null));
-    public static final BlockEntityType<CrusherTileEntity> CRUSHER = register("crusher", BlockEntityType.Builder.of(CrusherTileEntity::new, ModBlocks.CRUSHER).build(null));
-    public static final BlockEntityType<ElectricSmelterTileEntity> ELECTRIC_SMELTER = register("electric_smelter", BlockEntityType.Builder.of(ElectricSmelterTileEntity::new, ModBlocks.ELECTRIC_SMELTER).build(null));
-    public static final BlockEntityType<CompactorTileEntity> COMPACTOR = register("compactor", BlockEntityType.Builder.of(CompactorTileEntity::new, ModBlocks.COMPACTOR).build(null));
-    public static final BlockEntityType<CreativePowerCellTileEntity> CREATIVE_POWER_CELL = register("creative_power_cell", BlockEntityType.Builder.of(CreativePowerCellTileEntity::new, ModBlocks.CREATIVE_POWER_CELL).build(null));
+    public static final BlockEntityType<CoalGeneratorBlockEntity> COAL_GENERATOR = register("coal_generator", BlockEntityType.Builder.of(CoalGeneratorBlockEntity::new, ModBlocks.COAL_GENERATOR).build(null));
+    public static final BlockEntityType<LavaGeneratorBlockEntity> LAVA_GENERATOR = register("lava_generator", BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, ModBlocks.LAVA_GENERATOR).build(null));
+    public static final BlockEntityType<CrusherBlockEntity> CRUSHER = register("crusher", BlockEntityType.Builder.of(CrusherBlockEntity::new, ModBlocks.CRUSHER).build(null));
+    public static final BlockEntityType<ElectricSmelterBlockEntity> ELECTRIC_SMELTER = register("electric_smelter", BlockEntityType.Builder.of(ElectricSmelterBlockEntity::new, ModBlocks.ELECTRIC_SMELTER).build(null));
+    public static final BlockEntityType<CompactorBlockEntity> COMPACTOR = register("compactor", BlockEntityType.Builder.of(CompactorBlockEntity::new, ModBlocks.COMPACTOR).build(null));
+    public static final BlockEntityType<CreativePowerCellBlockEntity> CREATIVE_POWER_CELL = register("creative_power_cell", BlockEntityType.Builder.of(CreativePowerCellBlockEntity::new, ModBlocks.CREATIVE_POWER_CELL).build(null));
 
     private static <T extends BlockEntityType<?>> T register(String registryName, T BlockEntityType) {
         BlockEntityType.setRegistryName(UsefulMachinery.getId(registryName));

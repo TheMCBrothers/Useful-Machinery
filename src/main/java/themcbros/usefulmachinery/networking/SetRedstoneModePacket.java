@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import themcbros.usefulmachinery.container.MachineContainer;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -39,7 +39,7 @@ public class SetRedstoneModePacket {
     private static void handlePacket(SetRedstoneModePacket packet, ServerPlayer player) {
         if (player != null) {
             if (player.containerMenu instanceof MachineContainer) {
-                MachineTileEntity tileEntity = ((MachineContainer) player.containerMenu).machineTileEntity;
+                AbstractMachineBlockEntity tileEntity = ((MachineContainer) player.containerMenu).abstractMachineBlockEntity;
                 if (tileEntity != null) {
                     tileEntity.redstoneMode = packet.mode;
                 }
