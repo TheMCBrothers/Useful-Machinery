@@ -1,12 +1,11 @@
 package themcbros.usefulmachinery.machine;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.MathHelper;
-import themcbros.usefulfoundation.init.FoundationBlocks;
-import themcbros.usefulfoundation.init.FoundationItems;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,20 +13,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum CompactorMode implements IStringSerializable {
-
-    PLATE(0, FoundationItems.IRON_PLATE),
-    GEAR(1, FoundationItems.GOLD_GEAR),
-    BLOCK(2, FoundationBlocks.LEAD_BLOCK);
+public enum CompactorMode implements StringRepresentable {
+    PLATE(0, Items.STONE_PRESSURE_PLATE),
+    GEAR(1, Items.GOLDEN_CARROT),
+    BLOCK(2, Items.IRON_BLOCK);
 
     private static final CompactorMode[] VALUES = values();
-    private static final Map<String, CompactorMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(CompactorMode::getName, (p_199787_0_) -> p_199787_0_));
+    private static final Map<String, CompactorMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(CompactorMode::getSerializedName, (p_199787_0_) -> p_199787_0_));
     private static final CompactorMode[] BY_INDEX = Arrays.stream(VALUES).sorted(Comparator.comparingInt((p_199790_0_) -> p_199790_0_.index)).toArray(CompactorMode[]::new);
 
     private final int index;
-    private final IItemProvider itemProvider;
+    private final ItemLike itemProvider;
 
-    CompactorMode(int index, IItemProvider itemProvider) {
+    CompactorMode(int index, ItemLike itemProvider) {
         this.index = index;
         this.itemProvider = itemProvider;
     }
@@ -36,8 +34,9 @@ public enum CompactorMode implements IStringSerializable {
         return index;
     }
 
+    @Nonnull
     @Override
-    public String getName() {
+    public String getSerializedName() {
         return name().toLowerCase(Locale.ROOT);
     }
 
@@ -54,7 +53,7 @@ public enum CompactorMode implements IStringSerializable {
      * PLATE-GEAR-BLOCK
      */
     public static CompactorMode byIndex(int index) {
-        return BY_INDEX[MathHelper.abs(index % BY_INDEX.length)];
+        return BY_INDEX[Math.abs(index % BY_INDEX.length)];
     }
 
     public ItemStack getIconStack() {

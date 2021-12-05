@@ -11,6 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 group = 'themcbros.usefulmachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'usefulmachinery'
@@ -76,6 +77,10 @@ minecraft {
             }
         }
     }
+}
+
+sourceSets.main.java {
+    exclude '**/compat/**'
 }
 
 dependencies {

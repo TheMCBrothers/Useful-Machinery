@@ -1,22 +1,20 @@
 package themcbros.usefulmachinery.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.init.ModStats;
-import themcbros.usefulmachinery.tileentity.CoalGeneratorTileEntity;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CoalGeneratorBlock extends MachineBlock {
-
     public CoalGeneratorBlock(Properties properties) {
         super(properties, ModStats.INTERACT_WITH_COAL_GENERATOR);
     }
 
-    @Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CoalGeneratorTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return null;
     }
 }

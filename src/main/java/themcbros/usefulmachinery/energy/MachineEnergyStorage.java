@@ -3,7 +3,6 @@ package themcbros.usefulmachinery.energy;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class MachineEnergyStorage extends EnergyStorage {
-
     public MachineEnergyStorage(int capacity) {
         super(capacity);
     }
@@ -31,8 +30,8 @@ public class MachineEnergyStorage extends EnergyStorage {
     public void modifyEnergyStored(int energy) {
         this.energy += energy;
 
-        if(this.energy > capacity) this.energy = capacity;
-        else if(this.energy < 0) this.energy = 0;
+        if (this.energy > capacity) this.energy = capacity;
+        else if (this.energy < 0) this.energy = 0;
     }
 
     public int getMaxExtract() {
@@ -42,5 +41,4 @@ public class MachineEnergyStorage extends EnergyStorage {
     public int getMaxReceive() {
         return this.maxReceive;
     }
-
 }

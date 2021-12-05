@@ -1,42 +1,36 @@
 package themcbros.usefulmachinery.tileentity.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
-public class MachineRenderer extends TileEntityRenderer<MachineTileEntity> {
-
-    public MachineRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+public class MachineRenderer implements BlockEntityRenderer<MachineTileEntity> {
+    public MachineRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
     }
 
     @Override
-    public void render(MachineTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-
+    public void render(MachineTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         MachineTier machineTier = tileEntityIn.machineTier;
 
-
-        RenderSystem.pushMatrix();
+        poseStack.pushPose();
 
         setGLColorFromInt(machineTier.getColor());
-        RenderSystem.translatef(0f, 1f, 0f);
 
-        matrixStackIn.push();
-        ItemStack stack = tileEntityIn.getStackInSlot(0);
+        poseStack.translate(0f, 1f, 0f);
+
+        ItemStack stack = tileEntityIn.getItem(0);
+
         if (!stack.isEmpty())
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, 0);
 
-        matrixStackIn.pop();
-        RenderSystem.popMatrix();
-
+        poseStack.popPose();
     }
 
     private static void setGLColorFromInt(int color) {
@@ -45,7 +39,6 @@ public class MachineRenderer extends TileEntityRenderer<MachineTileEntity> {
         float blue = (color & 0xFF) / 255.0F;
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
-        RenderSystem.color4f(red, green, blue, alpha);
+        RenderSystem.clearColor(red, green, blue, alpha);
     }
-
 }

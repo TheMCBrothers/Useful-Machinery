@@ -1,14 +1,13 @@
 package themcbros.usefulmachinery.machine;
 
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.StringRepresentable;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 
-public enum MachineTier implements IStringSerializable {
-
+public enum MachineTier implements StringRepresentable {
     LEADSTONE(0x39516d),
     HARDENED(0xa6a6a6),
     REINFORCED(0x908928),
@@ -24,8 +23,9 @@ public enum MachineTier implements IStringSerializable {
         this.color = color;
     }
 
+    @Nonnull
     @Override
-    public String getName() {
+    public String getSerializedName() {
         return name().toLowerCase(Locale.ROOT);
     }
 
@@ -34,7 +34,7 @@ public enum MachineTier implements IStringSerializable {
      * LEADSTONE-HARDENED-REINFORCED-SIGNALUM-RESONANT
      */
     public static MachineTier byOrdinal(int index) {
-        return BY_INDEX[MathHelper.abs(index % BY_INDEX.length)];
+        return BY_INDEX[Math.abs(index % BY_INDEX.length)];
     }
 
     public int getColor() {

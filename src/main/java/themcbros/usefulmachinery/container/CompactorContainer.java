@@ -1,16 +1,18 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
@@ -18,16 +20,15 @@ import themcbros.usefulmachinery.tileentity.CompactorTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class CompactorContainer extends MachineContainer {
+    private final Level level;
 
-    private World world;
-
-    public CompactorContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new CompactorTileEntity(), new IntArray(8));
+    public CompactorContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new CompactorTileEntity(BlockPos.ZERO, ModBlocks.COMPACTOR.defaultBlockState()), new SimpleContainerData(8));
     }
 
-    public CompactorContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    public CompactorContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(ModContainers.COMPACTOR, id, playerInventory, tileEntity, fields);
-        this.world = playerInventory.player.world;
+        this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
         this.addSlot(new Slot(tileEntity, 1, 95, 33));
@@ -46,43 +47,43 @@ public class CompactorContainer extends MachineContainer {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        int i = this.machineTileEntity.getSizeInventory();
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        int i = this.machineTileEntity.getContainerSize();
         ItemStack itemstack1 = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
             itemstack1 = slotStack.copy();
             if (index == 1) {
-                if (!this.mergeItemStack(slotStack, i, 36 + i, true)) {
+                if (!this.moveItemStackTo(slotStack, i, 36 + i, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(slotStack, itemstack1);
+                slot.onQuickCraft(slotStack, itemstack1);
             } else if (index != 0) {
                 if (this.canProcess(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, 0, 1, false)) {
+                    if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (this.isEnergyItem(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, i - 1, i, false)) {
+                    if (!this.moveItemStackTo(slotStack, i - 1, i, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {
-                    if (!this.mergeItemStack(slotStack, 27 + i, 36 + i, false)) {
+                    if (!this.moveItemStackTo(slotStack, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(slotStack, i, 27 + i, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(slotStack, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(slotStack, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(slotStack, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (slotStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (slotStack.getCount() == itemstack1.getCount()) {
@@ -101,8 +102,8 @@ public class CompactorContainer extends MachineContainer {
     }
 
     protected boolean canProcess(ItemStack stack) {
-        return this.world.getRecipeManager().getRecipe(ModRecipeTypes.COMPACTING, new Inventory(stack), this.world)
-                        .map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
+        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, new SimpleContainer(stack), this.level)
+                .map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
     }
 
     public int getProcessTime() {
@@ -118,5 +119,4 @@ public class CompactorContainer extends MachineContainer {
         int j = this.getProcessTimeTotal();
         return i != 0 && j != 0 ? i * width / j : 0;
     }
-
 }

@@ -1,12 +1,12 @@
 package themcbros.usefulmachinery.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.init.ModStats;
-import themcbros.usefulmachinery.tileentity.ElectricSmelterTileEntity;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class ElectricSmelterBlock extends MachineBlock {
 
@@ -16,8 +16,7 @@ public class ElectricSmelterBlock extends MachineBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new ElectricSmelterTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return null;
     }
-
 }

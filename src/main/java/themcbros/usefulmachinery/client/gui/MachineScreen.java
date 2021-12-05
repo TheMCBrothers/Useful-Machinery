@@ -1,10 +1,10 @@
 package themcbros.usefulmachinery.client.gui;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import themcbros.usefulmachinery.UsefulMachinery;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
 import themcbros.usefulmachinery.client.gui.widget.RedstoneModeButton;
 import themcbros.usefulmachinery.container.MachineContainer;
@@ -13,11 +13,12 @@ import themcbros.usefulmachinery.networking.Networking;
 import themcbros.usefulmachinery.networking.SetRedstoneModePacket;
 import themcbros.usefulmachinery.util.TextUtils;
 
-public abstract class MachineScreen<T extends MachineContainer> extends ContainerScreen<T> {
+import javax.annotation.Nonnull;
 
+public abstract class MachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T> {
     protected EnergyBar energyBar = null;
 
-    MachineScreen(T screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    MachineScreen(T screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 
@@ -25,37 +26,36 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
     protected void init() {
         super.init();
 
-        RedstoneModeButton redstoneModeButton = new RedstoneModeButton(this.container, this.guiLeft - 16, this.guiTop, button -> {
+        RedstoneModeButton redstoneModeButton = new RedstoneModeButton(this.menu, this.leftPos - 16, this.topPos, button -> {
             RedstoneMode mode = ((RedstoneModeButton) button).getMode();
             Networking.channel.sendToServer(new SetRedstoneModePacket(mode));
         });
-        this.addButton(redstoneModeButton);
+
+        this.addRenderableWidget(redstoneModeButton);
     }
 
     @Override
-    public void render(int x, int y, float ticks) {
-        this.renderBackground();
-        super.render(x, y, ticks);
-        this.renderHoveredToolTip(x, y);
+    public void render(@Nonnull PoseStack poseStack, int x, int y, float ticks) {
+        this.renderBackground(poseStack);
+        super.render(poseStack, x, y, ticks);
+        this.renderTooltip(poseStack, x, y);
     }
 
     @Override
-    protected void renderHoveredToolTip(int mouseX, int mouseY) {
-        super.renderHoveredToolTip(mouseX, mouseY);
-        for (Widget widget : this.buttons) {
-            if (widget.isHovered() && widget instanceof RedstoneModeButton) {
-                RedstoneMode mode = ((RedstoneModeButton) widget).getMode();
-                renderTooltip(TextUtils.translate("misc", "redstoneMode", mode.name()).getFormattedText(), mouseX, mouseY);
+    protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
+        super.renderTooltip(poseStack, mouseX, mouseY);
+
+        for (Widget widget : this.renderables) {
+            if (widget instanceof RedstoneModeButton button && button.isHoveredOrFocused()) {
+                RedstoneMode mode = button.getMode();
+                renderTooltip(poseStack, TextUtils.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
             }
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s = this.title.getFormattedText();
-        this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F,
-                (float) (this.ySize - 96 + 2), 4210752);
+    protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
+        this.font.draw(poseStack, this.title, (float) (this.imageWidth / 2 - this.titleLabelX / 2), this.titleLabelY, 4210752);
+        this.font.draw(poseStack, this.playerInventoryTitle, 8.0F, (float) (this.inventoryLabelY), 4210752);
     }
-
 }

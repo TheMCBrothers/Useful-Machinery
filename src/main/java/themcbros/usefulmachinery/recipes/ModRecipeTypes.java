@@ -1,11 +1,9 @@
 package themcbros.usefulmachinery.recipes;
 
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class ModRecipeTypes {
-
-    public static final IRecipeType<CrusherRecipe> CRUSHING = IRecipeType.register("usefulmachinery:crushing");
-    public static final IRecipeType<ElectricSmeltingRecipe> ELECTRIC_SMELTING = IRecipeType.register("usefulmachinery:electric_smelting");
-    public static final IRecipeType<CompactingRecipe> COMPACTING = IRecipeType.register("usefulmachinery:compacting");
-
+    public static final RecipeType<CrusherRecipe> CRUSHING = RecipeType.register("usefulmachinery:crushing");
+    public static final RecipeType<ElectricSmeltingRecipe> ELECTRIC_SMELTING = RecipeType.register("usefulmachinery:electric_smelting");
+    public static final RecipeType<CompactingRecipe> COMPACTING = RecipeType.register("usefulmachinery:compacting");
 }

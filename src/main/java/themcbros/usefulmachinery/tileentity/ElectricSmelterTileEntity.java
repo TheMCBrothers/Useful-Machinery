@@ -1,117 +1,100 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ElectricSmelterTileEntity extends MachineTileEntity {
-
     private static final int RF_PER_TICK = 10;
 
-    private IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4:
-                    ElectricSmelterTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                    break;
-                case 5:
-                    ElectricSmelterTileEntity.this.processTime = value;
-                    break;
-                case 6:
-                    ElectricSmelterTileEntity.this.processTimeTotal = value;
-                    break;
+                case 4 -> ElectricSmelterTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> ElectricSmelterTileEntity.this.processTime = value;
+                case 6 -> ElectricSmelterTileEntity.this.processTimeTotal = value;
             }
         }
 
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    // Energy lower bytes
-                    return ElectricSmelterTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1:
-                    // Energy upper bytes
-                    return (ElectricSmelterTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2:
-                    // Max energy lower bytes
-                    return ElectricSmelterTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3:
-                    // Max energy upper bytes
-                    return (ElectricSmelterTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4:
-                    // Redstone mode ordinal
-                    return ElectricSmelterTileEntity.this.redstoneMode.ordinal();
-                case 5:
-                    // Crush time
-                    return ElectricSmelterTileEntity.this.processTime;
-                case 6:
-                    // Total crush time
-                    return ElectricSmelterTileEntity.this.processTimeTotal;
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> ElectricSmelterTileEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (ElectricSmelterTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> ElectricSmelterTileEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (ElectricSmelterTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> ElectricSmelterTileEntity.this.redstoneMode.ordinal();
+                case 5 -> ElectricSmelterTileEntity.this.processTime;
+                case 6 -> ElectricSmelterTileEntity.this.processTimeTotal;
+                default -> 0;
+            };
         }
     };
 
-    public ElectricSmelterTileEntity() {
-        super(ModTileEntities.ELECTRIC_SMELTER, false);
+    public ElectricSmelterTileEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.ELECTRIC_SMELTER, blockPos, blockState, false);
     }
 
     @Override
     int[] getInputSlots() {
-        return new int[] {0};
+        return new int[]{0};
     }
 
     @Override
     int[] getOutputSlots() {
-        return new int[] {1};
+        return new int[]{1};
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 3;
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
         this.stacks.set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (stack.getCount() > this.getMaxEnergyStored()) {
+            stack.setCount(this.getMaxEnergyStored());
         }
 
         if (index == 0 && !flag) {
             this.processTimeTotal = this.getProcessTime();
             this.processTime = 0;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
+    @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("container.usefulmachinery.electric_smelter");
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.usefulmachinery.electric_smelter");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
         return new ElectricSmelterContainer(id, playerInventory, this, this.fields);
     }
 
@@ -121,17 +104,18 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
 
     @Override
     public void tick() {
-
         boolean shouldLit = this.isActive();
         boolean flag1 = false;
 
-        assert this.world != null;
-        if (!this.world.isRemote) {
+        assert this.level != null;
+
+        if (!this.level.isClientSide) {
             this.receiveEnergyFromSlot(2);
 
             if (this.isActive() || this.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                AbstractCookingRecipe recipe = this.world.getRecipeManager().getRecipe(IRecipeType.BLASTING, this, this.world).orElse(null);
-                if (recipe == null) recipe = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).orElse(null);
+                AbstractCookingRecipe recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level).orElse(null);
+                if (recipe == null)
+                    recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
@@ -141,10 +125,13 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
                 if (this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
                     this.processTime++;
+
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
                         this.processTimeTotal = this.getProcessTime();
+
                         this.processItem(recipe);
+
                         flag1 = true;
                     }
                 } else {
@@ -159,29 +146,31 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
         }
 
         if (flag1) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     private int getProcessTime() {
-        if (world == null) return 200;
-        return this.world.getRecipeManager().getRecipe(IRecipeType.BLASTING, this, this.world)
-                .map(AbstractCookingRecipe::getCookTime).orElse(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world)
-                        .map(AbstractCookingRecipe::getCookTime).orElse(200));
+        if (this.level == null) return 200;
+        return this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level)
+                .map(AbstractCookingRecipe::getCookingTime).orElse(this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level)
+                        .map(AbstractCookingRecipe::getCookingTime).orElse(200));
     }
 
     private boolean canProcess(@Nullable AbstractCookingRecipe recipeIn) {
         if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this)) {
-            ItemStack itemstack = recipeIn.getRecipeOutput();
+            ItemStack itemstack = recipeIn.getResultItem();
+
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 ItemStack itemstack1 = this.stacks.get(1);
+
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!itemstack1.isItemEqual(itemstack)) {
+                } else if (!itemstack1.sameItem(itemstack)) {
                     return false;
-                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
+                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getMaxEnergyStored() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;
                 } else {
                     return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize();
@@ -195,8 +184,9 @@ public class ElectricSmelterTileEntity extends MachineTileEntity {
     private void processItem(@Nullable AbstractCookingRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
-            ItemStack itemstack1 = recipe.getRecipeOutput();
+            ItemStack itemstack1 = recipe.getResultItem();
             ItemStack itemstack2 = this.stacks.get(1);
+
             if (itemstack2.isEmpty()) {
                 this.stacks.set(1, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {

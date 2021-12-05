@@ -1,92 +1,72 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.recipes.CrusherRecipe;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CrusherTileEntity extends MachineTileEntity {
-
     private static final int RF_PER_TICK = 10;
 
-    private IIntArray fields = new IIntArray() {
+    private ContainerData fields = new ContainerData() {
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4:
-                    CrusherTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                    break;
-                case 5:
-                    CrusherTileEntity.this.processTime = value;
-                    break;
-                case 6:
-                    CrusherTileEntity.this.processTimeTotal = value;
-                    break;
+                case 4 -> CrusherTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> CrusherTileEntity.this.processTime = value;
+                case 6 -> CrusherTileEntity.this.processTimeTotal = value;
             }
         }
 
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    // Energy lower bytes
-                    return CrusherTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1:
-                    // Energy upper bytes
-                    return (CrusherTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2:
-                    // Max energy lower bytes
-                    return CrusherTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3:
-                    // Max energy upper bytes
-                    return (CrusherTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4:
-                    // Redstone mode ordinal
-                    return CrusherTileEntity.this.redstoneMode.ordinal();
-                case 5:
-                    // Crush time
-                    return CrusherTileEntity.this.processTime;
-                case 6:
-                    // Total crush time
-                    return CrusherTileEntity.this.processTimeTotal;
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> CrusherTileEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (CrusherTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CrusherTileEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CrusherTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CrusherTileEntity.this.redstoneMode.ordinal();
+                case 5 -> CrusherTileEntity.this.processTime;
+                case 6 -> CrusherTileEntity.this.processTimeTotal;
+                default -> 0;
+            };
         }
     };
 
-    public CrusherTileEntity() {
-        super(ModTileEntities.CRUSHER, false);
+    public CrusherTileEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.CRUSHER, blockPos, blockState, false);
     }
 
     @Override
     int[] getInputSlots() {
-        return new int[] {0};
+        return new int[]{0};
     }
 
     @Override
     int[] getOutputSlots() {
-        return new int[] {1, 2};
+        return new int[]{1, 2};
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 4;
     }
 
@@ -96,17 +76,17 @@ public class CrusherTileEntity extends MachineTileEntity {
 
     @Override
     public void tick() {
-
         boolean shouldLit = this.isActive();
         boolean flag1 = false;
 
-        assert this.world != null;
-        if (!this.world.isRemote) {
+        assert this.level != null;
+        if (!this.level.isClientSide) {
 
             this.receiveEnergyFromSlot(3);
 
             if (this.isActive() || this.energyStorage.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                CrusherRecipe crusherRecipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.CRUSHING, this, this.world).orElse(null);
+                CrusherRecipe crusherRecipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.CRUSHING, this, this.level).orElse(null);
+
                 if (!this.isActive() && this.canCrush(crusherRecipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
                     processTime++;
@@ -115,10 +95,13 @@ public class CrusherTileEntity extends MachineTileEntity {
                 if (this.isActive() && this.canCrush(crusherRecipe)) {
                     this.processTime++;
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
                         this.processTimeTotal = this.getCrushTime();
+
                         this.crushItem(crusherRecipe);
+
                         flag1 = true;
                     }
                 } else {
@@ -133,34 +116,35 @@ public class CrusherTileEntity extends MachineTileEntity {
         }
 
         if (flag1) {
-            this.markDirty();
+            this.setChanged();
         }
-
     }
 
     private int getCrushTime() {
-        if (world == null) return 200;
-        return this.world.getRecipeManager().getRecipe(ModRecipeTypes.CRUSHING, this, this.world)
+        if (level == null) return 200;
+        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.CRUSHING, this, this.level)
                 .map(CrusherRecipe::getCrushTime).orElse(200);
     }
 
     private boolean canCrush(@Nullable CrusherRecipe recipe) {
         if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
-            ItemStack recipeOutputStack = recipe.getRecipeOutput();
+            ItemStack recipeOutputStack = recipe.getResultItem();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
-            if(!recipeSecondOutputStack.isEmpty()) {
+
+            if (!recipeSecondOutputStack.isEmpty()) {
                 if (recipeOutputStack.isEmpty()) {
                     return false;
                 } else {
                     ItemStack crusherOutputStack = this.stacks.get(1);
                     ItemStack crusherSecondOutputStack = this.stacks.get(2);
+
                     if (crusherOutputStack.isEmpty() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (!crusherOutputStack.isItemEqual(recipeOutputStack) || !crusherSecondOutputStack.isItemEqual(recipeSecondOutputStack)) {
+                    } else if (!crusherOutputStack.sameItem(recipeOutputStack) || !crusherSecondOutputStack.sameItem(recipeSecondOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getInventoryStackLimit()
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize()
                             && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()
-                            && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getInventoryStackLimit()
+                            && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize()
                             && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
@@ -173,11 +157,12 @@ public class CrusherTileEntity extends MachineTileEntity {
                     return false;
                 } else {
                     ItemStack crusherOutputStack = this.stacks.get(1);
+
                     if (crusherOutputStack.isEmpty()) {
                         return true;
-                    } else if (!crusherOutputStack.isItemEqual(recipeOutputStack)) {
+                    } else if (!crusherOutputStack.sameItem(recipeOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getInventoryStackLimit()
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize()
                             && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
@@ -193,8 +178,9 @@ public class CrusherTileEntity extends MachineTileEntity {
     private void crushItem(@Nullable CrusherRecipe recipe) {
         if (recipe != null && this.canCrush(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
-            ItemStack itemstack1 = recipe.getRecipeOutput();
+            ItemStack itemstack1 = recipe.getResultItem();
             ItemStack itemstack2 = this.stacks.get(1);
+
             if (itemstack2.isEmpty()) {
                 this.stacks.set(1, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
@@ -206,30 +192,32 @@ public class CrusherTileEntity extends MachineTileEntity {
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
+
         this.stacks.set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxEnergyStored());
         }
 
         if (index == 0 && !flag) {
             this.processTimeTotal = this.getCrushTime();
             this.processTime = 0;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
+    @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("container.usefulmachinery.crusher");
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.usefulmachinery.crusher");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         return new CrusherContainer(id, playerInventory, this, this.fields);
     }
-
 }

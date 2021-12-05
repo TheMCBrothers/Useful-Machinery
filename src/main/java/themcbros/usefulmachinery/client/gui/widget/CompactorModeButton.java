@@ -1,20 +1,26 @@
 package themcbros.usefulmachinery.client.gui.widget;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.container.CompactorContainer;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.gui.components.Button.OnPress;
+
 public class CompactorModeButton extends Button {
+    private final CompactorContainer container;
 
-    private CompactorContainer container;
-
-    public CompactorModeButton(CompactorContainer container, int x, int y, int width, int height, IPressable onPress) {
-        super(x, y, width, height, "", button -> {
+    public CompactorModeButton(CompactorContainer container, int x, int y, int width, int height, OnPress onPress) {
+        super(x, y, width, height, TextComponent.EMPTY, button -> {
             ((CompactorModeButton) button).cycleMode();
             onPress.onPress(button);
         });
+
         this.container = container;
     }
 
@@ -30,13 +36,14 @@ public class CompactorModeButton extends Button {
     }
 
     @Override
-    public void renderButton(int mouseX, int mouseY, float p_renderButton_3_) {
-        super.renderButton(mouseX, mouseY, p_renderButton_3_);
+    public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float p_renderButton_3_) {
+        super.renderButton(poseStack, mouseX, mouseY, p_renderButton_3_);
 
         final Minecraft minecraft = Minecraft.getInstance();
         final ItemStack renderStack = this.container.getCompactorMode().getIconStack();
-        minecraft.getItemRenderer().renderItemOverlayIntoGUI(minecraft.fontRenderer, renderStack, this.x + 2, this.y + 2, "");
-        minecraft.getItemRenderer().renderItemAndEffectIntoGUI(renderStack, this.x + 2, this.y + 2);
+
+        minecraft.getItemRenderer().renderGuiItemDecorations(minecraft.font, renderStack, this.x + 2, this.y + 2, "");
+        minecraft.getItemRenderer().renderGuiItem(renderStack, this.x + 2, this.y + 2);
     }
 
 }

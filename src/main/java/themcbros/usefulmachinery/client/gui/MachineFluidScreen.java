@@ -1,16 +1,17 @@
 package themcbros.usefulmachinery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import themcbros.usefulmachinery.container.MachineContainer;
@@ -18,7 +19,6 @@ import themcbros.usefulmachinery.container.MachineContainer;
 import javax.annotation.Nullable;
 
 public abstract class MachineFluidScreen<T extends MachineContainer> extends MachineScreen<T> {
-
     private static final int DEFAULT_TANK_WIDTH = 10;
     private static final int DEFAULT_TANK_HEIGHT = 50;
 
@@ -30,7 +30,7 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
     private final int width;
     private final int height;
 
-    MachineFluidScreen(T screenContainer, PlayerInventory inv, ITextComponent titleIn, int capacityMb) {
+    MachineFluidScreen(T screenContainer, Inventory inv, Component titleIn, int capacityMb) {
         super(screenContainer, inv, titleIn);
         this.capacityMb = capacityMb;
         this.width = DEFAULT_TANK_WIDTH;
@@ -43,21 +43,23 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
         if (fluidStack == null) {
             return;
         }
+
         Fluid fluid = fluidStack.getFluid();
         if (fluid == null) {
             return;
         }
 
         TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
-
         FluidAttributes attributes = fluid.getAttributes();
         int fluidColor = attributes.getColor(fluidStack);
 
         int amount = fluidStack.getAmount();
         int scaledAmount = (amount * height) / capacityMb;
+
         if (amount > 0 && scaledAmount < MIN_FLUID_HEIGHT) {
             scaledAmount = MIN_FLUID_HEIGHT;
         }
+
         if (scaledAmount > height) {
             scaledAmount = height;
         }
@@ -67,14 +69,13 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
 
     protected void drawTiledSprite(final int xPosition, final int yPosition, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        minecraft.getTextureManager().bindForSetup(TextureAtlas.LOCATION_BLOCKS);
         setGLColorFromInt(color);
 
         final int xTileCount = tiledWidth / TEX_WIDTH;
         final int xRemainder = tiledWidth - (xTileCount * TEX_WIDTH);
         final int yTileCount = scaledAmount / TEX_HEIGHT;
         final int yRemainder = scaledAmount - (yTileCount * TEX_HEIGHT);
-
         final int yStart = yPosition + tiledHeight;
 
         for (int xTile = 0; xTile <= xTileCount; xTile++) {
@@ -83,6 +84,7 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
                 int height = (yTile == yTileCount) ? yRemainder : TEX_HEIGHT;
                 int x = xPosition + (xTile * TEX_WIDTH);
                 int y = yStart - ((yTile + 1) * TEX_HEIGHT);
+
                 if (width > 0 && height > 0) {
                     int maskTop = TEX_HEIGHT - height;
                     int maskRight = TEX_WIDTH - width;
@@ -98,7 +100,7 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
         Fluid fluid = fluidStack.getFluid();
         FluidAttributes attributes = fluid.getAttributes();
         ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
-        return minecraft.getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+        return minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(fluidStill);
     }
 
     private static void setGLColorFromInt(int color) {
@@ -107,26 +109,27 @@ public abstract class MachineFluidScreen<T extends MachineContainer> extends Mac
         float blue = (color & 0xFF) / 255.0F;
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
-        RenderSystem.color4f(red, green, blue, alpha);
+        RenderSystem.clearColor(red, green, blue, alpha);
     }
 
     private static void drawTextureWithMasking(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-        double uMin = textureSprite.getMinU();
-        double uMax = textureSprite.getMaxU();
-        double vMin = textureSprite.getMinV();
-        double vMax = textureSprite.getMaxV();
+        double uMin = textureSprite.getU0();
+        double uMax = textureSprite.getU1();
+        double vMin = textureSprite.getV0();
+        double vMax = textureSprite.getV1();
+
         uMax = uMax - (maskRight / 16.0 * (uMax - uMin));
         vMax = vMax - (maskTop / 16.0 * (vMax - vMin));
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(xCoord, yCoord + 16, zLevel).tex((float) uMin, (float) vMax).endVertex();
-        bufferBuilder.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex((float) uMax, (float) vMax).endVertex();
-        bufferBuilder.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex((float) uMax, (float) vMin).endVertex();
-        bufferBuilder.pos(xCoord, yCoord + maskTop, zLevel).tex((float) uMin, (float) vMin).endVertex();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.getBuilder();
 
-        tessellator.draw();
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferBuilder.vertex(xCoord, yCoord + 16, zLevel).uv((float) uMin, (float) vMax).endVertex();
+        bufferBuilder.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv((float) uMax, (float) vMax).endVertex();
+        bufferBuilder.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv((float) uMax, (float) vMin).endVertex();
+        bufferBuilder.vertex(xCoord, yCoord + maskTop, zLevel).uv((float) uMin, (float) vMin).endVertex();
+
+        tesselator.end();
     }
-
 }

@@ -1,18 +1,19 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -28,54 +29,58 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class MachineTileEntity extends TileEntity implements ITickableTileEntity, ISidedInventory, INamedContainerProvider {
-
+public abstract class MachineTileEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
 
-    protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 
     public int processTime, processTimeTotal;
     public MachineEnergyStorage energyStorage;
     public MachineTier machineTier = MachineTier.LEADSTONE;
     public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
-    private boolean isGenerator;
+    private final boolean isGenerator;
     private int cooldown = -1;
 
-    MachineTileEntity(TileEntityType<?> tileEntityTypeIn, boolean isGenerator) {
-        super(tileEntityTypeIn);
+    MachineTileEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
+        super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
         this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
         if (this.processTime > 0) compound.putInt("ProcessTime", this.processTime);
         if (this.processTimeTotal > 0) compound.putInt("ProcessTimeTotal", this.processTimeTotal);
         if (machineTier != MachineTier.LEADSTONE) compound.putInt("Tier", machineTier.ordinal());
         if (redstoneMode != RedstoneMode.IGNORED) compound.putInt("RedstoneMode", redstoneMode.getIndex());
-        if (this.energyStorage.getEnergyStored() > 0) compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
-        ItemStackHelper.saveAllItems(compound, this.stacks, false);
-        return super.write(compound);
+        if (this.energyStorage.getEnergyStored() > 0)
+            compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+
+        ContainerHelper.saveAllItems(compound, this.stacks, false);
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        if (compound.contains("ProcessTime", Constants.NBT.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
-        if (compound.contains("ProcessTimeTotal", Constants.NBT.TAG_INT)) this.processTimeTotal = compound.getInt("ProcessTimeTotal");
-        if (compound.contains("Tier", Constants.NBT.TAG_INT)) this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
-        if (compound.contains("RedstoneMode", Constants.NBT.TAG_INT))
+    public void load(CompoundTag compound) {
+        if (compound.contains("ProcessTime", Tag.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
+        if (compound.contains("ProcessTimeTotal", Tag.TAG_INT))
+            this.processTimeTotal = compound.getInt("ProcessTimeTotal");
+        if (compound.contains("Tier", Tag.TAG_INT)) this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
+        if (compound.contains("RedstoneMode", Tag.TAG_INT))
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        if (compound.contains("EnergyStored", Constants.NBT.TAG_INT))
-            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal()+1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
-        ItemStackHelper.loadAllItems(compound, this.stacks);
-        super.read(compound);
+        if (compound.contains("EnergyStored", Tag.TAG_INT))
+            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+
+        ContainerHelper.loadAllItems(compound, this.stacks);
+
+        super.load(compound);
     }
 
     abstract int[] getInputSlots();
 
     abstract int[] getOutputSlots();
 
+    @Nonnull
     @Override
     public int[] getSlotsForFace(Direction side) {
         // TODO: Implement side config
@@ -83,87 +88,90 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         // TODO: Implement side config
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         // TODO: Implement side config
         return true;
     }
 
     @Override
-    public abstract int getSizeInventory();
+    public abstract int getContainerSize();
 
     @Override
     public boolean isEmpty() {
         for (ItemStack stack : this.stacks) {
-            if (!stack.isEmpty())
-                return false;
+            if (!stack.isEmpty()) return false;
         }
         return true;
     }
 
+    @Nonnull
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.stacks.get(index);
     }
 
+    @Nonnull
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return ItemStackHelper.getAndSplit(this.stacks, index, count);
+    public ItemStack removeItem(int index, int count) {
+        return ContainerHelper.removeItem(this.stacks, index, count);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack removeItemNoUpdate(int index) {
+        return ContainerHelper.takeItem(this.stacks, index);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStackHelper.getAndRemove(this.stacks, index);
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        // TODO
+    public void setItem(int index, ItemStack stack) {
+        //TODO
         this.stacks.set(index, stack);
     }
 
     @Override
-    public boolean isUsableByPlayer(@Nonnull PlayerEntity player) {
-        assert this.world != null;
-        if (this.world.getTileEntity(this.pos) != this) {
+    public boolean stillValid(@Nonnull Player player) {
+        assert this.level != null;
+
+        if (this.level.getBlockEntity(this.getBlockPos()) != this) {
             return false;
         } else {
-            return !(player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
-                    (double) this.pos.getZ() + 0.5D) > 64.0D);
+            return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
         }
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.stacks.clear();
     }
 
-    @Override
-    public void tick() {
+    protected void tick() {
         if (this.cooldown > 0) this.cooldown--;
         if (this.cooldown < 0) sendUpdate(false);
     }
 
     public void sendUpdate(boolean lit) {
         if (lit) this.cooldown = 15;
-        assert this.world != null;
-        boolean flag = this.getBlockState().get(MachineBlock.LIT) != lit;
-        if (flag) this.world.setBlockState(this.pos, this.getBlockState().with(MachineBlock.LIT, lit));
+
+        assert this.level != null;
+        boolean flag = this.getBlockState().getValue(MachineBlock.LIT) != lit;
+
+        if (flag) this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MachineBlock.LIT, lit), 3);
     }
 
-    private LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());
-    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> this.energyStorage);
+    private final LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> this.energyStorage);
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (!this.removed && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemHandlers[side.getIndex()].cast();
+        if (!this.remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return itemHandlers[side.get2DDataValue()].cast();
         } else if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
         }
@@ -179,11 +187,12 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     }
 
     // Util methods
+    protected void sendEnergyToSlot() {
+        final ItemStack energyStack = this.stacks.get(1);
 
-    protected void sendEnergyToSlot(int slotIndex) {
-        final ItemStack energyStack = this.stacks.get(slotIndex);
         if (!energyStack.isEmpty()) {
             IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+
             if (energy != null && energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
                 this.energyStorage.modifyEnergyStored(-accepted);
@@ -193,11 +202,13 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
 
     protected void receiveEnergyFromSlot(int slotIndex) {
         final ItemStack energyStack = this.stacks.get(slotIndex);
+
         if (!energyStack.isEmpty()) {
             IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
             if (energy != null && energy.canExtract()) {
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
-                if(this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
+
+                if (this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
                     this.energyStorage.modifyEnergyStored(energy.extractEnergy(accept, false));
             }
         }
@@ -206,8 +217,10 @@ public abstract class MachineTileEntity extends TileEntity implements ITickableT
     public void sendEnergy() {
         // TODO implement side config
         for (Direction facing : Direction.values()) {
-            assert this.world != null;
-            IEnergyStorage energy = EnergyUtils.getEnergy(this.world, this.pos.offset(facing), facing.getOpposite());
+            assert this.level != null;
+
+            IEnergyStorage energy = EnergyUtils.getEnergy(this.level, this.worldPosition.relative(facing), facing.getOpposite());
+
             if (energy != null && energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
                 this.energyStorage.modifyEnergyStored(-accepted);

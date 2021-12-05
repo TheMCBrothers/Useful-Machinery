@@ -1,27 +1,21 @@
 package themcbros.usefulmachinery.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
-import themcbros.usefulmachinery.tileentity.CreativePowerCellTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-public class CreativePowerCellBlock extends Block {
-
+public class CreativePowerCellBlock extends BaseEntityBlock {
     public CreativePowerCellBlock(Properties properties) {
         super(properties);
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CreativePowerCellTileEntity();
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
+        return null;
     }
 }

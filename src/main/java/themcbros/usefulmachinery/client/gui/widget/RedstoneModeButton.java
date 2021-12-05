@@ -1,18 +1,20 @@
 package themcbros.usefulmachinery.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import themcbros.usefulmachinery.container.MachineContainer;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
-public class RedstoneModeButton extends ExtendedButton {
+import net.minecraft.client.gui.components.Button.OnPress;
 
+public class RedstoneModeButton extends ExtendedButton {
     private MachineContainer container;
 
-    public RedstoneModeButton(MachineContainer container, int x, int y, IPressable onPress) {
-        super(x, y, 16, 16, "", button -> {
+    public RedstoneModeButton(MachineContainer container, int x, int y, OnPress onPress) {
+        super(x, y, 16, 16, TextComponent.EMPTY, button -> {
             ((RedstoneModeButton) button).cycleMode();
             onPress.onPress(button);
         });
@@ -31,15 +33,16 @@ public class RedstoneModeButton extends ExtendedButton {
     }
 
     @Override
-    public void renderButton(int mouseX, int mouseY, float partial) {
-        super.renderButton(mouseX, mouseY, partial);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+        super.renderButton(poseStack, mouseX, mouseY, partial);
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(container.getRedstoneMode().getIcon());
+        minecraft.getTextureManager().bindForSetup(container.getRedstoneMode().getIcon());
+
         RenderSystem.disableDepthTest();
 
-        blit(this.x, this.y, 0, 0, this.width, this.height, 16, 16);
+        blit(poseStack, this.x, this.y, 0, 0, this.width, this.height, 16, 16);
         RenderSystem.enableDepthTest();
     }
 }

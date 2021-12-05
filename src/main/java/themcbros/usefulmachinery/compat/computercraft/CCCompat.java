@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import themcbros.usefulmachinery.tileentity.FramedBundledCableTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 import javax.annotation.Nonnull;

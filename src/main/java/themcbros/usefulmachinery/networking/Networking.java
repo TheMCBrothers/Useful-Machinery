@@ -1,14 +1,14 @@
 package themcbros.usefulmachinery.networking;
 
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import themcbros.usefulmachinery.UsefulMachinery;
 
 import java.util.Objects;
 
 public class Networking {
-
     public static SimpleChannel channel;
+
     static {
         channel = NetworkRegistry.ChannelBuilder.named(UsefulMachinery.getId("network"))
                 .clientAcceptedVersions(s -> Objects.equals(s, "1"))
@@ -28,8 +28,10 @@ public class Networking {
                 .add();
     }
 
-    private Networking() {}
+    private Networking() {
+    }
 
-    public static void init() {}
+    public static void init() {
+    }
 
 }

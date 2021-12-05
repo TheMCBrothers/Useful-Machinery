@@ -1,79 +1,79 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.tileentity.ElectricSmelterTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class ElectricSmelterContainer extends MachineContainer {
+    private final Level level;
 
-    private World world;
-
-    public ElectricSmelterContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new ElectricSmelterTileEntity(), new IntArray(7));
+    public ElectricSmelterContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new ElectricSmelterTileEntity(BlockPos.ZERO, ModBlocks.ELECTRIC_SMELTER.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public ElectricSmelterContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    public ElectricSmelterContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(ModContainers.ELECTRIC_SMELTER, id, playerInventory, tileEntity, fields);
-        this.world = playerInventory.player.world;
+        this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
         this.addSlot(new Slot(tileEntity, 1, 95, 33));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
         this.addPlayerSlots(playerInventory);
-
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        int i = this.machineTileEntity.getSizeInventory();
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        int i = this.machineTileEntity.getContainerSize();
         ItemStack itemstack1 = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
             itemstack1 = slotStack.copy();
             if (index == 1) {
-                if (!this.mergeItemStack(slotStack, i, 36 + i, true)) {
+                if (!this.moveItemStackTo(slotStack, i, 36 + i, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(slotStack, itemstack1);
+                slot.onQuickCraft(slotStack, itemstack1);
             } else if (index != 0) {
                 if (this.canCook(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, 0, 1, false)) {
+                    if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (this.isEnergyItem(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, i - 1, i, false)) {
+                    if (!this.moveItemStackTo(slotStack, i - 1, i, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {
-                    if (!this.mergeItemStack(slotStack, 27 + i, 36 + i, false)) {
+                    if (!this.moveItemStackTo(slotStack, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(slotStack, i, 27 + i, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(slotStack, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(slotStack, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(slotStack, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (slotStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (slotStack.getCount() == itemstack1.getCount()) {
@@ -92,10 +92,10 @@ public class ElectricSmelterContainer extends MachineContainer {
     }
 
     protected boolean canCook(ItemStack stack) {
-        return this.world.getRecipeManager()
-                .getRecipe(IRecipeType.BLASTING, new Inventory(stack), this.world)
-                .isPresent() || this.world.getRecipeManager()
-                .getRecipe(IRecipeType.SMELTING, new Inventory(stack), this.world)
+        return this.level.getRecipeManager()
+                .getRecipeFor(RecipeType.BLASTING, new SimpleContainer(stack), this.level)
+                .isPresent() || this.level.getRecipeManager()
+                .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), this.level)
                 .isPresent();
     }
 
@@ -112,5 +112,4 @@ public class ElectricSmelterContainer extends MachineContainer {
         int j = this.getCookTimeTotal();
         return i != 0 && j != 0 ? i * width / j : 0;
     }
-
 }

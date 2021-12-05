@@ -1,34 +1,33 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 import themcbros.usefulmachinery.tileentity.CrusherTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class CrusherContainer extends MachineContainer {
+    private final Level level;
 
-    private World world;
-
-    public CrusherContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new CrusherTileEntity(), new IntArray(7));
+    public CrusherContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new CrusherTileEntity(BlockPos.ZERO, ModBlocks.CRUSHER.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public CrusherContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    public CrusherContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(ModContainers.CRUSHER, id, playerInventory, tileEntity, fields);
-        this.world = playerInventory.player.world;
+        this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 35));
         this.addSlot(new Slot(tileEntity, 1, 95, 24));
@@ -36,47 +35,46 @@ public class CrusherContainer extends MachineContainer {
         this.addSlot(new EnergySlot(tileEntity, 3, 134, 33));
 
         this.addPlayerSlots(playerInventory);
-
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        int i = this.machineTileEntity.getSizeInventory();
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        int i = this.machineTileEntity.getContainerSize();
         ItemStack itemstack1 = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
             itemstack1 = slotStack.copy();
             if (index == 1 || index == 2) {
-                if (!this.mergeItemStack(slotStack, i, 36 + i, true)) {
+                if (!this.moveItemStackTo(slotStack, i, 36 + i, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(slotStack, itemstack1);
+                slot.onQuickCraft(slotStack, itemstack1);
             } else if (index != 0) {
                 if (this.canCrush(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, 0, 1, false)) {
+                    if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (this.isEnergyItem(slotStack)) {
-                    if (!this.mergeItemStack(slotStack, 3, 4, false)) {
+                    if (!this.moveItemStackTo(slotStack, 3, 4, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {
-                    if (!this.mergeItemStack(slotStack, 27 + i, 36 + i, false)) {
+                    if (!this.moveItemStackTo(slotStack, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(slotStack, i, 27 + i, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(slotStack, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(slotStack, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(slotStack, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (slotStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (slotStack.getCount() == itemstack1.getCount()) {
@@ -95,8 +93,8 @@ public class CrusherContainer extends MachineContainer {
     }
 
     protected boolean canCrush(ItemStack stack) {
-        return this.world.getRecipeManager()
-                .getRecipe(ModRecipeTypes.CRUSHING, new Inventory(stack), this.world)
+        return this.level.getRecipeManager()
+                .getRecipeFor(ModRecipeTypes.CRUSHING, new SimpleContainer(stack), this.level)
                 .isPresent();
     }
 
@@ -113,5 +111,4 @@ public class CrusherContainer extends MachineContainer {
         int j = this.getCrushTimeTotal();
         return i != 0 && j != 0 ? i * width / j : 0;
     }
-
 }

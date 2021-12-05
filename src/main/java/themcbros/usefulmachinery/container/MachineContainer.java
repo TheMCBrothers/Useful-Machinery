@@ -1,32 +1,31 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 import javax.annotation.Nullable;
 
-public class MachineContainer extends Container {
-
+public class MachineContainer extends AbstractContainerMenu {
     public MachineTileEntity machineTileEntity;
-    private RedstoneMode mode = RedstoneMode.IGNORED;
-    protected IIntArray fields;
+    private final RedstoneMode mode = RedstoneMode.IGNORED;
+    protected ContainerData fields;
 
-    MachineContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    MachineContainer(@Nullable MenuType<?> type, int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(type, id);
         this.machineTileEntity = tileEntity;
 
         this.fields = fields;
-        this.trackIntArray(fields);
+        this.addDataSlots(fields);
 
     }
 
-    protected void addPlayerSlots(PlayerInventory playerInventory) {
+    protected void addPlayerSlots(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -39,8 +38,8 @@ public class MachineContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.machineTileEntity.isUsableByPlayer(playerIn);
+    public boolean stillValid(Player playerIn) {
+        return this.machineTileEntity.stillValid(playerIn);
     }
 
     public RedstoneMode getRedstoneMode() {
@@ -51,7 +50,7 @@ public class MachineContainer extends Container {
         this.fields.set(4, mode.ordinal());
     }
 
-    public IIntArray getFields() {
+    public ContainerData getFields() {
         return fields;
     }
 

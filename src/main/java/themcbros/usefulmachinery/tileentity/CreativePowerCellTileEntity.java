@@ -1,8 +1,10 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -13,10 +15,9 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CreativePowerCellTileEntity extends TileEntity implements IEnergyStorage, ITickableTileEntity {
-
-    public CreativePowerCellTileEntity() {
-        super(ModTileEntities.CREATIVE_POWER_CELL);
+public class CreativePowerCellTileEntity extends BlockEntity implements IEnergyStorage {
+    public CreativePowerCellTileEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.CREATIVE_POWER_CELL, blockPos, blockState);
     }
 
     @Override
@@ -52,24 +53,22 @@ public class CreativePowerCellTileEntity extends TileEntity implements IEnergySt
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityEnergy.ENERGY){
+        if (cap == CapabilityEnergy.ENERGY) {
             return LazyOptional.of(() -> this).cast();
         }
         return super.getCapability(cap, side);
     }
 
-    @Override
-    public void tick() {
-        assert world != null;
-        if (!world.isRemote) {
-            this.sendEnergy();
+    public static void serverTick(Level level, BlockPos blockPos, BlockState blockState, CreativePowerCellTileEntity blockEntity) {
+        if (!level.isClientSide) {
+            blockEntity.sendEnergy(level, blockPos);
         }
     }
 
-    private void sendEnergy() {
+    private void sendEnergy(Level level, BlockPos blockPos) {
         for (Direction facing : Direction.values()) {
-            assert this.world != null;
-            IEnergyStorage energy = EnergyUtils.getEnergy(this.world, this.pos.offset(facing), facing.getOpposite());
+            IEnergyStorage energy = EnergyUtils.getEnergy(level, blockPos.relative(facing), facing.getOpposite());
+
             if (energy != null && energy.canReceive()) {
                 energy.receiveEnergy(this.getEnergyStored(), false);
             }

@@ -1,22 +1,23 @@
 package themcbros.usefulmachinery.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.init.ModStats;
-import themcbros.usefulmachinery.tileentity.LavaGeneratorTileEntity;
 
 import javax.annotation.Nullable;
 
-public class LavaGeneratorBlock extends MachineBlock {
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
+public class LavaGeneratorBlock extends MachineBlock {
     public LavaGeneratorBlock(Properties properties) {
         super(properties, ModStats.INTERACT_WITH_LAVA_GENERATOR);
     }
 
+    //TODO later on
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new LavaGeneratorTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return null;
     }
 }

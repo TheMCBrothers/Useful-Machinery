@@ -6,8 +6,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.tileentity.FramedBundledCableTileEntity;
-import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class CableProbeProvider implements IProbeInfoProvider {
 

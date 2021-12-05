@@ -1,15 +1,16 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -17,20 +18,22 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.container.slot.FluidItemSlot;
 import themcbros.usefulmachinery.container.slot.OutputSlot;
+import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.tileentity.LavaGeneratorTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
-public class LavaGeneratorContainer extends MachineContainer {
+import javax.annotation.Nonnull;
 
-    public LavaGeneratorContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new LavaGeneratorTileEntity(), new IntArray(9));
+public class LavaGeneratorContainer extends MachineContainer {
+    public LavaGeneratorContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new LavaGeneratorTileEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(9));
     }
 
-    public LavaGeneratorContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    public LavaGeneratorContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(ModContainers.LAVA_GENERATOR, id, playerInventory, tileEntity, fields);
 
-        this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().isIn(FluidTags.LAVA)));
+        this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA)));
         this.addSlot(new OutputSlot(tileEntity, 1, 26, 51));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
@@ -38,37 +41,37 @@ public class LavaGeneratorContainer extends MachineContainer {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        int i = this.machineTileEntity.getSizeInventory();
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        int i = this.machineTileEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index >= i) {
-                if (AbstractFurnaceTileEntity.isFuel(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                if (AbstractFurnaceBlockEntity.isFuel(itemstack1)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (isEnergyItem(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, i - 1, i, false)) {
+                    if (!this.moveItemStackTo(itemstack1, i - 1, i, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {
-                    if (!this.mergeItemStack(itemstack1, 27 + i, 36 + i, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(itemstack1, i, 27 + i, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(itemstack1, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -82,8 +85,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     }
 
     private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY)
-                .map(IEnergyStorage::canReceive).orElse(false);
+        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::canReceive).orElse(false);
     }
 
     public int getBurnTimeScaled() {
@@ -109,7 +111,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     }
 
     public Fluid getTankFluid() {
-        return Registry.FLUID.getByValue(this.fields.get(8));
+        return Registry.FLUID.byId(this.fields.get(8));
     }
 
     public IFluidHandler getFluidTankHandler() {
@@ -130,6 +132,7 @@ public class LavaGeneratorContainer extends MachineContainer {
                 return LavaGeneratorContainer.this.getTankCapacity();
             }
 
+            @Nonnull
             @Override
             public FluidStack getFluidInTank(int tank) {
                 return LavaGeneratorContainer.this.getTankStack();
@@ -140,16 +143,17 @@ public class LavaGeneratorContainer extends MachineContainer {
                 return 0;
             }
 
+            @Nonnull
             @Override
             public FluidStack drain(int maxDrain, FluidAction action) {
                 return FluidStack.EMPTY;
             }
 
+            @Nonnull
             @Override
             public FluidStack drain(FluidStack resource, FluidAction action) {
                 return resource;
             }
         };
     }
-
 }

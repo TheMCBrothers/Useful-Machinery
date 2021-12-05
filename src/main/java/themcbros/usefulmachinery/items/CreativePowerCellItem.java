@@ -1,9 +1,9 @@
 package themcbros.usefulmachinery.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
@@ -13,30 +13,29 @@ import themcbros.usefulmachinery.energy.IEnergyContainerItem;
 import javax.annotation.Nullable;
 
 public class CreativePowerCellItem extends BlockItem implements IEnergyContainerItem {
-
     public CreativePowerCellItem(Block block, Properties properties) {
         super(block, properties);
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         return 0xFF0000;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 0.0d;
+    public int getBarWidth(ItemStack stack) {
+        return 0;
     }
 
     @Override

@@ -1,26 +1,27 @@
 package themcbros.usefulmachinery.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.init.ModBlocks;
 import themcbros.usefulmachinery.init.ModContainers;
 import themcbros.usefulmachinery.tileentity.CoalGeneratorTileEntity;
 import themcbros.usefulmachinery.tileentity.MachineTileEntity;
 
 public class CoalGeneratorContainer extends MachineContainer {
-
-    public CoalGeneratorContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new CoalGeneratorTileEntity(), new IntArray(7));
+    public CoalGeneratorContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new CoalGeneratorTileEntity(BlockPos.ZERO, ModBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public CoalGeneratorContainer(int id, PlayerInventory playerInventory, MachineTileEntity tileEntity, IIntArray fields) {
+    public CoalGeneratorContainer(int id, Inventory playerInventory, MachineTileEntity tileEntity, ContainerData fields) {
         super(ModContainers.COAL_GENERATOR, id, playerInventory, tileEntity, fields);
 
         this.addSlot(new Slot(tileEntity, 0, 80, 33));
@@ -30,37 +31,37 @@ public class CoalGeneratorContainer extends MachineContainer {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        int i = this.machineTileEntity.getSizeInventory();
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        int i = this.machineTileEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index != 0) {
-                if (AbstractFurnaceTileEntity.isFuel(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                if (AbstractFurnaceBlockEntity.isFuel(itemstack1)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (isEnergyItem(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= i && index < 27 + i) {
-                    if (!this.mergeItemStack(itemstack1, 27 + i, 36 + i, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.mergeItemStack(itemstack1, i, 27 + i, false)) {
+                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(itemstack1, i, 27 + i, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, i, 36 + i, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {

@@ -1,101 +1,84 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.blocks.MachineBlock;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.util.EnergyUtils;
 import themcbros.usefulmachinery.util.TextUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CoalGeneratorTileEntity extends MachineTileEntity {
-
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4:
-                    CoalGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                    break;
-                case 5:
-                    CoalGeneratorTileEntity.this.burnTime = value;
-                    break;
-                case 6:
-                    CoalGeneratorTileEntity.this.burnTimeTotal = value;
-                    break;
-                default:
-                    break;
+                case 4 -> CoalGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> CoalGeneratorTileEntity.this.burnTime = value;
+                case 6 -> CoalGeneratorTileEntity.this.burnTimeTotal = value;
+                default -> {
+                }
             }
         }
 
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    // Energy lower bytes
-                    return CoalGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1:
-                    // Energy upper bytes
-                    return (CoalGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2:
-                    // Max energy lower bytes
-                    return CoalGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3:
-                    // Max energy upper bytes
-                    return (CoalGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4:
-                    return CoalGeneratorTileEntity.this.redstoneMode.ordinal();
-                case 5:
-                    return CoalGeneratorTileEntity.this.burnTime;
-                case 6:
-                    return CoalGeneratorTileEntity.this.burnTimeTotal;
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> CoalGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (CoalGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CoalGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CoalGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CoalGeneratorTileEntity.this.redstoneMode.ordinal();
+                case 5 -> CoalGeneratorTileEntity.this.burnTime;
+                case 6 -> CoalGeneratorTileEntity.this.burnTimeTotal;
+                default -> 0;
+            };
         }
     };
 
     private int burnTime, burnTimeTotal;
 
-    public CoalGeneratorTileEntity() {
-        super(ModTileEntities.COAL_GENERATOR, true);
+    public CoalGeneratorTileEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.COAL_GENERATOR, blockPos, blockState, true);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
+
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("BurnTimeTotal", this.burnTimeTotal);
-        return super.write(compound);
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void load(CompoundTag compound) {
         this.burnTime = compound.getInt("BurnTime");
         this.burnTimeTotal = compound.getInt("BurnTimeTotal");
-        super.read(compound);
+
+        super.load(compound);
     }
 
     @Override
     int[] getInputSlots() {
-        return new int[] {0};
+        return new int[]{0};
     }
 
     @Override
@@ -104,46 +87,50 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 2;
     }
 
+    @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return TextUtils.translate("container", "coal_generator");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        return new CoalGeneratorContainer(i, playerInventory, this, this.fields);
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
+        return new CoalGeneratorContainer(id, playerInventory, this, this.fields);
     }
 
     @Override
     public void tick() {
-
         boolean shouldLit = false;
 
-        assert world != null;
-        if (!world.isRemote) {
+        assert this.level != null;
+        if (!level.isClientSide) {
             if (this.burnTime > 0) {
                 --this.burnTime;
+
                 this.energyStorage.modifyEnergyStored(60);
+
                 shouldLit = true;
             } else if (this.redstoneMode.canRun(this)) {
                 ItemStack generatorStack = this.stacks.get(0);
-                if (AbstractFurnaceTileEntity.isFuel(generatorStack)) {
-                    int time = ForgeHooks.getBurnTime(generatorStack);
+                if (AbstractFurnaceBlockEntity.isFuel(generatorStack)) {
+                    int time = ForgeHooks.getBurnTime(generatorStack, null);
+
                     this.burnTime = time;
                     this.burnTimeTotal = time;
+
                     shouldLit = true;
                     generatorStack.shrink(1);
                 }
             }
 
-            this.sendEnergyToSlot(1);
+            this.sendEnergyToSlot();
 
-            if (this.getBlockState().get(MachineBlock.LIT) != shouldLit) {
+            if (this.getBlockState().getValue(MachineBlock.LIT) != shouldLit) {
                 this.sendUpdate(shouldLit);
             }
         }
@@ -152,8 +139,7 @@ public class CoalGeneratorTileEntity extends MachineTileEntity {
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return false;
     }
-
 }

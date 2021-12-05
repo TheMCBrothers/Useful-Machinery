@@ -1,5 +1,6 @@
 modLoader="javafml" #mandatory
-loaderVersion="[31,)" #mandatory
+loaderVersion="[38,)" #mandatory
+license="MIT License"
 # issueTrackerURL="http://my.issue.tracker/" #optional
 
 [[mods]] #mandatory
@@ -7,7 +8,7 @@ modId="usefulmachinery" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Useful Machinery" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
-displayURL="https://themcbros.tk/" #optional
+displayURL="https://themcbrothers.net/" #optional
 # logoFile="examplemod.png" #optional
 # credits="Thanks for this example mod goes to Java" #optional
 authors="TheMCBrothers" #optional
@@ -18,13 +19,13 @@ This is a mod that adds machines
 [[dependencies.usefulmachinery]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[29,)"
+    versionRange="[38,)"
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.usefulmachinery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15,)"
+    versionRange="[1.18,)"
     ordering="NONE"
     side="BOTH"

@@ -1,17 +1,19 @@
 package themcbros.usefulmachinery.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -29,144 +31,132 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class LavaGeneratorTileEntity extends MachineTileEntity {
-
     public static final int TANK_CAPACITY = 4000; // TODO config
     public static final int TICKS_PER_MB = 10; // TODO config
     public static final int MB_PER_USE = 10; // TODO config
     public static final int RF_PER_TICK = 120; // TODO config
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
-        public int size() {
+        public int getCount() {
             return 9;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4:
-                    LavaGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                    break;
-                case 5:
-                    LavaGeneratorTileEntity.this.burnTime = value;
-                    break;
-                default:
-                    break;
+                case 4 -> LavaGeneratorTileEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 5 -> LavaGeneratorTileEntity.this.burnTime = value;
+                default -> {
+                }
             }
         }
 
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    // Energy lower bytes
-                    return LavaGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
-                case 1:
-                    // Energy upper bytes
-                    return (LavaGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2:
-                    // Max energy lower bytes
-                    return LavaGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3:
-                    // Max energy upper bytes
-                    return (LavaGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4:
-                    return LavaGeneratorTileEntity.this.redstoneMode.ordinal();
-                case 5:
-                    return LavaGeneratorTileEntity.this.burnTime;
-                case 6:
-                    return LavaGeneratorTileEntity.this.lavaTank.getFluidAmount();
-                case 7:
-                    return LavaGeneratorTileEntity.this.lavaTank.getCapacity();
-                case 8:
-                    return Registry.FLUID.getId(LavaGeneratorTileEntity.this.lavaTank.getFluid().getFluid());
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> LavaGeneratorTileEntity.this.getEnergyStored() & 0xFFFF;
+                case 1 -> (LavaGeneratorTileEntity.this.getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> LavaGeneratorTileEntity.this.getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (LavaGeneratorTileEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> LavaGeneratorTileEntity.this.redstoneMode.ordinal();
+                case 5 -> LavaGeneratorTileEntity.this.burnTime;
+                case 6 -> LavaGeneratorTileEntity.this.lavaTank.getFluidAmount();
+                case 7 -> LavaGeneratorTileEntity.this.lavaTank.getCapacity();
+                case 8 -> Registry.FLUID.getId(LavaGeneratorTileEntity.this.lavaTank.getFluid().getFluid());
+                default -> 0;
+            };
         }
     };
 
     private int burnTime;
-    private FluidTank lavaTank;
+    private final FluidTank lavaTank;
 
-    public LavaGeneratorTileEntity() {
-        super(ModTileEntities.LAVA_GENERATOR, true);
-        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().isIn(FluidTags.LAVA));
+    public LavaGeneratorTileEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModTileEntities.LAVA_GENERATOR, blockPos, blockState, true);
+        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
+
         compound.putInt("BurnTime", this.burnTime);
+
         if (!this.lavaTank.getFluid().isEmpty())
-            compound.put("Tank", this.lavaTank.writeToNBT(new CompoundNBT()));
-        return super.write(compound);
+            compound.put("Tank", this.lavaTank.writeToNBT(new CompoundTag()));
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void load(CompoundTag compound) {
         this.burnTime = compound.getInt("BurnTime");
-        if (compound.contains("Tank", Constants.NBT.TAG_COMPOUND))
+
+        if (compound.contains("Tank", Tag.TAG_COMPOUND))
             this.lavaTank.readFromNBT(compound.getCompound("Tank"));
-        super.read(compound);
+
+        super.load(compound);
     }
 
     @Override
     int[] getInputSlots() {
-        return new int[] {0};
+        return new int[]{0};
     }
 
     @Override
     int[] getOutputSlots() {
-        return new int[] {1};
+        return new int[]{1};
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         return !stack.isEmpty() && index == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
-                .map(handler -> handler.getFluidInTank(0).getFluid().isIn(FluidTags.LAVA)).orElse(false);
+                .map(handler -> handler.getFluidInTank(0).getFluid().is(FluidTags.LAVA)).orElse(false);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return index == 1;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return this.canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 3;
     }
 
+    @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return TextUtils.translate("container", "lava_generator");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        return new LavaGeneratorContainer(i, playerInventory, this, this.fields);
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
+        return new LavaGeneratorContainer(id, playerInventory, this, this.fields);
     }
 
     @Override
     public void tick() {
-
         final ItemStack bucketStack = this.stacks.get(0);
+
         if (!bucketStack.isEmpty()) {
             FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidAttributes.BUCKET_VOLUME, null, true);
+
             if (result.isSuccess()) {
                 ItemStack outputSlotStack = this.stacks.get(1);
                 ItemStack resultStack = result.getResult();
-                if (resultStack.isItemEqual(outputSlotStack) && resultStack.getMaxStackSize() > 1 &&
-                        outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
+
+                if (resultStack.sameItem(outputSlotStack) && resultStack.getMaxStackSize() > 1 && outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
                     outputSlotStack.grow(resultStack.getCount());
                     bucketStack.shrink(1);
                 } else if (outputSlotStack.isEmpty()) {
                     this.stacks.set(1, resultStack);
+
                     bucketStack.shrink(1);
                 }
             }
@@ -193,7 +183,7 @@ public class LavaGeneratorTileEntity extends MachineTileEntity {
     }
 
     private boolean canRun() {
-        return this.world != null && this.redstoneMode.canRun(this)
+        return this.level != null && this.redstoneMode.canRun(this)
                 && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
     }
 
