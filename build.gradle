@@ -1,17 +1,20 @@
 buildscript {
     repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = "https://maven.explodingcreeper.me" }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'me.hypherionmc:CurseGradle:2.0.4'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply plugin: 'me.hypherionmc.cursegradle'
 
 group = 'themcbros.usefulmachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'usefulmachinery'
@@ -123,6 +126,36 @@ publishing {
     repositories {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+private String getCurseForgeToken() {
+    File secretFile = file('secrets.properties')
+
+    if (secretFile.canRead()) {
+        Properties secretProps = new Properties()
+        secretProps.load(new FileInputStream(secretFile))
+
+        return secretProps['curseForgeToken'].toString()
+    }
+
+    return null
+}
+
+// For CurseForge Deployment
+curseforge {
+    apiKey = getCurseForgeToken() // This should be kept private.
+    options {
+        forgeGradleIntegration = true
+    }
+    project {
+        id = '355129' // The ID of your project. You can find this on your project Curseforge page
+        changelog = file('changelog.txt') // A file can also be set using: changelog = file('changelog.txt')
+        releaseType = 'alpha' // beta, alpha, release
+        addGameVersion(project.mc_version)
+        mainArtifact(jar) {
+            displayName = "$project.modname $project.version"
         }
     }
 }
