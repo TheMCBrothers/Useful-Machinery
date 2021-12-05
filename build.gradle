@@ -2,19 +2,20 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = "https://maven.explodingcreeper.me" }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'me.hypherionmc:CurseGradle:2.0.4'
     }
+}
+
+plugins {
+    id "me.hypherionmc.cursegradle" version "2.0.1"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
-apply plugin: 'me.hypherionmc.cursegradle'
 
 group = 'themcbros.usefulmachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'usefulmachinery'
@@ -99,8 +100,8 @@ repositories {
     }
     maven {
         // TOP
-        name "tterrag maven"
-        url "https://maven.tterrag.com/"
+        name = "tterrag maven"
+        url = "https://maven.tterrag.com/"
     }
 }
 
@@ -184,7 +185,7 @@ curseforge {
         changelog = file('changelog.txt') // A file can also be set using: changelog = file('changelog.txt')
         releaseType = 'alpha' // beta, alpha, release
         addGameVersion(project.mc_version)
-        mainArtifact(jar) {
+        mainArtifact() {
             displayName = "$project.modname $project.version"
         }
     }
