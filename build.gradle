@@ -83,7 +83,25 @@ minecraft {
 }
 
 sourceSets.main.java {
-    exclude '**/compat/**'
+    exclude '**/compat/top/**'
+}
+
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven {
+        // TOP
+        name "tterrag maven"
+        url "https://maven.tterrag.com/"
+    }
 }
 
 dependencies {
@@ -91,6 +109,18 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    if (project.hasProperty('jei_version')) {
+        // JEI
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    }
+
+    if (project.hasProperty('top_version')) {
+        // TOP
+        compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")
+        runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
+    }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

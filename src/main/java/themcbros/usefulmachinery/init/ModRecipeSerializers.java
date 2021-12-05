@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.recipes.CrusherRecipe;
+import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.ElectricSmeltingRecipe;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ModRecipeSerializers {
     private static final List<RecipeSerializer<?>> RECIPE_SERIALIZERS = Lists.newArrayList();
 
-    public static final CrusherRecipe.Serializer CRUSHING = register("crushing", new CrusherRecipe.Serializer());
+    public static final CrushingRecipe.Serializer CRUSHING = register("crushing", new CrushingRecipe.Serializer());
     public static final SimpleCookingSerializer<ElectricSmeltingRecipe> ELECTRIC_SMELTING = null; // register("electric_smelting", new CookingRecipeSerializer<>(ElectricSmeltingRecipe::new, 100));
     public static final CompactingRecipe.Serializer COMPACTING = register("compacting", new CompactingRecipe.Serializer());
 

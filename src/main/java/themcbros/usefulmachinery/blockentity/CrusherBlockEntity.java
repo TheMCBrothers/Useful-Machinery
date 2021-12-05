@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.init.ModTileEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.recipes.CrusherRecipe;
+import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private static final int RF_PER_TICK = 10;
 
-    private ContainerData fields = new ContainerData() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
             return 7;
@@ -85,14 +85,14 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             this.receiveEnergyFromSlot(3);
 
             if (this.isActive() || this.energyStorage.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                CrusherRecipe crusherRecipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.CRUSHING, this, this.level).orElse(null);
+                CrushingRecipe crushingRecipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.CRUSHING, this, this.level).orElse(null);
 
-                if (!this.isActive() && this.canCrush(crusherRecipe)) {
+                if (!this.isActive() && this.canCrush(crushingRecipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
                     processTime++;
                 }
 
-                if (this.isActive() && this.canCrush(crusherRecipe)) {
+                if (this.isActive() && this.canCrush(crushingRecipe)) {
                     this.processTime++;
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
 
@@ -100,7 +100,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                         this.processTime = 0;
                         this.processTimeTotal = this.getCrushTime();
 
-                        this.crushItem(crusherRecipe);
+                        this.crushItem(crushingRecipe);
 
                         flag1 = true;
                     }
@@ -123,10 +123,10 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private int getCrushTime() {
         if (level == null) return 200;
         return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.CRUSHING, this, this.level)
-                .map(CrusherRecipe::getCrushTime).orElse(200);
+                .map(CrushingRecipe::getCrushTime).orElse(200);
     }
 
-    private boolean canCrush(@Nullable CrusherRecipe recipe) {
+    private boolean canCrush(@Nullable CrushingRecipe recipe) {
         if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
             ItemStack recipeOutputStack = recipe.getResultItem();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
@@ -175,7 +175,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private void crushItem(@Nullable CrusherRecipe recipe) {
+    private void crushItem(@Nullable CrushingRecipe recipe) {
         if (recipe != null && this.canCrush(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
             ItemStack itemstack1 = recipe.getResultItem();

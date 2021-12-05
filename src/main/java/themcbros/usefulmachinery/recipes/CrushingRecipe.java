@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrusherRecipe implements Recipe<Container> {
+public class CrushingRecipe implements Recipe<Container> {
     private final ResourceLocation id;
     private final String group;
     private final Ingredient ingredient;
@@ -29,7 +29,7 @@ public class CrusherRecipe implements Recipe<Container> {
     private final float experience;
     private final int crushTime;
 
-    public CrusherRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, float experience, int crushTime) {
+    public CrushingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, float experience, int crushTime) {
         this.id = id;
         this.group = group;
         this.ingredient = ingredient;
@@ -102,9 +102,9 @@ public class CrusherRecipe implements Recipe<Container> {
         return ItemStack.EMPTY;
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrusherRecipe> {
+    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrushingRecipe> {
         @Override
-        public CrusherRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public CrushingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             String s = GsonHelper.getAsString(json, "group", "");
             JsonElement jsonelement = (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
             Ingredient ingredient = Ingredient.fromJson(jsonelement);
@@ -130,12 +130,12 @@ public class CrusherRecipe implements Recipe<Container> {
             float f = GsonHelper.getAsFloat(json, "experience", 0.0F);
             int i = GsonHelper.getAsInt(json, "processingtime", 200);
 
-            return new CrusherRecipe(recipeId, s, ingredient, itemstack, f, i);
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, f, i);
         }
 
         @Nullable
         @Override
-        public CrusherRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public CrushingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             String s = buffer.readUtf(32767);
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             ItemStack itemstack = buffer.readItem();
@@ -143,11 +143,11 @@ public class CrusherRecipe implements Recipe<Container> {
             float f = buffer.readFloat();
             int i = buffer.readVarInt();
 
-            return new CrusherRecipe(recipeId, s, ingredient, itemstack, f, i);
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, f, i);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrusherRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CrushingRecipe recipe) {
             buffer.writeUtf(recipe.group);
             recipe.ingredient.toNetwork(buffer);
             buffer.writeItem(recipe.result);

@@ -5,8 +5,8 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.CoalGeneratorScreen;
 import themcbros.usefulmachinery.client.gui.CompactorScreen;
@@ -19,6 +19,9 @@ import themcbros.usefulmachinery.container.CompactorContainer;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
 import themcbros.usefulmachinery.init.ModItems;
+import themcbros.usefulmachinery.recipes.CompactingRecipe;
+import themcbros.usefulmachinery.recipes.CrushingRecipe;
+import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 
 @JeiPlugin
 public class JEICompat implements IModPlugin {
@@ -36,8 +39,8 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(UsefulMachineryRecipeValidator.getCrusherRecipes(), ModRecipeCategoryUid.CRUSHING);
-        registration.addRecipes(UsefulMachineryRecipeValidator.getCompactingRecipes(), ModRecipeCategoryUid.COMPACTING);
+        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(ModRecipeTypes.CRUSHING, CrushingRecipe.class), ModRecipeCategoryUid.CRUSHING);
+        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(ModRecipeTypes.COMPACTING, CompactingRecipe.class), ModRecipeCategoryUid.COMPACTING);
     }
 
     @Override
