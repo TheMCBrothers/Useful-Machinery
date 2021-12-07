@@ -16,7 +16,6 @@ import themcbros.usefulmachinery.init.ModItems;
 import themcbros.usefulmachinery.init.ModRecipeSerializers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CompactingRecipe implements Recipe<Container> {
@@ -43,7 +42,6 @@ public class CompactingRecipe implements Recipe<Container> {
         return this.ingredient.test(inv.getItem(0)) && inv.getItem(0).getCount() >= this.count;
     }
 
-    @Nonnull
     @Override
     public ItemStack assemble(Container inv) {
         return this.result.copy();
@@ -54,31 +52,26 @@ public class CompactingRecipe implements Recipe<Container> {
         return false;
     }
 
-    @Nonnull
     @Override
     public ItemStack getResultItem() {
         return this.result;
     }
 
-    @Nonnull
     @Override
     public ItemStack getToastSymbol() {
         return new ItemStack(ModItems.COMPACTOR);
     }
 
-    @Nonnull
     @Override
     public ResourceLocation getId() {
         return id;
     }
 
-    @Nonnull
     @Override
     public RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.COMPACTING;
     }
 
-    @Nonnull
     @Override
     public RecipeType<?> getType() {
         return ModRecipeTypes.COMPACTING;
@@ -96,7 +89,6 @@ public class CompactingRecipe implements Recipe<Container> {
         return count;
     }
 
-    @Nonnull
     @Override
     public NonNullList<Ingredient> getIngredients() {
         return NonNullList.withSize(1, this.ingredient);
