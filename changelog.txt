@@ -1,21 +1,8 @@
-0.0.2.0:
-- Updated to 1.15.2
-- Added compactor
-- Added lava generator
-- Added creative power cell
-- Added new machine fronts
-- Added background to redstone mode button
-- Added machine compatibility for The One Probe
-- Added manual book using Patchouli
+1.1.0:
+- Fixed BlockEntity
+- Fixed GUI-Rendering
+- Creative Powercell now works properly
+- added JEI support
 
-0.0.1.0:
-- Added crusher functionality
-- Added electric smelter
-- Added functionality to redstone mode
-- Added compactor (not implemented yet)
-
-0.0.0.1:
-- Initial alpha release
-- Added coal generator
-- Added crusher (not working)
-- Added battery (can hold FE)
+1.0.0:
+- Updated to 1.18

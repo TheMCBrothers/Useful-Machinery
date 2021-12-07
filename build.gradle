@@ -183,7 +183,7 @@ curseforge {
     project {
         id = '355129' // The ID of your project. You can find this on your project Curseforge page
         changelog = file('changelog.txt') // A file can also be set using: changelog = file('changelog.txt')
-        releaseType = 'alpha' // beta, alpha, release
+        releaseType = project.curse_type // beta, alpha, release
         addGameVersion(project.mc_version)
         mainArtifact() {
             displayName = "$project.modname $project.version"
