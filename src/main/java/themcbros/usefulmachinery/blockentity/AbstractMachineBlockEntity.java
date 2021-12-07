@@ -150,7 +150,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.stacks.clear();
     }
 
-    protected void tick() {
+    public void tick() {
         if (this.cooldown > 0) this.cooldown--;
         if (this.cooldown < 0) sendUpdate(false);
     }

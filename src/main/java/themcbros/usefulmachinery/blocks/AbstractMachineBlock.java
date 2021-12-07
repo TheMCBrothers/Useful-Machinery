@@ -12,18 +12,17 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
 
 import javax.annotation.Nullable;
@@ -39,6 +38,16 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.FALSE));
         this.interactStat = interactStat;
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState blockState) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> type) {
+        return level.isClientSide() ? null : createTickerHelper(type, type, ((l, p, s, be) -> ((AbstractMachineBlockEntity) be).tick()));
     }
 
     @Override
@@ -72,9 +81,10 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
         }
 
         if (worldIn.getBlockEntity(pos) instanceof MenuProvider blockEntity && player instanceof ServerPlayer) {
-            NetworkHooks.openGui((ServerPlayer) player, blockEntity);
+            player.openMenu(blockEntity);
             if (interactStat != null) player.awardStat(interactStat);
         }
+
         return InteractionResult.SUCCESS;
     }
 }

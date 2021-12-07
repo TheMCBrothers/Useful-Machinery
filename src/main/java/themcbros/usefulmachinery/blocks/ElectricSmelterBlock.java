@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.init.ModStats;
+import themcbros.usefulmachinery.init.ModTileEntities;
 
 public class ElectricSmelterBlock extends AbstractMachineBlock {
 
@@ -15,6 +16,6 @@ public class ElectricSmelterBlock extends AbstractMachineBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return null;
+        return ModTileEntities.ELECTRIC_SMELTER.create(pos, state);
     }
 }
