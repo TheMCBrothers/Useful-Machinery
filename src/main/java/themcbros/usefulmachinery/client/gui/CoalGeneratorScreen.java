@@ -30,7 +30,7 @@ public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorCont
 
         int i = this.leftPos;
         int j = this.topPos;
-        this.blit(poseStack, i, j, 0, 0, this.width, this.height);
+        this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
         // Render Energy Bar
         int k = this.menu.getEnergyScaled((int) this.energyBar.rect.getHeight());
