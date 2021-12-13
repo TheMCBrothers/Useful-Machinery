@@ -103,6 +103,12 @@ repositories {
         name = "tterrag maven"
         url = "https://maven.tterrag.com/"
     }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -122,10 +128,16 @@ dependencies {
         compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")
         runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
     }
+
+    if (project.hasProperty('usefulfoundation_file_id')) {
+        // Useful Foundation
+        implementation fg.deobf("curse.maven:useful-foundation-355245:${usefulfoundation_file_id}")
+    }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    archiveAppendix.set("$project.mc_version")
     manifest {
         attributes([
                 "Specification-Title"     : "usefulmachinery",
@@ -187,6 +199,10 @@ curseforge {
         addGameVersion(project.mc_version)
         mainArtifact(jar) {
             displayName = "$project.modname $project.version"
+            relations {
+                requiredDependency 'useful-foundation'
+                optionalDependency 'jei'
+            }
         }
     }
 }
