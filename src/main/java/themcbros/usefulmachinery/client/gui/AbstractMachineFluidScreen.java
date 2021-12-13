@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
@@ -38,7 +39,6 @@ public abstract class AbstractMachineFluidScreen<T extends MachineContainer> ext
     }
 
     // Rendering methods
-
     protected void drawFluid(final int xPosition, final int yPosition, @Nullable FluidStack fluidStack) {
         if (fluidStack == null) {
             return;
@@ -68,9 +68,9 @@ public abstract class AbstractMachineFluidScreen<T extends MachineContainer> ext
     }
 
     protected void drawTiledSprite(final int xPosition, final int yPosition, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindForSetup(TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         setGLColorFromInt(color);
+        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 
         final int xTileCount = tiledWidth / TEX_WIDTH;
         final int xRemainder = tiledWidth - (xTileCount * TEX_WIDTH);
@@ -109,7 +109,7 @@ public abstract class AbstractMachineFluidScreen<T extends MachineContainer> ext
         float blue = (color & 0xFF) / 255.0F;
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
-        RenderSystem.clearColor(red, green, blue, alpha);
+        RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 
     private static void drawTextureWithMasking(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {

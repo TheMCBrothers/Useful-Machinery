@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
-import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.machine.MachineTier;
 
 public class MachineRenderer implements BlockEntityRenderer<AbstractMachineBlockEntity> {
     public MachineRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
@@ -27,8 +27,9 @@ public class MachineRenderer implements BlockEntityRenderer<AbstractMachineBlock
 
         ItemStack stack = tileEntityIn.getItem(0);
 
-        if (!stack.isEmpty())
+        if (!stack.isEmpty()) {
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, 0);
+        }
 
         poseStack.popPose();
     }

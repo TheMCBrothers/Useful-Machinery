@@ -32,6 +32,8 @@ public abstract class AbstractMachineScreen<T extends MachineContainer> extends 
         });
 
         this.addRenderableWidget(redstoneModeButton);
+
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 
     @Override
@@ -51,11 +53,5 @@ public abstract class AbstractMachineScreen<T extends MachineContainer> extends 
                 renderTooltip(poseStack, TextUtils.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
             }
         }
-    }
-
-    @Override
-    protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        this.font.draw(poseStack, this.title, (float) (this.imageWidth / 2 - this.titleLabelX / 2), this.titleLabelY, 4210752);
-        this.font.draw(poseStack, this.playerInventoryTitle, 8.0F, (float) (this.inventoryLabelY), 4210752);
     }
 }
