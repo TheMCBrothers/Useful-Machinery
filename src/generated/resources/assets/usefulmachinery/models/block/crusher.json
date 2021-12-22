@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "side": "usefulmachinery:block/machine_side",
+    "front": "usefulmachinery:block/crusher_front",
+    "top": "usefulmachinery:block/machine_top"
+  }
+}
