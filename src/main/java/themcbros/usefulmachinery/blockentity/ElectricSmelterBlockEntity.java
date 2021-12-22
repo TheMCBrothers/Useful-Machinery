@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
 import javax.annotation.Nonnull;
@@ -52,7 +52,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     };
 
     public ElectricSmelterBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.ELECTRIC_SMELTER, blockPos, blockState, false);
+        super(MachineryBlockEntities.ELECTRIC_SMELTER, blockPos, blockState, false);
     }
 
     @Override

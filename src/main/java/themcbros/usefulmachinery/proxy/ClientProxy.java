@@ -7,9 +7,9 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import themcbros.usefulmachinery.client.gui.*;
-import themcbros.usefulmachinery.init.ModContainers;
-import themcbros.usefulmachinery.init.ModItems;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
+import themcbros.usefulmachinery.init.MachineryContainers;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.blockentity.renderer.MachineRenderer;
 
@@ -21,17 +21,17 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-        MenuScreens.register(ModContainers.COAL_GENERATOR, CoalGeneratorScreen::new);
-        MenuScreens.register(ModContainers.LAVA_GENERATOR, LavaGeneratorScreen::new);
-        MenuScreens.register(ModContainers.CRUSHER, CrusherScreen::new);
-        MenuScreens.register(ModContainers.ELECTRIC_SMELTER, ElectricSmelterScreen::new);
-        MenuScreens.register(ModContainers.COMPACTOR, CompactorScreen::new);
+        MenuScreens.register(MachineryContainers.COAL_GENERATOR, CoalGeneratorScreen::new);
+        MenuScreens.register(MachineryContainers.LAVA_GENERATOR, LavaGeneratorScreen::new);
+        MenuScreens.register(MachineryContainers.CRUSHER, CrusherScreen::new);
+        MenuScreens.register(MachineryContainers.ELECTRIC_SMELTER, ElectricSmelterScreen::new);
+        MenuScreens.register(MachineryContainers.COMPACTOR, CompactorScreen::new);
 
-        BlockEntityRenderers.register(ModTileEntities.COAL_GENERATOR, MachineRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.LAVA_GENERATOR, MachineRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.CRUSHER, MachineRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.ELECTRIC_SMELTER, MachineRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.COMPACTOR, MachineRenderer::new);
+        BlockEntityRenderers.register(MachineryBlockEntities.COAL_GENERATOR, MachineRenderer::new);
+        BlockEntityRenderers.register(MachineryBlockEntities.LAVA_GENERATOR, MachineRenderer::new);
+        BlockEntityRenderers.register(MachineryBlockEntities.CRUSHER, MachineRenderer::new);
+        BlockEntityRenderers.register(MachineryBlockEntities.ELECTRIC_SMELTER, MachineRenderer::new);
+        BlockEntityRenderers.register(MachineryBlockEntities.COMPACTOR, MachineRenderer::new);
     }
 
     private void registerItemColors(final ColorHandlerEvent.Item event) {
@@ -43,6 +43,6 @@ public class ClientProxy extends CommonProxy {
                 return tintIndex == 1 ? tier.getColor() : -1;
             }
             return -1;
-        }, ModItems.TIER_UPGRADE);
+        }, MachineryItems.TIER_UPGRADE);
     }
 }

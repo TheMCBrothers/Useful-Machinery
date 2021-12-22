@@ -11,7 +11,7 @@ import themcbros.usefulmachinery.container.*;
 import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = UsefulMachinery.MOD_ID)
-public class ModContainers {
+public class MachineryContainers {
     private static final List<MenuType<?>> CONTAINER_TYPES = Lists.newArrayList();
 
     public static final MenuType<CoalGeneratorContainer> COAL_GENERATOR = register("coal_generator", new MenuType<>(CoalGeneratorContainer::new));

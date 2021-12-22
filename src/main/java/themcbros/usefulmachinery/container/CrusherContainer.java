@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
-import themcbros.usefulmachinery.init.ModBlocks;
-import themcbros.usefulmachinery.init.ModContainers;
+import themcbros.usefulmachinery.init.MachineryBlocks;
+import themcbros.usefulmachinery.init.MachineryContainers;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
 import themcbros.usefulmachinery.blockentity.CrusherBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
@@ -22,11 +22,11 @@ public class CrusherContainer extends MachineContainer {
     private final Level level;
 
     public CrusherContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new CrusherBlockEntity(BlockPos.ZERO, ModBlocks.CRUSHER.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new CrusherBlockEntity(BlockPos.ZERO, MachineryBlocks.CRUSHER.defaultBlockState()), new SimpleContainerData(7));
     }
 
     public CrusherContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(ModContainers.CRUSHER, id, playerInventory, tileEntity, fields);
+        super(MachineryContainers.CRUSHER, id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 35));

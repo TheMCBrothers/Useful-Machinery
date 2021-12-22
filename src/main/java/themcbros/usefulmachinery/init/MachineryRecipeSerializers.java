@@ -15,7 +15,7 @@ import themcbros.usefulmachinery.recipes.ElectricSmeltingRecipe;
 import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = UsefulMachinery.MOD_ID)
-public class ModRecipeSerializers {
+public class MachineryRecipeSerializers {
     private static final List<RecipeSerializer<?>> RECIPE_SERIALIZERS = Lists.newArrayList();
 
     public static final CrushingRecipe.Serializer CRUSHING = register("crushing", new CrushingRecipe.Serializer());

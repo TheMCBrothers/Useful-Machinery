@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.container.CoalGeneratorContainer;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.TextUtils;
 
@@ -57,7 +57,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private int burnTime, burnTimeTotal;
 
     public CoalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.COAL_GENERATOR, blockPos, blockState, true);
+        super(MachineryBlockEntities.COAL_GENERATOR, blockPos, blockState, true);
     }
 
     @Override

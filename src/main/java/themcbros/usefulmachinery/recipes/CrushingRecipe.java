@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-import themcbros.usefulmachinery.init.ModBlocks;
-import themcbros.usefulmachinery.init.ModRecipeSerializers;
+import themcbros.usefulmachinery.init.MachineryBlocks;
+import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -40,7 +40,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModBlocks.CRUSHER);
+        return new ItemStack(MachineryBlocks.CRUSHER);
     }
 
     public int getCrushTime() {
@@ -90,7 +90,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRUSHING;
+        return MachineryRecipeSerializers.CRUSHING;
     }
 
     @Override

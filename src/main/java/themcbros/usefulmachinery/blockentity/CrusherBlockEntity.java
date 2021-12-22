@@ -10,7 +10,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.CrusherContainer;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
@@ -52,7 +52,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     };
 
     public CrusherBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.CRUSHER, blockPos, blockState, false);
+        super(MachineryBlockEntities.CRUSHER, blockPos, blockState, false);
     }
 
     @Override

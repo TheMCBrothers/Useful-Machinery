@@ -7,7 +7,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import themcbros.usefulmachinery.init.ModItems;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.proxy.ClientProxy;
 import themcbros.usefulmachinery.proxy.ServerProxy;
 
@@ -22,7 +22,7 @@ public class UsefulMachinery {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ModItems.BATTERY);
+            return new ItemStack(MachineryItems.BATTERY);
         }
     };
 

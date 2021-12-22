@@ -5,8 +5,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import themcbros.usefulmachinery.init.ModItems;
-import themcbros.usefulmachinery.init.ModRecipeSerializers;
+import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 
 public class ElectricSmeltingRecipe extends AbstractCookingRecipe {
     public ElectricSmeltingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
@@ -15,11 +15,11 @@ public class ElectricSmeltingRecipe extends AbstractCookingRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.ELECTRIC_SMELTER);
+        return new ItemStack(MachineryItems.ELECTRIC_SMELTER);
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.ELECTRIC_SMELTING;
+        return MachineryRecipeSerializers.ELECTRIC_SMELTING;
     }
 }

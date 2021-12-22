@@ -6,7 +6,7 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import themcbros.usefulmachinery.UsefulMachinery;
 
-public class ModStats {
+public class MachineryStats {
     public static final ResourceLocation INTERACT_WITH_CRUSHER = registerCustom("interact_with_crusher", StatFormatter.DEFAULT);
     public static final ResourceLocation INTERACT_WITH_ELECTRIC_SMELTER = registerCustom("interact_with_electric_smelter", StatFormatter.DEFAULT);
     public static final ResourceLocation INTERACT_WITH_COMPACTOR = registerCustom("interact_with_compactor", StatFormatter.DEFAULT);

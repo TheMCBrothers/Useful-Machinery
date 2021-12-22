@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-import themcbros.usefulmachinery.init.ModItems;
-import themcbros.usefulmachinery.init.ModRecipeSerializers;
+import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
 import javax.annotation.Nullable;
@@ -59,7 +59,7 @@ public class CompactingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.COMPACTOR);
+        return new ItemStack(MachineryItems.COMPACTOR);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CompactingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.COMPACTING;
+        return MachineryRecipeSerializers.COMPACTING;
     }
 
     @Override

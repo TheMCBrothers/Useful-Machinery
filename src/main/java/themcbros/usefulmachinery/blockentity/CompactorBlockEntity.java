@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.container.CompactorContainer;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
@@ -60,7 +60,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
     public CompactorMode compactorMode = CompactorMode.PLATE;
 
     public CompactorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.COMPACTOR, blockPos, blockState, false);
+        super(MachineryBlockEntities.COMPACTOR, blockPos, blockState, false);
     }
 
     @Override

@@ -80,7 +80,6 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     abstract int[] getOutputSlots();
 
-    @Nonnull
     @Override
     public int[] getSlotsForFace(Direction side) {
         // TODO: Implement side config
@@ -110,19 +109,16 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         return true;
     }
 
-    @Nonnull
     @Override
     public ItemStack getItem(int index) {
         return this.stacks.get(index);
     }
 
-    @Nonnull
     @Override
     public ItemStack removeItem(int index, int count) {
         return ContainerHelper.removeItem(this.stacks, index, count);
     }
 
-    @Nonnull
     @Override
     public ItemStack removeItemNoUpdate(int index) {
         return ContainerHelper.takeItem(this.stacks, index);
@@ -161,17 +157,17 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         assert this.level != null;
         boolean flag = this.getBlockState().getValue(AbstractMachineBlock.LIT) != lit;
 
-        if (flag) this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.LIT, lit), 3);
+        if (flag)
+            this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.LIT, lit), 3);
     }
 
     private final LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> this.energyStorage);
 
-    @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (!this.remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemHandlers[side.get2DDataValue()].cast();
+            return itemHandlers[side.get3DDataValue()].cast();
         } else if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
         }
@@ -228,5 +224,4 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             }
         }
     }
-
 }

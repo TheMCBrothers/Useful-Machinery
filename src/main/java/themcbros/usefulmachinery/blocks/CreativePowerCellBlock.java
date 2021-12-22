@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.blockentity.CreativePowerCellBlockEntity;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 
 public class CreativePowerCellBlock extends BaseEntityBlock {
     public CreativePowerCellBlock(Properties properties) {
@@ -23,11 +23,11 @@ public class CreativePowerCellBlock extends BaseEntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return ModTileEntities.CREATIVE_POWER_CELL.create(pos, state);
+        return MachineryBlockEntities.CREATIVE_POWER_CELL.create(pos, state);
     }
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModTileEntities.CREATIVE_POWER_CELL, CreativePowerCellBlockEntity::serverTick);
+        return level.isClientSide ? null : createTickerHelper(type, MachineryBlockEntities.CREATIVE_POWER_CELL, CreativePowerCellBlockEntity::serverTick);
     }
 }

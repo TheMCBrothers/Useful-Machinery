@@ -9,7 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.util.EnergyUtils;
 
 import javax.annotation.Nonnull;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public class CreativePowerCellBlockEntity extends BlockEntity implements IEnergyStorage {
     public CreativePowerCellBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.CREATIVE_POWER_CELL, blockPos, blockState);
+        super(MachineryBlockEntities.CREATIVE_POWER_CELL, blockPos, blockState);
     }
 
     @Override

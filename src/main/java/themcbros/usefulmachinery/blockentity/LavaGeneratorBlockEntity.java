@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import themcbros.usefulmachinery.container.LavaGeneratorContainer;
-import themcbros.usefulmachinery.init.ModTileEntities;
+import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.TextUtils;
 
@@ -73,7 +73,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final FluidTank lavaTank;
 
     public LavaGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModTileEntities.LAVA_GENERATOR, blockPos, blockState, true);
+        super(MachineryBlockEntities.LAVA_GENERATOR, blockPos, blockState, true);
         this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
     }
 
