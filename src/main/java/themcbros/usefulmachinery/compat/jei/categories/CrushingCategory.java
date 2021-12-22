@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.ModRecipeCategoryUid;
-import themcbros.usefulmachinery.init.ModItems;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.util.TextUtils;
 
@@ -25,7 +25,7 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
     private final IDrawableAnimated arrow, energyBar;
 
     public CrushingCategory(IGuiHelper helper) {
-        this.icon = helper.createDrawableIngredient(new ItemStack(ModItems.CRUSHER));
+        this.icon = helper.createDrawableIngredient(new ItemStack(MachineryItems.CRUSHER));
         this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
 
         this.arrow = helper.drawableBuilder(TEXTURES, 176, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);

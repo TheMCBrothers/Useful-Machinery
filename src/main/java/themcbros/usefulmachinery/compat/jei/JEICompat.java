@@ -18,16 +18,22 @@ import themcbros.usefulmachinery.container.CoalGeneratorContainer;
 import themcbros.usefulmachinery.container.CompactorContainer;
 import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
-import themcbros.usefulmachinery.init.ModItems;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.ModRecipeTypes;
+
+import static themcbros.usefulmachinery.init.MachineryItems.*;
 
 @JeiPlugin
 public class JEICompat implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
         return UsefulMachinery.getId("jeicompat");
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.useNbtForSubtypes(TIER_UPGRADE);
     }
 
     @Override
@@ -54,10 +60,10 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.COAL_GENERATOR), VanillaRecipeCategoryUid.FUEL);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.CRUSHER), ModRecipeCategoryUid.CRUSHING);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ELECTRIC_SMELTER), VanillaRecipeCategoryUid.FURNACE, VanillaRecipeCategoryUid.BLASTING);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.COMPACTOR), ModRecipeCategoryUid.COMPACTING);
+        registration.addRecipeCatalyst(new ItemStack(COAL_GENERATOR), VanillaRecipeCategoryUid.FUEL);
+        registration.addRecipeCatalyst(new ItemStack(CRUSHER), ModRecipeCategoryUid.CRUSHING);
+        registration.addRecipeCatalyst(new ItemStack(ELECTRIC_SMELTER), VanillaRecipeCategoryUid.FURNACE, VanillaRecipeCategoryUid.BLASTING);
+        registration.addRecipeCatalyst(new ItemStack(COMPACTOR), ModRecipeCategoryUid.COMPACTING);
     }
 
     @Override
