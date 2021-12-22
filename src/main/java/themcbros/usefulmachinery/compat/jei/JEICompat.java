@@ -20,7 +20,7 @@ import themcbros.usefulmachinery.container.CrusherContainer;
 import themcbros.usefulmachinery.container.ElectricSmelterContainer;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
+import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
 import static themcbros.usefulmachinery.init.MachineryItems.*;
 
@@ -45,8 +45,8 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(ModRecipeTypes.CRUSHING, CrushingRecipe.class), ModRecipeCategoryUid.CRUSHING);
-        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(ModRecipeTypes.COMPACTING, CompactingRecipe.class), ModRecipeCategoryUid.COMPACTING);
+        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING, CrushingRecipe.class), ModRecipeCategoryUid.CRUSHING);
+        registration.addRecipes(UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING, CompactingRecipe.class), ModRecipeCategoryUid.COMPACTING);
     }
 
     @Override

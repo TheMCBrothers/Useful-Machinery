@@ -16,7 +16,7 @@ import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
+import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
@@ -145,7 +145,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
             this.receiveEnergyFromSlot(2);
 
             if (this.isActive() || this.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, this, this.level).orElse(null);
+                CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
@@ -181,7 +181,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
 
     private int getProcessTime() {
         if (level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, this, this.level)
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level)
                 .map(CompactingRecipe::getProcessTime).orElse(200);
     }
 

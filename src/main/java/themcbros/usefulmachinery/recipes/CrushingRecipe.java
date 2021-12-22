@@ -95,7 +95,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.CRUSHING;
+        return MachineryRecipeTypes.CRUSHING;
     }
 
     public ItemStack getSecondRecipeOutput() {

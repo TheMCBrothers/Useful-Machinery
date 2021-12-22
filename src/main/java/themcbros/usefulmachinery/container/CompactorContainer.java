@@ -15,7 +15,7 @@ import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryContainers;
 import themcbros.usefulmachinery.machine.CompactorMode;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
+import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
@@ -102,7 +102,7 @@ public class CompactorContainer extends MachineContainer {
     }
 
     protected boolean canProcess(ItemStack stack) {
-        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.COMPACTING, new SimpleContainer(stack), this.level)
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, new SimpleContainer(stack), this.level)
                 .map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
     }
 

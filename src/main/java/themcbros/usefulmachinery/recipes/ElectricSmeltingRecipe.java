@@ -10,7 +10,7 @@ import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 
 public class ElectricSmeltingRecipe extends AbstractCookingRecipe {
     public ElectricSmeltingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
-        super(ModRecipeTypes.ELECTRIC_SMELTING, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
+        super(MachineryRecipeTypes.ELECTRIC_SMELTING, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
     }
 
     @Override

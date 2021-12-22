@@ -74,7 +74,7 @@ public class CompactingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.COMPACTING;
+        return MachineryRecipeTypes.COMPACTING;
     }
 
     public int getProcessTime() {

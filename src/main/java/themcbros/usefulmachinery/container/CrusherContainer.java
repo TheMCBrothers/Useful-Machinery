@@ -14,7 +14,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryContainers;
-import themcbros.usefulmachinery.recipes.ModRecipeTypes;
+import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 import themcbros.usefulmachinery.blockentity.CrusherBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
@@ -94,7 +94,7 @@ public class CrusherContainer extends MachineContainer {
 
     protected boolean canCrush(ItemStack stack) {
         return this.level.getRecipeManager()
-                .getRecipeFor(ModRecipeTypes.CRUSHING, new SimpleContainer(stack), this.level)
+                .getRecipeFor(MachineryRecipeTypes.CRUSHING, new SimpleContainer(stack), this.level)
                 .isPresent();
     }
 
