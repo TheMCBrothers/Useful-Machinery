@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:silver_gear_from_compacting"
+    ]
+  },
+  "criteria": {
+    "has_silver": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/silver"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "usefulmachinery:silver_gear_from_compacting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_silver",
+      "has_the_recipe"
+    ]
+  ]
+}

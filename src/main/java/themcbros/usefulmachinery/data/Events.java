@@ -27,6 +27,7 @@ public class Events {
             gen.addProvider(blockProvider);
             gen.addProvider(new MachineryTagProvider.Item(gen, blockProvider, fileHelper));
             gen.addProvider(new MachineryLootTableProvider(gen));
+            gen.addProvider(new MachineryRecipeProvider(gen));
         }
     }
 }

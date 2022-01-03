@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:uranium_plate_from_compacting"
+    ]
+  },
+  "criteria": {
+    "has_uranium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/uranium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "usefulmachinery:uranium_plate_from_compacting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_uranium",
+      "has_the_recipe"
+    ]
+  ]
+}

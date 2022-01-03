@@ -3,9 +3,8 @@
   "ingredient": {
     "tag": "forge:ingots/iron"
   },
-  "result": {
-    "item": "usefulfoundation:iron_plate",
-    "count": 1
-  },
-  "mode": "plate"
+  "count": 9,
+  "mode": "block",
+  "processingtime": 250,
+  "result": "minecraft:iron_block"
 }

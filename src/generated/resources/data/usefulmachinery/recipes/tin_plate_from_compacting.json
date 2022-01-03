@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/tin"
+  },
+  "count": 1,
+  "mode": "plate",
+  "processingtime": 200,
+  "result": "usefulfoundation:tin_plate"
+}

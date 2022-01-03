@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/gold"
+  },
+  "count": 1,
+  "mode": "plate",
+  "processingtime": 200,
+  "result": "usefulfoundation:gold_plate"
+}
