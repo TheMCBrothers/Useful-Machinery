@@ -1,14 +1,15 @@
 {
   "type": "usefulmachinery:crushing",
   "ingredient": {
-    "tag": "forge:ores/silver"
+    "tag": "forge:ores/iron"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:silver_dust",
+    "item": "minecraft:raw_iron",
     "count": 2
   },
   "secondary": {
-    "item": "usefulfoundation:lead_dust",
+    "item": "usefulfoundation:raw_nickel",
     "chance": 0.1
   }
 }

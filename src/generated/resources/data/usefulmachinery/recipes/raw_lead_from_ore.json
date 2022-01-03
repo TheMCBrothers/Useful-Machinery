@@ -3,12 +3,13 @@
   "ingredient": {
     "tag": "forge:ores/lead"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:lead_dust",
+    "item": "usefulfoundation:raw_lead",
     "count": 2
   },
   "secondary": {
-    "item": "usefulfoundation:silver_dust",
-    "chance": 0.1
+    "item": "usefulfoundation:raw_silver",
+    "chance": 0.08
   }
 }

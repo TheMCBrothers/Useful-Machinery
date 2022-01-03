@@ -1,0 +1,15 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/silver"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:raw_silver",
+    "count": 2
+  },
+  "secondary": {
+    "item": "usefulfoundation:raw_lead",
+    "chance": 0.09
+  }
+}

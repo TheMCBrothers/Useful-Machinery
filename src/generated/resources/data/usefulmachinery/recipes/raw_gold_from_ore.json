@@ -1,0 +1,15 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/gold"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "minecraft:raw_gold",
+    "count": 2
+  },
+  "secondary": {
+    "item": "minecraft:raw_copper",
+    "chance": 0.4
+  }
+}

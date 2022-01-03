@@ -26,15 +26,17 @@ public class CrushingRecipe implements Recipe<Container> {
     private final String group;
     private final Ingredient ingredient;
     private final ItemStack result;
-    private final float experience;
+    private final ItemStack secondary;
+    private final float secondaryChance;
     private final int crushTime;
 
-    public CrushingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, float experience, int crushTime) {
+    public CrushingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, ItemStack secondary, float secondaryChance, int crushTime) {
         this.id = id;
         this.group = group;
         this.ingredient = ingredient;
         this.result = result;
-        this.experience = experience;
+        this.secondary = secondary;
+        this.secondaryChance = secondaryChance;
         this.crushTime = crushTime;
     }
 
@@ -47,8 +49,8 @@ public class CrushingRecipe implements Recipe<Container> {
         return crushTime;
     }
 
-    public float getExperience() {
-        return experience;
+    public float getSecondaryChance() {
+        return secondaryChance;
     }
 
     @Override
@@ -113,6 +115,8 @@ public class CrushingRecipe implements Recipe<Container> {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
 
             ItemStack itemstack;
+            ItemStack itemstack2;
+            float chance = 0.0F;
 
             if (json.get("result").isJsonObject())
                 itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
@@ -121,16 +125,30 @@ public class CrushingRecipe implements Recipe<Container> {
                 ResourceLocation resourcelocation = new ResourceLocation(s1);
                 Item item = ForgeRegistries.ITEMS.getValue(resourcelocation);
 
-                if (item != null)
+                if (item != null) {
                     itemstack = new ItemStack(item);
-                else
+                } else {
                     throw new IllegalStateException("Item: " + s1 + " does not exist");
+                }
             }
 
-            float f = GsonHelper.getAsFloat(json, "experience", 0.0F);
+            if (json.has("secondary") && json.get("secondary").isJsonObject()) {
+                itemstack2 = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "secondary"));
+            } else {
+                String s2 = GsonHelper.getAsString(json.getAsJsonObject("secondary"), "item");
+                ResourceLocation location = new ResourceLocation(s2);
+                Item item = ForgeRegistries.ITEMS.getValue(location);
+
+                chance = GsonHelper.getAsFloat(json, "chance", 0.0F);
+
+                if (item != null) {
+                    itemstack2 = new ItemStack(item);
+                } else throw new IllegalStateException("Item: " + s2 + " does not exist");
+            }
+
             int i = GsonHelper.getAsInt(json, "processingtime", 200);
 
-            return new CrushingRecipe(recipeId, s, ingredient, itemstack, f, i);
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i);
         }
 
         @Nullable
@@ -139,11 +157,12 @@ public class CrushingRecipe implements Recipe<Container> {
             String s = buffer.readUtf(32767);
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             ItemStack itemstack = buffer.readItem();
+            ItemStack itemstack2 = buffer.readItem();
 
-            float f = buffer.readFloat();
+            float chance = buffer.readFloat();
             int i = buffer.readVarInt();
 
-            return new CrushingRecipe(recipeId, s, ingredient, itemstack, f, i);
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i);
         }
 
         @Override
@@ -151,7 +170,8 @@ public class CrushingRecipe implements Recipe<Container> {
             buffer.writeUtf(recipe.group);
             recipe.ingredient.toNetwork(buffer);
             buffer.writeItem(recipe.result);
-            buffer.writeFloat(recipe.experience);
+            buffer.writeItem(recipe.secondary);
+            buffer.writeFloat(recipe.secondaryChance);
             buffer.writeVarInt(recipe.crushTime);
         }
     }

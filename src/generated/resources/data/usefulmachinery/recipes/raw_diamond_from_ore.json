@@ -3,6 +3,7 @@
   "ingredient": {
     "tag": "forge:ores/diamond"
   },
+  "processingtime": 200,
   "result": {
     "item": "minecraft:diamond",
     "count": 2

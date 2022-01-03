@@ -3,8 +3,9 @@
   "ingredient": {
     "tag": "forge:ores/uranium"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:uranium_dust",
+    "item": "usefulfoundation:raw_uranium",
     "count": 2
   }
 }

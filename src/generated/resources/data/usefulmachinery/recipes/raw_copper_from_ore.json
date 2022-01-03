@@ -3,12 +3,13 @@
   "ingredient": {
     "tag": "forge:ores/copper"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:copper_dust",
+    "item": "minecraft:raw_copper",
     "count": 2
   },
   "secondary": {
-    "item": "usefulfoundation:gold_dust",
-    "chance": 0.1
+    "item": "minecraft:raw_gold",
+    "chance": 0.05
   }
 }

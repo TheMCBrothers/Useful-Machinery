@@ -3,8 +3,9 @@
   "ingredient": {
     "tag": "forge:ores/tin"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:tin_dust",
+    "item": "usefulfoundation:raw_tin",
     "count": 2
   }
 }

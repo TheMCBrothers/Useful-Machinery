@@ -3,10 +3,14 @@ package themcbros.usefulmachinery.data;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import themcbros.usefulmachinery.data.recipes.CompactingRecipeBuilder;
+import themcbros.usefulmachinery.data.recipes.CrushingRecipeBuilder;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
 import javax.annotation.Nonnull;
@@ -62,6 +66,18 @@ public class MachineryRecipeProvider extends RecipeProvider {
         CompactingRecipeBuilder.compacting(TIN_PLATE, Ingredient.of(INGOTS_TIN), 1, 200, CompactorMode.PLATE).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipe, getId("tin_plate_from_compacting"));
         CompactingRecipeBuilder.compacting(URANIUM_PLATE, Ingredient.of(INGOTS_URANIUM), 1, 200, CompactorMode.PLATE).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipe, getId("uranium_plate_from_compacting"));
 
+        //TODO in Foundation mod
+        final Tags.IOptionalNamedTag<Item> oresCopper = ItemTags.createOptional(new ResourceLocation("forge", "ores/copper"));
 
+        //Raw Materials
+        CrushingRecipeBuilder.crushing(Items.RAW_COPPER, 2, Ingredient.of(oresCopper), 200).secondary(Items.RAW_GOLD, 0.05F).unlockedBy("has_copper_ore", has(oresCopper)).save(recipe, getId("raw_copper_from_ore"));
+        CrushingRecipeBuilder.crushing(Items.DIAMOND, 2, Ingredient.of(Tags.Items.ORES_DIAMOND), 200).unlockedBy("has_diamond_ore", has(Tags.Items.ORES_DIAMOND)).save(recipe, getId("raw_diamond_from_ore"));
+        CrushingRecipeBuilder.crushing(Items.RAW_GOLD, 2, Ingredient.of(Tags.Items.ORES_GOLD), 200).secondary(Items.RAW_COPPER, 0.4F).unlockedBy("has_gold_ore", has(Tags.Items.ORES_GOLD)).save(recipe, getId("raw_gold_from_ore"));
+        CrushingRecipeBuilder.crushing(Items.RAW_IRON, 2, Ingredient.of(Tags.Items.ORES_IRON), 200).secondary(RAW_NICKEL, 0.1F).unlockedBy("has_iron_ore", has(Tags.Items.ORES_IRON)).save(recipe, getId("raw_iron_from_ore"));
+        CrushingRecipeBuilder.crushing(RAW_LEAD, 2, Ingredient.of(ORES_LEAD), 200).secondary(RAW_SILVER, 0.08F).unlockedBy("has_lead_ore", has(ORES_LEAD)).save(recipe, getId("raw_lead_from_ore"));
+        CrushingRecipeBuilder.crushing(RAW_NICKEL, 2, Ingredient.of(ORES_NICKEL), 200).unlockedBy("has_nickel_ore", has(ORES_NICKEL)).save(recipe, getId("raw_nickel_from_ore"));
+        CrushingRecipeBuilder.crushing(RAW_SILVER, 2, Ingredient.of(ORES_SILVER), 200).secondary(RAW_LEAD, 0.09F).unlockedBy("has_silver_ore", has(ORES_SILVER)).save(recipe, getId("raw_silver_from_ore"));
+        CrushingRecipeBuilder.crushing(RAW_TIN, 2, Ingredient.of(ORES_TIN), 200).unlockedBy("has_tin_ore", has(ORES_TIN)).save(recipe, getId("raw_tin_from_ore"));
+        CrushingRecipeBuilder.crushing(RAW_URANIUM, 2, Ingredient.of(ORES_URANIUM), 200).unlockedBy("has_uranium_ore", has(ORES_URANIUM)).save(recipe, getId("raw_uranium_from_ore"));
     }
 }

@@ -3,8 +3,9 @@
   "ingredient": {
     "tag": "forge:ores/nickel"
   },
+  "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:nickel_dust",
+    "item": "usefulfoundation:raw_nickel",
     "count": 2
   }
 }
