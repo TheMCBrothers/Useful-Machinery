@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/bronze"
+    "tag": "forge:ingots/bronze",
+    "count": 4
   },
-  "count": 4,
   "mode": "gear",
   "processingtime": 200,
   "result": "usefulfoundation:bronze_gear"

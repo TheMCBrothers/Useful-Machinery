@@ -6,19 +6,19 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
+import themcbros.usefulmachinery.blockentity.extension.Compactor;
 import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
 import javax.annotation.Nullable;
 
-public class CompactingRecipe implements Recipe<Container> {
+public class CompactingRecipe implements Recipe<Compactor> {
     private final ResourceLocation id;
     private final String group;
     private final Ingredient ingredient;
@@ -38,12 +38,12 @@ public class CompactingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inv, Level level) {
-        return this.ingredient.test(inv.getItem(0)) && inv.getItem(0).getCount() >= this.count;
+    public boolean matches(Compactor compactor, Level level) {
+        return this.ingredient.test(compactor.getItem(0)) && compactor.getItem(0).getCount() >= this.count && this.compactorMode == compactor.getMode();
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Compactor compactor) {
         return this.result.copy();
     }
 
@@ -116,10 +116,8 @@ public class CompactingRecipe implements Recipe<Container> {
 
                 Item item = ForgeRegistries.ITEMS.getValue(resourcelocation);
 
-                if (item != null)
-                    itemstack = new ItemStack(item);
-                else
-                    throw new IllegalStateException("Item: " + s1 + " does not exist");
+                if (item != null) itemstack = new ItemStack(item);
+                else throw new IllegalStateException("Item: " + s1 + " does not exist");
             }
 
             int i = GsonHelper.getAsInt(json, "processingtime", 200);

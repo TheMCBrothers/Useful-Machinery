@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import themcbros.usefulmachinery.blockentity.extension.Compactor;
 import themcbros.usefulmachinery.container.CompactorContainer;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.CompactorMode;
@@ -22,7 +23,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CompactorBlockEntity extends AbstractMachineBlockEntity {
+public class CompactorBlockEntity extends AbstractMachineBlockEntity implements Compactor {
     private static final int RF_PER_TICK = 15;
 
     private final ContainerData fields = new ContainerData() {
@@ -72,8 +73,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public void load(CompoundTag compound) {
-        if (compound.contains("Mode", Tag.TAG_INT))
-            this.compactorMode = CompactorMode.byIndex(compound.getInt("Mode"));
+        if (compound.contains("Mode", Tag.TAG_INT)) this.compactorMode = CompactorMode.byIndex(compound.getInt("Mode"));
 
         super.load(compound);
     }
@@ -179,10 +179,14 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
+    @Override
+    public CompactorMode getMode() {
+        return this.compactorMode;
+    }
+
     private int getProcessTime() {
         if (level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level)
-                .map(CompactingRecipe::getProcessTime).orElse(200);
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level).map(CompactingRecipe::getProcessTime).orElse(200);
     }
 
     private boolean canProcess(@Nullable CompactingRecipe recipeIn) {
@@ -224,5 +228,4 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity {
             itemstack.shrink(recipe.getCount());
         }
     }
-
 }

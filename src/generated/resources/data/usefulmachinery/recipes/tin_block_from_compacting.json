@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/tin"
+    "tag": "forge:ingots/tin",
+    "count": 9
   },
-  "count": 9,
   "mode": "block",
   "processingtime": 250,
   "result": "usefulfoundation:tin_block"

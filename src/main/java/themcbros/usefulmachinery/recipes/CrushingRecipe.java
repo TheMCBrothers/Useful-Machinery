@@ -111,19 +111,20 @@ public class CrushingRecipe implements Recipe<Container> {
             JsonElement jsonelement = (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
             Ingredient ingredient = Ingredient.fromJson(jsonelement);
 
-            if (!json.has("result"))
+            if (!json.has("result")) {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
+            }
 
             ItemStack itemstack;
-            ItemStack itemstack2;
+            ItemStack itemstack2 = ItemStack.EMPTY;
             float chance = 0.0F;
 
             if (json.get("result").isJsonObject())
                 itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             else {
                 String s1 = GsonHelper.getAsString(json, "result");
-                ResourceLocation resourcelocation = new ResourceLocation(s1);
-                Item item = ForgeRegistries.ITEMS.getValue(resourcelocation);
+                ResourceLocation location = new ResourceLocation(s1);
+                Item item = ForgeRegistries.ITEMS.getValue(location);
 
                 if (item != null) {
                     itemstack = new ItemStack(item);
@@ -134,16 +135,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
             if (json.has("secondary") && json.get("secondary").isJsonObject()) {
                 itemstack2 = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "secondary"));
-            } else {
-                String s2 = GsonHelper.getAsString(json.getAsJsonObject("secondary"), "item");
-                ResourceLocation location = new ResourceLocation(s2);
-                Item item = ForgeRegistries.ITEMS.getValue(location);
-
-                chance = GsonHelper.getAsFloat(json, "chance", 0.0F);
-
-                if (item != null) {
-                    itemstack2 = new ItemStack(item);
-                } else throw new IllegalStateException("Item: " + s2 + " does not exist");
+                chance = GsonHelper.getAsFloat(GsonHelper.getAsJsonObject(json, "secondary"), "chance", 0.0F);
             }
 
             int i = GsonHelper.getAsInt(json, "processingtime", 200);

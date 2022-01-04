@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/gold"
+    "tag": "forge:ingots/gold",
+    "count": 9
   },
-  "count": 9,
   "mode": "block",
   "processingtime": 250,
   "result": "minecraft:gold_block"

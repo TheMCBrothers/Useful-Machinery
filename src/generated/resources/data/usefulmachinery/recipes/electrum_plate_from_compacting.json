@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/electrum"
+    "tag": "forge:ingots/electrum",
+    "count": 1
   },
-  "count": 1,
   "mode": "plate",
   "processingtime": 200,
   "result": "usefulfoundation:electrum_plate"

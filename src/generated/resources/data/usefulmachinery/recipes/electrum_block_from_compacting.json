@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/electrum"
+    "tag": "forge:ingots/electrum",
+    "count": 9
   },
-  "count": 9,
   "mode": "block",
   "processingtime": 250,
   "result": "usefulfoundation:electrum_block"

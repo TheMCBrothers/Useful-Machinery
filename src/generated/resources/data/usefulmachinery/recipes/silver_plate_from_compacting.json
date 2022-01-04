@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/silver"
+    "tag": "forge:ingots/silver",
+    "count": 1
   },
-  "count": 1,
   "mode": "plate",
   "processingtime": 200,
   "result": "usefulfoundation:silver_plate"

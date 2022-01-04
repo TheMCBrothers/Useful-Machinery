@@ -1,7 +1,6 @@
 package themcbros.usefulmachinery.container;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -11,13 +10,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
+import themcbros.usefulmachinery.blockentity.extension.SimpleCompactor;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryContainers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
-import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class CompactorContainer extends MachineContainer {
     private final Level level;
@@ -97,13 +97,11 @@ public class CompactorContainer extends MachineContainer {
     }
 
     private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY)
-                .map(IEnergyStorage::canExtract).orElse(false);
+        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::canExtract).orElse(false);
     }
 
     protected boolean canProcess(ItemStack stack) {
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, new SimpleContainer(stack), this.level)
-                .map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, new SimpleCompactor(this.getCompactorMode(), stack), this.level).map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
     }
 
     public int getProcessTime() {

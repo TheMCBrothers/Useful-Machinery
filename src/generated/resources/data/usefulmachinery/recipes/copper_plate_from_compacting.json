@@ -1,9 +1,9 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/copper"
+    "tag": "forge:ingots/copper",
+    "count": 1
   },
-  "count": 1,
   "mode": "plate",
   "processingtime": 200,
   "result": "usefulfoundation:copper_plate"

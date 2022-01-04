@@ -106,8 +106,11 @@ public class CompactingRecipeBuilder implements RecipeBuilder {
             if (!this.group.isEmpty()) {
                 object.addProperty("group", this.group);
             }
-            object.add("ingredient", this.ingredient.toJson());
-            object.addProperty("count", this.count);
+
+            JsonObject ingredientObject = (JsonObject) this.ingredient.toJson();
+            ingredientObject.addProperty("count", this.count);
+
+            object.add("ingredient", ingredientObject);
             object.addProperty("mode", this.mode.getSerializedName());
             object.addProperty("processingtime", this.processTime);
             object.addProperty("result", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.result)).toString());
