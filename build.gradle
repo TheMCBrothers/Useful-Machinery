@@ -17,7 +17,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-group = 'themcbros.usefulmachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'net.themcbrothers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'usefulmachinery'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -72,7 +72,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'usefulmachinery', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'usefulmachinery', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 usefulmachinery {
@@ -81,6 +81,10 @@ minecraft {
             }
         }
     }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
 }
 
 sourceSets.main.java {
@@ -109,6 +113,10 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        name = "themcb-nexus"
+        url = "https://nexus.themcbrothers.net/repository/maven-releases/"
+    }
 }
 
 dependencies {
@@ -129,9 +137,9 @@ dependencies {
         runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
     }
 
-    if (project.hasProperty('usefulfoundation_file_id')) {
+    if (project.hasProperty('usefulfoundation_version')) {
         // Useful Foundation
-        implementation fg.deobf("curse.maven:useful-foundation-355245:${usefulfoundation_file_id}")
+        implementation fg.deobf("net.themcbrothers:useful-foundation:$usefulfoundation_version")
     }
 }
 
@@ -144,7 +152,7 @@ jar {
                 "Specification-Vendor"    : "themcbrothers",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
+                "Implementation-Version"  : "${archiveVersion.get()}",
                 "Implementation-Vendor"   : "themcbrothers",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
@@ -161,26 +169,34 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     builtBy 'reobfJar'
 }
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
+    publications { PublicationContainer publicationContainer ->
+        publicationContainer.register("maven", MavenPublication) { MavenPublication publication ->
+            publication.artifacts = [jar]
+            publication.version = "$project.mc_version-$project.version"
+            publication.artifactId = "useful-machinery"
         }
     }
+
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            credentials {
+                username = getSecretByKey("nexus_uname")
+                password = getSecretByKey("nexus_pwd")
+            }
+
+            url "https://nexus.themcbrothers.net/repository/maven-releases/"
         }
     }
 }
 
-private String getCurseForgeToken() {
+private String getSecretByKey(String key) {
     File secretFile = file('secrets.properties')
 
     if (secretFile.canRead()) {
         Properties secretProps = new Properties()
         secretProps.load(new FileInputStream(secretFile))
 
-        return secretProps['curseForgeToken'].toString()
+        return secretProps[key].toString()
     }
 
     return null
@@ -188,7 +204,7 @@ private String getCurseForgeToken() {
 
 // For CurseForge Deployment
 curseforge {
-    apiKey = getCurseForgeToken() // This should be kept private.
+    apiKey = getSecretByKey("curseForgeToken") // This should be kept private.
     options {
         forgeGradleIntegration = true
     }
