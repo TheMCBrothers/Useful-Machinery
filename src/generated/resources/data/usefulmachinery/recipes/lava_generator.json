@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "#R#",
+    "IBI"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:bucket"
+    },
+    "#": {
+      "tag": "forge:dusts/redstone"
+    },
+    "R": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "I": {
+      "tag": "forge:ingots/nether_brick"
+    },
+    "B": {
+      "tag": "forge:batteries"
+    }
+  },
+  "result": {
+    "item": "usefulmachinery:lava_generator"
+  }
+}

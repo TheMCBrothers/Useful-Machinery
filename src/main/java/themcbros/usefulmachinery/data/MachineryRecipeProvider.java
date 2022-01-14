@@ -3,9 +3,9 @@ package themcbros.usefulmachinery.data;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -18,7 +18,9 @@ import java.util.function.Consumer;
 
 import static themcbros.usefulfoundation.FoundationTags.Items.*;
 import static themcbros.usefulfoundation.init.FoundationItems.*;
+import static themcbros.usefulmachinery.MachineryTags.Items.BATTERIES;
 import static themcbros.usefulmachinery.UsefulMachinery.getId;
+import static themcbros.usefulmachinery.init.MachineryItems.*;
 
 public class MachineryRecipeProvider extends RecipeProvider {
     public MachineryRecipeProvider(DataGenerator gen) {
@@ -66,11 +68,8 @@ public class MachineryRecipeProvider extends RecipeProvider {
         CompactingRecipeBuilder.compacting(TIN_PLATE, Ingredient.of(INGOTS_TIN), 1, 200, CompactorMode.PLATE).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipe, getId("tin_plate_from_compacting"));
         CompactingRecipeBuilder.compacting(URANIUM_PLATE, Ingredient.of(INGOTS_URANIUM), 1, 200, CompactorMode.PLATE).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipe, getId("uranium_plate_from_compacting"));
 
-        //TODO in Foundation mod
-        final Tags.IOptionalNamedTag<Item> oresCopper = ItemTags.createOptional(new ResourceLocation("forge", "ores/copper"));
-
         //Raw Materials
-        CrushingRecipeBuilder.crushing(Items.RAW_COPPER, 2, Ingredient.of(oresCopper), 200).secondary(Items.RAW_GOLD, 0.05F).unlockedBy("has_copper_ore", has(oresCopper)).save(recipe, getId("raw_copper_from_ore"));
+        CrushingRecipeBuilder.crushing(Items.RAW_COPPER, 2, Ingredient.of(Tags.Items.ORES_COPPER), 200).secondary(Items.RAW_GOLD, 0.05F).unlockedBy("has_copper_ore", has(Tags.Items.ORES_COPPER)).save(recipe, getId("raw_copper_from_ore"));
         CrushingRecipeBuilder.crushing(Items.DIAMOND, 2, Ingredient.of(Tags.Items.ORES_DIAMOND), 200).unlockedBy("has_diamond_ore", has(Tags.Items.ORES_DIAMOND)).save(recipe, getId("raw_diamond_from_ore"));
         CrushingRecipeBuilder.crushing(Items.RAW_GOLD, 2, Ingredient.of(Tags.Items.ORES_GOLD), 200).secondary(Items.RAW_COPPER, 0.4F).unlockedBy("has_gold_ore", has(Tags.Items.ORES_GOLD)).save(recipe, getId("raw_gold_from_ore"));
         CrushingRecipeBuilder.crushing(Items.RAW_IRON, 2, Ingredient.of(Tags.Items.ORES_IRON), 200).secondary(RAW_NICKEL, 0.1F).unlockedBy("has_iron_ore", has(Tags.Items.ORES_IRON)).save(recipe, getId("raw_iron_from_ore"));
@@ -79,5 +78,18 @@ public class MachineryRecipeProvider extends RecipeProvider {
         CrushingRecipeBuilder.crushing(RAW_SILVER, 2, Ingredient.of(ORES_SILVER), 200).secondary(RAW_LEAD, 0.09F).unlockedBy("has_silver_ore", has(ORES_SILVER)).save(recipe, getId("raw_silver_from_ore"));
         CrushingRecipeBuilder.crushing(RAW_TIN, 2, Ingredient.of(ORES_TIN), 200).unlockedBy("has_tin_ore", has(ORES_TIN)).save(recipe, getId("raw_tin_from_ore"));
         CrushingRecipeBuilder.crushing(RAW_URANIUM, 2, Ingredient.of(ORES_URANIUM), 200).unlockedBy("has_uranium_ore", has(ORES_URANIUM)).save(recipe, getId("raw_uranium_from_ore"));
+
+        //Machines
+        ShapedRecipeBuilder.shaped(COAL_GENERATOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', ItemTags.COALS).define('R', MACHINE_FRAME).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME)).save(recipe);
+        ShapedRecipeBuilder.shaped(COMPACTOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', COMPACTOR_KIT).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME).define('I', INGOTS_ELECTRUM).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME)).save(recipe);
+        ShapedRecipeBuilder.shaped(CRUSHER, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', Items.FLINT).define('R', MACHINE_FRAME).define('I', INGOTS_COPPER).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME)).save(recipe);
+        ShapedRecipeBuilder.shaped(ELECTRIC_SMELTER, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', GEARS_COPPER).define('R', Items.FURNACE).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_furnace", has(Items.FURNACE)).save(recipe);
+        ShapedRecipeBuilder.shaped(LAVA_GENERATOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME).define('I', Tags.Items.INGOTS_NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME)).save(recipe);
+
+        //Items
+        ShapedRecipeBuilder.shaped(MACHINE_FRAME, 1).pattern("X#X").pattern("#R#").pattern("X#X").define('X', INGOTS_TIN).define('#', Tags.Items.GLASS).define('R', GEARS_IRON).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
+        ShapedRecipeBuilder.shaped(BATTERY, 1).pattern(" X ").pattern("#R#").pattern("#R#").define('X', Tags.Items.NUGGETS_GOLD).define('#', INGOTS_TIN).define('R', Tags.Items.DUSTS_REDSTONE).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
+
+        ShapelessRecipeBuilder.shapeless(COMPACTOR_KIT, 1).requires(GEARS_GOLD).requires(PLATES_LEAD).requires(HAMMER).unlockedBy("has_hammer", has(HAMMER)).save(recipe);
     }
 }

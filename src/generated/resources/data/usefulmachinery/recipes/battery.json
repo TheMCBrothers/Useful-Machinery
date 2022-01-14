@@ -1,23 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " # ",
-    "IRI",
-    "IRI"
+    " X ",
+    "#R#",
+    "#R#"
   ],
   "key": {
-    "I": {
-      "tag": "forge:ingots/tin"
+    "X": {
+      "tag": "forge:nuggets/gold"
     },
     "#": {
-      "tag": "forge:nuggets/gold"
+      "tag": "forge:ingots/tin"
     },
     "R": {
       "tag": "forge:dusts/redstone"
     }
   },
   "result": {
-    "item": "usefulmachinery:battery",
-    "count": 1
+    "item": "usefulmachinery:battery"
   }
 }

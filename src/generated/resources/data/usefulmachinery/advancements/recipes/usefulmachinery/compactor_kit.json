@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:compactor_kit"
+    ]
+  },
+  "criteria": {
+    "has_hammer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "usefulfoundation:hammer"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "usefulmachinery:compactor_kit"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_hammer",
+      "has_the_recipe"
+    ]
+  ]
+}

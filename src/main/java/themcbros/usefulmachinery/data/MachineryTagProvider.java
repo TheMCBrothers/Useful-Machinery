@@ -5,7 +5,9 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.UsefulMachinery;
+import themcbros.usefulmachinery.init.MachineryItems;
 
 import javax.annotation.Nullable;
 
@@ -30,6 +32,7 @@ public class MachineryTagProvider {
 
         @Override
         protected void addTags() {
+            this.tag(MachineryTags.Items.BATTERIES).add(MachineryItems.BATTERY);
         }
     }
 }

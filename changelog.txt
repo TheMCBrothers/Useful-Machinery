@@ -1,3 +1,7 @@
+1.5.0:
+- added Tags
+- changed Recipes
+
 1.4.0:
 - added new Recipes to machines
 - Fixed crash
