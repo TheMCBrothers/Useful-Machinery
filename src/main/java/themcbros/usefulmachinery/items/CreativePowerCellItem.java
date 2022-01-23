@@ -35,7 +35,7 @@ public class CreativePowerCellItem extends BlockItem implements IEnergyContainer
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return 0;
+        return 13;
     }
 
     @Override
