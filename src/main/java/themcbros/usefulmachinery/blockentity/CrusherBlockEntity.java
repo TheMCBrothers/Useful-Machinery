@@ -122,8 +122,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     private int getCrushTime() {
         if (level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.CRUSHING, this, this.level)
-                .map(CrushingRecipe::getCrushTime).orElse(200);
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.CRUSHING, this, this.level).map(CrushingRecipe::getCrushTime).orElse(200);
     }
 
     private boolean canCrush(@Nullable CrushingRecipe recipe) {
@@ -140,16 +139,16 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
                     if (crusherOutputStack.isEmpty() && crusherSecondOutputStack.isEmpty()) {
                         return true;
+                    } else if (crusherOutputStack.sameItem(recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
+                        return true;
+                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
+                        return true;
                     } else if (!crusherOutputStack.sameItem(recipeOutputStack) || !crusherSecondOutputStack.sameItem(recipeSecondOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize()
-                            && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()
-                            && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize()
-                            && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize() && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
-                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize()
-                                && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= recipeSecondOutputStack.getMaxStackSize();
+                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= recipeSecondOutputStack.getMaxStackSize();
                     }
                 }
             } else {
@@ -162,8 +161,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                         return true;
                     } else if (!crusherOutputStack.sameItem(recipeOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize()
-                            && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
                         return crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize();
@@ -177,17 +175,28 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     private void crushItem(@Nullable CrushingRecipe recipe) {
         if (recipe != null && this.canCrush(recipe)) {
-            ItemStack itemstack = this.stacks.get(0);
-            ItemStack itemstack1 = recipe.getResultItem();
-            ItemStack itemstack2 = this.stacks.get(1);
+            ItemStack inputSlot = this.stacks.get(0);
+            ItemStack recipeResultItem = recipe.getResultItem();
+            ItemStack outputSlot = this.stacks.get(1);
+            ItemStack secondaryRecipeResultItem = recipe.getSecondRecipeOutput();
+            ItemStack secondaryOutputSlot = this.stacks.get(2);
+            float secondaryChance = recipe.getSecondaryChance();
 
-            if (itemstack2.isEmpty()) {
-                this.stacks.set(1, itemstack1.copy());
-            } else if (itemstack2.getItem() == itemstack1.getItem()) {
-                itemstack2.grow(itemstack1.getCount());
+            if (outputSlot.isEmpty()) {
+                this.stacks.set(1, recipeResultItem.copy());
+            } else if (outputSlot.getItem() == recipeResultItem.getItem()) {
+                outputSlot.grow(recipeResultItem.getCount());
             }
 
-            itemstack.shrink(1);
+            if (!secondaryRecipeResultItem.isEmpty() && Math.random() <= secondaryChance) {
+                if (secondaryOutputSlot.isEmpty()) {
+                    this.stacks.set(2, secondaryRecipeResultItem.copy());
+                } else if (secondaryOutputSlot.getItem() == secondaryRecipeResultItem.getItem()) {
+                    secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                }
+            }
+
+            inputSlot.shrink(1);
         }
     }
 

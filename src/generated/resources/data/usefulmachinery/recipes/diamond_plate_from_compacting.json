@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:gems/diamond",
+    "count": 1
+  },
+  "mode": "plate",
+  "processingtime": 200,
+  "result": "usefulfoundation:diamond_plate"
+}

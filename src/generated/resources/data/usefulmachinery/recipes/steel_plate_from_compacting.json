@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/steel",
+    "count": 1
+  },
+  "mode": "plate",
+  "processingtime": 200,
+  "result": "usefulfoundation:steel_plate"
+}

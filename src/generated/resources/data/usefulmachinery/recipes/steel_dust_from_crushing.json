@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/steel"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:steel_dust",
+    "count": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/tin"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:tin_dust",
+    "count": 1
+  }
+}

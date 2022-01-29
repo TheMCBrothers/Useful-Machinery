@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/enderium"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:enderium_dust",
+    "count": 1
+  }
+}

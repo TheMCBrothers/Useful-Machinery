@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/signalum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:signalum_dust",
+    "count": 1
+  }
+}

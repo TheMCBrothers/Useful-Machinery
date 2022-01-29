@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/copper"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:copper_dust",
+    "count": 1
+  }
+}

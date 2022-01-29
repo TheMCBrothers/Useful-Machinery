@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/platinum",
+    "count": 1
+  },
+  "mode": "plate",
+  "processingtime": 200,
+  "result": "usefulfoundation:platinum_plate"
+}

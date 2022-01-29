@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/invar"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:invar_dust",
+    "count": 1
+  }
+}

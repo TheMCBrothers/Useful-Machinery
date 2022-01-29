@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/silver"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:silver_dust",
+    "count": 1
+  }
+}

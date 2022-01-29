@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/aluminum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:aluminum_dust",
+    "count": 1
+  }
+}

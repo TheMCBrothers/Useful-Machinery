@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:ingots/signalum",
+    "count": 9
+  },
+  "mode": "block",
+  "processingtime": 250,
+  "result": "usefulfoundation:signalum_block"
+}

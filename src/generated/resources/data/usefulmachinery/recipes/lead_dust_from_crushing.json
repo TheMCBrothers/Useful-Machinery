@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/lead"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:lead_dust",
+    "count": 1
+  }
+}

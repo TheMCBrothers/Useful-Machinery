@@ -101,7 +101,7 @@ public class CrushingRecipe implements Recipe<Container> {
     }
 
     public ItemStack getSecondRecipeOutput() {
-        return ItemStack.EMPTY;
+        return this.secondary;
     }
 
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrushingRecipe> {

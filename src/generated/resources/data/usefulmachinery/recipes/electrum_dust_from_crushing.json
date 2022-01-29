@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/electrum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:electrum_dust",
+    "count": 1
+  }
+}

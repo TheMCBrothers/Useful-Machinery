@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/aluminum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:raw_aluminum",
+    "count": 2
+  }
+}

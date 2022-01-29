@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:gems/diamond"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:diamond_dust",
+    "count": 1
+  }
+}

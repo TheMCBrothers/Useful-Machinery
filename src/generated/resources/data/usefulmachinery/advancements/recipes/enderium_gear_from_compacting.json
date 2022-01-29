@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:enderium_gear_from_compacting"
+    ]
+  },
+  "criteria": {
+    "has_enderium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/enderium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "usefulmachinery:enderium_gear_from_compacting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_enderium",
+      "has_the_recipe"
+    ]
+  ]
+}

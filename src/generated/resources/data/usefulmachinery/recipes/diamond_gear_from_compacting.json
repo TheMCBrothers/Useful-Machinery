@@ -1,0 +1,10 @@
+{
+  "type": "usefulmachinery:compacting",
+  "ingredient": {
+    "tag": "forge:gems/diamond",
+    "count": 4
+  },
+  "mode": "gear",
+  "processingtime": 200,
+  "result": "usefulfoundation:diamond_gear"
+}

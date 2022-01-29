@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ingots/platinum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:platinum_dust",
+    "count": 1
+  }
+}

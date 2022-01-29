@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "ingredient": {
+    "tag": "forge:ores/platinum"
+  },
+  "processingtime": 200,
+  "result": {
+    "item": "usefulfoundation:raw_platinum",
+    "count": 2
+  }
+}

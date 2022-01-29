@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:platinum_dust_from_crushing"
+    ]
+  },
+  "criteria": {
+    "has_platinum": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/platinum"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "usefulmachinery:platinum_dust_from_crushing"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_platinum",
+      "has_the_recipe"
+    ]
+  ]
+}
