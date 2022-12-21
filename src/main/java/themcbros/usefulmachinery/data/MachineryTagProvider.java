@@ -21,7 +21,7 @@ public class MachineryTagProvider {
 
         @Override
         protected void addTags() {
-            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(COAL_GENERATOR, COMPACTOR, CRUSHER, ELECTRIC_SMELTER, LAVA_GENERATOR);
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(COAL_GENERATOR.get(), COMPACTOR.get(), CRUSHER.get(), ELECTRIC_SMELTER.get(), LAVA_GENERATOR.get());
         }
     }
 
@@ -32,7 +32,7 @@ public class MachineryTagProvider {
 
         @Override
         protected void addTags() {
-            this.tag(MachineryTags.Items.BATTERIES).add(MachineryItems.BATTERY);
+            this.tag(MachineryTags.Items.BATTERIES).add(MachineryItems.BATTERY.get());
         }
     }
 }

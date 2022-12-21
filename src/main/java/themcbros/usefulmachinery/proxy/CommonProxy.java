@@ -1,25 +1,28 @@
 package themcbros.usefulmachinery.proxy;
 
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import themcbros.usefulmachinery.UsefulMachinery;
+import themcbros.usefulmachinery.init.Registration;
 import themcbros.usefulmachinery.networking.Networking;
 
 import java.util.stream.Collectors;
 
 public class CommonProxy {
     CommonProxy() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        Registration.register(modEventBus);
+        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::enqueueIMC);
+        modEventBus.addListener(this::processIMC);
 
         Networking.init();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

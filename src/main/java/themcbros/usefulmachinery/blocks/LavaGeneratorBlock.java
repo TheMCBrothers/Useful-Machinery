@@ -13,6 +13,6 @@ public class LavaGeneratorBlock extends AbstractMachineBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.LAVA_GENERATOR.create(pos, state);
+        return MachineryBlockEntities.LAVA_GENERATOR.get().create(pos, state);
     }
 }

@@ -16,6 +16,6 @@ public class ElectricSmelterBlock extends AbstractMachineBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.ELECTRIC_SMELTER.create(pos, state);
+        return MachineryBlockEntities.ELECTRIC_SMELTER.get().create(pos, state);
     }
 }

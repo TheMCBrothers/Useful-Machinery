@@ -14,6 +14,6 @@ public class CompactorBlock extends AbstractMachineBlock {
     @org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.COMPACTOR.create(pos, state);
+        return MachineryBlockEntities.COMPACTOR.get().create(pos, state);
     }
 }

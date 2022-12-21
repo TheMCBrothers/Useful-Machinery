@@ -14,7 +14,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.init.MachineryContainers;
+import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.blockentity.ElectricSmelterBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
@@ -22,11 +22,11 @@ public class ElectricSmelterContainer extends MachineContainer {
     private final Level level;
 
     public ElectricSmelterContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, MachineryBlocks.ELECTRIC_SMELTER.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, MachineryBlocks.ELECTRIC_SMELTER.get().defaultBlockState()), new SimpleContainerData(7));
     }
 
     public ElectricSmelterContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(MachineryContainers.ELECTRIC_SMELTER, id, playerInventory, tileEntity, fields);
+        super(MachineryMenus.ELECTRIC_SMELTER.get(), id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));

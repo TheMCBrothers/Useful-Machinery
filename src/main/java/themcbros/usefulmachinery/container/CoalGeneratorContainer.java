@@ -12,17 +12,17 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.init.MachineryContainers;
+import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class CoalGeneratorContainer extends MachineContainer {
     public CoalGeneratorContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new CoalGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, new CoalGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(7));
     }
 
     public CoalGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(MachineryContainers.COAL_GENERATOR, id, playerInventory, tileEntity, fields);
+        super(MachineryMenus.COAL_GENERATOR.get(), id, playerInventory, tileEntity, fields);
 
         this.addSlot(new Slot(tileEntity, 0, 80, 33));
         this.addSlot(new EnergySlot(tileEntity, 1, 134, 33));

@@ -61,7 +61,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     public CompactorMode compactorMode = CompactorMode.PLATE;
 
     public CompactorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MachineryBlockEntities.COMPACTOR, blockPos, blockState, false);
+        super(MachineryBlockEntities.COMPACTOR.get(), blockPos, blockState, false);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
             this.receiveEnergyFromSlot(2);
 
             if (this.isActive() || this.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
-                CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level).orElse(null);
+                CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
                     this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
@@ -185,8 +185,10 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     private int getProcessTime() {
-        if (level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, this, this.level).map(CompactingRecipe::getProcessTime).orElse(200);
+        if (level == null) {
+            return 200;
+        }
+        return calcProcessTime(this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level).map(CompactingRecipe::getProcessTime).orElse(200));
     }
 
     private boolean canProcess(@Nullable CompactingRecipe recipeIn) {

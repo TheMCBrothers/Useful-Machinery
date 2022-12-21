@@ -125,7 +125,7 @@ public class CompactingRecipeBuilder implements RecipeBuilder {
         @Nonnull
         @Override
         public RecipeSerializer<?> getType() {
-            return MachineryRecipeSerializers.COMPACTING;
+            return MachineryRecipeSerializers.COMPACTING.get();
         }
 
         @Nullable

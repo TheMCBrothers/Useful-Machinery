@@ -3,6 +3,7 @@ package themcbros.usefulmachinery.machine;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import themcbros.usefulfoundation.init.FoundationBlocks;
 import themcbros.usefulfoundation.init.FoundationItems;
 
 import javax.annotation.Nonnull;
@@ -14,9 +15,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum CompactorMode implements StringRepresentable {
-    PLATE(0, FoundationItems.LEAD_PLATE),
-    GEAR(1, FoundationItems.GOLD_GEAR),
-    BLOCK(2, FoundationItems.BRONZE_BLOCK);
+    PLATE(0, FoundationItems.LEAD_PLATE.get()),
+    GEAR(1, FoundationItems.GOLD_GEAR.get()),
+    BLOCK(2, FoundationBlocks.BRONZE_BLOCK.get());
 
     private static final CompactorMode[] VALUES = values();
     private static final Map<String, CompactorMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(CompactorMode::getSerializedName, (p_199787_0_) -> p_199787_0_));

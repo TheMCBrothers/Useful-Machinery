@@ -15,23 +15,23 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.LavaGeneratorBlockEntity;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.container.slot.FluidItemSlot;
 import themcbros.usefulmachinery.container.slot.OutputSlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.init.MachineryContainers;
-import themcbros.usefulmachinery.blockentity.LavaGeneratorBlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.init.MachineryMenus;
 
 import javax.annotation.Nonnull;
 
 public class LavaGeneratorContainer extends MachineContainer {
     public LavaGeneratorContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new LavaGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.defaultBlockState()), new SimpleContainerData(9));
+        this(id, playerInventory, new LavaGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(9));
     }
 
     public LavaGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(MachineryContainers.LAVA_GENERATOR, id, playerInventory, tileEntity, fields);
+        super(MachineryMenus.LAVA_GENERATOR.get(), id, playerInventory, tileEntity, fields);
 
         this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA)));
         this.addSlot(new OutputSlot(tileEntity, 1, 26, 51));

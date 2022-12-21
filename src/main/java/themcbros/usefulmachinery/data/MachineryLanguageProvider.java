@@ -15,24 +15,24 @@ public class MachineryLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         //Creative Tab
-        this.add("itemGroup.usefulfoundation", "Useful Machinery");
+        this.add("itemGroup.usefulmachinery", "Useful Machinery");
 
         //Machines
-        this.add(COAL_GENERATOR, "Coal Generator");
-        this.add(COMPACTOR, "Compactor");
-        this.add(CREATIVE_POWER_CELL, "Creative Power Cell");
-        this.add(CRUSHER, "Crusher");
-        this.add(ELECTRIC_SMELTER, "Electric Smelter");
-        this.add(LAVA_GENERATOR, "Lava Generator");
+        this.add(COAL_GENERATOR.get(), "Coal Generator");
+        this.add(COMPACTOR.get(), "Compactor");
+        this.add(CREATIVE_POWER_CELL.get(), "Creative Power Cell");
+        this.add(CRUSHER.get(), "Crusher");
+        this.add(ELECTRIC_SMELTER.get(), "Electric Smelter");
+        this.add(LAVA_GENERATOR.get(), "Lava Generator");
 
         //Items
-        this.add(MachineryItems.BATTERY, "Battery");
-        this.add(MachineryItems.COMPACTOR_KIT, "Compactor Kit");
-        this.add(MachineryItems.MACHINE_FRAME, "Machine Frame");
-        this.add(MachineryItems.TIER_UPGRADE.getDescriptionId() + "_hardened", "Hardened Upgrade");
-        this.add(MachineryItems.TIER_UPGRADE.getDescriptionId() + "_reinforced", "Reinforced Upgrade");
-        this.add(MachineryItems.TIER_UPGRADE.getDescriptionId() + "_signalum", "Signalum Upgrade");
-        this.add(MachineryItems.TIER_UPGRADE.getDescriptionId() + "_resonant", "Resonant Upgrade");
+        this.add(MachineryItems.BATTERY.get(), "Battery");
+        this.add(MachineryItems.COMPACTOR_KIT.get(), "Compactor Kit");
+        this.add(MachineryItems.MACHINE_FRAME.get(), "Machine Frame");
+        this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_basic", "Basic Upgrade");
+        this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_reinforced", "Reinforced Upgrade");
+        this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_factory", "Factory Upgrade");
+        this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_overkill", "Overkill Upgrade");
 
         //Container Titles
         this.add("container.usefulmachinery.coal_generator", "Coal Generator");

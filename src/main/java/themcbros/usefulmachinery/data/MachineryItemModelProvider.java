@@ -19,12 +19,12 @@ public class MachineryItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         //Machinery Items
-        simpleItem(BATTERY);
+        simpleItem(BATTERY.get());
 
-        ResourceLocation machineFrame = MACHINE_FRAME.getRegistryName();
+        ResourceLocation machineFrame = MACHINE_FRAME.get().getRegistryName();
         this.generatedModels.put(machineFrame, this.singleTexture(Objects.requireNonNull(machineFrame).getPath(), mcLoc("block/cube_all"), "all", modLoc("block/" + machineFrame.getPath())));
 
-        this.generatedModels.put(TIER_UPGRADE.getRegistryName(), this.getBuilder(Objects.requireNonNull(TIER_UPGRADE.getRegistryName()).getPath())
+        this.generatedModels.put(TIER_UPGRADE.get().getRegistryName(), this.getBuilder(Objects.requireNonNull(TIER_UPGRADE.get().getRegistryName()).getPath())
                 .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc("item/tier_upgrade_0"))
                 .texture("layer1", modLoc("item/tier_upgrade_1")));

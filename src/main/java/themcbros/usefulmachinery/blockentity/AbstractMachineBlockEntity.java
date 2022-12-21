@@ -20,6 +20,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.MachineTier;
@@ -37,7 +38,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public int processTime, processTimeTotal;
     public MachineEnergyStorage energyStorage;
-    public MachineTier machineTier = MachineTier.LEADSTONE;
+    public MachineTier machineTier = MachineTier.SIMPLE;
     public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private final boolean isGenerator;
     private int cooldown = -1;
@@ -50,27 +51,42 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     @Override
     public void saveAdditional(CompoundTag compound) {
-        if (this.processTime > 0) compound.putInt("ProcessTime", this.processTime);
-        if (this.processTimeTotal > 0) compound.putInt("ProcessTimeTotal", this.processTimeTotal);
-        if (machineTier != MachineTier.LEADSTONE) compound.putInt("Tier", machineTier.ordinal());
-        if (redstoneMode != RedstoneMode.IGNORED) compound.putInt("RedstoneMode", redstoneMode.getIndex());
-        if (this.energyStorage.getEnergyStored() > 0)
+        if (this.processTime > 0) {
+            compound.putInt("ProcessTime", this.processTime);
+        }
+        if (this.processTimeTotal > 0) {
+            compound.putInt("ProcessTimeTotal", this.processTimeTotal);
+        }
+        if (machineTier != MachineTier.SIMPLE) {
+            compound.putInt("Tier", machineTier.ordinal());
+        }
+        if (redstoneMode != RedstoneMode.IGNORED) {
+            compound.putInt("RedstoneMode", redstoneMode.getIndex());
+        }
+        if (this.energyStorage.getEnergyStored() > 0) {
             compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+        }
 
         ContainerHelper.saveAllItems(compound, this.stacks, false);
     }
 
     @Override
     public void load(CompoundTag compound) {
-        if (compound.contains("ProcessTime", Tag.TAG_INT)) this.processTime = compound.getInt("ProcessTime");
-        if (compound.contains("ProcessTimeTotal", Tag.TAG_INT))
+        if (compound.contains("ProcessTime", Tag.TAG_INT)) {
+            this.processTime = compound.getInt("ProcessTime");
+        }
+        if (compound.contains("ProcessTimeTotal", Tag.TAG_INT)) {
             this.processTimeTotal = compound.getInt("ProcessTimeTotal");
-        if (compound.contains("Tier", Tag.TAG_INT)) this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
-        if (compound.contains("RedstoneMode", Tag.TAG_INT))
+        }
+        if (compound.contains("Tier", Tag.TAG_INT)) {
+            this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
+        }
+        if (compound.contains("RedstoneMode", Tag.TAG_INT)) {
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        if (compound.contains("EnergyStored", Tag.TAG_INT))
+        }
+        if (compound.contains("EnergyStored", Tag.TAG_INT)) {
             this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
-
+        }
         ContainerHelper.loadAllItems(compound, this.stacks);
 
         super.load(compound);
@@ -84,6 +100,13 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public int[] getSlotsForFace(Direction side) {
         // TODO: Implement side config
         return side == Direction.DOWN ? this.getOutputSlots() : this.getInputSlots();
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag);
+        return tag;
     }
 
     @Override
@@ -147,8 +170,32 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public void tick() {
-        if (this.cooldown > 0) this.cooldown--;
-        if (this.cooldown < 0) sendUpdate(false);
+        if (this.cooldown > 0) {
+            this.cooldown--;
+        }
+        if (this.cooldown < 0) {
+            sendUpdate(false);
+        }
+    }
+
+    public int calcProcessTime(int processTime) {
+        return switch (this.machineTier) {
+            case SIMPLE -> processTime;
+            case BASIC -> processTime / 2;
+            case REINFORCED -> processTime / 4;
+            case FACTORY -> processTime / 8;
+            case OVERKILL -> processTime / 16;
+        };
+    }
+
+    public int calcBurnTime(int burnTime) {
+        return switch (this.machineTier) {
+            case SIMPLE -> processTime;
+            case BASIC -> processTime * 2;
+            case REINFORCED -> processTime * 4;
+            case FACTORY -> processTime * 8;
+            case OVERKILL -> processTime * 16;
+        };
     }
 
     public void sendUpdate(boolean lit) {
@@ -165,7 +212,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> this.energyStorage);
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> @NotNull LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (!this.remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandlers[side.get3DDataValue()].cast();
         } else if (cap == CapabilityEnergy.ENERGY) {

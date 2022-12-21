@@ -81,7 +81,7 @@ public class TierUpgradeItem extends UpgradeItem {
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             for (MachineTier tier : MachineTier.values()) {
-                if (tier != MachineTier.LEADSTONE) {
+                if (tier != MachineTier.SIMPLE) {
                     ItemStack stack = new ItemStack(this);
                     CompoundTag tag = new CompoundTag();
 

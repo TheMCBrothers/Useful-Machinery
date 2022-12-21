@@ -23,11 +23,11 @@ public class CreativePowerCellBlock extends BaseEntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.CREATIVE_POWER_CELL.create(pos, state);
+        return MachineryBlockEntities.CREATIVE_POWER_CELL.get().create(pos, state);
     }
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, MachineryBlockEntities.CREATIVE_POWER_CELL, CreativePowerCellBlockEntity::serverTick);
+        return level.isClientSide ? null : createTickerHelper(type, MachineryBlockEntities.CREATIVE_POWER_CELL.get(), CreativePowerCellBlockEntity::serverTick);
     }
 }

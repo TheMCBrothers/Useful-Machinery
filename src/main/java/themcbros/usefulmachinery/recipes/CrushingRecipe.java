@@ -42,7 +42,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(MachineryBlocks.CRUSHER);
+        return new ItemStack(MachineryBlocks.CRUSHER.get());
     }
 
     public int getCrushTime() {
@@ -92,12 +92,12 @@ public class CrushingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return MachineryRecipeSerializers.CRUSHING;
+        return MachineryRecipeSerializers.CRUSHING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return MachineryRecipeTypes.CRUSHING;
+        return MachineryRecipeTypes.CRUSHING.get();
     }
 
     public ItemStack getSecondRecipeOutput() {

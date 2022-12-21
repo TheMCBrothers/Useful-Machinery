@@ -15,7 +15,7 @@ import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
 import themcbros.usefulmachinery.blockentity.extension.SimpleCompactor;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.init.MachineryContainers;
+import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
@@ -23,11 +23,11 @@ public class CompactorContainer extends MachineContainer {
     private final Level level;
 
     public CompactorContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new CompactorBlockEntity(BlockPos.ZERO, MachineryBlocks.COMPACTOR.defaultBlockState()), new SimpleContainerData(8));
+        this(id, playerInventory, new CompactorBlockEntity(BlockPos.ZERO, MachineryBlocks.COMPACTOR.get().defaultBlockState()), new SimpleContainerData(8));
     }
 
     public CompactorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(MachineryContainers.COMPACTOR, id, playerInventory, tileEntity, fields);
+        super(MachineryMenus.COMPACTOR.get(), id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
@@ -101,7 +101,7 @@ public class CompactorContainer extends MachineContainer {
     }
 
     protected boolean canProcess(ItemStack stack) {
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING, new SimpleCompactor(this.getCompactorMode(), stack), this.level).map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), new SimpleCompactor(this.getCompactorMode(), stack), this.level).map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
     }
 
     public int getProcessTime() {

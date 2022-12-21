@@ -73,7 +73,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final FluidTank lavaTank;
 
     public LavaGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MachineryBlockEntities.LAVA_GENERATOR, blockPos, blockState, true);
+        super(MachineryBlockEntities.LAVA_GENERATOR.get(), blockPos, blockState, true);
         this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
     }
 
@@ -189,7 +189,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
     private void consumeFuel() {
         FluidStack fluid = this.lavaTank.drain(MB_PER_USE, IFluidHandler.FluidAction.EXECUTE);
-        this.burnTime = TICKS_PER_MB * fluid.getAmount();
+        this.burnTime = calcBurnTime(TICKS_PER_MB * fluid.getAmount());
     }
 
     @Nonnull

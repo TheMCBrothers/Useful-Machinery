@@ -20,24 +20,24 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(CREATIVE_POWER_CELL, cubeAll(Blocks.REDSTONE_BLOCK));
+        simpleBlock(CREATIVE_POWER_CELL.get(), cubeAll(Blocks.REDSTONE_BLOCK));
 
-        horizontalMachineBlock(COAL_GENERATOR);
-        horizontalMachineBlock(COMPACTOR);
-        horizontalMachineBlock(CRUSHER);
-        horizontalMachineBlock(ELECTRIC_SMELTER);
-        horizontalMachineBlock(LAVA_GENERATOR);
+        horizontalMachineBlock(COAL_GENERATOR.get());
+        horizontalMachineBlock(COMPACTOR.get());
+        horizontalMachineBlock(CRUSHER.get());
+        horizontalMachineBlock(ELECTRIC_SMELTER.get());
+        horizontalMachineBlock(LAVA_GENERATOR.get());
 
-        simpleBlockItem(COAL_GENERATOR);
-        simpleBlockItem(COMPACTOR);
-        simpleBlockItem(CRUSHER);
-        simpleBlockItem(ELECTRIC_SMELTER);
-        simpleBlockItem(LAVA_GENERATOR);
-        simpleBlockItem(CREATIVE_POWER_CELL, cubeAll(Blocks.REDSTONE_BLOCK));
+        machineBlockItem(COAL_GENERATOR.get());
+        machineBlockItem(COMPACTOR.get());
+        machineBlockItem(CRUSHER.get());
+        machineBlockItem(ELECTRIC_SMELTER.get());
+        machineBlockItem(LAVA_GENERATOR.get());
+        simpleBlockItem(CREATIVE_POWER_CELL.get(), cubeAll(Blocks.REDSTONE_BLOCK));
     }
 
     private void horizontalMachineBlock(Block block) {
-        ModelFile model = models().orientable(block.getRegistryName().getPath(), modLoc("block/machine_side"), modLoc("block/" + block.getRegistryName().getPath() + "_front"), modLoc("block/machine_top"));
+        ModelFile model = models().orientable(Objects.requireNonNull(block.getRegistryName()).getPath(), modLoc("block/machine_side"), modLoc("block/" + block.getRegistryName().getPath() + "_front"), modLoc("block/machine_top"));
         ModelFile modelOn = models().orientable(block.getRegistryName().getPath() + "_on", modLoc("block/machine_side"), modLoc("block/" + block.getRegistryName().getPath() + "_front_on"), modLoc("block/machine_top"));
 
         horizontalBlock(block, state -> state.getValue(BlockStateProperties.LIT) ? modelOn : model);
@@ -45,5 +45,9 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
 
     private void simpleBlockItem(Block block) {
         simpleBlockItem(block, models().getExistingFile(modLoc("block/" + Objects.requireNonNull(block.getRegistryName()).getPath())));
+    }
+
+    private void machineBlockItem(Block block) {
+        itemModels().getBuilder(Objects.requireNonNull(block.getRegistryName()).getPath());
     }
 }

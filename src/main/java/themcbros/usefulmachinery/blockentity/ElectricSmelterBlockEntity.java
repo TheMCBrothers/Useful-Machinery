@@ -52,7 +52,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     };
 
     public ElectricSmelterBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MachineryBlockEntities.ELECTRIC_SMELTER, blockPos, blockState, false);
+        super(MachineryBlockEntities.ELECTRIC_SMELTER.get(), blockPos, blockState, false);
     }
 
     @Override
@@ -151,10 +151,12 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private int getProcessTime() {
-        if (this.level == null) return 200;
-        return this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level)
+        if (this.level == null) {
+            return 200;
+        }
+        return calcProcessTime(this.level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, this, this.level)
                 .map(AbstractCookingRecipe::getCookingTime).orElse(this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level)
-                        .map(AbstractCookingRecipe::getCookingTime).orElse(200));
+                        .map(AbstractCookingRecipe::getCookingTime).orElse(200)));
     }
 
     private boolean canProcess(@Nullable AbstractCookingRecipe recipeIn) {

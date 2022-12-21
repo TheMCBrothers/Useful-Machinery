@@ -26,15 +26,16 @@ import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public abstract class AbstractMachineBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     @Nullable
-    private final ResourceLocation interactStat;
+    private final Supplier<ResourceLocation> interactStat;
 
-    public AbstractMachineBlock(Properties properties, @Nullable ResourceLocation interactStat) {
+    public AbstractMachineBlock(Properties properties, @Nullable Supplier<ResourceLocation> interactStat) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.FALSE));
         this.interactStat = interactStat;
@@ -82,9 +83,11 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
 
         if (worldIn.getBlockEntity(pos) instanceof MenuProvider blockEntity && player instanceof ServerPlayer) {
             player.openMenu(blockEntity);
-            if (interactStat != null) player.awardStat(interactStat);
+            if (interactStat != null) player.awardStat(interactStat.get());
         }
 
         return InteractionResult.SUCCESS;
     }
+
+
 }

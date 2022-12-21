@@ -8,11 +8,11 @@ import java.util.Comparator;
 import java.util.Locale;
 
 public enum MachineTier implements StringRepresentable {
-    LEADSTONE(0x39516d),
-    HARDENED(0xa6a6a6),
+    SIMPLE(0x39516d),
+    BASIC(0xa6a6a6),
     REINFORCED(0x908928),
-    SIGNALUM(0xff5900),
-    RESONANT(0x008571);
+    FACTORY(0xe53600),
+    OVERKILL(0x005554);
 
     private static final MachineTier[] VALUES = values();
     private static final MachineTier[] BY_INDEX = Arrays.stream(VALUES).sorted(Comparator.comparingInt(Enum::ordinal)).toArray(MachineTier[]::new);

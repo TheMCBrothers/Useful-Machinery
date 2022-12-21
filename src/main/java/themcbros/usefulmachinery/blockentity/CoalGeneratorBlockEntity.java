@@ -57,7 +57,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private int burnTime, burnTimeTotal;
 
     public CoalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MachineryBlockEntities.COAL_GENERATOR, blockPos, blockState, true);
+        super(MachineryBlockEntities.COAL_GENERATOR.get(), blockPos, blockState, true);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
             } else if (this.redstoneMode.canRun(this)) {
                 ItemStack generatorStack = this.stacks.get(0);
                 if (AbstractFurnaceBlockEntity.isFuel(generatorStack)) {
-                    int time = ForgeHooks.getBurnTime(generatorStack, null);
+                    int time = calcBurnTime(ForgeHooks.getBurnTime(generatorStack, null));
 
                     this.burnTime = time;
                     this.burnTimeTotal = time;

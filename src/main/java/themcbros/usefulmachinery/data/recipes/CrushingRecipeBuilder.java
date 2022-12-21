@@ -143,7 +143,7 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
         @Nonnull
         @Override
         public RecipeSerializer<?> getType() {
-            return MachineryRecipeSerializers.CRUSHING;
+            return MachineryRecipeSerializers.CRUSHING.get();
         }
 
         @Nullable

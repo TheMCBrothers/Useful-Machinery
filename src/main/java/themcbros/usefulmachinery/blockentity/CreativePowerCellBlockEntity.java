@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public class CreativePowerCellBlockEntity extends BlockEntity implements IEnergyStorage {
     public CreativePowerCellBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MachineryBlockEntities.CREATIVE_POWER_CELL, blockPos, blockState);
+        super(MachineryBlockEntities.CREATIVE_POWER_CELL.get(), blockPos, blockState);
     }
 
     @Override

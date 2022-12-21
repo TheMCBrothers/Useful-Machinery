@@ -13,6 +13,6 @@ public class CoalGeneratorBlock extends AbstractMachineBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.COAL_GENERATOR.create(pos, state);
+        return MachineryBlockEntities.COAL_GENERATOR.get().create(pos, state);
     }
 }

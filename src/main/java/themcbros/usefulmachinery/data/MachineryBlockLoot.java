@@ -13,6 +13,8 @@ import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import themcbros.usefulmachinery.init.Registration;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -22,17 +24,11 @@ import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 public class MachineryBlockLoot extends BlockLoot {
     @Override
     protected void addTables() {
-        this.add(COAL_GENERATOR, MachineryBlockLoot::simpleMachineBlock);
-        this.add(COMPACTOR, MachineryBlockLoot::simpleMachineBlock);
-        this.add(CRUSHER, MachineryBlockLoot::simpleMachineBlock);
-        this.add(ELECTRIC_SMELTER, MachineryBlockLoot::simpleMachineBlock);
-        this.add(LAVA_GENERATOR, MachineryBlockLoot::simpleMachineBlock);
-    }
-
-    @Nonnull
-    @Override
-    protected Iterable<Block> getKnownBlocks() {
-        return BLOCKS;
+        this.add(COAL_GENERATOR.get(), MachineryBlockLoot::simpleMachineBlock);
+        this.add(COMPACTOR.get(), MachineryBlockLoot::simpleMachineBlock);
+        this.add(CRUSHER.get(), MachineryBlockLoot::simpleMachineBlock);
+        this.add(ELECTRIC_SMELTER.get(), MachineryBlockLoot::simpleMachineBlock);
+        this.add(LAVA_GENERATOR.get(), MachineryBlockLoot::simpleMachineBlock);
     }
 
     private static LootTable.Builder simpleMachineBlock(Block block) {
@@ -48,5 +44,11 @@ public class MachineryBlockLoot extends BlockLoot {
                                         .copy("Items", "BlockEntityTag.Items")
                                         .copy("RedstoneMode", "BlockEntityTag.RedstoneMode"))
                         ));
+    }
+
+    @Override
+    @Nonnull
+    protected Iterable<Block> getKnownBlocks() {
+        return Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).toList();
     }
 }

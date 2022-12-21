@@ -15,6 +15,6 @@ public class CrusherBlock extends AbstractMachineBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MachineryBlockEntities.CRUSHER.create(pos, state);
+        return MachineryBlockEntities.CRUSHER.get().create(pos, state);
     }
 }

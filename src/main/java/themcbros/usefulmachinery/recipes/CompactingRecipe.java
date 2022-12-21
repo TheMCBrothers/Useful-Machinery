@@ -8,11 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import themcbros.usefulmachinery.blockentity.extension.Compactor;
-import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryRecipeSerializers;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
@@ -59,7 +63,7 @@ public class CompactingRecipe implements Recipe<Compactor> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(MachineryItems.COMPACTOR);
+        return new ItemStack(MachineryBlocks.COMPACTOR.get());
     }
 
     @Override
@@ -69,12 +73,12 @@ public class CompactingRecipe implements Recipe<Compactor> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return MachineryRecipeSerializers.COMPACTING;
+        return MachineryRecipeSerializers.COMPACTING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return MachineryRecipeTypes.COMPACTING;
+        return MachineryRecipeTypes.COMPACTING.get();
     }
 
     public int getProcessTime() {
