@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/gold",
-    "count": 9
+    "count": 9,
+    "tag": "forge:ingots/gold"
   },
   "mode": "block",
   "processingtime": 250,

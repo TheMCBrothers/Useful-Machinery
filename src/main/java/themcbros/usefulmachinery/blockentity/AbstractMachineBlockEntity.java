@@ -14,10 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -213,9 +212,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (!this.remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && side != null && cap == ForgeCapabilities.ITEM_HANDLER) {
             return itemHandlers[side.get3DDataValue()].cast();
-        } else if (cap == CapabilityEnergy.ENERGY) {
+        } else if (cap == ForgeCapabilities.ENERGY) {
             return energyHandler.cast();
         }
         return super.getCapability(cap, side);
@@ -234,7 +233,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(1);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
 
             if (energy != null && energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
@@ -247,7 +246,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(slotIndex);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energy != null && energy.canExtract()) {
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
 

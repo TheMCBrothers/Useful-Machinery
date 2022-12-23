@@ -5,11 +5,11 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "minecraft:raw_gold",
-    "count": 2
+    "count": 2,
+    "item": "minecraft:raw_gold"
   },
   "secondary": {
-    "item": "minecraft:raw_copper",
-    "chance": 0.4
+    "chance": 0.4,
+    "item": "minecraft:raw_copper"
   }
 }

@@ -5,11 +5,11 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "minecraft:raw_iron",
-    "count": 2
+    "count": 2,
+    "item": "minecraft:raw_iron"
   },
   "secondary": {
-    "item": "usefulfoundation:raw_nickel",
-    "chance": 0.1
+    "chance": 0.1,
+    "item": "usefulfoundation:raw_nickel"
   }
 }

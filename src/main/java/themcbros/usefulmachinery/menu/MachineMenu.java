@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.container;
+package themcbros.usefulmachinery.menu;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -6,17 +6,18 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nullable;
 
-public class MachineContainer extends AbstractContainerMenu {
+public class MachineMenu extends AbstractContainerMenu {
     public AbstractMachineBlockEntity abstractMachineBlockEntity;
     private final RedstoneMode mode = RedstoneMode.IGNORED;
     protected ContainerData fields;
 
-    MachineContainer(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
+    MachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(type, id);
         this.abstractMachineBlockEntity = tileEntity;
 
@@ -35,6 +36,11 @@ public class MachineContainer extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
+    }
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int p_38942_) {
+        return null;
     }
 
     @Override

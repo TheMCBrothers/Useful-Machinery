@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/signalum",
-    "count": 4
+    "count": 4,
+    "tag": "forge:ingots/signalum"
   },
   "mode": "gear",
   "processingtime": 200,

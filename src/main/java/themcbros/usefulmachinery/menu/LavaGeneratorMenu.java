@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.container;
+package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -11,26 +11,26 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.blockentity.LavaGeneratorBlockEntity;
-import themcbros.usefulmachinery.container.slot.EnergySlot;
-import themcbros.usefulmachinery.container.slot.FluidItemSlot;
-import themcbros.usefulmachinery.container.slot.OutputSlot;
+import themcbros.usefulmachinery.menu.slot.EnergySlot;
+import themcbros.usefulmachinery.menu.slot.FluidItemSlot;
+import themcbros.usefulmachinery.menu.slot.OutputSlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
 
 import javax.annotation.Nonnull;
 
-public class LavaGeneratorContainer extends MachineContainer {
-    public LavaGeneratorContainer(int id, Inventory playerInventory) {
+public class LavaGeneratorMenu extends MachineMenu {
+    public LavaGeneratorMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new LavaGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(9));
     }
 
-    public LavaGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
+    public LavaGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(MachineryMenus.LAVA_GENERATOR.get(), id, playerInventory, tileEntity, fields);
 
         this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA)));
@@ -85,7 +85,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     }
 
     private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::canReceive).orElse(false);
+        return !itemstack1.isEmpty() && itemstack1.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::canReceive).orElse(false);
     }
 
     public int getBurnTimeScaled() {
@@ -129,13 +129,13 @@ public class LavaGeneratorContainer extends MachineContainer {
 
             @Override
             public int getTankCapacity(int tank) {
-                return LavaGeneratorContainer.this.getTankCapacity();
+                return LavaGeneratorMenu.this.getTankCapacity();
             }
 
             @Nonnull
             @Override
             public FluidStack getFluidInTank(int tank) {
-                return LavaGeneratorContainer.this.getTankStack();
+                return LavaGeneratorMenu.this.getTankStack();
             }
 
             @Override

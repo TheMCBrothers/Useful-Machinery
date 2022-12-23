@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/electrum",
-    "count": 9
+    "count": 9,
+    "tag": "forge:ingots/electrum"
   },
   "mode": "block",
   "processingtime": 250,

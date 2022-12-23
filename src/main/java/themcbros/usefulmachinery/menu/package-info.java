@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package themcbros.usefulmachinery.container;
+package themcbros.usefulmachinery.menu;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

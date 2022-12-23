@@ -5,7 +5,7 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:signalum_dust",
-    "count": 1
+    "count": 1,
+    "item": "usefulfoundation:signalum_dust"
   }
 }

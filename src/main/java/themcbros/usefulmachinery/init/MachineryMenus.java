@@ -2,20 +2,20 @@ package themcbros.usefulmachinery.init;
 
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.registries.RegistryObject;
-import themcbros.usefulmachinery.container.CoalGeneratorContainer;
-import themcbros.usefulmachinery.container.CompactorContainer;
-import themcbros.usefulmachinery.container.CrusherContainer;
-import themcbros.usefulmachinery.container.ElectricSmelterContainer;
-import themcbros.usefulmachinery.container.LavaGeneratorContainer;
+import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
+import themcbros.usefulmachinery.menu.CompactorMenu;
+import themcbros.usefulmachinery.menu.CrusherMenu;
+import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
+import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 
 import static themcbros.usefulmachinery.init.Registration.MENUS;
 
 public class MachineryMenus {
-    public static final RegistryObject<MenuType<CoalGeneratorContainer>> COAL_GENERATOR = MENUS.register("coal_generator", () -> new MenuType<>(CoalGeneratorContainer::new));
-    public static final RegistryObject<MenuType<LavaGeneratorContainer>> LAVA_GENERATOR = MENUS.register("lava_generator", () -> new MenuType<>(LavaGeneratorContainer::new));
-    public static final RegistryObject<MenuType<CrusherContainer>> CRUSHER = MENUS.register("crusher", () -> new MenuType<>(CrusherContainer::new));
-    public static final RegistryObject<MenuType<ElectricSmelterContainer>> ELECTRIC_SMELTER = MENUS.register("electric_smelter", () -> new MenuType<>(ElectricSmelterContainer::new));
-    public static final RegistryObject<MenuType<CompactorContainer>> COMPACTOR = MENUS.register("compactor", () -> new MenuType<>(CompactorContainer::new));
+    public static final RegistryObject<MenuType<CoalGeneratorMenu>> COAL_GENERATOR = MENUS.register("coal_generator", () -> new MenuType<>(CoalGeneratorMenu::new));
+    public static final RegistryObject<MenuType<LavaGeneratorMenu>> LAVA_GENERATOR = MENUS.register("lava_generator", () -> new MenuType<>(LavaGeneratorMenu::new));
+    public static final RegistryObject<MenuType<CrusherMenu>> CRUSHER = MENUS.register("crusher", () -> new MenuType<>(CrusherMenu::new));
+    public static final RegistryObject<MenuType<ElectricSmelterMenu>> ELECTRIC_SMELTER = MENUS.register("electric_smelter", () -> new MenuType<>(ElectricSmelterMenu::new));
+    public static final RegistryObject<MenuType<CompactorMenu>> COMPACTOR = MENUS.register("compactor", () -> new MenuType<>(CompactorMenu::new));
 
     protected static void init() {
     }

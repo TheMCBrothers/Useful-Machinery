@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/lead",
-    "count": 4
+    "count": 4,
+    "tag": "forge:ingots/lead"
   },
   "mode": "gear",
   "processingtime": 200,

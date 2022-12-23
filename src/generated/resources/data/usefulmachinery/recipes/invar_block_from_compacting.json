@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/invar",
-    "count": 9
+    "count": 9,
+    "tag": "forge:ingots/invar"
   },
   "mode": "block",
   "processingtime": 250,

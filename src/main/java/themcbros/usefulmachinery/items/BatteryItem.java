@@ -10,8 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
 import themcbros.usefulmachinery.caps.EnergyConversionStorage;
 import themcbros.usefulmachinery.energy.IEnergyContainerItem;
@@ -31,7 +31,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
+        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), ForgeCapabilities.ENERGY, null);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+        if (this.allowedIn(group)) {
             ItemStack itemStack = new ItemStack(this);
             CompoundTag tag = new CompoundTag();
 

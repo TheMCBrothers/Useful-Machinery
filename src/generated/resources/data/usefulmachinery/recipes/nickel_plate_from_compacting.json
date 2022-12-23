@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/nickel",
-    "count": 1
+    "count": 1,
+    "tag": "forge:ingots/nickel"
   },
   "mode": "plate",
   "processingtime": 200,

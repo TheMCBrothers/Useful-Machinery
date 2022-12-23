@@ -2,7 +2,6 @@ package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -11,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import themcbros.usefulmachinery.container.ElectricSmelterContainer;
+import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
@@ -89,13 +88,13 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("container.usefulmachinery.electric_smelter");
+        return Component.translatable("container.usefulmachinery.electric_smelter");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new ElectricSmelterContainer(id, playerInventory, this, this.fields);
+        return new ElectricSmelterMenu(id, playerInventory, this, this.fields);
     }
 
     private boolean isActive() {

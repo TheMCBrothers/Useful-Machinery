@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/silver",
-    "count": 4
+    "count": 4,
+    "tag": "forge:ingots/silver"
   },
   "mode": "gear",
   "processingtime": 200,

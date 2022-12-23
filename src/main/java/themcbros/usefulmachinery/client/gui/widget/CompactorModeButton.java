@@ -3,20 +3,18 @@ package themcbros.usefulmachinery.client.gui.widget;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import themcbros.usefulmachinery.container.CompactorContainer;
+import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.machine.CompactorMode;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.components.Button.OnPress;
-
 public class CompactorModeButton extends Button {
-    private final CompactorContainer container;
+    private final CompactorMenu container;
 
-    public CompactorModeButton(CompactorContainer container, int x, int y, int width, int height, OnPress onPress) {
-        super(x, y, width, height, TextComponent.EMPTY, button -> {
+    public CompactorModeButton(CompactorMenu container, int x, int y, int width, int height, OnPress onPress) {
+        super(x, y, width, height, Component.empty(), button -> {
             ((CompactorModeButton) button).cycleMode();
             onPress.onPress(button);
         });

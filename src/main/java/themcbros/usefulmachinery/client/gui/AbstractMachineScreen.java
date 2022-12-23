@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
 import themcbros.usefulmachinery.client.gui.widget.RedstoneModeButton;
-import themcbros.usefulmachinery.container.MachineContainer;
+import themcbros.usefulmachinery.menu.MachineMenu;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.networking.Networking;
 import themcbros.usefulmachinery.networking.SetRedstoneModePacket;
@@ -15,7 +15,7 @@ import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractMachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T> {
+public abstract class AbstractMachineScreen<T extends MachineMenu> extends AbstractContainerScreen<T> {
     protected EnergyBar energyBar = null;
 
     AbstractMachineScreen(T screenContainer, Inventory inv, Component titleIn) {

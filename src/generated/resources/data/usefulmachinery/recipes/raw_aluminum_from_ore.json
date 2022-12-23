@@ -5,7 +5,7 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:raw_aluminum",
-    "count": 2
+    "count": 2,
+    "item": "usefulfoundation:raw_aluminum"
   }
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
-import themcbros.usefulmachinery.container.CoalGeneratorContainer;
+import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.TextUtils;
@@ -100,7 +100,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CoalGeneratorContainer(id, playerInventory, this, this.fields);
+        return new CoalGeneratorMenu(id, playerInventory, this, this.fields);
     }
 
     @Override

@@ -8,16 +8,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.CrusherContainer;
+import themcbros.usefulmachinery.menu.CrusherMenu;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class CrusherScreen extends AbstractMachineScreen<CrusherContainer> {
+public class CrusherScreen extends AbstractMachineScreen<CrusherMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/crusher.png");
 
-    public CrusherScreen(CrusherContainer screenContainer, Inventory inv, Component titleIn) {
+    public CrusherScreen(CrusherMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.energyBar = new EnergyBar(155, 17, 10, 50);
     }

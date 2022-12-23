@@ -13,13 +13,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import themcbros.usefulmachinery.container.MachineContainer;
+import net.minecraftforge.fluids.FluidType;
+import themcbros.usefulmachinery.menu.MachineMenu;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractMachineFluidScreen<T extends MachineContainer> extends AbstractMachineScreen<T> {
+public abstract class AbstractMachineFluidScreen<T extends MachineMenu> extends AbstractMachineScreen<T> {
     private static final int DEFAULT_TANK_WIDTH = 10;
     private static final int DEFAULT_TANK_HEIGHT = 50;
 
@@ -50,8 +50,8 @@ public abstract class AbstractMachineFluidScreen<T extends MachineContainer> ext
         }
 
         TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
-        FluidAttributes attributes = fluid.getAttributes();
-        int fluidColor = attributes.getColor(fluidStack);
+        FluidType attributes = fluid.getFluidType();
+        int fluidColor = attributes.getTemperature(fluidStack);
 
         int amount = fluidStack.getAmount();
         int scaledAmount = (amount * height) / capacityMb;
@@ -98,8 +98,8 @@ public abstract class AbstractMachineFluidScreen<T extends MachineContainer> ext
     private static TextureAtlasSprite getStillFluidSprite(FluidStack fluidStack) {
         Minecraft minecraft = Minecraft.getInstance();
         Fluid fluid = fluidStack.getFluid();
-        FluidAttributes attributes = fluid.getAttributes();
-        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
+        FluidType attributes = fluid.getFluidType();
+        ResourceLocation fluidStill = ResourceLocation.tryParse(attributes.getDescriptionId(fluidStack));
         return minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(fluidStill);
     }
 

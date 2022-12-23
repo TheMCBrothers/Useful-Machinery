@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/aluminum",
-    "count": 4
+    "count": 4,
+    "tag": "forge:ingots/aluminum"
   },
   "mode": "gear",
   "processingtime": 200,

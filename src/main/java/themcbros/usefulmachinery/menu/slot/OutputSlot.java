@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.container.slot;
+package themcbros.usefulmachinery.menu.slot;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;

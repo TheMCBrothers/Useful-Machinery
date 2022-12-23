@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.CompactorModeButton;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.CompactorContainer;
+import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.networking.Networking;
 import themcbros.usefulmachinery.networking.SetCompactorModePacket;
@@ -19,10 +19,10 @@ import themcbros.usefulmachinery.util.TextUtils;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class CompactorScreen extends AbstractMachineScreen<CompactorContainer> {
+public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
-    public CompactorScreen(CompactorContainer screenContainer, Inventory inv, Component titleIn) {
+    public CompactorScreen(CompactorMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.energyBar = new EnergyBar(155, 17, 10, 50);
     }

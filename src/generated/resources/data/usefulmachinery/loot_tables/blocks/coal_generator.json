@@ -2,8 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
@@ -13,45 +17,41 @@
               "source": "block_entity"
             },
             {
-              "function": "minecraft:set_contents",
               "type": "usefulmachinery:coal_generator",
               "entries": [
                 {
                   "type": "minecraft:dynamic",
                   "name": "minecraft:contents"
                 }
-              ]
+              ],
+              "function": "minecraft:set_contents"
             },
             {
               "function": "minecraft:copy_nbt",
-              "source": "block_entity",
               "ops": [
                 {
+                  "op": "replace",
                   "source": "EnergyStored",
-                  "target": "BlockEntityTag.EnergyStored",
-                  "op": "replace"
+                  "target": "BlockEntityTag.EnergyStored"
                 },
                 {
+                  "op": "replace",
                   "source": "Items",
-                  "target": "BlockEntityTag.Items",
-                  "op": "replace"
+                  "target": "BlockEntityTag.Items"
                 },
                 {
+                  "op": "replace",
                   "source": "RedstoneMode",
-                  "target": "BlockEntityTag.RedstoneMode",
-                  "op": "replace"
+                  "target": "BlockEntityTag.RedstoneMode"
                 }
-              ]
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "usefulmachinery:coal_generator"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "rolls": 1.0
     }
   ]
 }

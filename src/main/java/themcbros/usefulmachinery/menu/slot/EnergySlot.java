@@ -1,9 +1,9 @@
-package themcbros.usefulmachinery.container.slot;
+package themcbros.usefulmachinery.menu.slot;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class EnergySlot extends Slot {
@@ -13,7 +13,7 @@ public class EnergySlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return !stack.isEmpty() && stack.getCapability(CapabilityEnergy.ENERGY).isPresent() &&
-                stack.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::canReceive).orElse(false);
+        return !stack.isEmpty() && stack.getCapability(ForgeCapabilities.ENERGY).isPresent() &&
+                stack.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::canReceive).orElse(false);
     }
 }

@@ -5,7 +5,7 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:aluminum_dust",
-    "count": 1
+    "count": 1,
+    "item": "usefulfoundation:aluminum_dust"
   }
 }

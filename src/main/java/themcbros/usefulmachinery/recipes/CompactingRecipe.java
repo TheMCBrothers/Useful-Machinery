@@ -98,7 +98,9 @@ public class CompactingRecipe implements Recipe<Compactor> {
         return NonNullList.withSize(1, this.ingredient);
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CompactingRecipe> {
+
+
+    public static class Serializer implements RecipeSerializer<CompactingRecipe> {
         @Override
         public CompactingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             String s = GsonHelper.getAsString(json, "group", "");

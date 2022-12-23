@@ -8,16 +8,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.CoalGeneratorContainer;
+import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorContainer> {
+public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/coal_generator.png");
 
-    public CoalGeneratorScreen(CoalGeneratorContainer screenContainer, Inventory inv, Component titleIn) {
+    public CoalGeneratorScreen(CoalGeneratorMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.energyBar = new EnergyBar(155, 17, 10, 50);
     }

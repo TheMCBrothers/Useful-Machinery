@@ -4,8 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
 import themcbros.usefulmachinery.caps.EnergyConversionStorage;
 import themcbros.usefulmachinery.energy.IEnergyContainerItem;
@@ -20,7 +20,7 @@ public class CreativePowerCellItem extends BlockItem implements IEnergyContainer
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
+        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), ForgeCapabilities.ENERGY, null);
     }
 
     @Override

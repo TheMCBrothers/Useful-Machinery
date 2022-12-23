@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.container;
+package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -8,20 +8,20 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
-import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
+import themcbros.usefulmachinery.menu.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
-import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
-public class CoalGeneratorContainer extends MachineContainer {
-    public CoalGeneratorContainer(int id, Inventory playerInventory) {
+public class CoalGeneratorMenu extends MachineMenu {
+    public CoalGeneratorMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new CoalGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(7));
     }
 
-    public CoalGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
+    public CoalGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(MachineryMenus.COAL_GENERATOR.get(), id, playerInventory, tileEntity, fields);
 
         this.addSlot(new Slot(tileEntity, 0, 80, 33));
@@ -35,7 +35,7 @@ public class CoalGeneratorContainer extends MachineContainer {
         int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index != 0) {
@@ -75,7 +75,7 @@ public class CoalGeneratorContainer extends MachineContainer {
     }
 
     private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY)
+        return !itemstack1.isEmpty() && itemstack1.getCapability(ForgeCapabilities.ENERGY)
                 .map(IEnergyStorage::canExtract).orElse(false);
     }
 

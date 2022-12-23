@@ -37,7 +37,7 @@ public class MachineryBlockLoot extends BlockLoot {
                         .setRolls(ConstantValue.exactly(1F))
                         .add(LootItem.lootTableItem(block)
                                 .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
-                                .apply(SetContainerContents.setContents(Objects.requireNonNull(ForgeRegistries.BLOCK_ENTITIES.getValue(block.getRegistryName())))
+                                .apply(SetContainerContents.setContents(Objects.requireNonNull(ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(ForgeRegistries.BLOCKS.getKey(block))))
                                         .withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("contents"))))
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                         .copy("EnergyStored", "BlockEntityTag.EnergyStored")

@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.machine.MachineTier;
 
 import javax.annotation.Nonnull;
 
@@ -41,11 +41,11 @@ public class TierUpgradeItem extends UpgradeItem {
                     abstractMachineBlockEntity.machineTier = itemTier;
                     abstractMachineBlockEntity.setChanged();
                     if (playerEntity != null)
-                        playerEntity.displayClientMessage(new TextComponent("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
+                        playerEntity.displayClientMessage(Component.translatable("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
                     return InteractionResult.SUCCESS;
                 }
             } else if (playerEntity != null) {
-                playerEntity.displayClientMessage(new TextComponent("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
+                playerEntity.displayClientMessage(Component.translatable("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
             }
         }
 
@@ -79,7 +79,7 @@ public class TierUpgradeItem extends UpgradeItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+        if (this.allowedIn(group)) {
             for (MachineTier tier : MachineTier.values()) {
                 if (tier != MachineTier.SIMPLE) {
                     ItemStack stack = new ItemStack(this);

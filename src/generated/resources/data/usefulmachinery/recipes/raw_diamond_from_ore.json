@@ -5,7 +5,7 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "minecraft:diamond",
-    "count": 2
+    "count": 2,
+    "item": "minecraft:diamond"
   }
 }

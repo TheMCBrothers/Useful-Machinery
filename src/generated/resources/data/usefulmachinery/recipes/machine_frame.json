@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X#X",
-    "#R#",
-    "X#X"
-  ],
   "key": {
-    "X": {
-      "tag": "forge:ingots/tin"
-    },
     "#": {
       "tag": "forge:glass"
     },
     "R": {
       "tag": "forge:gears/iron"
+    },
+    "X": {
+      "tag": "forge:ingots/tin"
     }
   },
+  "pattern": [
+    "X#X",
+    "#R#",
+    "X#X"
+  ],
   "result": {
     "item": "usefulmachinery:machine_frame"
   }

@@ -19,10 +19,11 @@ import themcbros.usefulmachinery.client.gui.CrusherScreen;
 import themcbros.usefulmachinery.client.gui.ElectricSmelterScreen;
 import themcbros.usefulmachinery.compat.jei.categories.CompactingCategory;
 import themcbros.usefulmachinery.compat.jei.categories.CrushingCategory;
-import themcbros.usefulmachinery.container.CoalGeneratorContainer;
-import themcbros.usefulmachinery.container.CompactorContainer;
-import themcbros.usefulmachinery.container.CrusherContainer;
-import themcbros.usefulmachinery.container.ElectricSmelterContainer;
+import themcbros.usefulmachinery.init.MachineryMenus;
+import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
+import themcbros.usefulmachinery.menu.CompactorMenu;
+import themcbros.usefulmachinery.menu.CrusherMenu;
+import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
@@ -57,11 +58,11 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(CoalGeneratorContainer.class, RecipeTypes.FUELING, 0, 1, 2, 36);
-        registration.addRecipeTransferHandler(CrusherContainer.class, MachineryJeiRecipeTypes.CRUSHING, 0, 1, 4, 36);
-        registration.addRecipeTransferHandler(ElectricSmelterContainer.class, RecipeTypes.SMELTING, 0, 1, 3, 36);
-        registration.addRecipeTransferHandler(ElectricSmelterContainer.class, RecipeTypes.BLASTING, 0, 1, 3, 36);
-        registration.addRecipeTransferHandler(CompactorContainer.class, MachineryJeiRecipeTypes.COMPACTING, 0, 1, 3, 36);
+        registration.addRecipeTransferHandler(CoalGeneratorMenu.class, MachineryMenus.COAL_GENERATOR.get(), RecipeTypes.FUELING, 0, 1, 2, 36);
+        registration.addRecipeTransferHandler(CrusherMenu.class, MachineryMenus.CRUSHER.get(), MachineryJeiRecipeTypes.CRUSHING, 0, 1, 4, 36);
+        registration.addRecipeTransferHandler(ElectricSmelterMenu.class, MachineryMenus.ELECTRIC_SMELTER.get(), RecipeTypes.SMELTING, 0, 1, 3, 36);
+        registration.addRecipeTransferHandler(ElectricSmelterMenu.class, MachineryMenus.ELECTRIC_SMELTER.get(), RecipeTypes.BLASTING, 0, 1, 3, 36);
+        registration.addRecipeTransferHandler(CompactorMenu.class, MachineryMenus.COMPACTOR.get(), MachineryJeiRecipeTypes.COMPACTING, 0, 1, 3, 36);
     }
 
     @Override

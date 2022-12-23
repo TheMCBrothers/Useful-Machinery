@@ -2,14 +2,13 @@ package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import themcbros.usefulmachinery.container.CrusherContainer;
+import themcbros.usefulmachinery.menu.CrusherMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
@@ -223,12 +222,12 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("container.usefulmachinery.crusher");
+        return Component.translatable("container.usefulmachinery.crusher");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new CrusherContainer(id, playerInventory, this, this.fields);
+        return new CrusherMenu(id, playerInventory, this, this.fields);
     }
 }

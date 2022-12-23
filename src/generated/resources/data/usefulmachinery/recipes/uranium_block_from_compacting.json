@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/uranium",
-    "count": 9
+    "count": 9,
+    "tag": "forge:ingots/uranium"
   },
   "mode": "block",
   "processingtime": 250,

@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/tin",
-    "count": 4
+    "count": 4,
+    "tag": "forge:ingots/tin"
   },
   "mode": "gear",
   "processingtime": 200,

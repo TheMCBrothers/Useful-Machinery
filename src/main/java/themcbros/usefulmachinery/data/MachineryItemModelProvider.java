@@ -1,9 +1,9 @@
 package themcbros.usefulmachinery.data;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import themcbros.usefulmachinery.UsefulMachinery;
 
 import java.util.Objects;
@@ -20,12 +20,12 @@ public class MachineryItemModelProvider extends ItemModelProvider {
         //Machinery Items
         basicItem(BATTERY.get());
 
-        withExistingParent(Objects.requireNonNull(TIER_UPGRADE.get().getRegistryName()).getPath(), mcLoc("item/generated"))
+        withExistingParent(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(TIER_UPGRADE.get())).getPath(), mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/tier_upgrade_0"))
                 .texture("layer1", modLoc("item/tier_upgrade_1"));
 
-        ResourceLocation machineFrame = MACHINE_FRAME.get().getRegistryName();
-        withExistingParent(Objects.requireNonNull(machineFrame).getPath(), mcLoc("block/cube_all"))
-                .texture("all", modLoc("block/" + machineFrame.getPath()));
+        String machineFrame = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(MACHINE_FRAME.get())).getPath();
+        withExistingParent(machineFrame, mcLoc("block/cube_all"))
+                .texture("all", modLoc("block/" + machineFrame));
     }
 }

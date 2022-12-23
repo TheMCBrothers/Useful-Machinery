@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import themcbros.usefulmachinery.UsefulMachinery;
 
 import java.util.Objects;
@@ -39,20 +40,19 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
     }
 
     private void horizontalMachineBlock(Block block) {
-        ModelFile model = models().orientable(Objects.requireNonNull(block.getRegistryName()).getPath(), modLoc("block/machine_side"), modLoc("block/" + block.getRegistryName().getPath() + "_front"), modLoc("block/machine_top"));
-        ModelFile modelOn = models().orientable(block.getRegistryName().getPath() + "_on", modLoc("block/machine_side"), modLoc("block/" + block.getRegistryName().getPath() + "_front_on"), modLoc("block/machine_top"));
-
+        ModelFile model = models().orientable(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), modLoc("block/machine_side"), modLoc("block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath() + "_front"), modLoc("block/machine_top"));
+        ModelFile modelOn = models().orientable(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath() + "_on", modLoc("block/machine_side"), modLoc("block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath() + "_front_on"), modLoc("block/machine_top"));
         horizontalBlock(block, state -> state.getValue(BlockStateProperties.LIT) ? modelOn : model);
     }
 
     private void simpleBlockItem(Block block) {
-        simpleBlockItem(block, models().getExistingFile(modLoc("block/" + Objects.requireNonNull(block.getRegistryName()).getPath())));
+        simpleBlockItem(block, models().getExistingFile(modLoc(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath())));
     }
 
     private void machineBlockItem(Block block) {
         ModelFile.UncheckedModelFile modelFile = new ModelFile.UncheckedModelFile("builtin/entity");
 
-        itemModels().getBuilder(Objects.requireNonNull(block.getRegistryName()).getPath())
+        itemModels().getBuilder(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath())
                 .parent(modelFile)
                 .transforms()
                 .transform(ItemTransforms.TransformType.GUI).rotation(30, 225, 0).translation(0, 0, 0).scale(0.625F, 0.625F, 0.625F).end()
@@ -62,6 +62,6 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
                 .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(0, 135, 0).translation(0, 0, 0).scale(0.4F, 0.4F, 0.4F).end()
                 .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(0, 135, 0).translation(0, 0, 0).scale(0.4F, 0.4F, 0.4F).end()
                 .end()
-                .guiLight(BlockModel.GuiLight.SIDE);
+                .guiLight(BlockModel.GuiLight.FRONT);
     }
 }

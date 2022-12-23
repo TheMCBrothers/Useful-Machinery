@@ -27,7 +27,7 @@ public class MachineryBlocks {
     public static final RegistryObject<AbstractMachineBlock> LAVA_GENERATOR = register("lava_generator", () -> new LavaGeneratorBlock(Block.Properties.of(Material.METAL).strength(2f).sound(SoundType.METAL).requiresCorrectToolForDrops()), true);
     public static final RegistryObject<AbstractMachineBlock> ELECTRIC_SMELTER = register("electric_smelter", () -> new ElectricSmelterBlock(Block.Properties.of(Material.METAL).strength(2f).sound(SoundType.METAL).requiresCorrectToolForDrops()), true);
     public static final RegistryObject<AbstractMachineBlock> COMPACTOR = register("compactor", () -> new CompactorBlock(Block.Properties.of(Material.METAL).strength(2f).sound(SoundType.METAL).requiresCorrectToolForDrops()), true);
-    public static final RegistryObject<CreativePowerCellBlock> CREATIVE_POWER_CELL = register("creative_power_cell", () -> new CreativePowerCellBlock(Block.Properties.of(Material.DECORATION).strength(.5f).sound(SoundType.METAL).noDrops()), false);
+    public static final RegistryObject<CreativePowerCellBlock> CREATIVE_POWER_CELL = register("creative_power_cell", () -> new CreativePowerCellBlock(Block.Properties.of(Material.DECORATION).strength(.5f).sound(SoundType.METAL).noLootTable()), false);
 
     private static <T extends Block> RegistryObject<T> register(String registryName, Supplier<T> block, boolean isMachine) {
         RegistryObject<T> blockObj = BLOCKS.register(registryName, block);

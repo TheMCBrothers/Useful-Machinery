@@ -14,15 +14,15 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import themcbros.usefulmachinery.container.LavaGeneratorContainer;
+import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.TextUtils;
@@ -109,7 +109,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return !stack.isEmpty() && index == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
+        return !stack.isEmpty() && index == 0 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER)
                 .map(handler -> handler.getFluidInTank(0).getFluid().is(FluidTags.LAVA)).orElse(false);
     }
 
@@ -137,7 +137,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new LavaGeneratorContainer(id, playerInventory, this, this.fields);
+        return new LavaGeneratorMenu(id, playerInventory, this, this.fields);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         final ItemStack bucketStack = this.stacks.get(0);
 
         if (!bucketStack.isEmpty()) {
-            FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidAttributes.BUCKET_VOLUME, null, true);
+            FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidType.BUCKET_VOLUME, null, true);
 
             if (result.isSuccess()) {
                 ItemStack outputSlotStack = this.stacks.get(1);
@@ -195,7 +195,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return LazyOptional.of(() -> this.lavaTank).cast();
         }
         return super.getCapability(cap, side);

@@ -9,19 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.LavaGeneratorContainer;
+import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.List;
 
-public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGeneratorContainer> {
+public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGeneratorMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
 
     private final Rectangle lavaTankRect = new Rectangle(11, 17, 10, 50);
 
-    public LavaGeneratorScreen(LavaGeneratorContainer screenContainer, Inventory inv, Component titleIn) {
+    public LavaGeneratorScreen(LavaGeneratorMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn, screenContainer.getTankCapacity());
         this.energyBar = new EnergyBar(155, 17, 10, 50);
     }

@@ -3,16 +3,16 @@ package themcbros.usefulmachinery.client.gui.widget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
-import themcbros.usefulmachinery.container.MachineContainer;
+import themcbros.usefulmachinery.menu.MachineMenu;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
 public class RedstoneModeButton extends ExtendedButton {
-    private final MachineContainer container;
+    private final MachineMenu container;
 
-    public RedstoneModeButton(MachineContainer container, int x, int y, OnPress onPress) {
-        super(x, y, 16, 16, TextComponent.EMPTY, button -> {
+    public RedstoneModeButton(MachineMenu container, int x, int y, OnPress onPress) {
+        super(x, y, 16, 16, Component.empty(), button -> {
             ((RedstoneModeButton) button).cycleMode();
             onPress.onPress(button);
         });

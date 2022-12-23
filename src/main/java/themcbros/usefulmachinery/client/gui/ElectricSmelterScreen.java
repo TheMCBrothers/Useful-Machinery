@@ -8,16 +8,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
-import themcbros.usefulmachinery.container.ElectricSmelterContainer;
+import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelterContainer> {
+public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelterMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
-    public ElectricSmelterScreen(ElectricSmelterContainer screenContainer, Inventory inv, Component titleIn) {
+    public ElectricSmelterScreen(ElectricSmelterMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.energyBar = new EnergyBar(155, 17, 10, 50);
     }

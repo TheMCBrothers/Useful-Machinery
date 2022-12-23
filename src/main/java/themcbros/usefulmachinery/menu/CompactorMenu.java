@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.container;
+package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -8,25 +8,25 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
 import themcbros.usefulmachinery.blockentity.extension.SimpleCompactor;
-import themcbros.usefulmachinery.container.slot.EnergySlot;
+import themcbros.usefulmachinery.menu.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
-public class CompactorContainer extends MachineContainer {
+public class CompactorMenu extends MachineMenu {
     private final Level level;
 
-    public CompactorContainer(int id, Inventory playerInventory) {
+    public CompactorMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new CompactorBlockEntity(BlockPos.ZERO, MachineryBlocks.COMPACTOR.get().defaultBlockState()), new SimpleContainerData(8));
     }
 
-    public CompactorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
+    public CompactorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(MachineryMenus.COMPACTOR.get(), id, playerInventory, tileEntity, fields);
         this.level = playerInventory.player.level;
 
@@ -97,11 +97,11 @@ public class CompactorContainer extends MachineContainer {
     }
 
     private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::canExtract).orElse(false);
+        return !itemstack1.isEmpty() && itemstack1.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::canExtract).orElse(false);
     }
 
     protected boolean canProcess(ItemStack stack) {
-        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), new SimpleCompactor(this.getCompactorMode(), stack), this.level).map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorContainer.this.getCompactorMode())).orElse(false);
+        return this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), new SimpleCompactor(this.getCompactorMode(), stack), this.level).map(compactingRecipe -> compactingRecipe.getCompactorMode().equals(CompactorMenu.this.getCompactorMode())).orElse(false);
     }
 
     public int getProcessTime() {

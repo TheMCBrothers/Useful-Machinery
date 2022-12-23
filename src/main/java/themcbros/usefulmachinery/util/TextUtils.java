@@ -1,7 +1,6 @@
 package themcbros.usefulmachinery.util;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
@@ -12,7 +11,7 @@ public class TextUtils {
     private static final String ENERGY_FORMAT = "%,d";
 
     public static Component translate(String prefix, String suffix, Object... params) {
-        return new TranslatableComponent(prefix + "." + UsefulMachinery.MOD_ID + "." + suffix, params);
+        return Component.translatable(prefix + "." + UsefulMachinery.MOD_ID + "." + suffix, params);
     }
 
     // Energy
@@ -71,6 +70,6 @@ public class TextUtils {
 
     public static Component fluidName(Fluid fluid) {
         if (fluid == Fluids.EMPTY) return translate("misc", "empty");
-        return fluid.getAttributes().getDisplayName(FluidStack.EMPTY);
+        return fluid.getFluidType().getDescription(FluidStack.EMPTY);
     }
 }

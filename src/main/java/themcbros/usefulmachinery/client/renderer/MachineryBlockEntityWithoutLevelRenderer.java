@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -12,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 
@@ -37,7 +38,7 @@ public class MachineryBlockEntityWithoutLevelRenderer extends BlockEntityWithout
             if (block instanceof AbstractMachineBlock machine) {
                 blockEntity = machine.newBlockEntity(BlockPos.ZERO, blockState);
 
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, buffer, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, buffer, combinedLight, combinedOverlay, ModelData.EMPTY, RenderType.cutout());
                 Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(Objects.requireNonNull(blockEntity), poseStack, buffer, combinedLight, combinedOverlay);
             }
         }

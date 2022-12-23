@@ -3,7 +3,7 @@ package themcbros.usefulmachinery.proxy;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import themcbros.usefulmachinery.client.gui.CoalGeneratorScreen;
@@ -13,8 +13,8 @@ import themcbros.usefulmachinery.client.gui.ElectricSmelterScreen;
 import themcbros.usefulmachinery.client.gui.LavaGeneratorScreen;
 import themcbros.usefulmachinery.client.renderer.MachineRenderer;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
-import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.MachineTier;
 
 public class ClientProxy extends CommonProxy {
@@ -38,7 +38,7 @@ public class ClientProxy extends CommonProxy {
         BlockEntityRenderers.register(MachineryBlockEntities.COMPACTOR.get(), context -> new MachineRenderer());
     }
 
-    private void registerItemColors(final ColorHandlerEvent.Item event) {
+    private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
         ItemColors itemColors = event.getItemColors();
 
         itemColors.register((stack, tintIndex) -> {

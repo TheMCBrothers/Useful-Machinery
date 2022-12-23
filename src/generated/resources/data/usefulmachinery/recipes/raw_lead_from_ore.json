@@ -5,11 +5,11 @@
   },
   "processingtime": 200,
   "result": {
-    "item": "usefulfoundation:raw_lead",
-    "count": 2
+    "count": 2,
+    "item": "usefulfoundation:raw_lead"
   },
   "secondary": {
-    "item": "usefulfoundation:raw_silver",
-    "chance": 0.08
+    "chance": 0.08,
+    "item": "usefulfoundation:raw_silver"
   }
 }

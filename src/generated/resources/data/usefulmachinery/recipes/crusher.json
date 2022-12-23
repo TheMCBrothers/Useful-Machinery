@@ -1,27 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "B": {
+      "tag": "forge:batteries"
+    },
+    "I": {
+      "tag": "forge:ingots/copper"
+    },
+    "R": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "X": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
   "pattern": [
     " X ",
     "#R#",
     "IBI"
   ],
-  "key": {
-    "X": {
-      "tag": "forge:dusts/redstone"
-    },
-    "#": {
-      "item": "minecraft:flint"
-    },
-    "R": {
-      "item": "usefulmachinery:machine_frame"
-    },
-    "I": {
-      "tag": "forge:ingots/copper"
-    },
-    "B": {
-      "tag": "forge:batteries"
-    }
-  },
   "result": {
     "item": "usefulmachinery:crusher"
   }

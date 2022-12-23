@@ -3,7 +3,7 @@ package themcbros.usefulmachinery.networking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import themcbros.usefulmachinery.container.MachineContainer;
+import themcbros.usefulmachinery.menu.MachineMenu;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.blockentity.CompactorBlockEntity;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
@@ -38,8 +38,8 @@ public class SetCompactorModePacket {
 
     private static void handlePacket(SetCompactorModePacket packet, ServerPlayer player) {
         if (player != null) {
-            if (player.containerMenu instanceof MachineContainer) {
-                AbstractMachineBlockEntity tileEntity = ((MachineContainer) player.containerMenu).abstractMachineBlockEntity;
+            if (player.containerMenu instanceof MachineMenu) {
+                AbstractMachineBlockEntity tileEntity = ((MachineMenu) player.containerMenu).abstractMachineBlockEntity;
                 if (tileEntity instanceof CompactorBlockEntity) {
                     ((CompactorBlockEntity) tileEntity).compactorMode = packet.mode;
                 }

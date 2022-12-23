@@ -1,8 +1,8 @@
 {
   "type": "usefulmachinery:compacting",
   "ingredient": {
-    "tag": "forge:ingots/steel",
-    "count": 1
+    "count": 1,
+    "tag": "forge:ingots/steel"
   },
   "mode": "plate",
   "processingtime": 200,
