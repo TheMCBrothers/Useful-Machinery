@@ -1,3 +1,10 @@
+1.6.0:
+- Creative power cell bug fix
+- new recipes for materials (Usefulfoundation)
+- Renaming of upgrades
+- Upgrades increase speed of machines
+- Tiny improvements
+
 1.5.0:
 - added Tags
 - changed Recipes
