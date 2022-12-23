@@ -1,31 +1,3 @@
-1.6.0:
-- Creative power cell bug fix
-- new recipes for materials (Usefulfoundation)
-- Renaming of upgrades
-- Upgrades increase speed of machines
-- Tiny improvements
-
-1.5.0:
-- added Tags
-- changed Recipes
-
-1.4.0:
-- added new Recipes to machines
-- Fixed crash
-- Fixed machine drop behavior
-
-1.3.0:
-- added support Useful Foundation mod
-- Fixed rendering issues
-
-1.2.0:
-- ?
-
-1.1.0:
-- added JEI support
-- Fixed BlockEntity
-- Fixed GUI-Rendering
-- Creative Powercell now works properly
-
 1.0.0:
-- Updated to 1.18
+- Updated to 1.19.2
+- JEI bug fix
