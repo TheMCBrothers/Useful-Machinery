@@ -14,7 +14,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.UsefulMachinery;
@@ -45,16 +44,6 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return getRecipeType().getUid();
-    }
-
-    @Override
-    public Class<? extends CrushingRecipe> getRecipeClass() {
-        return getRecipeType().getRecipeClass();
-    }
-
-    @Override
     public RecipeType<CrushingRecipe> getRecipeType() {
         return MachineryJeiRecipeTypes.CRUSHING;
     }
@@ -64,7 +53,7 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
         if (secondaryChance > 0) {
             float secondaryChanceInPercent = secondaryChance * 100;
 
-            TextComponent text = new TextComponent(secondaryChanceInPercent + "%");
+            Component text = Component.translatable(secondaryChanceInPercent + "%");
             Minecraft minecraft = Minecraft.getInstance();
 
             Font fontRenderer = minecraft.font;
@@ -89,8 +78,8 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrushingRecipe recipe, IFocusGroup focusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 0, 18).addIngredients(recipe.getIngredients().get(0));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 7).addItemStack(recipe.getResultItem());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 31).addItemStack(recipe.getSecondRecipeOutput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 19).addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 8).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 32).addItemStack(recipe.getSecondRecipeOutput());
     }
 }

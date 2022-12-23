@@ -5,6 +5,7 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -36,19 +37,9 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
     }
 
     @Override
-    public void draw(CompactingRecipe recipe, PoseStack poseStack, double mouseX, double mouseY) {
+    public void draw(CompactingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY) {
         this.arrow.draw(poseStack, 24, 16);
         this.energyBar.draw(poseStack, 121, 1);
-    }
-
-    @Override
-    public ResourceLocation getUid() {
-        return getRecipeType().getUid();
-    }
-
-    @Override
-    public Class<? extends CompactingRecipe> getRecipeClass() {
-        return getRecipeType().getRecipeClass();
     }
 
     @Override
@@ -79,7 +70,7 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
             stack.setCount(recipe.getCount());
         }
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 0, 16).addItemStacks(List.of(stacks));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 16).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addItemStacks(List.of(stacks));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 17).addItemStack(recipe.getResultItem());
     }
 }
