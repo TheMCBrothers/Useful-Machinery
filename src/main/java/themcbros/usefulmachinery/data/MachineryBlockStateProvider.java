@@ -1,5 +1,7 @@
 package themcbros.usefulmachinery.data;
 
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -48,6 +50,18 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
     }
 
     private void machineBlockItem(Block block) {
-        itemModels().getBuilder(Objects.requireNonNull(block.getRegistryName()).getPath());
+        ModelFile.UncheckedModelFile modelFile = new ModelFile.UncheckedModelFile("builtin/entity");
+
+        itemModels().getBuilder(Objects.requireNonNull(block.getRegistryName()).getPath())
+                .parent(modelFile)
+                .transforms()
+                .transform(ItemTransforms.TransformType.GUI).rotation(30, 225, 0).translation(0, 0, 0).scale(0.625F, 0.625F, 0.625F).end()
+                .transform(ItemTransforms.TransformType.GROUND).rotation(0, 0, 0).translation(0, 3, 0).scale(0.25F, 0.25F, 0.25F).end()
+                .transform(ItemTransforms.TransformType.FIXED).rotation(0, 0, 0).translation(0, 0, 0).scale(0.5F, 0.5F, 0.5F).end()
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(75, 45, 0).translation(0, 2.5F, 0).scale(0.375F, 0.375F, 0.375F).end()
+                .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(0, 135, 0).translation(0, 0, 0).scale(0.4F, 0.4F, 0.4F).end()
+                .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(0, 135, 0).translation(0, 0, 0).scale(0.4F, 0.4F, 0.4F).end()
+                .end()
+                .guiLight(BlockModel.GuiLight.SIDE);
     }
 }
