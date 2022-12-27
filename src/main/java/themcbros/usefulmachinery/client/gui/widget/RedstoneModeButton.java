@@ -4,9 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
-import themcbros.usefulmachinery.menu.MachineMenu;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.MachineMenu;
 
 public class RedstoneModeButton extends ExtendedButton {
     private final MachineMenu container;
@@ -38,11 +39,12 @@ public class RedstoneModeButton extends ExtendedButton {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, this.container.getRedstoneMode().getIcon());
+        ResourceLocation icon = this.container.getRedstoneMode().getIcon();
+        RenderSystem.setShaderTexture(0, icon);
 
         RenderSystem.disableDepthTest();
 
-        blit(poseStack, this.x, this.y, 0, 0, this.width, this.height, 16, 16);
+        blit(poseStack, this.x, this.y, 0, this.container.getRedstoneMode().getIndex() == 0 ? 0 : 2, this.width, this.height, 16, 16);
 
         RenderSystem.enableDepthTest();
     }

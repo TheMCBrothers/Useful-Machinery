@@ -1,6 +1,5 @@
 package themcbros.usefulmachinery.client.gui;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
@@ -14,7 +13,6 @@ import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.List;
 
 public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGeneratorMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
@@ -49,7 +47,7 @@ public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGenerato
         }
 
         // Render the fluid
-        this.drawFluid(this.lavaTankRect.x + i, this.lavaTankRect.y + j, this.menu.getTankStack());
+        this.render(poseStack, this.lavaTankRect.x + i, this.lavaTankRect.y + j, this.menu.getTankStack());
     }
 
     @Override
@@ -59,11 +57,7 @@ public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGenerato
             this.renderTooltip(poseStack, TextUtils.energyWithMax(this.menu.getEnergyStored(), this.menu.getMaxEnergyStored()), mouseX, mouseY);
         }
         if (isHovering(lavaTankRect.x, lavaTankRect.y, lavaTankRect.width, lavaTankRect.height, mouseX, mouseY)) {
-            List<Component> texts = Lists.newArrayList();
-            texts.add(TextUtils.fluidName(this.menu.getTankStack()));
-            texts.add(TextUtils.fluidWithMax(this.menu.getFluidTankHandler()));
-
-            this.renderComponentTooltip(poseStack, texts, mouseX, mouseY);
+            this.renderComponentTooltip(poseStack, this.getTooltip(this.menu.getTankStack()), mouseX, mouseY);
         }
         super.renderTooltip(poseStack, mouseX, mouseY);
     }

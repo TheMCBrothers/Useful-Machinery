@@ -19,12 +19,12 @@ public class Networking {
         channel.messageBuilder(SetRedstoneModePacket.class, 1)
                 .decoder(SetRedstoneModePacket::fromBytes)
                 .encoder(SetRedstoneModePacket::toBytes)
-                .consumer(SetRedstoneModePacket::handle)
+                .consumerMainThread(SetRedstoneModePacket::handle)
                 .add();
         channel.messageBuilder(SetCompactorModePacket.class, 2)
                 .decoder(SetCompactorModePacket::fromBytes)
                 .encoder(SetCompactorModePacket::toBytes)
-                .consumer(SetCompactorModePacket::handle)
+                .consumerMainThread(SetCompactorModePacket::handle)
                 .add();
     }
 
