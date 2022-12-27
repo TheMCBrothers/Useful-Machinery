@@ -1,3 +1,8 @@
+1.7.0:
+- Lava and Coal Generators now work properly
+- Lava is visible in Lava Generator
+- Other bug fixes
+
 1.6.0:
 - Creative power cell bug fix
 - new recipes for materials (Usefulfoundation)
