@@ -32,20 +32,18 @@ import javax.annotation.Nullable;
 public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
-
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-
-    public int processTime, processTimeTotal;
-    public MachineEnergyStorage energyStorage;
-    public MachineTier machineTier = MachineTier.SIMPLE;
-    public RedstoneMode redstoneMode = RedstoneMode.IGNORED;
+    protected int processTime, processTimeTotal;
+    protected MachineEnergyStorage energyStorage;
+    protected MachineTier machineTier = MachineTier.SIMPLE;
+    protected RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private final boolean isGenerator;
     private int cooldown = -1;
 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        calcEnergyStorage();
     }
 
     @Override
@@ -84,7 +82,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         }
         if (compound.contains("EnergyStored", Tag.TAG_INT)) {
-            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+            this.calcEnergyStorage();
         }
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -189,22 +187,23 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public int calcBurnTime(int burnTime) {
         return switch (this.machineTier) {
-            case SIMPLE -> processTime;
-            case BASIC -> processTime * 2;
-            case REINFORCED -> processTime * 4;
-            case FACTORY -> processTime * 8;
-            case OVERKILL -> processTime * 16;
+            case SIMPLE -> burnTime;
+            case BASIC -> burnTime * 2;
+            case REINFORCED -> burnTime * 4;
+            case FACTORY -> burnTime * 8;
+            case OVERKILL -> burnTime * 16;
         };
     }
 
     public void sendUpdate(boolean lit) {
-        if (lit) this.cooldown = 15;
-
-        assert this.level != null;
+        if (lit) {
+            this.cooldown = 15;
+        }
         boolean flag = this.getBlockState().getValue(AbstractMachineBlock.LIT) != lit;
 
-        if (flag)
+        if (flag && this.level != null) {
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.LIT, lit), 3);
+        }
     }
 
     private final LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());
@@ -224,6 +223,10 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         return this.energyStorage.getEnergyStored();
     }
 
+    public MachineEnergyStorage getEnergyStorage() {
+        return this.energyStorage;
+    }
+
     public int getMaxEnergyStored() {
         return this.energyStorage.getMaxEnergyStored();
     }
@@ -233,9 +236,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(1);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(NullPointerException::new);
 
-            if (energy != null && energy.canReceive()) {
+            if (energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
                 this.energyStorage.modifyEnergyStored(-accepted);
             }
@@ -246,8 +249,8 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(slotIndex);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-            if (energy != null && energy.canExtract()) {
+            IEnergyStorage energy = energyStack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(NullPointerException::new);
+            if (energy.canExtract()) {
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
 
                 if (this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
@@ -269,5 +272,33 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
                 if (this.getEnergyStored() <= 0) break;
             }
         }
+    }
+
+    private void calcEnergyStorage() {
+        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+    }
+
+    public int getProcessTime() {
+        return processTime;
+    }
+
+    public int getProcessTimeTotal() {
+        return processTimeTotal;
+    }
+
+    public MachineTier getMachineTier() {
+        return machineTier;
+    }
+
+    public void setMachineTier(MachineTier machineTier) {
+        this.machineTier = machineTier;
+    }
+
+    public RedstoneMode getRedstoneMode() {
+        return redstoneMode;
+    }
+
+    public void setRedstoneMode(RedstoneMode redstoneMode) {
+        this.redstoneMode = redstoneMode;
     }
 }

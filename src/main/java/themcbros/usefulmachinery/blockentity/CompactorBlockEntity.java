@@ -12,10 +12,10 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.blockentity.extension.Compactor;
-import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 import themcbros.usefulmachinery.util.TextUtils;
@@ -184,7 +184,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         return this.compactorMode;
     }
 
-    private int getProcessTime() {
+    public int getProcessTime() {
         if (level == null) {
             return 200;
         }

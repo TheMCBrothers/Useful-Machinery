@@ -149,7 +149,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private int getProcessTime() {
+    public int getProcessTime() {
         if (this.level == null) {
             return 200;
         }

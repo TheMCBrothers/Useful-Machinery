@@ -6,13 +6,13 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -22,9 +22,9 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
@@ -61,20 +61,20 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 case 3 -> (LavaGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> LavaGeneratorBlockEntity.this.redstoneMode.ordinal();
                 case 5 -> LavaGeneratorBlockEntity.this.burnTime;
-                case 6 -> LavaGeneratorBlockEntity.this.lavaTank.getFluidAmount();
-                case 7 -> LavaGeneratorBlockEntity.this.lavaTank.getCapacity();
-                case 8 -> Registry.FLUID.getId(LavaGeneratorBlockEntity.this.lavaTank.getFluid().getFluid());
+                case 6 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getFluidAmount();
+                case 7 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getCapacity();
+                case 8 -> Registry.FLUID.getId(LavaGeneratorBlockEntity.this.LAVA_TANK.getFluid().getFluid());
                 default -> 0;
             };
         }
     };
 
     private int burnTime;
-    private final FluidTank lavaTank;
+    private final FluidTank LAVA_TANK;
 
     public LavaGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(MachineryBlockEntities.LAVA_GENERATOR.get(), blockPos, blockState, true);
-        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
+        this.LAVA_TANK = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA));
     }
 
     @Override
@@ -83,8 +83,8 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         compound.putInt("BurnTime", this.burnTime);
 
-        if (!this.lavaTank.getFluid().isEmpty())
-            compound.put("Tank", this.lavaTank.writeToNBT(new CompoundTag()));
+        if (!this.LAVA_TANK.getFluid().isEmpty())
+            compound.put("Tank", this.LAVA_TANK.writeToNBT(new CompoundTag()));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         this.burnTime = compound.getInt("BurnTime");
 
         if (compound.contains("Tank", Tag.TAG_COMPOUND))
-            this.lavaTank.readFromNBT(compound.getCompound("Tank"));
+            this.LAVA_TANK.readFromNBT(compound.getCompound("Tank"));
 
         super.load(compound);
     }
@@ -109,8 +109,8 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return !stack.isEmpty() && index == 0 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .map(handler -> handler.getFluidInTank(0).getFluid().is(FluidTags.LAVA)).orElse(false);
+        return !stack.isEmpty() && index == 0 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
+                .map(handler -> handler.getFluidInTank(0).getFluid().isSame(Fluids.LAVA)).orElse(false);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         final ItemStack bucketStack = this.stacks.get(0);
 
         if (!bucketStack.isEmpty()) {
-            FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidType.BUCKET_VOLUME, null, true);
+            FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.LAVA_TANK, FluidType.BUCKET_VOLUME, null, true);
 
             if (result.isSuccess()) {
                 ItemStack outputSlotStack = this.stacks.get(1);
@@ -162,11 +162,8 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
             }
         }
 
-        if (this.canRun()) {
-            if (this.burnTime <= 0 && this.hasFuel()) {
-                consumeFuel();
-                sendUpdate(true);
-            }
+        if (this.burnTime <= 0 && this.hasFuel() && this.canRun()) {
+            consumeFuel();
         }
 
         if (this.burnTime > 0) {
@@ -179,16 +176,17 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean hasFuel() {
-        return this.lavaTank.getFluidAmount() >= MB_PER_USE;
+        return this.LAVA_TANK.getFluidAmount() >= MB_PER_USE;
     }
 
     private boolean canRun() {
-        return this.level != null && this.redstoneMode.canRun(this)
-                && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
+        boolean canRun = this.redstoneMode.canRun(this);
+        sendUpdate(canRun);
+        return this.level != null && canRun && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
     }
 
     private void consumeFuel() {
-        FluidStack fluid = this.lavaTank.drain(MB_PER_USE, IFluidHandler.FluidAction.EXECUTE);
+        FluidStack fluid = this.LAVA_TANK.drain(MB_PER_USE, IFluidHandler.FluidAction.EXECUTE);
         this.burnTime = calcBurnTime(TICKS_PER_MB * fluid.getAmount());
     }
 
@@ -196,7 +194,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return LazyOptional.of(() -> this.lavaTank).cast();
+            return LazyOptional.of(() -> this.LAVA_TANK).cast();
         }
         return super.getCapability(cap, side);
     }
