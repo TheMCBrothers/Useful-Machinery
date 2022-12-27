@@ -7,14 +7,14 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
-import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class CoalGeneratorContainer extends MachineContainer {
     public CoalGeneratorContainer(int id, Inventory playerInventory) {
@@ -35,11 +35,11 @@ public class CoalGeneratorContainer extends MachineContainer {
         int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index != 0) {
-                if (AbstractFurnaceBlockEntity.isFuel(itemstack1)) {
+                if (ForgeHooks.getBurnTime(itemstack1, null) == 1600) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

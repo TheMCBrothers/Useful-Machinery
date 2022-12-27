@@ -6,13 +6,13 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -74,7 +74,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
     public LavaGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(MachineryBlockEntities.LAVA_GENERATOR.get(), blockPos, blockState, true);
-        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA));
+        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA));
     }
 
     @Override
@@ -110,7 +110,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         return !stack.isEmpty() && index == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
-                .map(handler -> handler.getFluidInTank(0).getFluid().is(FluidTags.LAVA)).orElse(false);
+                .map(handler -> handler.getFluidInTank(0).getFluid().isSame(Fluids.LAVA)).orElse(false);
     }
 
     @Override
@@ -162,11 +162,8 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
             }
         }
 
-        if (this.canRun()) {
-            if (this.burnTime <= 0 && this.hasFuel()) {
-                consumeFuel();
-                sendUpdate(true);
-            }
+        if (this.burnTime <= 0 && this.hasFuel() && this.canRun()) {
+            consumeFuel();
         }
 
         if (this.burnTime > 0) {
@@ -183,8 +180,9 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean canRun() {
-        return this.level != null && this.redstoneMode.canRun(this)
-                && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
+        boolean canRun = this.redstoneMode.canRun(this);
+        sendUpdate(canRun);
+        return this.level != null && canRun && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
     }
 
     private void consumeFuel() {

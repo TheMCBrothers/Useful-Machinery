@@ -10,8 +10,6 @@ import themcbros.usefulmachinery.machine.CompactorMode;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.components.Button.OnPress;
-
 public class CompactorModeButton extends Button {
     private final CompactorContainer container;
 

@@ -2,26 +2,26 @@ package themcbros.usefulmachinery.container;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.blockentity.LavaGeneratorBlockEntity;
+import themcbros.usefulmachinery.init.MachineryBlocks;
+import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.container.slot.FluidItemSlot;
 import themcbros.usefulmachinery.container.slot.OutputSlot;
-import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.init.MachineryMenus;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +33,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     public LavaGeneratorContainer(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
         super(MachineryMenus.LAVA_GENERATOR.get(), id, playerInventory, tileEntity, fields);
 
-        this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().is(FluidTags.LAVA)));
+        this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA)));
         this.addSlot(new OutputSlot(tileEntity, 1, 26, 51));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
@@ -45,11 +45,12 @@ public class LavaGeneratorContainer extends MachineContainer {
         int i = this.abstractMachineBlockEntity.getContainerSize();
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index >= i) {
-                if (AbstractFurnaceBlockEntity.isFuel(itemstack1)) {
+                if (ForgeHooks.getBurnTime(itemstack1, null) == 1600) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -57,7 +58,7 @@ public class LavaGeneratorContainer extends MachineContainer {
                     if (!this.moveItemStackTo(itemstack1, i - 1, i, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= i && index < 27 + i) {
+                } else if (index < 27 + i) {
                     if (!this.moveItemStackTo(itemstack1, 27 + i, 36 + i, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -91,7 +92,7 @@ public class LavaGeneratorContainer extends MachineContainer {
     public int getBurnTimeScaled() {
         int i = this.fields.get(5);
         int j = LavaGeneratorBlockEntity.TICKS_PER_MB * LavaGeneratorBlockEntity.MB_PER_USE;
-        return i != 0 && j != 0 ? i * 13 / j : 0;
+        return i != 0 ? i * 13 / j : 0;
     }
 
     public boolean isBurning() {

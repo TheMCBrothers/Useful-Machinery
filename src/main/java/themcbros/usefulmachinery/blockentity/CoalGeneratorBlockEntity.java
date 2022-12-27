@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
@@ -117,11 +116,11 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 shouldLit = true;
             } else if (this.redstoneMode.canRun(this)) {
                 ItemStack generatorStack = this.stacks.get(0);
-                if (AbstractFurnaceBlockEntity.isFuel(generatorStack)) {
+                if (ForgeHooks.getBurnTime(generatorStack, null) == 1600) {
                     int time = calcBurnTime(ForgeHooks.getBurnTime(generatorStack, null));
 
                     this.burnTime = time;
-                    this.burnTimeTotal = time;
+                    this.burnTimeTotal += time;
 
                     shouldLit = true;
                     generatorStack.shrink(1);

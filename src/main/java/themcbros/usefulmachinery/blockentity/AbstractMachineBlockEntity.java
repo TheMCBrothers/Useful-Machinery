@@ -190,11 +190,11 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public int calcBurnTime(int burnTime) {
         return switch (this.machineTier) {
-            case SIMPLE -> processTime;
-            case BASIC -> processTime * 2;
-            case REINFORCED -> processTime * 4;
-            case FACTORY -> processTime * 8;
-            case OVERKILL -> processTime * 16;
+            case SIMPLE -> burnTime;
+            case BASIC -> burnTime * 2;
+            case REINFORCED -> burnTime * 4;
+            case FACTORY -> burnTime * 8;
+            case OVERKILL -> burnTime * 16;
         };
     }
 
@@ -234,9 +234,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(1);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElseThrow(NullPointerException::new);
 
-            if (energy != null && energy.canReceive()) {
+            if (energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
                 this.energyStorage.modifyEnergyStored(-accepted);
             }
@@ -247,8 +247,8 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         final ItemStack energyStack = this.stacks.get(slotIndex);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
-            if (energy != null && energy.canExtract()) {
+            IEnergyStorage energy = energyStack.getCapability(CapabilityEnergy.ENERGY).orElseThrow(NullPointerException::new);
+            if (energy.canExtract()){
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
 
                 if (this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
