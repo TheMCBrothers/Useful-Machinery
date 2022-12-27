@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum RedstoneMode implements StringRepresentable {
-    IGNORED(0, new ResourceLocation("textures/item/gunpowder.png")), HIGH(1, new ResourceLocation("textures/block/redstone_torch.png")), LOW(2, new ResourceLocation("textures/block/redstone_torch_off.png"));
+    IGNORED(0, new ResourceLocation("textures/item/gunpowder.png")),
+    HIGH(1, new ResourceLocation("textures/block/redstone_torch.png")),
+    LOW(2, new ResourceLocation("textures/block/redstone_torch_off.png"));
 
     private static final RedstoneMode[] VALUES = values();
     private static final Map<String, RedstoneMode> NAME_LOOKUP = Arrays.stream(VALUES).collect(Collectors.toMap(RedstoneMode::getSerializedName, (p_199787_0_) -> p_199787_0_));

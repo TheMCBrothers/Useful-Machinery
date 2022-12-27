@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.MachineTier;
 
@@ -31,17 +32,21 @@ public class TierUpgradeItem extends UpgradeItem {
         final BlockPos pos = context.getClickedPos();
         final ItemStack stack = context.getItemInHand();
         final BlockEntity blockEntity = level.getBlockEntity(pos);
+        final BlockState blockState = context.getLevel().getBlockState(pos);
 
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
-            MachineTier machineTier = abstractMachineBlockEntity.machineTier;
+            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
 
             if (stack.hasTag() && stack.getTag() != null && stack.getTag().contains("Tier", Tag.TAG_INT)) {
                 MachineTier itemTier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
-                    abstractMachineBlockEntity.machineTier = itemTier;
+                    abstractMachineBlockEntity.setMachineTier(itemTier);
                     abstractMachineBlockEntity.setChanged();
-                    if (playerEntity != null)
+                    abstractMachineBlockEntity.getEnergyStorage().setCapacity(20000 * (itemTier.ordinal() + 1));
+                    level.sendBlockUpdated(pos, blockState, blockState, 4);
+                    if (playerEntity != null) {
                         playerEntity.displayClientMessage(Component.translatable("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
+                    }
                     return InteractionResult.SUCCESS;
                 }
             } else if (playerEntity != null) {

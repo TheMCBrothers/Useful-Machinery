@@ -44,7 +44,7 @@ public class TextUtils {
         return translate("misc", fluid.getAmount() > 0 ? "fluidWithMaxName" : "empty", fluidName, s1, s2);
     }
 
-    public static Component fluidWithMaxName(String fluid, int amount, int max) {
+    public static Component fluidWithMaxName(String fluid, long amount, long max) {
         String s1 = String.format(ENERGY_FORMAT, amount);
         String s2 = String.format(ENERGY_FORMAT, max);
         return translate("misc", amount > 0 ? "fluidWithMaxName" : "empty", fluid, s1, s2);

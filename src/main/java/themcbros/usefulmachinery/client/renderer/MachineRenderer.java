@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.inventory.InventoryMenu;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.MachineTier;
@@ -31,10 +31,9 @@ public class MachineRenderer implements BlockEntityRenderer<AbstractMachineBlock
 
     @Override
     public void render(AbstractMachineBlockEntity machine, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        MachineTier tier = machine.machineTier;
+        MachineTier tier = machine.getMachineTier();
 
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
-                .apply(UsefulMachinery.getId("block/machine_side_tier_overlay"));
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(UsefulMachinery.getId("block/machine_side_tier_overlay"));
         VertexConsumer builder = buffer.getBuffer(RenderType.cutout());
 
         int color = tier.getColor();

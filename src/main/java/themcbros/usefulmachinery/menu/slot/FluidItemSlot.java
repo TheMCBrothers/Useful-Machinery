@@ -19,7 +19,8 @@ public class FluidItemSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return !stack.isEmpty() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .map(fluidHandler -> FluidItemSlot.this.validator.test(fluidHandler.getFluidInTank(0))).orElse(false);
+        return !stack.isEmpty() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
+                .map(fluidHandler -> FluidItemSlot.this.validator.test(fluidHandler.getFluidInTank(0)))
+                .orElse(false);
     }
 }

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.init.MachineryStats;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class ElectricSmelterBlock extends AbstractMachineBlock {
 
     public ElectricSmelterBlock(Properties properties) {
@@ -15,6 +17,7 @@ public class ElectricSmelterBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
+    @ParametersAreNonnullByDefault
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return MachineryBlockEntities.ELECTRIC_SMELTER.get().create(pos, state);
     }

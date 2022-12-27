@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.init.MachineryStats;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class CrusherBlock extends AbstractMachineBlock {
     public CrusherBlock(Properties properties) {
         super(properties, MachineryStats.INTERACT_WITH_CRUSHER);
@@ -14,6 +16,7 @@ public class CrusherBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
+    @ParametersAreNonnullByDefault
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return MachineryBlockEntities.CRUSHER.get().create(pos, state);
     }

@@ -38,8 +38,9 @@ public class MachineryBlockEntityWithoutLevelRenderer extends BlockEntityWithout
             if (block instanceof AbstractMachineBlock machine) {
                 blockEntity = machine.newBlockEntity(BlockPos.ZERO, blockState);
 
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, buffer, combinedLight, combinedOverlay, ModelData.EMPTY, RenderType.cutout());
-                Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(Objects.requireNonNull(blockEntity), poseStack, buffer, combinedLight, combinedOverlay);
+                Minecraft instance = Minecraft.getInstance();
+                instance.getBlockRenderer().renderSingleBlock(blockState, poseStack, buffer, combinedLight, combinedOverlay, ModelData.EMPTY, RenderType.cutout());
+                instance.getBlockEntityRenderDispatcher().renderItem(Objects.requireNonNull(blockEntity), poseStack, buffer, combinedLight, combinedOverlay);
             }
         }
     }

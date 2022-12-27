@@ -3,14 +3,6 @@ package themcbros.usefulmachinery.energy;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class MachineEnergyStorage extends EnergyStorage {
-    public MachineEnergyStorage(int capacity) {
-        super(capacity);
-    }
-
-    public MachineEnergyStorage(int capacity, int maxTransfer) {
-        super(capacity, maxTransfer);
-    }
-
     public MachineEnergyStorage(int capacity, int maxReceive, int maxExtract) {
         super(capacity, maxReceive, maxExtract);
     }
