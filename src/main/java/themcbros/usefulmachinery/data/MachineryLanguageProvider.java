@@ -45,6 +45,7 @@ public class MachineryLanguageProvider extends LanguageProvider {
         this.add("jei.usefulmachinery.crushing", "Crushing");
         this.add("jei.usefulmachinery.electric_smelting", "Electric Smelting");
         this.add("jei.usefulmachinery.compacting", "Compacting");
+        this.add("jei.usefulmachinery.fuel", "Fuel for RF");
 
         //Misc
         this.add("misc.usefulmachinery.energy", "%s FE");
