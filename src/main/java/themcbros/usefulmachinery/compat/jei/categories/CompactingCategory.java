@@ -79,7 +79,7 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
             stack.setCount(recipe.getCount());
         }
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 0, 16).addItemStacks(List.of(stacks));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 16).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addItemStacks(List.of(stacks));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 17).addItemStack(recipe.getResultItem());
     }
 }

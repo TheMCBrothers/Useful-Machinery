@@ -35,9 +35,9 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CompactorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CompactorBlockEntity.this.processTime = value;
-                case 6 -> CompactorBlockEntity.this.processTimeTotal = value;
+                case 4 -> CompactorBlockEntity.this.setRedstoneMode(RedstoneMode.byIndex(value));
+                case 5 -> CompactorBlockEntity.this.setProcessTime(value);
+                case 6 -> CompactorBlockEntity.this.setProcessTimeTotal(value);
                 case 7 -> CompactorBlockEntity.this.compactorMode = CompactorMode.byIndex(value);
             }
         }
@@ -45,20 +45,20 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CompactorBlockEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CompactorBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CompactorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CompactorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CompactorBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> CompactorBlockEntity.this.processTime;
-                case 6 -> CompactorBlockEntity.this.processTimeTotal;
+                case 0 -> CompactorBlockEntity.this.getEnergyStorage().getEnergyStored() & 0xFFFF;
+                case 1 -> (CompactorBlockEntity.this.getEnergyStorage().getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CompactorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CompactorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CompactorBlockEntity.this.getRedstoneMode().ordinal();
+                case 5 -> CompactorBlockEntity.this.getProcessTime();
+                case 6 -> CompactorBlockEntity.this.getProcessTimeTotal();
                 case 7 -> CompactorBlockEntity.this.compactorMode.getIndex();
                 default -> 0;
             };
         }
     };
 
-    public CompactorMode compactorMode = CompactorMode.PLATE;
+    private CompactorMode compactorMode = CompactorMode.PLATE;
 
     public CompactorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(MachineryBlockEntities.COMPACTOR.get(), blockPos, blockState, false);
@@ -83,13 +83,13 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         ItemStack itemstack = this.stacks.get(index);
         boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
         this.stacks.set(index, stack);
-        if (stack.getCount() > this.getMaxEnergyStored()) {
-            stack.setCount(this.getMaxEnergyStored());
+        if (stack.getCount() > this.getEnergyStorage().getMaxEnergyStored()) {
+            stack.setCount(this.getEnergyStorage().getMaxEnergyStored());
         }
 
         if (index == 0 && !flag) {
-            this.processTimeTotal = this.getProcessTime();
-            this.processTime = 0;
+            this.setProcessTimeTotal(this.getRecipeProcessTime());
+            this.setProcessTime(0);
             this.setChanged();
         }
     }
@@ -132,7 +132,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     private boolean isActive() {
-        return this.processTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
+        return this.getProcessTime() > 0 && this.getEnergyStorage().getEnergyStored() >= RF_PER_TICK;
     }
 
     @Override
@@ -144,27 +144,27 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         if (!this.level.isClientSide) {
             this.receiveEnergyFromSlot(2);
 
-            if (this.isActive() || this.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
+            if (this.isActive() || this.getEnergyStorage().getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
                 CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    this.processTime++;
+                    this.getEnergyStorage().modifyEnergyStored(-RF_PER_TICK);
+                    this.setProcessTime(this.getProcessTime() + 1);
                 }
 
                 if (this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    this.processTime++;
+                    this.getEnergyStorage().modifyEnergyStored(-RF_PER_TICK);
+                    this.setProcessTime(this.getProcessTime() + 1);
 
-                    if (this.processTime == this.processTimeTotal) {
-                        this.processTime = 0;
-                        this.processTimeTotal = this.getProcessTime();
+                    if (this.getProcessTime() == this.getProcessTimeTotal()) {
+                        this.setProcessTime(0);
+                        this.setProcessTime(this.getRecipeProcessTime());
                         this.processItem(recipe);
 
                         flag1 = true;
                     }
                 } else {
-                    this.processTime = 0;
+                    this.setProcessTime(0);
                 }
             }
 
@@ -184,7 +184,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         return this.compactorMode;
     }
 
-    private int getProcessTime() {
+    private int getRecipeProcessTime() {
         if (level == null) {
             return 200;
         }
@@ -192,7 +192,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     private boolean canProcess(@Nullable CompactingRecipe recipeIn) {
-        if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this) && recipeIn.getCompactorMode().equals(this.compactorMode)) {
+        if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.getRedstoneMode().canRun(this) && recipeIn.getCompactorMode().equals(this.compactorMode)) {
             ItemStack itemstack = recipeIn.getResultItem();
 
             if (itemstack.isEmpty()) {
@@ -204,7 +204,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
                     return true;
                 } else if (!itemstack1.sameItem(itemstack)) {
                     return false;
-                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getMaxEnergyStored() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
+                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getEnergyStorage().getMaxEnergyStored() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;
                 } else {
                     return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize();
@@ -229,5 +229,13 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
             itemstack.shrink(recipe.getCount());
         }
+    }
+
+    public CompactorMode getCompactorMode() {
+        return compactorMode;
+    }
+
+    public void setCompactorMode(CompactorMode compactorMode) {
+        this.compactorMode = compactorMode;
     }
 }

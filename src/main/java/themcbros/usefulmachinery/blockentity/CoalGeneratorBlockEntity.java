@@ -30,7 +30,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CoalGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 4 -> CoalGeneratorBlockEntity.this.setRedstoneMode(RedstoneMode.byIndex(value));
                 case 5 -> CoalGeneratorBlockEntity.this.burnTime = value;
                 case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal = value;
                 default -> {
@@ -41,11 +41,11 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CoalGeneratorBlockEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CoalGeneratorBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CoalGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CoalGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CoalGeneratorBlockEntity.this.redstoneMode.ordinal();
+                case 0 -> CoalGeneratorBlockEntity.this.getEnergyStorage().getEnergyStored() & 0xFFFF;
+                case 1 -> (CoalGeneratorBlockEntity.this.getEnergyStorage().getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CoalGeneratorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CoalGeneratorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CoalGeneratorBlockEntity.this.getRedstoneMode().ordinal();
                 case 5 -> CoalGeneratorBlockEntity.this.burnTime;
                 case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal;
                 default -> 0;
@@ -111,10 +111,10 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
             if (this.burnTime > 0) {
                 --this.burnTime;
 
-                this.energyStorage.modifyEnergyStored(60);
+                this.getEnergyStorage().modifyEnergyStored(60);
 
                 shouldLit = true;
-            } else if (this.redstoneMode.canRun(this)) {
+            } else if (this.getRedstoneMode().canRun(this)) {
                 ItemStack generatorStack = this.stacks.get(0);
                 if (ForgeHooks.getBurnTime(generatorStack, null) == 1600) {
                     int time = calcBurnTime(ForgeHooks.getBurnTime(generatorStack, null));

@@ -31,7 +31,7 @@ public class MachineRenderer implements BlockEntityRenderer<AbstractMachineBlock
 
     @Override
     public void render(AbstractMachineBlockEntity machine, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        MachineTier tier = machine.machineTier;
+        MachineTier tier = machine.getMachineTier();
 
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
                 .apply(UsefulMachinery.getId("block/machine_side_tier_overlay"));

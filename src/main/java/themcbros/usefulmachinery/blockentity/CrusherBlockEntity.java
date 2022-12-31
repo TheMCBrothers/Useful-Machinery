@@ -30,22 +30,22 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> CrusherBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CrusherBlockEntity.this.processTime = value;
-                case 6 -> CrusherBlockEntity.this.processTimeTotal = value;
+                case 4 -> CrusherBlockEntity.this.setRedstoneMode(RedstoneMode.byIndex(value));
+                case 5 -> CrusherBlockEntity.this.setProcessTime(value);
+                case 6 -> CrusherBlockEntity.this.setProcessTimeTotal(value);
             }
         }
 
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> CrusherBlockEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (CrusherBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> CrusherBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (CrusherBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> CrusherBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> CrusherBlockEntity.this.processTime;
-                case 6 -> CrusherBlockEntity.this.processTimeTotal;
+                case 0 -> CrusherBlockEntity.this.getEnergyStorage().getEnergyStored() & 0xFFFF;
+                case 1 -> (CrusherBlockEntity.this.getEnergyStorage().getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> CrusherBlockEntity.this.getEnergyStorage().getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (CrusherBlockEntity.this.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> CrusherBlockEntity.this.getRedstoneMode().ordinal();
+                case 5 -> CrusherBlockEntity.this.getProcessTime();
+                case 6 -> CrusherBlockEntity.this.getProcessTimeTotal();
                 default -> 0;
             };
         }
@@ -71,7 +71,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean isActive() {
-        return this.processTime > 0 && this.energyStorage.getEnergyStored() >= RF_PER_TICK;
+        return this.getProcessTime() > 0 && this.getEnergyStorage().getEnergyStored() >= RF_PER_TICK;
     }
 
     @Override
@@ -84,28 +84,28 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
             this.receiveEnergyFromSlot(3);
 
-            if (this.isActive() || this.energyStorage.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
+            if (this.isActive() || this.getEnergyStorage().getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
                 CrushingRecipe crushingRecipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.CRUSHING.get(), this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canCrush(crushingRecipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
-                    processTime++;
+                    this.getEnergyStorage().modifyEnergyStored(-RF_PER_TICK);
+                    this.setProcessTime(this.getProcessTime() + 1);
                 }
 
                 if (this.isActive() && this.canCrush(crushingRecipe)) {
-                    this.processTime++;
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.setProcessTime(this.getProcessTime() + 1);
+                    this.getEnergyStorage().modifyEnergyStored(-RF_PER_TICK);
 
-                    if (this.processTime == this.processTimeTotal) {
-                        this.processTime = 0;
-                        this.processTimeTotal = this.getCrushTime();
+                    if (this.getProcessTime() == this.getProcessTimeTotal()) {
+                        this.setProcessTime(0);
+                        this.setProcessTimeTotal(this.getRecipeProcessTime());
 
                         this.crushItem(crushingRecipe);
 
                         flag1 = true;
                     }
                 } else {
-                    this.processTime = 0;
+                    this.setProcessTime(0);
                 }
             }
 
@@ -120,7 +120,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private int getCrushTime() {
+    private int getRecipeProcessTime() {
         if (level == null) {
             return 200;
         }
@@ -128,7 +128,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean canCrush(@Nullable CrushingRecipe recipe) {
-        if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
+        if (!this.stacks.get(0).isEmpty() && recipe != null && this.getRedstoneMode().canRun(this)) {
             ItemStack recipeOutputStack = recipe.getResultItem();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
 
@@ -210,12 +210,12 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         this.stacks.set(index, stack);
 
         if (stack.getCount() > this.getMaxStackSize()) {
-            stack.setCount(this.getMaxEnergyStored());
+            stack.setCount(this.getEnergyStorage().getMaxEnergyStored());
         }
 
         if (index == 0 && !flag) {
-            this.processTimeTotal = this.getCrushTime();
-            this.processTime = 0;
+            this.setProcessTimeTotal(this.getRecipeProcessTime());
+            this.setProcessTime(0);
             this.setChanged();
         }
     }

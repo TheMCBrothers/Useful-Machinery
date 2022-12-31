@@ -45,7 +45,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 4 -> LavaGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
+                case 4 -> LavaGeneratorBlockEntity.this.setRedstoneMode(RedstoneMode.byIndex(value));
                 case 5 -> LavaGeneratorBlockEntity.this.burnTime = value;
                 default -> {
                 }
@@ -55,11 +55,11 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> LavaGeneratorBlockEntity.this.getEnergyStored() & 0xFFFF;
-                case 1 -> (LavaGeneratorBlockEntity.this.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> LavaGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (LavaGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
-                case 4 -> LavaGeneratorBlockEntity.this.redstoneMode.ordinal();
+                case 0 -> LavaGeneratorBlockEntity.this.getEnergyStorage().getEnergyStored() & 0xFFFF;
+                case 1 -> (LavaGeneratorBlockEntity.this.getEnergyStorage().getEnergyStored() >> 16) & 0xFFFF;
+                case 2 -> LavaGeneratorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() & 0xFFFF;
+                case 3 -> (LavaGeneratorBlockEntity.this.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 4 -> LavaGeneratorBlockEntity.this.getRedstoneMode().ordinal();
                 case 5 -> LavaGeneratorBlockEntity.this.burnTime;
                 case 6 -> LavaGeneratorBlockEntity.this.lavaTank.getFluidAmount();
                 case 7 -> LavaGeneratorBlockEntity.this.lavaTank.getCapacity();
@@ -168,7 +168,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         if (this.burnTime > 0) {
             --this.burnTime;
-            this.energyStorage.modifyEnergyStored(RF_PER_TICK);
+            this.getEnergyStorage().modifyEnergyStored(RF_PER_TICK);
         }
 
         super.tick();
@@ -180,9 +180,9 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean canRun() {
-        boolean canRun = this.redstoneMode.canRun(this);
+        boolean canRun = this.getRedstoneMode().canRun(this);
         sendUpdate(canRun);
-        return this.level != null && canRun && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
+        return this.level != null && canRun && this.getEnergyStorage().getEnergyStored() <= this.getEnergyStorage().getMaxEnergyStored() - RF_PER_TICK;
     }
 
     private void consumeFuel() {

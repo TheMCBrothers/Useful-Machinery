@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.machine.MachineTier;
 
 import javax.annotation.Nonnull;
 
@@ -33,12 +33,12 @@ public class TierUpgradeItem extends UpgradeItem {
         final BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
-            MachineTier machineTier = abstractMachineBlockEntity.machineTier;
+            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
 
             if (stack.hasTag() && stack.getTag() != null && stack.getTag().contains("Tier", Tag.TAG_INT)) {
                 MachineTier itemTier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
-                    abstractMachineBlockEntity.machineTier = itemTier;
+                    abstractMachineBlockEntity.setMachineTier(itemTier);
                     abstractMachineBlockEntity.setChanged();
                     if (playerEntity != null)
                         playerEntity.displayClientMessage(new TextComponent("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);

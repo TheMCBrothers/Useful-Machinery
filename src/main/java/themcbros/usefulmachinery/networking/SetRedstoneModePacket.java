@@ -3,9 +3,9 @@ package themcbros.usefulmachinery.networking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.container.MachineContainer;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -41,7 +41,7 @@ public class SetRedstoneModePacket {
             if (player.containerMenu instanceof MachineContainer) {
                 AbstractMachineBlockEntity tileEntity = ((MachineContainer) player.containerMenu).abstractMachineBlockEntity;
                 if (tileEntity != null) {
-                    tileEntity.redstoneMode = packet.mode;
+                    tileEntity.setRedstoneMode(packet.mode);
                 }
             }
         }

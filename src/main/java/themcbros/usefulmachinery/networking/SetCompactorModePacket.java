@@ -41,7 +41,7 @@ public class SetCompactorModePacket {
             if (player.containerMenu instanceof MachineContainer) {
                 AbstractMachineBlockEntity tileEntity = ((MachineContainer) player.containerMenu).abstractMachineBlockEntity;
                 if (tileEntity instanceof CompactorBlockEntity) {
-                    ((CompactorBlockEntity) tileEntity).compactorMode = packet.mode;
+                    ((CompactorBlockEntity) tileEntity).setCompactorMode(packet.mode);
                 }
             }
         }
