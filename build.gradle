@@ -218,6 +218,7 @@ curseforge {
             relations {
                 requiredDependency 'useful-foundation'
                 optionalDependency 'jei'
+                optionalDependency 'the-one-probe'
             }
         }
     }
