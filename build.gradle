@@ -87,10 +87,6 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
-sourceSets.main.java {
-    exclude '**/compat/top/**'
-}
-
 repositories {
     maven {
         // location of the maven that hosts JEI files
@@ -98,14 +94,14 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
+        // TOP
+        name = "k4you"
+        url = "https://maven.k-4u.nl/"
+    }
+    maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.dev"
-    }
-    maven {
-        // TOP
-        name = "tterrag maven"
-        url = "https://maven.tterrag.com/"
     }
     maven {
         url "https://cursemaven.com"
@@ -133,8 +129,8 @@ dependencies {
 
     if (project.hasProperty('top_version')) {
         // TOP
-        compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")
-        runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
+        compileOnly "mcjty.theoneprobe:theoneprobe:${top_version}:api"
+        runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}", {transitive = false})
     }
 
     if (project.hasProperty('usefulfoundation_version')) {

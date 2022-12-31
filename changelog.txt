@@ -1,3 +1,8 @@
+2.7.0:
+- TheOneProbe works with our machines
+- Insert Lava by clicking with Lava Bucket on Lava Generator
+- Tiny bug fixes
+
 1.7.0:
 - Lava and Coal Generators now work properly
 - Lava is visible in Lava Generator
