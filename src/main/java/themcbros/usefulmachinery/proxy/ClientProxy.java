@@ -1,6 +1,5 @@
 package themcbros.usefulmachinery.proxy;
 
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -39,9 +38,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
-        ItemColors itemColors = event.getItemColors();
-
-        itemColors.register((stack, tintIndex) -> {
+        event.register((stack, tintIndex) -> {
             if (!stack.isEmpty() && stack.hasTag() && stack.getTag() != null) {
                 MachineTier tier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
                 return tintIndex == 1 ? tier.getColor() : -1;
