@@ -79,7 +79,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
 
         if (index == 0 && !flag) {
-            this.processTimeTotal = this.getProcessTime();
+            this.processTimeTotal = this.getRecipeProcessTime();
             this.processTime = 0;
             this.setChanged();
         }
@@ -127,7 +127,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
 
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
-                        this.processTimeTotal = this.getProcessTime();
+                        this.processTimeTotal = this.getRecipeProcessTime();
 
                         this.processItem(recipe);
 
@@ -149,7 +149,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    public int getProcessTime() {
+    public int getRecipeProcessTime() {
         if (this.level == null) {
             return 200;
         }

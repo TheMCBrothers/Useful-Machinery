@@ -43,7 +43,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        calcEnergyStorage();
+        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
     }
 
     @Override
@@ -82,7 +82,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         }
         if (compound.contains("EnergyStored", Tag.TAG_INT)) {
-            this.calcEnergyStorage();
+            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         }
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -272,10 +272,6 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
                 if (this.getEnergyStored() <= 0) break;
             }
         }
-    }
-
-    private void calcEnergyStorage() {
-        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
     }
 
     public int getProcessTime() {

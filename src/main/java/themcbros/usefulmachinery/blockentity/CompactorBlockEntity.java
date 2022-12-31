@@ -88,7 +88,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         }
 
         if (index == 0 && !flag) {
-            this.processTimeTotal = this.getProcessTime();
+            this.processTimeTotal = this.getRecipeProcessTime();
             this.processTime = 0;
             this.setChanged();
         }
@@ -158,7 +158,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
-                        this.processTimeTotal = this.getProcessTime();
+                        this.processTimeTotal = this.getRecipeProcessTime();
                         this.processItem(recipe);
 
                         flag1 = true;
@@ -184,7 +184,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         return this.compactorMode;
     }
 
-    public int getProcessTime() {
+    public int getRecipeProcessTime() {
         if (level == null) {
             return 200;
         }
