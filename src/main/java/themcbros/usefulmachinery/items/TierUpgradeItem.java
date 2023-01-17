@@ -40,8 +40,12 @@ public class TierUpgradeItem extends UpgradeItem {
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
                     abstractMachineBlockEntity.setMachineTier(itemTier);
                     abstractMachineBlockEntity.setChanged();
-                    if (playerEntity != null)
+                    if (playerEntity != null) {
+                        if (!playerEntity.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
                         playerEntity.displayClientMessage(new TextComponent("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
+                    }
                     return InteractionResult.SUCCESS;
                 }
             } else if (playerEntity != null) {
