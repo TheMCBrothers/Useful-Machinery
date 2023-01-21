@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://nexus.themcbrothers.net/repository/maven-minecraftforge/' }
         mavenCentral()
     }
     dependencies {
@@ -24,12 +24,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: project.mc_version
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
@@ -91,20 +86,20 @@ repositories {
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        url = "https://nexus.themcbrothers.net/repository/maven-progwml6"
     }
     maven {
         // TOP
         name = "k4you"
-        url = "https://maven.k-4u.nl/"
+        url = "https://nexus.themcbrothers.net/repository/maven-k4you"
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.dev"
+        url = "https://nexus.themcbrothers.net/repository/maven-mod"
     }
     maven {
-        url "https://cursemaven.com"
+        url "https://nexus.themcbrothers.net/repository/maven-curse"
         content {
             includeGroup "curse.maven"
         }
@@ -112,6 +107,10 @@ repositories {
     maven {
         name = "themcb-nexus"
         url = "https://nexus.themcbrothers.net/repository/maven-releases/"
+    }
+    maven {
+        name = "themcb-nexus-snapshots"
+        url = "https://nexus.themcbrothers.net/repository/maven-snapshots/"
     }
 }
 
@@ -123,19 +122,25 @@ dependencies {
 
     if (project.hasProperty('jei_version')) {
         // JEI
-        compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
     }
 
     if (project.hasProperty('top_version')) {
         // TOP
         compileOnly "mcjty.theoneprobe:theoneprobe:${top_version}:api"
-        runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}", {transitive = false})
+        runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}", { transitive = false })
     }
 
     if (project.hasProperty('usefulfoundation_version')) {
         // Useful Foundation
-        implementation fg.deobf("net.themcbrothers:useful-foundation:$usefulfoundation_version")
+        implementation fg.deobf("net.themcbrothers:useful-foundation:${usefulfoundation_version}")
+    }
+
+    if (project.hasProperty('themcbroslib_version')) {
+        // TheMCBrosLib
+        implementation fg.deobf("net.themcbrothers:TheMCBrosLib:${themcbroslib_version}")
     }
 }
 
@@ -155,15 +160,6 @@ jar {
     }
 }
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
 publishing {
     publications { PublicationContainer publicationContainer ->
         publicationContainer.register("maven", MavenPublication) { MavenPublication publication ->
@@ -213,6 +209,7 @@ curseforge {
             displayName = "$project.modname $project.version"
             relations {
                 requiredDependency 'useful-foundation'
+                requiredDependency 'themcbroslib'
                 optionalDependency 'jei'
                 optionalDependency 'the-one-probe'
             }
