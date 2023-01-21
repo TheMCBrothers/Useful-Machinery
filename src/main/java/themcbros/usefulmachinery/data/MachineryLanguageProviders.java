@@ -81,8 +81,8 @@ public class MachineryLanguageProviders {
             //Machines
             this.add(COAL_GENERATOR.get(), "Cholegenerator");
             this.add(COMPACTOR.get(), "Kompaktierer");
-            this.add(CREATIVE_POWER_CELL.get(), "Kreativi Energiezälle");
-            this.add(CRUSHER.get(), "Zerbrösmeler");
+            this.add(CREATIVE_POWER_CELL.get(), "Kreativi Energiezaelle");
+            this.add(CRUSHER.get(), "Zerbroesmeler");
             this.add(ELECTRIC_SMELTER.get(), "Elektrischi Schmelzi");
             this.add(LAVA_GENERATOR.get(), "Lavagenerator");
 
@@ -90,38 +90,38 @@ public class MachineryLanguageProviders {
             this.add(MachineryItems.BATTERY.get(), "Batterie");
             this.add(MachineryItems.COMPACTOR_KIT.get(), "Kompaktier Bousatz");
             this.add(MachineryItems.MACHINE_FRAME.get(), "Maschineteil");
-            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_basic", "Eifachs Öpgraid");
-            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_reinforced", "Verstärkts Öpgraid");
-            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_factory", "Fabrik Öpgraid");
-            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_overkill", "Übermässigs Öpgraid");
+            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_basic", "Eifachs Oepgraid");
+            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_reinforced", "Verstaerkts Oepgraid");
+            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_factory", "Fabrik Oepgraid");
+            this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_overkill", "Übermaessigs Oepgraid");
 
             //Container Titles
             this.add("container.usefulmachinery.coal_generator", "Cholegenerator");
             this.add("container.usefulmachinery.compactor", "Kompaktierer");
-            this.add("container.usefulmachinery.crusher", "Zerbrösmeler");
+            this.add("container.usefulmachinery.crusher", "Zerbroesmeler");
             this.add("container.usefulmachinery.electric_smelter", "Elektrischi Schmelzi");
             this.add("container.usefulmachinery.lava_generator", "Lavagenerator");
 
             //JEI
-            this.add("jei.usefulmachinery.crushing", "Zerbrösmele");
-            this.add("jei.usefulmachinery.electric_smelting", "Elektrisch Schmelzä");
+            this.add("jei.usefulmachinery.crushing", "Zerbroesmele");
+            this.add("jei.usefulmachinery.electric_smelting", "Elektrisch Schmelzae");
             this.add("jei.usefulmachinery.compacting", "Kompaktiere");
-            this.add("jei.usefulmachinery.fuel", "Triebstoff für Strom");
+            this.add("jei.usefulmachinery.fuel", "Triebstoff fuer Strom");
 
             //Misc
             this.add("misc.usefulmachinery.energy", "%s FE");
             this.add("misc.usefulmachinery.energyWithMax", "%s / %s FE");
-            this.add("misc.usefulmachinery.empty", "Läär");
+            this.add("misc.usefulmachinery.empty", "Laer");
             this.add("misc.usefulmachinery.fluidWithMax", "%s / %s mB");
             this.add("misc.usefulmachinery.fluidWithMaxName", "%s, %s / %s mB");
             this.add("misc.usefulmachinery.redstoneMode", "Rotsteimodus, %s");
-            this.add("misc.usefulmachinery.compact_plate", "Platteprässi");
+            this.add("misc.usefulmachinery.compact_plate", "Plattepraessi");
             this.add("misc.usefulmachinery.compact_gear", "Zahradherstellig");
             this.add("misc.usefulmachinery.compact_block", "Blockbilder");
 
             //Stats
-            this.add("stat.usefulmachinery.interact_with_crusher", "Ustusch mitem Zerbrösmeler");
-            this.add("stat.usefulmachinery.interact_with_electric_smelter", "Ustusch mit dä Elektrischi Schmelzi");
+            this.add("stat.usefulmachinery.interact_with_crusher", "Ustusch mitem Zerbroesmeler");
+            this.add("stat.usefulmachinery.interact_with_electric_smelter", "Ustusch mit dae Elektrischi Schmelzi");
             this.add("stat.usefulmachinery.interact_with_compactor", "Ustusch mitem Kompaktierer");
             this.add("stat.usefulmachinery.interact_with_coal_generator", "Ustusch mitem Cholegenerator");
             this.add("stat.usefulmachinery.interact_with_lava_generator", "Ustusch mitem Lavagenerator");
