@@ -12,15 +12,16 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
-import themcbros.usefulmachinery.caps.EnergyConversionStorage;
-import themcbros.usefulmachinery.energy.IEnergyContainerItem;
-import themcbros.usefulmachinery.util.TextUtils;
+import net.themcbrothers.lib.capability.CapabilityProvider;
+import net.themcbrothers.lib.energy.EnergyContainerItem;
+import net.themcbrothers.lib.energy.EnergyConversionStorage;
+import net.themcbrothers.lib.energy.EnergyUnit;
+import themcbros.usefulmachinery.UsefulMachinery;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BatteryItem extends Item implements IEnergyContainerItem {
+public class BatteryItem extends Item implements EnergyContainerItem {
     public static final String ENERGY = "Energy";
     private final int capacity = 10_000;
 
@@ -31,7 +32,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
+        return new CapabilityProvider<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        MutableComponent component = (MutableComponent) TextUtils.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack));
+        MutableComponent component = UsefulMachinery.TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), EnergyUnit.REDSTONE_FLUX);
         tooltip.add(component.withStyle(ChatFormatting.GRAY));
     }
 

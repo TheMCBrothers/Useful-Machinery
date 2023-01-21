@@ -5,13 +5,13 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
+import net.themcbrothers.lib.client.screen.widgets.EnergyBar;
+import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.RedstoneModeButton;
 import themcbros.usefulmachinery.container.MachineContainer;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.networking.Networking;
 import themcbros.usefulmachinery.networking.SetRedstoneModePacket;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 
@@ -50,7 +50,7 @@ public abstract class AbstractMachineScreen<T extends MachineContainer> extends 
         for (Widget widget : this.renderables) {
             if (widget instanceof RedstoneModeButton button && button.isHoveredOrFocused()) {
                 RedstoneMode mode = button.getMode();
-                renderTooltip(poseStack, TextUtils.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
+                renderTooltip(poseStack, UsefulMachinery.TEXT_UTILS.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
             }
         }
     }

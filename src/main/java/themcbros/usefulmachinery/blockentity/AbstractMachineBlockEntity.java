@@ -20,9 +20,10 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.themcbrothers.lib.energy.ExtendedEnergyStorage;
+import net.themcbrothers.lib.wrench.WrenchableBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
-import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.util.EnergyUtils;
@@ -30,14 +31,14 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider, WrenchableBlockEntity {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
 
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 
     private int processTime, processTimeTotal;
-    private MachineEnergyStorage energyStorage;
+    private ExtendedEnergyStorage energyStorage;
     private MachineTier machineTier = MachineTier.SIMPLE;
     private RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private final boolean isGenerator;
@@ -46,7 +47,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY, !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
     }
 
     @Override
@@ -85,7 +86,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         }
         if (compound.contains("EnergyStored", Tag.TAG_INT)) {
-            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+            this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         }
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -288,7 +289,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.redstoneMode = redstoneMode;
     }
 
-    public MachineEnergyStorage getEnergyStorage() {
+    public ExtendedEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 

@@ -18,7 +18,8 @@ public class Events {
         if (event.includeClient()) {
             gen.addProvider(new MachineryBlockStateProvider(gen, fileHelper));
             gen.addProvider(new MachineryItemModelProvider(gen, fileHelper));
-            gen.addProvider(new MachineryLanguageProvider(gen));
+            gen.addProvider(new MachineryLanguageProviders.EnglishUS(gen));
+            gen.addProvider(new MachineryLanguageProviders.SwissGerman(gen));
         }
 
         if (event.includeServer()) {

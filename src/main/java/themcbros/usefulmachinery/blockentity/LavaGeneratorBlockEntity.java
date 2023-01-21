@@ -22,10 +22,10 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.container.LavaGeneratorContainer;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -131,7 +131,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return TextUtils.translate("container", "lava_generator");
+        return UsefulMachinery.TEXT_UTILS.translate("container", "lava_generator");
     }
 
     @Nullable

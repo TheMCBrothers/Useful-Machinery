@@ -22,13 +22,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.themcbrothers.lib.wrench.WrenchableBlock;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public abstract class AbstractMachineBlock extends BaseEntityBlock {
+public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -77,6 +78,8 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        this.tryWrench(state, worldIn, pos, player, handIn, hit);
+
         if (player.getItemInHand(handIn).getItem() instanceof UpgradeItem) {
             return player.getItemInHand(handIn).useOn(new UseOnContext(player, handIn, hit));
         }
@@ -88,6 +91,4 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
 
         return InteractionResult.SUCCESS;
     }
-
-
 }

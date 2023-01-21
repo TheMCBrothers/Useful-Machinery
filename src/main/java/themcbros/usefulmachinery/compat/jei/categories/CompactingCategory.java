@@ -17,7 +17,6 @@ import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
 
     @Override
     public Component getTitle() {
-        return TextUtils.translate("jei", "compacting");
+        return UsefulMachinery.TEXT_UTILS.translate("jei", "compacting");
     }
 
     @Override

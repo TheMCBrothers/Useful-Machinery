@@ -6,13 +6,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
-import themcbros.usefulmachinery.caps.EnergyConversionStorage;
-import themcbros.usefulmachinery.energy.IEnergyContainerItem;
+import net.themcbrothers.lib.capability.CapabilityProvider;
+import net.themcbrothers.lib.energy.EnergyContainerItem;
+import net.themcbrothers.lib.energy.EnergyConversionStorage;
 
 import javax.annotation.Nullable;
 
-public class CreativePowerCellItem extends BlockItem implements IEnergyContainerItem {
+public class CreativePowerCellItem extends BlockItem implements EnergyContainerItem {
     public CreativePowerCellItem(Block block, Properties properties) {
         super(block, properties);
     }
@@ -20,7 +20,7 @@ public class CreativePowerCellItem extends BlockItem implements IEnergyContainer
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
+        return new CapabilityProvider<>(new EnergyConversionStorage(this, stack), CapabilityEnergy.ENERGY, null);
     }
 
     @Override

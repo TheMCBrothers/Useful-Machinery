@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.container;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,16 +13,16 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.ElectricSmelterBlockEntity;
 import themcbros.usefulmachinery.container.slot.EnergySlot;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
-import themcbros.usefulmachinery.blockentity.ElectricSmelterBlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 public class ElectricSmelterContainer extends MachineContainer {
     private final Level level;
 
-    public ElectricSmelterContainer(int id, Inventory playerInventory) {
+    public ElectricSmelterContainer(int id, Inventory playerInventory, FriendlyByteBuf data) {
         this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, MachineryBlocks.ELECTRIC_SMELTER.get().defaultBlockState()), new SimpleContainerData(7));
     }
 

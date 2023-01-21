@@ -21,7 +21,7 @@ import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
-import themcbros.usefulmachinery.util.TextUtils;
+
 
 public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/crusher.png");
@@ -74,7 +74,7 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
 
     @Override
     public Component getTitle() {
-        return TextUtils.translate("jei", "crushing");
+        return UsefulMachinery.TEXT_UTILS.translate("jei", "crushing");
     }
 
     @Override

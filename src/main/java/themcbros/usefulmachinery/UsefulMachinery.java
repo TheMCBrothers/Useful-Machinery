@@ -5,6 +5,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.themcbrothers.lib.util.ComponentFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import themcbros.usefulmachinery.init.MachineryItems;
@@ -18,6 +19,7 @@ import javax.annotation.Nonnull;
 public class UsefulMachinery {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "usefulmachinery";
+    public static final ComponentFormatter TEXT_UTILS = new ComponentFormatter(MOD_ID);
     public static CommonProxy proxy;
 
     public static final CreativeModeTab GROUP = new CreativeModeTab(MOD_ID) {

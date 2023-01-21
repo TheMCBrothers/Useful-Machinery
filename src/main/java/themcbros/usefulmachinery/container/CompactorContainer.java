@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.container;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -22,7 +23,7 @@ import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 public class CompactorContainer extends MachineContainer {
     private final Level level;
 
-    public CompactorContainer(int id, Inventory playerInventory) {
+    public CompactorContainer(int id, Inventory playerInventory, FriendlyByteBuf data) {
         this(id, playerInventory, new CompactorBlockEntity(BlockPos.ZERO, MachineryBlocks.COMPACTOR.get().defaultBlockState()), new SimpleContainerData(8));
     }
 

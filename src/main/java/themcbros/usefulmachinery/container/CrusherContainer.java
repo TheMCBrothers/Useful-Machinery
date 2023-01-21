@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.container;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,7 @@ import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 public class CrusherContainer extends MachineContainer {
     private final Level level;
 
-    public CrusherContainer(int id, Inventory playerInventory) {
+    public CrusherContainer(int id, Inventory playerInventory, FriendlyByteBuf data) {
         this(id, playerInventory, new CrusherBlockEntity(BlockPos.ZERO, MachineryBlocks.CRUSHER.get().defaultBlockState()), new SimpleContainerData(7));
     }
 
