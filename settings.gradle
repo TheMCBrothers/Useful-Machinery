@@ -1,0 +1,6 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://nexus.themcbrothers.net/repository/maven-minecraftforge' }
+    }
+}
