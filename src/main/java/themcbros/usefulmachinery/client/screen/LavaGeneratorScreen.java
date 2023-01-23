@@ -1,27 +1,30 @@
-package themcbros.usefulmachinery.client.gui;
+package themcbros.usefulmachinery.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.themcbrothers.lib.client.screen.widgets.FluidTank;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
 import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
-public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGeneratorMenu> {
+public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
 
-    private final Rectangle lavaTankRect = new Rectangle(11, 17, 10, 50);
-
     public LavaGeneratorScreen(LavaGeneratorMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn, screenContainer.getTankCapacity());
-        this.energyBar = new EnergyBar(155, 17, 10, 50);
+        super(screenContainer, inv, titleIn);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        this.addRenderableOnly(new FluidTank(this.leftPos + 11, this.topPos + 17, 10, 50, this.menu.getFluidTankHandler(), this));
     }
 
     @Override
@@ -35,30 +38,21 @@ public class LavaGeneratorScreen extends AbstractMachineFluidScreen<LavaGenerato
 
         this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-        // Render Energy Bar
-        Rectangle bar = this.energyBar.rect;
-        int k = this.menu.getEnergyScaled(bar.height);
-        this.blit(poseStack, bar.x + i, bar.y + j + bar.height - k, 246, bar.height - k, bar.width, k);
-
         // Render burning flame
         if (this.menu.isBurning()) {
             int l = this.menu.getBurnTimeScaled();
             this.blit(poseStack, 81 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1);
         }
-
-        // Render the fluid
-        this.render(poseStack, this.lavaTankRect.x + i, this.lavaTankRect.y + j, this.menu.getTankStack());
     }
 
     @Override
     protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        Rectangle bar = this.energyBar.rect;
-        if (isHovering(bar.x, bar.y, bar.width, bar.height, mouseX, mouseY)) {
-            this.renderTooltip(poseStack, TextUtils.energyWithMax(this.menu.getEnergyStored(), this.menu.getMaxEnergyStored()), mouseX, mouseY);
+        for (Widget widget : this.renderables) {
+            if (widget instanceof FluidTank fluidTank && fluidTank.isHoveredOrFocused()) {
+                fluidTank.renderToolTip(poseStack, mouseX, mouseY);
+            }
         }
-        if (isHovering(lavaTankRect.x, lavaTankRect.y, lavaTankRect.width, lavaTankRect.height, mouseX, mouseY)) {
-            this.renderComponentTooltip(poseStack, this.getTooltip(this.menu.getTankStack()), mouseX, mouseY);
-        }
+
         super.renderTooltip(poseStack, mouseX, mouseY);
     }
 }

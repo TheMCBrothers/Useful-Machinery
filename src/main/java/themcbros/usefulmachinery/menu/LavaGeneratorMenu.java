@@ -2,6 +2,7 @@ package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -26,7 +27,7 @@ import themcbros.usefulmachinery.menu.slot.OutputSlot;
 import javax.annotation.Nonnull;
 
 public class LavaGeneratorMenu extends MachineMenu {
-    public LavaGeneratorMenu(int id, Inventory playerInventory) {
+    public LavaGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, new LavaGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(9));
     }
 

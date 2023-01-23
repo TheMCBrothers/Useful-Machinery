@@ -15,10 +15,11 @@ import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
@@ -93,7 +94,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return TextUtils.translate("container", "coal_generator");
+        return TEXT_UTILS.translate("container", "coal_generator");
     }
 
     @Nullable
@@ -111,7 +112,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
             if (this.burnTime > 0) {
                 --this.burnTime;
 
-                this.energyStorage.modifyEnergyStored(60);
+                this.energyStorage.growEnergy(60);
 
                 shouldLit = true;
             } else if (this.redstoneMode.canRun(this)) {

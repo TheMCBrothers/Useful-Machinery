@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -17,7 +18,7 @@ import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
 
 public class CoalGeneratorMenu extends MachineMenu {
-    public CoalGeneratorMenu(int id, Inventory playerInventory) {
+    public CoalGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, new CoalGeneratorBlockEntity(BlockPos.ZERO, MachineryBlocks.COAL_GENERATOR.get().defaultBlockState()), new SimpleContainerData(7));
     }
 

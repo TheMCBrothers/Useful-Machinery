@@ -12,11 +12,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.themcbrothers.lib.wrench.WrenchableBlock;
 import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
@@ -35,7 +32,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
-public abstract class AbstractMachineBlock extends BaseEntityBlock {
+public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -88,6 +85,10 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock {
     @Override
     @Nonnull
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level worldIn, @Nonnull BlockPos pos, Player player, @Nonnull InteractionHand handIn, @Nonnull BlockHitResult hit) {
+        if (this.tryWrench(state, worldIn, pos, player, handIn, hit)) {
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        }
+
         if (player.getItemInHand(handIn).getItem() instanceof UpgradeItem) {
             return player.getItemInHand(handIn).useOn(new UseOnContext(player, handIn, hit));
         }

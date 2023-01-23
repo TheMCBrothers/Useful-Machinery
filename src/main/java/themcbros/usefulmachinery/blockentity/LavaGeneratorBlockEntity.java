@@ -25,10 +25,11 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int TANK_CAPACITY = 4000; // TODO config
@@ -131,7 +132,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return TextUtils.translate("container", "lava_generator");
+        return TEXT_UTILS.translate("container", "lava_generator");
     }
 
     @Nullable
@@ -168,7 +169,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         if (this.burnTime > 0) {
             --this.burnTime;
-            this.energyStorage.modifyEnergyStored(RF_PER_TICK);
+            this.energyStorage.growEnergy(RF_PER_TICK);
         }
 
         super.tick();

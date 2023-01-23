@@ -12,15 +12,19 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import themcbros.usefulmachinery.caps.CapabilityProviderEnergy;
-import themcbros.usefulmachinery.caps.EnergyConversionStorage;
-import themcbros.usefulmachinery.energy.IEnergyContainerItem;
-import themcbros.usefulmachinery.util.TextUtils;
+import net.themcbrothers.lib.capability.CapabilityProvider;
+import net.themcbrothers.lib.config.Config;
+import net.themcbrothers.lib.energy.EnergyContainerItem;
+import net.themcbrothers.lib.energy.EnergyConversionStorage;
+import net.themcbrothers.lib.energy.EnergyUnit;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
-public class BatteryItem extends Item implements IEnergyContainerItem {
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
+
+public class BatteryItem extends Item implements EnergyContainerItem {
     public static final String ENERGY = "Energy";
     private final int capacity = 10_000;
 
@@ -31,7 +35,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProviderEnergy<>(new EnergyConversionStorage(this, stack), ForgeCapabilities.ENERGY, null);
+        return new CapabilityProvider<>(new EnergyConversionStorage(this, stack), ForgeCapabilities.ENERGY, null);
     }
 
     @Override
@@ -53,7 +57,9 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        MutableComponent component = (MutableComponent) TextUtils.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack));
+        EnergyUnit energyUnit = Config.CLIENT_CONFIG.energyUnit;
+
+        MutableComponent component = TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), energyUnit);
         tooltip.add(component.withStyle(ChatFormatting.GRAY));
     }
 
@@ -75,7 +81,7 @@ public class BatteryItem extends Item implements IEnergyContainerItem {
         if (!container.hasTag()) {
             container.setTag(new CompoundTag());
         }
-        int stored = Math.min(container.getTag().getInt(ENERGY), getMaxEnergyStored(container));
+        int stored = Math.min(Objects.requireNonNull(container.getTag()).getInt(ENERGY), getMaxEnergyStored(container));
         int maxReceive1 = 500;
         int energyReceived = Math.min(capacity - stored, Math.min(maxReceive1, maxReceive));
 

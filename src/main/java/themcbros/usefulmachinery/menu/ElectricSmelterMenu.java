@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,7 @@ import themcbros.usefulmachinery.init.MachineryMenus;
 public class ElectricSmelterMenu extends MachineMenu {
     private final Level level;
 
-    public ElectricSmelterMenu(int id, Inventory playerInventory) {
+    public ElectricSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, MachineryBlocks.ELECTRIC_SMELTER.get().defaultBlockState()), new SimpleContainerData(7));
     }
 

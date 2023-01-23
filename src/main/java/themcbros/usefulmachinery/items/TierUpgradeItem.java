@@ -42,7 +42,7 @@ public class TierUpgradeItem extends UpgradeItem {
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
                     abstractMachineBlockEntity.setMachineTier(itemTier);
                     abstractMachineBlockEntity.setChanged();
-                    abstractMachineBlockEntity.getEnergyStorage().setCapacity(20000 * (itemTier.ordinal() + 1));
+                    abstractMachineBlockEntity.getEnergyStorage().setMaxEnergyStored(20000 * (itemTier.ordinal() + 1));
                     level.sendBlockUpdated(pos, blockState, blockState, 4);
                     if (playerEntity != null) {
                         playerEntity.displayClientMessage(Component.translatable("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);

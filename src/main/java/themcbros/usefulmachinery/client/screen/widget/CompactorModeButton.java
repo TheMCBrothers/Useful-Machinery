@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.client.gui.widget;
+package themcbros.usefulmachinery.client.screen.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;

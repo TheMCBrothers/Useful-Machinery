@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -22,7 +23,7 @@ import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 public class CompactorMenu extends MachineMenu {
     private final Level level;
 
-    public CompactorMenu(int id, Inventory playerInventory) {
+    public CompactorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, new CompactorBlockEntity(BlockPos.ZERO, MachineryBlocks.COMPACTOR.get().defaultBlockState()), new SimpleContainerData(8));
     }
 

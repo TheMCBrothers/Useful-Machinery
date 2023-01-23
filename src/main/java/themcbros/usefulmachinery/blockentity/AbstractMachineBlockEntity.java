@@ -19,12 +19,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.themcbrothers.lib.energy.ExtendedEnergyStorage;
+import net.themcbrothers.lib.util.EnergyUtils;
 import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
-import themcbros.usefulmachinery.energy.MachineEnergyStorage;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.util.EnergyUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected static final int MAX_TRANSFER = 100;
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     protected int processTime, processTimeTotal;
-    protected MachineEnergyStorage energyStorage;
+    protected ExtendedEnergyStorage energyStorage;
     protected MachineTier machineTier = MachineTier.SIMPLE;
     protected RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private final boolean isGenerator;
@@ -43,7 +43,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
     }
 
     @Override
@@ -82,7 +82,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
         }
         if (compound.contains("EnergyStored", Tag.TAG_INT)) {
-            this.energyStorage = new MachineEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+            this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         }
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -223,7 +223,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         return this.energyStorage.getEnergyStored();
     }
 
-    public MachineEnergyStorage getEnergyStorage() {
+    public ExtendedEnergyStorage getEnergyStorage() {
         return this.energyStorage;
     }
 
@@ -240,7 +240,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
             if (energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(-accepted);
+                this.energyStorage.consumeEnergy(accepted);
             }
         }
     }
@@ -254,7 +254,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
                 int accept = energy.extractEnergy(Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_TRANSFER), true);
 
                 if (this.getEnergyStored() <= this.getMaxEnergyStored() - accept)
-                    this.energyStorage.modifyEnergyStored(energy.extractEnergy(accept, false));
+                    this.energyStorage.growEnergy(energy.extractEnergy(accept, false));
             }
         }
     }
@@ -268,8 +268,11 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
             if (energy != null && energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(-accepted);
-                if (this.getEnergyStored() <= 0) break;
+                this.energyStorage.consumeEnergy(accepted);
+
+                if (this.getEnergyStored() <= 0) {
+                    break;
+                }
             }
         }
     }

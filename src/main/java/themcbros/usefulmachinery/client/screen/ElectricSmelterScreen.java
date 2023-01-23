@@ -1,4 +1,4 @@
-package themcbros.usefulmachinery.client.gui;
+package themcbros.usefulmachinery.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,19 +7,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.client.gui.widget.EnergyBar;
 import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
 public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelterMenu> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
 
     public ElectricSmelterScreen(ElectricSmelterMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
-        this.energyBar = new EnergyBar(155, 17, 10, 50);
     }
 
     @Override
@@ -32,24 +28,8 @@ public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelter
         int j = this.topPos;
         this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-        // Render Energy Bar
-        int k = this.menu.getEnergyScaled((int) this.energyBar.rect.getHeight());
-        Rectangle bar = this.energyBar.rect;
-        this.blit(poseStack, bar.x + i, bar.y + j + bar.height - k, 246, bar.height - k, bar.width, k);
-
         // Render arrow
         int l = this.menu.getProgressScaled(24);
         this.blit(poseStack, 58 + i, 32 + j, 176, 14, l, 17);
-    }
-
-    @Override
-    protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        Rectangle bar = this.energyBar.rect;
-
-        if (isHovering(bar.x, bar.y, bar.width, bar.height, mouseX, mouseY)) {
-            this.renderTooltip(poseStack, TextUtils.energyWithMax(this.menu.getEnergyStored(), this.menu.getMaxEnergyStored()), mouseX, mouseY);
-        }
-
-        super.renderTooltip(poseStack, mouseX, mouseY);
     }
 }

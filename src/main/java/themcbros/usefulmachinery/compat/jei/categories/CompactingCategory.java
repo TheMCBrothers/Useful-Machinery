@@ -18,9 +18,10 @@ import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
 import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import java.util.List;
+
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/electric_smelter.png");
@@ -49,7 +50,7 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
 
     @Override
     public Component getTitle() {
-        return TextUtils.translate("jei", "compacting");
+        return TEXT_UTILS.translate("jei", "compacting");
     }
 
     @Override

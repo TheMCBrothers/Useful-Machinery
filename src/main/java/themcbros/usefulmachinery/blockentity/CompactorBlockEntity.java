@@ -18,10 +18,11 @@ import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.recipes.CompactingRecipe;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
-import themcbros.usefulmachinery.util.TextUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CompactorBlockEntity extends AbstractMachineBlockEntity implements Compactor {
     private static final int RF_PER_TICK = 15;
@@ -122,7 +123,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return TextUtils.translate("container", "compactor");
+        return TEXT_UTILS.translate("container", "compactor");
     }
 
     @Nullable
@@ -148,12 +149,12 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
                 CompactingRecipe recipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
                     this.processTime++;
                 }
 
                 if (this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
                     this.processTime++;
 
                     if (this.processTime == this.processTimeTotal) {

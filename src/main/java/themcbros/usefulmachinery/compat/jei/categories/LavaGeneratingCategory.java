@@ -18,7 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
 import themcbros.usefulmachinery.init.MachineryBlocks;
-import themcbros.usefulmachinery.util.TextUtils;
+
+import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class LavaGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
@@ -49,7 +50,7 @@ public class LavaGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
 
     @Override
     public Component getTitle() {
-        return TextUtils.translate("jei", "fuel");
+        return TEXT_UTILS.translate("jei", "fuel");
     }
 
     @Override
