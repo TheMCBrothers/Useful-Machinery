@@ -78,7 +78,9 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
 
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        this.tryWrench(state, worldIn, pos, player, handIn, hit);
+        if (this.tryWrench(state, worldIn, pos, player, handIn, hit)) {
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        }
 
         if (player.getItemInHand(handIn).getItem() instanceof UpgradeItem) {
             return player.getItemInHand(handIn).useOn(new UseOnContext(player, handIn, hit));

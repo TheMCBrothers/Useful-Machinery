@@ -21,7 +21,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import net.themcbrothers.lib.energy.ExtendedEnergyStorage;
-import net.themcbrothers.lib.wrench.WrenchableBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.machine.MachineTier;
@@ -31,7 +30,7 @@ import themcbros.usefulmachinery.util.EnergyUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider, WrenchableBlockEntity {
+public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
 
@@ -231,7 +230,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
             if (energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStorage().getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(-accepted);
+                this.energyStorage.consumeEnergy(accepted);
             }
         }
     }
@@ -245,7 +244,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
                 int accept = energy.extractEnergy(Math.min(this.getEnergyStorage().getMaxEnergyStored() - this.getEnergyStorage().getEnergyStored(), MAX_TRANSFER), true);
 
                 if (this.getEnergyStorage().getEnergyStored() <= this.getEnergyStorage().getMaxEnergyStored() - accept)
-                    this.energyStorage.modifyEnergyStored(energy.extractEnergy(accept, false));
+                    this.energyStorage.growEnergy(energy.extractEnergy(accept, false));
             }
         }
     }
@@ -259,7 +258,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
             if (energy != null && energy.canReceive()) {
                 int accepted = energy.receiveEnergy(Math.min(MAX_TRANSFER, this.getEnergyStorage().getEnergyStored()), false);
-                this.energyStorage.modifyEnergyStored(-accepted);
+                this.energyStorage.consumeEnergy(accepted);
                 if (this.getEnergyStorage().getEnergyStored() <= 0) break;
             }
         }

@@ -7,8 +7,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.themcbrothers.lib.client.screen.widgets.EnergyBar;
-import net.themcbrothers.lib.energy.EnergyProvider;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.gui.widget.CompactorModeButton;
 import themcbros.usefulmachinery.container.CompactorContainer;
@@ -34,20 +32,7 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorContainer> {
             Networking.channel.sendToServer(new SetCompactorModePacket(mode));
         });
 
-        this.energyBar = new EnergyBar(this.leftPos + 155, this.topPos + 17, EnergyBar.Size._10x50, new EnergyProvider() {
-            @Override
-            public long getEnergyStored() {
-                return menu.getEnergyStored();
-            }
-
-            @Override
-            public long getMaxEnergyStored() {
-                return menu.getMaxEnergyStored();
-            }
-        }, this);
-
         this.addRenderableWidget(compactorModeButton);
-        this.addRenderableOnly(this.energyBar);
     }
 
     @Override
@@ -58,12 +43,12 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorContainer> {
 
         int i = this.leftPos;
         int j = this.topPos;
+
         this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
         // Render arrow
         int l = this.menu.getProgressScaled(24);
         this.blit(poseStack, 58 + i, 32 + j, 176, 14, l, 17);
-
     }
 
     @Override
@@ -73,10 +58,6 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorContainer> {
                 CompactorMode mode = button.getMode();
                 renderTooltip(poseStack, UsefulMachinery.TEXT_UTILS.translate("misc", "compact_" + mode.getSerializedName()), mouseX, mouseY);
             }
-        }
-
-        if (this.energyBar.isMouseOver(mouseX, mouseY)) {
-            this.energyBar.renderToolTip(poseStack, mouseX, mouseY);
         }
 
         super.renderTooltip(poseStack, mouseX, mouseY);

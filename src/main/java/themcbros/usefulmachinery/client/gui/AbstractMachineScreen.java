@@ -16,8 +16,6 @@ import themcbros.usefulmachinery.networking.SetRedstoneModePacket;
 import javax.annotation.Nonnull;
 
 public abstract class AbstractMachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T> {
-    protected EnergyBar energyBar = null;
-
     AbstractMachineScreen(T screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
@@ -32,6 +30,7 @@ public abstract class AbstractMachineScreen<T extends MachineContainer> extends 
         });
 
         this.addRenderableWidget(redstoneModeButton);
+        this.addRenderableOnly(new EnergyBar(this.leftPos + 155, this.topPos + 17, EnergyBar.Size._10x50, this.menu, this));
 
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
@@ -51,6 +50,10 @@ public abstract class AbstractMachineScreen<T extends MachineContainer> extends 
             if (widget instanceof RedstoneModeButton button && button.isHoveredOrFocused()) {
                 RedstoneMode mode = button.getMode();
                 renderTooltip(poseStack, UsefulMachinery.TEXT_UTILS.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
+            }
+
+            if (widget instanceof EnergyBar energyBar && energyBar.isHoveredOrFocused()) {
+                energyBar.renderToolTip(poseStack, mouseX, mouseY);
             }
         }
     }

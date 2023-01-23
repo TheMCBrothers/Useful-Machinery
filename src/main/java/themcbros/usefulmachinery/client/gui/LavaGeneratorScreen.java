@@ -2,13 +2,12 @@ package themcbros.usefulmachinery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.themcbrothers.lib.client.screen.widgets.EnergyBar;
 import net.themcbrothers.lib.client.screen.widgets.FluidTank;
-import net.themcbrothers.lib.energy.EnergyProvider;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.container.LavaGeneratorContainer;
 
@@ -16,8 +15,6 @@ import javax.annotation.Nonnull;
 
 public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorContainer> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.getId("textures/gui/container/lava_generator.png");
-
-    private FluidTank lavaTank;
 
     public LavaGeneratorScreen(LavaGeneratorContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
@@ -27,21 +24,7 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorCont
     protected void init() {
         super.init();
 
-        this.lavaTank = new FluidTank(this.leftPos + 11, this.topPos + 17, 10, 50, this.menu.getFluidTankHandler(), this);
-        this.energyBar = new EnergyBar(this.leftPos + 155, this.topPos + 17, EnergyBar.Size._10x50, new EnergyProvider() {
-            @Override
-            public long getEnergyStored() {
-                return menu.getEnergyStored();
-            }
-
-            @Override
-            public long getMaxEnergyStored() {
-                return menu.getMaxEnergyStored();
-            }
-        }, this);
-
-        this.addRenderableOnly(this.lavaTank);
-        this.addRenderableOnly(this.energyBar);
+        this.addRenderableOnly(new FluidTank(this.leftPos + 11, this.topPos + 17, 10, 50, this.menu.getFluidTankHandler(), this));
     }
 
     @Override
@@ -64,12 +47,10 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorCont
 
     @Override
     protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        if (this.lavaTank.isMouseOver(mouseX, mouseY)) {
-            this.lavaTank.renderToolTip(poseStack, mouseX, mouseY);
-        }
-
-        if (this.energyBar.isMouseOver(mouseX, mouseY)) {
-            this.energyBar.renderToolTip(poseStack, mouseX, mouseY);
+        for (Widget widget : this.renderables) {
+            if (widget instanceof FluidTank lavaTank && lavaTank.isHoveredOrFocused()) {
+                lavaTank.renderToolTip(poseStack, mouseX, mouseY);
+            }
         }
 
         super.renderTooltip(poseStack, mouseX, mouseY);
