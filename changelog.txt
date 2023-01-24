@@ -1,3 +1,8 @@
+4.1.0:
+- Fixed client sync
+- Fixed machine drop
+- Upgrade item uses in survival
+
 3.1.0:
 - Integration of TheMCBrosLib
 - Bug fixes
