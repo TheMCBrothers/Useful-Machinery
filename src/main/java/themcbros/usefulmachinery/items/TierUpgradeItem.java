@@ -2,13 +2,11 @@ package themcbros.usefulmachinery.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -37,7 +35,7 @@ public class TierUpgradeItem extends UpgradeItem {
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
             MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
 
-            if (stack.hasTag() && stack.getTag() != null && stack.getTag().contains("Tier", Tag.TAG_INT)) {
+            if (stack.getTag() != null && stack.getTag().contains("Tier", Tag.TAG_ANY_NUMERIC)) {
                 MachineTier itemTier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
                     abstractMachineBlockEntity.setMachineTier(itemTier);
@@ -45,12 +43,15 @@ public class TierUpgradeItem extends UpgradeItem {
                     abstractMachineBlockEntity.getEnergyStorage().setMaxEnergyStored(20000 * (itemTier.ordinal() + 1));
                     level.sendBlockUpdated(pos, blockState, blockState, 4);
                     if (playerEntity != null) {
-                        playerEntity.displayClientMessage(Component.translatable("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
+                        if (!playerEntity.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        playerEntity.displayClientMessage(Component.literal("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
                     }
                     return InteractionResult.SUCCESS;
                 }
             } else if (playerEntity != null) {
-                playerEntity.displayClientMessage(Component.translatable("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
+                playerEntity.displayClientMessage(Component.literal("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
             }
         }
 
@@ -80,22 +81,5 @@ public class TierUpgradeItem extends UpgradeItem {
         }
 
         return this.getDescriptionId();
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowedIn(group)) {
-            for (MachineTier tier : MachineTier.values()) {
-                if (tier != MachineTier.SIMPLE) {
-                    ItemStack stack = new ItemStack(this);
-                    CompoundTag tag = new CompoundTag();
-
-                    tag.putInt("Tier", tier.ordinal());
-                    stack.setTag(tag);
-
-                    items.add(stack);
-                }
-            }
-        }
     }
 }
