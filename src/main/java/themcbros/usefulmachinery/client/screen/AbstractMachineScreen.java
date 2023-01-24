@@ -1,7 +1,7 @@
 package themcbros.usefulmachinery.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -47,13 +47,13 @@ public abstract class AbstractMachineScreen<T extends MachineMenu> extends Abstr
     protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
         super.renderTooltip(poseStack, mouseX, mouseY);
 
-        for (Widget widget : this.renderables) {
-            if (widget instanceof RedstoneModeButton button && button.isHoveredOrFocused()) {
+        for (Renderable renderable : this.renderables) {
+            if (renderable instanceof RedstoneModeButton button && button.isHoveredOrFocused()) {
                 RedstoneMode mode = button.getMode();
                 renderTooltip(poseStack, TEXT_UTILS.translate("misc", "redstoneMode", mode.name()), mouseX, mouseY);
             }
 
-            if (widget instanceof EnergyBar energyBar && energyBar.isHoveredOrFocused()) {
+            if (renderable instanceof EnergyBar energyBar && energyBar.isHoveredOrFocused()) {
                 energyBar.renderToolTip(poseStack, mouseX, mouseY);
             }
         }

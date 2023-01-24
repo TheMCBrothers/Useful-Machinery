@@ -1,12 +1,11 @@
 package themcbros.usefulmachinery.init;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.themcbrothers.lib.registration.deferred.BlockDeferredRegister;
 import net.themcbrothers.lib.registration.deferred.BlockEntityDeferredRegister;
 import net.themcbrothers.lib.registration.deferred.ItemDeferredRegister;
@@ -19,9 +18,9 @@ public class Registration {
     public static final BlockEntityDeferredRegister BLOCK_ENTITY_TYPES = new BlockEntityDeferredRegister(UsefulMachinery.MOD_ID);
     public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(UsefulMachinery.MOD_ID);
     public static final MenuTypeDeferredRegister MENUS = new MenuTypeDeferredRegister(UsefulMachinery.MOD_ID);
-    public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registry.CUSTOM_STAT_REGISTRY, UsefulMachinery.MOD_ID);
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, UsefulMachinery.MOD_ID);
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UsefulMachinery.MOD_ID);
 
     public static void register(IEventBus bus) {
         MachineryBlocks.init();

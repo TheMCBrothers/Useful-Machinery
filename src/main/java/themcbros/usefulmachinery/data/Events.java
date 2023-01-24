@@ -1,7 +1,8 @@
 package themcbros.usefulmachinery.data;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,21 +14,23 @@ public class Events {
     @SubscribeEvent
     public static void gatherData(final GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
+        PackOutput output = gen.getPackOutput();
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         // Client Providers
-        gen.addProvider(event.includeClient(), new MachineryBlockStateProvider(gen, fileHelper));
-        gen.addProvider(event.includeClient(), new MachineryItemModelProvider(gen, fileHelper));
-        gen.addProvider(event.includeClient(), new MachineryLanguageProviders.EnglishUS(gen));
-        gen.addProvider(event.includeClient(), new MachineryLanguageProviders.SwissGerman(gen));
+        gen.addProvider(event.includeClient(), new MachineryBlockStateProvider(output, fileHelper));
+        gen.addProvider(event.includeClient(), new MachineryItemModelProvider(output, fileHelper));
+        gen.addProvider(event.includeClient(), new MachineryLanguageProviders.EnglishUS(output));
+        gen.addProvider(event.includeClient(), new MachineryLanguageProviders.SwissGerman(output));
+        gen.addProvider(event.includeClient(), new MachinerySpriteSourceProvider(output, fileHelper));
 
 
         // Server Providers
-        BlockTagsProvider blockProvider = new MachineryTagProvider.Block(gen, fileHelper);
+        BlockTagsProvider blockProvider = new MachineryTagProvider.Block(output, event.getLookupProvider(), fileHelper);
 
         gen.addProvider(event.includeServer(), blockProvider);
-        gen.addProvider(event.includeServer(), new MachineryTagProvider.Item(gen, blockProvider, fileHelper));
-        gen.addProvider(event.includeServer(), new MachineryLootTableProvider(gen));
-        gen.addProvider(event.includeServer(), new MachineryRecipeProvider(gen));
+        gen.addProvider(event.includeServer(), new MachineryTagProvider.Item(output, event.getLookupProvider(), blockProvider, fileHelper));
+        gen.addProvider(event.includeServer(), new MachineryLootTableProvider(output));
+        gen.addProvider(event.includeServer(), new MachineryRecipeProvider(output));
     }
 }

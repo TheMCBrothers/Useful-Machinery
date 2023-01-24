@@ -5,10 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import themcbros.usefulmachinery.menu.CompactorMenu;
 import themcbros.usefulmachinery.machine.CompactorMode;
+import themcbros.usefulmachinery.menu.CompactorMenu;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public class CompactorModeButton extends Button {
     private final CompactorMenu container;
@@ -17,7 +18,7 @@ public class CompactorModeButton extends Button {
         super(x, y, width, height, Component.empty(), button -> {
             ((CompactorModeButton) button).cycleMode();
             onPress.onPress(button);
-        });
+        }, Supplier::get);
 
         this.container = container;
     }
@@ -40,8 +41,8 @@ public class CompactorModeButton extends Button {
         final Minecraft minecraft = Minecraft.getInstance();
         final ItemStack renderStack = this.container.getCompactorMode().getIconStack();
 
-        minecraft.getItemRenderer().renderGuiItemDecorations(minecraft.font, renderStack, this.x + 2, this.y + 2, "");
-        minecraft.getItemRenderer().renderGuiItem(renderStack, this.x + 2, this.y + 2);
+        minecraft.getItemRenderer().renderGuiItemDecorations(minecraft.font, renderStack, this.getX() + 2, this.getY() + 2, "");
+        minecraft.getItemRenderer().renderGuiItem(renderStack, this.getX() + 2, this.getY() + 2);
     }
 
 }

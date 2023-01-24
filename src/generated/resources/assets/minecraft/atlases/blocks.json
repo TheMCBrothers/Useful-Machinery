@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "usefulmachinery:item/energy_slot"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "usefulmachinery:block/machine_side_tier_overlay"
+    }
+  ]
+}

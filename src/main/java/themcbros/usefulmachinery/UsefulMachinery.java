@@ -2,18 +2,17 @@ package themcbros.usefulmachinery;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.themcbrothers.lib.util.ComponentFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.Registration;
 import themcbros.usefulmachinery.proxy.ClientProxy;
 import themcbros.usefulmachinery.proxy.CommonProxy;
 import themcbros.usefulmachinery.proxy.ServerProxy;
-
-import javax.annotation.Nonnull;
 
 @Mod(UsefulMachinery.MOD_ID)
 public class UsefulMachinery {
@@ -21,16 +20,11 @@ public class UsefulMachinery {
     public static final String MOD_ID = "usefulmachinery";
     public static final ComponentFormatter TEXT_UTILS = new ComponentFormatter(MOD_ID);
     public static CommonProxy proxy;
-
-    public static final CreativeModeTab GROUP = new CreativeModeTab(MOD_ID) {
-        @Nonnull
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(MachineryItems.BATTERY.get());
-        }
-    };
+    public static CreativeModeTab GROUP;
 
     public UsefulMachinery() {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        Registration.register(bus);
         proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
     }
 

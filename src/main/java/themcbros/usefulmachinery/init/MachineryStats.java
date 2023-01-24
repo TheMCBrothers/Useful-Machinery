@@ -1,6 +1,7 @@
 package themcbros.usefulmachinery.init;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
@@ -19,7 +20,7 @@ public class MachineryStats {
 
     private static @NotNull ResourceLocation registerCustom(String key) {
         ResourceLocation resourcelocation = UsefulMachinery.getId(key);
-        Registry.register(Registry.CUSTOM_STAT, key, resourcelocation);
+        Registry.register(BuiltInRegistries.CUSTOM_STAT, key, resourcelocation);
         Stats.CUSTOM.get(resourcelocation, StatFormatter.DEFAULT);
         return resourcelocation;
     }

@@ -2,7 +2,7 @@ package themcbros.usefulmachinery.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -55,8 +55,8 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
 
     @Override
     protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        for (Widget widget : this.renderables) {
-            if (widget instanceof CompactorModeButton button && button.isHoveredOrFocused()) {
+        for (Renderable renderable : this.renderables) {
+            if (renderable instanceof CompactorModeButton button && button.isHoveredOrFocused()) {
                 CompactorMode mode = button.getMode();
                 renderTooltip(poseStack, TEXT_UTILS.translate("misc", "compact_" + mode.getSerializedName()), mouseX, mouseY);
             }

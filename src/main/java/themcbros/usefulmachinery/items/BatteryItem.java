@@ -1,11 +1,9 @@
 package themcbros.usefulmachinery.items;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -61,19 +59,6 @@ public class BatteryItem extends Item implements EnergyContainerItem {
 
         MutableComponent component = TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), energyUnit);
         tooltip.add(component.withStyle(ChatFormatting.GRAY));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowedIn(group)) {
-            ItemStack itemStack = new ItemStack(this);
-            CompoundTag tag = new CompoundTag();
-
-            tag.putInt(ENERGY, this.capacity);
-            itemStack.setTag(tag);
-            items.add(itemStack);
-        }
-        super.fillItemCategory(group, items);
     }
 
     @Override

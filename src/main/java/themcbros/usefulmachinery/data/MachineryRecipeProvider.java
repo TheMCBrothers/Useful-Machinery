@@ -1,10 +1,7 @@
 package themcbros.usefulmachinery.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -25,12 +22,12 @@ import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 import static themcbros.usefulmachinery.init.MachineryItems.*;
 
 public class MachineryRecipeProvider extends RecipeProvider {
-    public MachineryRecipeProvider(DataGenerator gen) {
-        super(gen);
+    public MachineryRecipeProvider(PackOutput output) {
+        super(output);
     }
 
     @Override
-    protected void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> recipe) {
+    protected void buildRecipes(@Nonnull Consumer<FinishedRecipe> recipe) {
         //Gears
         CompactingRecipeBuilder.compacting(ALUMINUM_GEAR.get(), Ingredient.of(INGOTS_ALUMINUM), 4, 200, CompactorMode.GEAR).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipe, getId("aluminum_gear_from_compacting"));
         CompactingRecipeBuilder.compacting(BRONZE_GEAR.get(), Ingredient.of(INGOTS_BRONZE), 4, 200, CompactorMode.GEAR).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipe, getId("bronze_gear_from_compacting"));
@@ -120,16 +117,16 @@ public class MachineryRecipeProvider extends RecipeProvider {
         CrushingRecipeBuilder.crushing(URANIUM_DUST.get(), 1, Ingredient.of(INGOTS_URANIUM), 200).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipe, getId("uranium_dust_from_compacting"));
 
         //Machines
-        ShapedRecipeBuilder.shaped(COAL_GENERATOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', ItemTags.COALS).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
-        ShapedRecipeBuilder.shaped(COMPACTOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', COMPACTOR_KIT.get()).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', INGOTS_ELECTRUM).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
-        ShapedRecipeBuilder.shaped(CRUSHER.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', Items.FLINT).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_COPPER).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
-        ShapedRecipeBuilder.shaped(ELECTRIC_SMELTER.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', GEARS_COPPER).define('R', Items.FURNACE).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_furnace", has(Items.FURNACE)).save(recipe);
-        ShapedRecipeBuilder.shaped(LAVA_GENERATOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, COAL_GENERATOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', ItemTags.COALS).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, COMPACTOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', COMPACTOR_KIT.get()).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', INGOTS_ELECTRUM).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CRUSHER.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', Items.FLINT).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_COPPER).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ELECTRIC_SMELTER.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', GEARS_COPPER).define('R', Items.FURNACE).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_furnace", has(Items.FURNACE)).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, LAVA_GENERATOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
 
         //Items
-        ShapedRecipeBuilder.shaped(MACHINE_FRAME.get(), 1).pattern("X#X").pattern("#R#").pattern("X#X").define('X', INGOTS_TIN).define('#', Tags.Items.GLASS).define('R', GEARS_IRON).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
-        ShapedRecipeBuilder.shaped(BATTERY.get(), 1).pattern(" X ").pattern("#R#").pattern("#R#").define('X', Tags.Items.NUGGETS_GOLD).define('#', INGOTS_TIN).define('R', Tags.Items.DUSTS_REDSTONE).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MACHINE_FRAME.get(), 1).pattern("X#X").pattern("#R#").pattern("X#X").define('X', INGOTS_TIN).define('#', Tags.Items.GLASS).define('R', GEARS_IRON).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BATTERY.get(), 1).pattern(" X ").pattern("#R#").pattern("#R#").define('X', Tags.Items.NUGGETS_GOLD).define('#', INGOTS_TIN).define('R', Tags.Items.DUSTS_REDSTONE).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
 
-        ShapelessRecipeBuilder.shapeless(COMPACTOR_KIT.get(), 1).requires(GEARS_GOLD).requires(PLATES_LEAD).requires(HAMMER.get()).unlockedBy("has_hammer", has(HAMMER.get())).save(recipe);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, COMPACTOR_KIT.get(), 1).requires(GEARS_GOLD).requires(PLATES_LEAD).requires(HAMMER.get()).unlockedBy("has_hammer", has(HAMMER.get())).save(recipe);
     }
 }

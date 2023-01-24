@@ -2,7 +2,7 @@ package themcbros.usefulmachinery.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,8 +47,8 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorMenu
 
     @Override
     protected void renderTooltip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-        for (Widget widget : this.renderables) {
-            if (widget instanceof FluidTank fluidTank && fluidTank.isHoveredOrFocused()) {
+        for (Renderable renderable : this.renderables) {
+            if (renderable instanceof FluidTank fluidTank && fluidTank.isHoveredOrFocused()) {
                 fluidTank.renderToolTip(poseStack, mouseX, mouseY);
             }
         }

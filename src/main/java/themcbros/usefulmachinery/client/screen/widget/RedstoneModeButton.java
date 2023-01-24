@@ -44,7 +44,7 @@ public class RedstoneModeButton extends ExtendedButton {
 
         RenderSystem.disableDepthTest();
 
-        blit(poseStack, this.x, this.y, 0, this.container.getRedstoneMode().getIndex() == 0 ? 0 : 2, this.width, this.height, 16, 16);
+        blit(poseStack, this.getX(), this.getY(), 0, this.container.getRedstoneMode().getIndex() == 0 ? 0 : 2, this.width, this.height, 16, 16);
 
         RenderSystem.enableDepthTest();
     }

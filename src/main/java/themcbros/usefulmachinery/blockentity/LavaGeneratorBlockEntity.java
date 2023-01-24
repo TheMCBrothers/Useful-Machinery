@@ -2,7 +2,7 @@ package themcbros.usefulmachinery.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -64,7 +64,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 case 5 -> LavaGeneratorBlockEntity.this.burnTime;
                 case 6 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getFluidAmount();
                 case 7 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getCapacity();
-                case 8 -> Registry.FLUID.getId(LavaGeneratorBlockEntity.this.LAVA_TANK.getFluid().getFluid());
+                case 8 -> BuiltInRegistries.FLUID.getId(LavaGeneratorBlockEntity.this.LAVA_TANK.getFluid().getFluid());
                 default -> 0;
             };
         }

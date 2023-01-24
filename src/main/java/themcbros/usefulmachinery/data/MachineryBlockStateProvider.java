@@ -2,7 +2,7 @@ package themcbros.usefulmachinery.data;
 
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,8 +17,8 @@ import java.util.Objects;
 import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 
 public class MachineryBlockStateProvider extends BlockStateProvider {
-    public MachineryBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, UsefulMachinery.MOD_ID, exFileHelper);
+    public MachineryBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
+        super(output, UsefulMachinery.MOD_ID, exFileHelper);
     }
 
     @Override

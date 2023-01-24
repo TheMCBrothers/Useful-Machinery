@@ -23,11 +23,9 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
-import org.jetbrains.annotations.NotNull;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
@@ -35,8 +33,6 @@ import java.util.function.Supplier;
 public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-
-    @Nullable
     private final Supplier<ResourceLocation> interactStat;
 
     public AbstractMachineBlock(Properties properties, @Nullable Supplier<ResourceLocation> interactStat) {
@@ -46,13 +42,12 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
     }
 
     @Override
-    @NotNull
-    public RenderShape getRenderShape(@NotNull BlockState blockState) {
+    public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @Nonnull BlockState blockState, @Nonnull BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> type) {
         return level.isClientSide() ? null : createTickerHelper(type, type, ((l, p, s, be) -> ((AbstractMachineBlockEntity) be).tick()));
     }
 
@@ -72,7 +67,6 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
     }
 
     @Override
-    @Nonnull
     public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
@@ -83,8 +77,7 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
     public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     @Override
-    @Nonnull
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level worldIn, @Nonnull BlockPos pos, Player player, @Nonnull InteractionHand handIn, @Nonnull BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (this.tryWrench(state, worldIn, pos, player, handIn, hit)) {
             return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }
@@ -95,7 +88,9 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
 
         if (worldIn.getBlockEntity(pos) instanceof MenuProvider blockEntity && player instanceof ServerPlayer) {
             player.openMenu(blockEntity);
-            if (interactStat != null) player.awardStat(interactStat.get());
+            if (interactStat != null) {
+                player.awardStat(interactStat.get());
+            }
         }
 
         return InteractionResult.SUCCESS;

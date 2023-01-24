@@ -1,7 +1,8 @@
 package themcbros.usefulmachinery.data;
 
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -17,21 +18,26 @@ import net.minecraftforge.registries.RegistryObject;
 import themcbros.usefulmachinery.init.Registration;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.Objects;
 
 import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 
-public class MachineryBlockLoot extends BlockLoot {
-    @Override
-    protected void addTables() {
-        this.add(COAL_GENERATOR.get(), MachineryBlockLoot::simpleMachineBlock);
-        this.add(COMPACTOR.get(), MachineryBlockLoot::simpleMachineBlock);
-        this.add(CRUSHER.get(), MachineryBlockLoot::simpleMachineBlock);
-        this.add(ELECTRIC_SMELTER.get(), MachineryBlockLoot::simpleMachineBlock);
-        this.add(LAVA_GENERATOR.get(), MachineryBlockLoot::simpleMachineBlock);
+public class MachineryBlockLoot extends BlockLootSubProvider {
+    protected MachineryBlockLoot() {
+        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
     }
 
-    private static LootTable.Builder simpleMachineBlock(Block block) {
+    @Override
+    protected void generate() {
+        this.add(COAL_GENERATOR.get(), this::simpleMachineBlock);
+        this.add(COMPACTOR.get(), this::simpleMachineBlock);
+        this.add(CRUSHER.get(), this::simpleMachineBlock);
+        this.add(ELECTRIC_SMELTER.get(), this::simpleMachineBlock);
+        this.add(LAVA_GENERATOR.get(), this::simpleMachineBlock);
+    }
+
+    private LootTable.Builder simpleMachineBlock(Block block) {
         return LootTable.lootTable()
                 .withPool(applyExplosionCondition(block, LootPool.lootPool())
                         .setRolls(ConstantValue.exactly(1F))
@@ -42,7 +48,8 @@ public class MachineryBlockLoot extends BlockLoot {
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                         .copy("EnergyStored", "BlockEntityTag.EnergyStored")
                                         .copy("Items", "BlockEntityTag.Items")
-                                        .copy("RedstoneMode", "BlockEntityTag.RedstoneMode"))
+                                        .copy("RedstoneMode", "BlockEntityTag.RedstoneMode")
+                                        .copy("Tier", "BlockEntityTag.Tier"))
                         ));
     }
 

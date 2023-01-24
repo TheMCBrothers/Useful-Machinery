@@ -1,5 +1,10 @@
 package themcbros.usefulmachinery.proxy;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -7,25 +12,35 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.themcbrothers.lib.energy.EnergyContainerItem;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.top.TheOneProbeSupport;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.init.Registration;
+import themcbros.usefulmachinery.items.TierUpgradeItem;
+import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.networking.Networking;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.stream.Collectors;
+
+import static themcbros.usefulmachinery.items.BatteryItem.ENERGY;
 
 public class CommonProxy {
     CommonProxy() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        Registration.register(modEventBus);
-        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC);
         modEventBus.addListener(this::processIMC);
+        modEventBus.addListener(this::registerCreativeModeTab);
+        modEventBus.addListener(this::buildContentsCreativeModeTab);
 
         Networking.init();
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
@@ -39,5 +54,47 @@ public class CommonProxy {
         UsefulMachinery.LOGGER.info("Got IMC {}", event.getIMCStream().
                 map(m -> m.messageSupplier().get()).
                 collect(Collectors.toList()));
+    }
+
+    private void registerCreativeModeTab(CreativeModeTabEvent.Register event) {
+        UsefulMachinery.GROUP = event.registerCreativeModeTab(UsefulMachinery.getId("tab"), (builder) -> {
+            builder.icon(() -> new ItemStack(MachineryItems.BATTERY.get())).title(Component.translatable("itemGroup.usefulmachinery"));
+        });
+    }
+
+    private void buildContentsCreativeModeTab(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == UsefulMachinery.GROUP) {
+            Registration.BLOCKS.getEntries().forEach(block -> event.accept(block.get()));
+            Registration.ITEMS.getEntries().forEach((item) -> event.acceptAll(considerSpecialNeeds(item.get())));
+        }
+    }
+
+    private Collection<ItemStack> considerSpecialNeeds(ItemLike itemLike) {
+        if (itemLike.asItem() instanceof EnergyContainerItem energyContainerItem) {
+            ItemStack itemStack = new ItemStack(itemLike);
+            CompoundTag tag = new CompoundTag();
+
+            tag.putInt(ENERGY, energyContainerItem.getMaxEnergyStored(itemStack));
+            itemStack.setTag(tag);
+            return Collections.singleton(itemStack);
+        } else if (itemLike.asItem() instanceof TierUpgradeItem) {
+            Collection<ItemStack> itemStacks = new HashSet<>();
+
+            for (MachineTier tier : MachineTier.values()) {
+                if (tier != MachineTier.SIMPLE) {
+                    ItemStack stack = new ItemStack(itemLike);
+                    CompoundTag tag = new CompoundTag();
+
+                    tag.putInt("Tier", tier.ordinal());
+                    stack.setTag(tag);
+
+                    itemStacks.add(stack);
+                }
+            }
+
+            return itemStacks;
+        }
+
+        return Collections.singleton(new ItemStack(itemLike));
     }
 }

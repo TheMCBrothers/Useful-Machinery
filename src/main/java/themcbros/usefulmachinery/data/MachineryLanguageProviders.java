@@ -1,6 +1,6 @@
 package themcbros.usefulmachinery.data;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.init.MachineryItems;
@@ -9,8 +9,8 @@ import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 
 public class MachineryLanguageProviders {
     public static class EnglishUS extends LanguageProvider {
-        public EnglishUS(DataGenerator gen) {
-            super(gen, UsefulMachinery.MOD_ID, "en_us");
+        public EnglishUS(PackOutput output) {
+            super(output, UsefulMachinery.MOD_ID, "en_us");
         }
 
         @Override
@@ -69,8 +69,8 @@ public class MachineryLanguageProviders {
     }
 
     public static class SwissGerman extends LanguageProvider {
-        public SwissGerman(DataGenerator gen) {
-            super(gen, UsefulMachinery.MOD_ID, "de_ch");
+        public SwissGerman(PackOutput output) {
+            super(output, UsefulMachinery.MOD_ID, "de_ch");
         }
 
         @Override

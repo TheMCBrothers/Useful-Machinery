@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.themcbrothers.lib.registration.object.ItemObject;
-import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.blocks.*;
 import themcbros.usefulmachinery.items.CreativePowerCellItem;
 import themcbros.usefulmachinery.items.MachineBlockItem;
@@ -15,7 +14,7 @@ import java.util.function.Function;
 import static themcbros.usefulmachinery.init.Registration.BLOCKS;
 
 public class MachineryBlocks {
-    private static final Item.Properties PROPS = new Item.Properties().tab(UsefulMachinery.GROUP);
+    private static final Item.Properties PROPS = new Item.Properties();
     private static final Function<? super Block, MachineBlockItem> MACHINE_BLOCK_ITEM = block -> new MachineBlockItem(block, PROPS);
 
     public static final ItemObject<AbstractMachineBlock> CRUSHER = BLOCKS.register("crusher", () -> new CrusherBlock(Block.Properties.of(Material.METAL).strength(2f).sound(SoundType.METAL).requiresCorrectToolForDrops()), MACHINE_BLOCK_ITEM);

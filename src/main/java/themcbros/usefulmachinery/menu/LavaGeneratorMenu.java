@@ -1,7 +1,7 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -113,7 +113,7 @@ public class LavaGeneratorMenu extends MachineMenu {
     }
 
     public Fluid getTankFluid() {
-        return Registry.FLUID.byId(this.fields.get(8));
+        return BuiltInRegistries.FLUID.byId(this.fields.get(8));
     }
 
     public IFluidHandler getFluidTankHandler() {

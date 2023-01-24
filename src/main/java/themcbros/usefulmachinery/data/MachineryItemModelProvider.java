@@ -1,6 +1,6 @@
 package themcbros.usefulmachinery.data;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -11,8 +11,8 @@ import java.util.Objects;
 import static themcbros.usefulmachinery.init.MachineryItems.*;
 
 public class MachineryItemModelProvider extends ItemModelProvider {
-    public MachineryItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, UsefulMachinery.MOD_ID, existingFileHelper);
+    public MachineryItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, UsefulMachinery.MOD_ID, existingFileHelper);
     }
 
     @Override
