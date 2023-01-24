@@ -1,3 +1,6 @@
+4.7.0:
+- Wrench bug fix (TheMCBrosLib)
+
 3.7.0:
 - integration of TheMCBrosLib
 - updated JEI to the newest beta
