@@ -1,18 +1,5 @@
-3.1.0:
-- Integration of TheMCBrosLib
-- Bug fixes
-
-2.1.0:
-- Yey! First Release!
-- TheOneProbe works with our machines
-- Insert Lava by clicking with Lava Bucket on Lava Generator
-- Tiny bug fixes
-
-1.1.0:
-- Lava and Coal Generators now work properly
-- Lava is visible in Lava Generator
-- Other bug fixes
-
 1.0.0:
-- Updated to 1.19.2
-- JEI bug fix
+- Fixed client sync
+- Fixed machine drop
+- Upgrade item uses in survival
+- Migrated to 1.19.3
