@@ -45,6 +45,9 @@ public class TierUpgradeItem extends UpgradeItem {
                     abstractMachineBlockEntity.getEnergyStorage().setMaxEnergyStored(20000 * (itemTier.ordinal() + 1));
                     level.sendBlockUpdated(pos, blockState, blockState, 4);
                     if (playerEntity != null) {
+                        if (!playerEntity.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
                         playerEntity.displayClientMessage(Component.translatable("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
                     }
                     return InteractionResult.SUCCESS;

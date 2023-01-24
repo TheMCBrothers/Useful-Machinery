@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[38,)" #mandatory
+loaderVersion="[43,)" #mandatory
 license="MIT License"
 # issueTrackerURL="http://my.issue.tracker/" #optional
 
@@ -15,17 +15,27 @@ authors="TheMCBrothers" #optional
 description='''
 This is a mod that adds machines
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.usefulmachinery]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[38,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
-# Here's another dependency
+[[dependencies.usefulmachinery]] #optional
+    modId="tmcb_lib"
+    mandatory=true
+    versionRange="[1.19.2-2.0.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.usefulmachinery]] #optional
+    modId="usefulfoundation"
+    mandatory=true
+    versionRange="[3.0.0,)"
+    ordering="NONE"
+    side="BOTH"
 [[dependencies.usefulmachinery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,)"
+    versionRange="[1.19,1.19.3)"
     ordering="NONE"
     side="BOTH"
