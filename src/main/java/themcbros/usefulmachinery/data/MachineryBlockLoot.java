@@ -41,8 +41,8 @@ public class MachineryBlockLoot extends BlockLoot {
                                         .withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("contents"))))
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                         .copy("EnergyStored", "BlockEntityTag.EnergyStored")
-                                        .copy("Items", "BlockEntityTag.Items")
-                                        .copy("RedstoneMode", "BlockEntityTag.RedstoneMode"))
+                                        .copy("RedstoneMode", "BlockEntityTag.RedstoneMode")
+                                        .copy("Tier", "BlockEntityTag.Tier"))
                         ));
     }
 
