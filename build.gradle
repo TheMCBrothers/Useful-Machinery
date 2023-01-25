@@ -210,3 +210,5 @@ curseforge {
         }
     }
 }
+
+tasks.named("curseforge") { finalizedBy("publish") }
