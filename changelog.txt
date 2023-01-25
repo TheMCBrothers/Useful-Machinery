@@ -1,3 +1,7 @@
+5.7.0:
+- Fixed client sync
+- Fixed machine drop
+
 4.7.0:
 - Wrench bug fix (TheMCBrosLib)
 
