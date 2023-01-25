@@ -32,13 +32,18 @@
                   "op": "replace"
                 },
                 {
+                  "source": "RedstoneMode",
+                  "target": "BlockEntityTag.RedstoneMode",
+                  "op": "replace"
+                },
+                {
                   "source": "Items",
                   "target": "BlockEntityTag.Items",
                   "op": "replace"
                 },
                 {
-                  "source": "RedstoneMode",
-                  "target": "BlockEntityTag.RedstoneMode",
+                  "source": "Tier",
+                  "target": "BlockEntityTag.Tier",
                   "op": "replace"
                 }
               ]

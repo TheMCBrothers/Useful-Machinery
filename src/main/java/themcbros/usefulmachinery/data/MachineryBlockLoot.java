@@ -42,6 +42,7 @@ public class MachineryBlockLoot extends BlockLoot {
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                         .copy("EnergyStored", "BlockEntityTag.EnergyStored")
                                         .copy("RedstoneMode", "BlockEntityTag.RedstoneMode")
+                                        .copy("Items", "BlockEntityTag.Items")
                                         .copy("Tier", "BlockEntityTag.Tier"))
                         ));
     }
