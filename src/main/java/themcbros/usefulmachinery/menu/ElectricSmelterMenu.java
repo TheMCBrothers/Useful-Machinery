@@ -1,73 +1,75 @@
 package themcbros.usefulmachinery.menu;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.themcbrothers.lib.util.ContainerHelper;
+import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
-import themcbros.usefulmachinery.blockentity.ElectricSmelterBlockEntity;
-import themcbros.usefulmachinery.menu.slot.EnergySlot;
-import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryMenus;
+import themcbros.usefulmachinery.menu.slot.EnergySlot;
 
 public class ElectricSmelterMenu extends MachineMenu {
-    private final Level level;
-
     public ElectricSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
-        this(id, playerInventory, new ElectricSmelterBlockEntity(BlockPos.ZERO, MachineryBlocks.ELECTRIC_SMELTER.get().defaultBlockState()), new SimpleContainerData(7));
+        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf), byteBuf.readInt());
     }
 
-    public ElectricSmelterMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
-        super(MachineryMenus.ELECTRIC_SMELTER.get(), id, playerInventory, tileEntity, fields);
-        this.level = playerInventory.player.level;
+    public ElectricSmelterMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, int upgradeCountSlot) {
+        super(MachineryMenus.ELECTRIC_SMELTER.get(), id, playerInventory, tileEntity, tileEntity.getContainerData(), upgradeCountSlot);
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
         this.addSlot(new Slot(tileEntity, 1, 95, 33));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
+        this.addUpgradeSlots(tileEntity.getUpgradeContainer());
         this.addPlayerSlots(playerInventory);
     }
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        int i = this.abstractMachineBlockEntity.getContainerSize();
-        ItemStack itemstack1 = ItemStack.EMPTY;
+        // information about slot indexes
+        final int containerSize = this.blockEntity.getContainerSize();
+        final int invSlotStart = containerSize + this.upgradeSlotCount;
+        final int invSlotEnd = invSlotStart + 27;
+        final int useRowSlotStart = invSlotEnd;
+        final int useRowSlotEnd = useRowSlotStart + 9;
+
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack slotStack = slot.getItem();
-            itemstack1 = slotStack.copy();
+            itemstack = slotStack.copy();
             if (index == 1) {
-                if (!this.moveItemStackTo(slotStack, i, 36 + i, true)) {
+                if (!this.moveItemStackTo(slotStack, invSlotStart, useRowSlotEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onQuickCraft(slotStack, itemstack1);
-            } else if (index != 0) {
+                slot.onQuickCraft(slotStack, itemstack);
+            } else if (index >= invSlotStart) {
                 if (this.canCook(slotStack)) {
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isEnergyItem(slotStack)) {
-                    if (!this.moveItemStackTo(slotStack, i - 1, i, false)) {
+                } else if (this.isEnergyItem(slotStack, false)) {
+                    if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= i && index < 27 + i) {
-                    if (!this.moveItemStackTo(slotStack, 27 + i, 36 + i, false)) {
+                } else if (slotStack.is(MachineryTags.Items.MACHINERY_UPGRADES)) {
+                    if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 27 + i && index < 36 + i && !this.moveItemStackTo(slotStack, i, 27 + i, false)) {
+                } else if (index < invSlotEnd) {
+                    if (!this.moveItemStackTo(slotStack, useRowSlotStart, useRowSlotEnd, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < useRowSlotEnd && !this.moveItemStackTo(slotStack, invSlotStart, invSlotEnd, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(slotStack, i, 36 + i, false)) {
+            } else if (!this.moveItemStackTo(slotStack, invSlotStart, useRowSlotEnd, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -77,19 +79,14 @@ public class ElectricSmelterMenu extends MachineMenu {
                 slot.setChanged();
             }
 
-            if (slotStack.getCount() == itemstack1.getCount()) {
+            if (slotStack.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
             slot.onTake(playerIn, slotStack);
         }
 
-        return itemstack1;
-    }
-
-    private boolean isEnergyItem(ItemStack itemstack1) {
-        return !itemstack1.isEmpty() && itemstack1.getCapability(ForgeCapabilities.ENERGY)
-                .map(IEnergyStorage::canExtract).orElse(false);
+        return itemstack;
     }
 
     protected boolean canCook(ItemStack stack) {
@@ -101,11 +98,11 @@ public class ElectricSmelterMenu extends MachineMenu {
     }
 
     public int getCookTime() {
-        return this.fields.get(5);
+        return this.fields.get(6);
     }
 
     public int getCookTimeTotal() {
-        return this.fields.get(6);
+        return this.fields.get(7);
     }
 
     public int getProgressScaled(int width) {

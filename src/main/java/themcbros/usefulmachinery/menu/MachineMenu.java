@@ -1,5 +1,6 @@
 package themcbros.usefulmachinery.menu;
 
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -7,23 +8,29 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.themcbrothers.lib.energy.EnergyProvider;
-import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.machine.RedstoneMode;
 
 import javax.annotation.Nullable;
 
-public class MachineMenu extends AbstractContainerMenu implements EnergyProvider {
-    public AbstractMachineBlockEntity abstractMachineBlockEntity;
-    protected ContainerData fields;
+public abstract class MachineMenu extends AbstractContainerMenu implements EnergyProvider {
+    protected final AbstractMachineBlockEntity blockEntity;
+    protected final ContainerData fields;
+    protected final Level level;
+    protected final int upgradeSlotCount;
 
-    MachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, ContainerData fields) {
+    MachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
         super(type, id);
-        this.abstractMachineBlockEntity = tileEntity;
+        this.level = playerInventory.player.getLevel();
+        this.blockEntity = blockEntity;
+        this.upgradeSlotCount = upgradeSlotCount;
 
         this.fields = fields;
         this.addDataSlots(fields);
-
     }
 
     protected void addPlayerSlots(Inventory playerInventory) {
@@ -38,14 +45,20 @@ public class MachineMenu extends AbstractContainerMenu implements EnergyProvider
         }
     }
 
-    @Override
-    public ItemStack quickMoveStack(Player player, int p_38942_) {
-        return null;
+    protected void addUpgradeSlots(Container upgradeContainer) {
+        for (int i = 0; i < this.upgradeSlotCount; i++) {
+            this.addSlot(new Slot(upgradeContainer, i, 188, 9 + i * 18));
+        }
+    }
+
+    protected boolean isEnergyItem(ItemStack stack, boolean canReceive) {
+        return !stack.isEmpty() && stack.getCapability(ForgeCapabilities.ENERGY)
+                .map(canReceive ? IEnergyStorage::canReceive : IEnergyStorage::canExtract).orElse(false);
     }
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return this.abstractMachineBlockEntity.stillValid(playerIn);
+        return this.getBlockEntity().stillValid(playerIn);
     }
 
     public RedstoneMode getRedstoneMode() {
@@ -56,8 +69,16 @@ public class MachineMenu extends AbstractContainerMenu implements EnergyProvider
         this.fields.set(4, mode.ordinal());
     }
 
+    public int getUpgradeSlotSize() {
+        return this.fields.get(5);
+    }
+
     public ContainerData getFields() {
         return fields;
+    }
+
+    public AbstractMachineBlockEntity getBlockEntity() {
+        return this.blockEntity;
     }
 
     @Override
