@@ -4,35 +4,18 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.registration.IGuiHandlerRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IRecipeTransferRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import themcbros.usefulmachinery.UsefulMachinery;
-import themcbros.usefulmachinery.client.screen.CoalGeneratorScreen;
-import themcbros.usefulmachinery.client.screen.CompactorScreen;
-import themcbros.usefulmachinery.client.screen.CrusherScreen;
-import themcbros.usefulmachinery.client.screen.ElectricSmelterScreen;
-import themcbros.usefulmachinery.client.screen.LavaGeneratorScreen;
+import themcbros.usefulmachinery.client.screen.*;
 import themcbros.usefulmachinery.compat.jei.categories.CoalGeneratingCategory;
 import themcbros.usefulmachinery.compat.jei.categories.CompactingCategory;
 import themcbros.usefulmachinery.compat.jei.categories.CrushingCategory;
 import themcbros.usefulmachinery.compat.jei.categories.LavaGeneratingCategory;
 import themcbros.usefulmachinery.init.MachineryMenus;
-import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
-import themcbros.usefulmachinery.menu.CompactorMenu;
-import themcbros.usefulmachinery.menu.CrusherMenu;
-import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
-import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
-import themcbros.usefulmachinery.recipes.CoalGeneratingRecipeMaker;
-import themcbros.usefulmachinery.recipes.CompactingRecipe;
-import themcbros.usefulmachinery.recipes.CrushingRecipe;
-import themcbros.usefulmachinery.recipes.LavaGeneratingRecipeMaker;
-import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
+import themcbros.usefulmachinery.menu.*;
+import themcbros.usefulmachinery.recipes.*;
 
 import static themcbros.usefulmachinery.init.MachineryBlocks.*;
 import static themcbros.usefulmachinery.init.MachineryItems.TIER_UPGRADE;
@@ -87,10 +70,10 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(CoalGeneratorScreen.class, 54, 34, 14, 14, MachineryJeiRecipeTypes.COAL_GENERATING);
-        registration.addRecipeClickArea(CrusherScreen.class, 58, 34, 28, 23, MachineryJeiRecipeTypes.CRUSHING);
-        registration.addRecipeClickArea(ElectricSmelterScreen.class, 58, 32, 24, 17, RecipeTypes.SMELTING, RecipeTypes.BLASTING);
-        registration.addRecipeClickArea(CompactorScreen.class, 58, 32, 24, 17, MachineryJeiRecipeTypes.COMPACTING);
-        registration.addRecipeClickArea(LavaGeneratorScreen.class, 81, 34, 14, 14, MachineryJeiRecipeTypes.LAVA_GENERATING);
+        registration.addGuiContainerHandler(CoalGeneratorScreen.class, new MachineGuiHandler(54, 34, 14, 14, MachineryJeiRecipeTypes.COAL_GENERATING));
+        registration.addGuiContainerHandler(CrusherScreen.class, new MachineGuiHandler(58, 34, 28, 23, MachineryJeiRecipeTypes.CRUSHING));
+        registration.addGuiContainerHandler(ElectricSmelterScreen.class, new MachineGuiHandler(58, 32, 24, 17, RecipeTypes.SMELTING, RecipeTypes.BLASTING));
+        registration.addGuiContainerHandler(CompactorScreen.class, new MachineGuiHandler(58, 32, 24, 17, MachineryJeiRecipeTypes.COMPACTING));
+        registration.addGuiContainerHandler(LavaGeneratorScreen.class, new MachineGuiHandler(81, 34, 14, 14, MachineryJeiRecipeTypes.LAVA_GENERATING));
     }
 }

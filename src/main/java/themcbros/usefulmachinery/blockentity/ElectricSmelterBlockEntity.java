@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.ElectricSmelterMenu;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,15 +23,15 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 7;
+            return 8;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
                 case 4 -> ElectricSmelterBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> ElectricSmelterBlockEntity.this.processTime = value;
-                case 6 -> ElectricSmelterBlockEntity.this.processTimeTotal = value;
+                case 6 -> ElectricSmelterBlockEntity.this.processTime = value;
+                case 7 -> ElectricSmelterBlockEntity.this.processTimeTotal = value;
             }
         }
 
@@ -43,8 +43,9 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
                 case 2 -> ElectricSmelterBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
                 case 3 -> (ElectricSmelterBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> ElectricSmelterBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> ElectricSmelterBlockEntity.this.processTime;
-                case 6 -> ElectricSmelterBlockEntity.this.processTimeTotal;
+                case 5 -> ElectricSmelterBlockEntity.this.getUpgradeSlotSize();
+                case 6 -> ElectricSmelterBlockEntity.this.processTime;
+                case 7 -> ElectricSmelterBlockEntity.this.processTimeTotal;
                 default -> 0;
             };
         }
@@ -94,7 +95,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new ElectricSmelterMenu(id, playerInventory, this, this.fields);
+        return new ElectricSmelterMenu(id, playerInventory, this, this.getUpgradeSlotSize());
     }
 
     private boolean isActive() {
@@ -117,12 +118,12 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
                     recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
                     this.processTime++;
                 }
 
                 if (this.isActive() && this.canProcess(recipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
                     this.processTime++;
 
                     if (this.processTime == this.processTimeTotal) {
@@ -196,5 +197,10 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
 
             itemstack.shrink(1);
         }
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fields;
     }
 }

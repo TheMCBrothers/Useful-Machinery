@@ -6,10 +6,10 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,6 +34,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+    protected SimpleContainer upgradeContainer;
     protected int processTime, processTimeTotal;
     protected ExtendedEnergyStorage energyStorage;
     protected MachineTier machineTier = MachineTier.SIMPLE;
@@ -45,6 +46,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
         this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
     }
 
     @Override
@@ -55,14 +57,17 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         if (this.processTimeTotal > 0) {
             compound.putInt("ProcessTimeTotal", this.processTimeTotal);
         }
-        if (machineTier != MachineTier.SIMPLE) {
-            compound.putInt("Tier", machineTier.ordinal());
+        if (this.machineTier != MachineTier.SIMPLE) {
+            compound.putInt("Tier", this.machineTier.ordinal());
         }
-        if (redstoneMode != RedstoneMode.IGNORED) {
-            compound.putInt("RedstoneMode", redstoneMode.getIndex());
+        if (this.redstoneMode != RedstoneMode.IGNORED) {
+            compound.putInt("RedstoneMode", this.redstoneMode.getIndex());
         }
         if (this.energyStorage.getEnergyStored() > 0) {
             compound.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+        }
+        if (!this.upgradeContainer.isEmpty()) {
+            compound.put("Upgrades", this.upgradeContainer.createTag());
         }
 
         ContainerHelper.saveAllItems(compound, this.stacks, false);
@@ -85,6 +90,10 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         if (compound.contains("EnergyStored", Tag.TAG_INT)) {
             this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         }
+
+        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
+        this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
+
         ContainerHelper.loadAllItems(compound, this.stacks);
 
         super.load(compound);
@@ -124,6 +133,10 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     @Override
     public abstract int getContainerSize();
+
+    public int getUpgradeSlotSize() {
+        return this.machineTier.ordinal();
+    }
 
     @Override
     public boolean isEmpty() {
@@ -303,5 +316,14 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public void setRedstoneMode(RedstoneMode redstoneMode) {
         this.redstoneMode = redstoneMode;
+        this.setChanged();
+    }
+
+    public Container getUpgradeContainer() {
+        return this.upgradeContainer;
+    }
+
+    public ContainerData getContainerData() {
+        return new SimpleContainerData(0); // was das ?
     }
 }

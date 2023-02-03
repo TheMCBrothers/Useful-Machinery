@@ -30,16 +30,16 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 8;
+            return 9;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
                 case 4 -> CompactorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CompactorBlockEntity.this.processTime = value;
-                case 6 -> CompactorBlockEntity.this.processTimeTotal = value;
-                case 7 -> CompactorBlockEntity.this.compactorMode = CompactorMode.byIndex(value);
+                case 6 -> CompactorBlockEntity.this.processTime = value;
+                case 7 -> CompactorBlockEntity.this.processTimeTotal = value;
+                case 8 -> CompactorBlockEntity.this.compactorMode = CompactorMode.byIndex(value);
             }
         }
 
@@ -51,9 +51,10 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
                 case 2 -> CompactorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
                 case 3 -> (CompactorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> CompactorBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> CompactorBlockEntity.this.processTime;
-                case 6 -> CompactorBlockEntity.this.processTimeTotal;
-                case 7 -> CompactorBlockEntity.this.compactorMode.getIndex();
+                case 5 -> CompactorBlockEntity.this.getUpgradeSlotSize();
+                case 6 -> CompactorBlockEntity.this.processTime;
+                case 7 -> CompactorBlockEntity.this.processTimeTotal;
+                case 8 -> CompactorBlockEntity.this.compactorMode.getIndex();
                 default -> 0;
             };
         }
@@ -129,7 +130,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CompactorMenu(id, playerInventory, this, this.fields);
+        return new CompactorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
     }
 
     private boolean isActive() {
@@ -230,5 +231,10 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
             itemstack.shrink(recipe.getCount());
         }
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fields;
     }
 }

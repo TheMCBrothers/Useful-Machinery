@@ -33,5 +33,7 @@ public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorMenu
             int l = this.menu.getBurnTimeScaled();
             this.blit(poseStack, 54 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1);
         }
+
+        this.renderUpgradeSlots(poseStack, partialTicks, mouseX, mouseY);
     }
 }

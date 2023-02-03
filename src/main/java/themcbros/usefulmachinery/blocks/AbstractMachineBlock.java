@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
@@ -86,8 +86,11 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
             return player.getItemInHand(handIn).useOn(new UseOnContext(player, handIn, hit));
         }
 
-        if (worldIn.getBlockEntity(pos) instanceof MenuProvider blockEntity && player instanceof ServerPlayer) {
-            player.openMenu(blockEntity);
+        if (worldIn.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, blockEntity, data -> {
+                data.writeBlockPos(pos);
+                data.writeInt(blockEntity.getUpgradeSlotSize());
+            });
             if (interactStat != null) {
                 player.awardStat(interactStat.get());
             }

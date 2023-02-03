@@ -43,6 +43,8 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorMenu
             int l = this.menu.getBurnTimeScaled();
             this.blit(poseStack, 81 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1);
         }
+
+        this.renderUpgradeSlots(poseStack, partialTicks, mouseX, mouseY);
     }
 
     @Override

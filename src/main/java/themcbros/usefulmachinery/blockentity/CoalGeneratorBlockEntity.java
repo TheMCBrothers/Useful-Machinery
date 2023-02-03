@@ -25,15 +25,15 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 7;
+            return 8;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
                 case 4 -> CoalGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CoalGeneratorBlockEntity.this.burnTime = value;
-                case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal = value;
+                case 6 -> CoalGeneratorBlockEntity.this.burnTime = value;
+                case 7 -> CoalGeneratorBlockEntity.this.burnTimeTotal = value;
                 default -> {
                 }
             }
@@ -47,8 +47,9 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 case 2 -> CoalGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
                 case 3 -> (CoalGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> CoalGeneratorBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> CoalGeneratorBlockEntity.this.burnTime;
-                case 6 -> CoalGeneratorBlockEntity.this.burnTimeTotal;
+                case 5 -> CoalGeneratorBlockEntity.this.getUpgradeSlotSize();
+                case 6 -> CoalGeneratorBlockEntity.this.burnTime;
+                case 7 -> CoalGeneratorBlockEntity.this.burnTimeTotal;
                 default -> 0;
             };
         }
@@ -100,7 +101,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CoalGeneratorMenu(id, playerInventory, this, this.fields);
+        return new CoalGeneratorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
     }
 
     @Override
@@ -141,5 +142,10 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return false;
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fields;
     }
 }

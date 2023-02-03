@@ -8,9 +8,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import themcbros.usefulmachinery.menu.CrusherMenu;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.CrusherMenu;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
@@ -23,15 +23,15 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 7;
+            return 8;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
                 case 4 -> CrusherBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> CrusherBlockEntity.this.processTime = value;
-                case 6 -> CrusherBlockEntity.this.processTimeTotal = value;
+                case 6 -> CrusherBlockEntity.this.processTime = value;
+                case 7 -> CrusherBlockEntity.this.processTimeTotal = value;
             }
         }
 
@@ -43,8 +43,9 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                 case 2 -> CrusherBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
                 case 3 -> (CrusherBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> CrusherBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> CrusherBlockEntity.this.processTime;
-                case 6 -> CrusherBlockEntity.this.processTimeTotal;
+                case 5 -> CrusherBlockEntity.this.getUpgradeSlotSize();
+                case 6 -> CrusherBlockEntity.this.processTime;
+                case 7 -> CrusherBlockEntity.this.processTimeTotal;
                 default -> 0;
             };
         }
@@ -87,13 +88,13 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                 CrushingRecipe crushingRecipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.CRUSHING.get(), this, this.level).orElse(null);
 
                 if (!this.isActive() && this.canCrush(crushingRecipe)) {
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
                     processTime++;
                 }
 
                 if (this.isActive() && this.canCrush(crushingRecipe)) {
                     this.processTime++;
-                    this.energyStorage.modifyEnergyStored(-RF_PER_TICK);
+                    this.energyStorage.consumeEnergy(RF_PER_TICK);
 
                     if (this.processTime == this.processTimeTotal) {
                         this.processTime = 0;
@@ -228,6 +229,11 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new CrusherMenu(id, playerInventory, this, this.fields);
+        return new CrusherMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fields;
     }
 }

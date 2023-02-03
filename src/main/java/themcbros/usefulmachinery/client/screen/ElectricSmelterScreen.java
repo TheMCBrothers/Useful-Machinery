@@ -31,5 +31,7 @@ public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelter
         // Render arrow
         int l = this.menu.getProgressScaled(24);
         this.blit(poseStack, 58 + i, 32 + j, 176, 14, l, 17);
+
+        this.renderUpgradeSlots(poseStack, partialTicks, mouseX, mouseY);
     }
 }

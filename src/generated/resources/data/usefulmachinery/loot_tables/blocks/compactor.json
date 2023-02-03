@@ -31,23 +31,8 @@
               "ops": [
                 {
                   "op": "replace",
-                  "source": "EnergyStored",
-                  "target": "BlockEntityTag.EnergyStored"
-                },
-                {
-                  "op": "replace",
-                  "source": "Items",
-                  "target": "BlockEntityTag.Items"
-                },
-                {
-                  "op": "replace",
-                  "source": "RedstoneMode",
-                  "target": "BlockEntityTag.RedstoneMode"
-                },
-                {
-                  "op": "replace",
-                  "source": "Tier",
-                  "target": "BlockEntityTag.Tier"
+                  "source": "",
+                  "target": "BlockEntityTag"
                 }
               ],
               "source": "block_entity"

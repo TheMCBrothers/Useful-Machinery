@@ -31,5 +31,7 @@ public class CrusherScreen extends AbstractMachineScreen<CrusherMenu> {
         // Render arrow
         int l = this.menu.getProgressScaled(24);
         this.blit(poseStack, 58 + i, 34 + j, 176, 14, l, 17);
+
+        this.renderUpgradeSlots(poseStack, partialTicks, mouseX, mouseY);
     }
 }

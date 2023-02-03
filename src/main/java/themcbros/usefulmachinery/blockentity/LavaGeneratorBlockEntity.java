@@ -40,14 +40,14 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
-            return 9;
+            return 10;
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
                 case 4 -> LavaGeneratorBlockEntity.this.redstoneMode = RedstoneMode.byIndex(value);
-                case 5 -> LavaGeneratorBlockEntity.this.burnTime = value;
+                case 6 -> LavaGeneratorBlockEntity.this.burnTime = value;
                 default -> {
                 }
             }
@@ -61,10 +61,11 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 case 2 -> LavaGeneratorBlockEntity.this.getMaxEnergyStored() & 0xFFFF;
                 case 3 -> (LavaGeneratorBlockEntity.this.getMaxEnergyStored() >> 16) & 0xFFFF;
                 case 4 -> LavaGeneratorBlockEntity.this.redstoneMode.ordinal();
-                case 5 -> LavaGeneratorBlockEntity.this.burnTime;
-                case 6 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getFluidAmount();
-                case 7 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getCapacity();
-                case 8 -> BuiltInRegistries.FLUID.getId(LavaGeneratorBlockEntity.this.LAVA_TANK.getFluid().getFluid());
+                case 5 -> LavaGeneratorBlockEntity.this.getUpgradeSlotSize();
+                case 6 -> LavaGeneratorBlockEntity.this.burnTime;
+                case 7 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getFluidAmount();
+                case 8 -> LavaGeneratorBlockEntity.this.LAVA_TANK.getCapacity();
+                case 9 -> BuiltInRegistries.FLUID.getId(LavaGeneratorBlockEntity.this.LAVA_TANK.getFluid().getFluid());
                 default -> 0;
             };
         }
@@ -138,7 +139,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new LavaGeneratorMenu(id, playerInventory, this, this.fields);
+        return new LavaGeneratorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
     }
 
     @Override
@@ -198,5 +199,10 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
             return LazyOptional.of(() -> this.LAVA_TANK).cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fields;
     }
 }
