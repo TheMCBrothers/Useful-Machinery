@@ -39,7 +39,7 @@ public class SetCompactorModePacket {
     private static void handlePacket(SetCompactorModePacket packet, ServerPlayer player) {
         if (player != null) {
             if (player.containerMenu instanceof MachineMenu) {
-                AbstractMachineBlockEntity tileEntity = ((MachineMenu) player.containerMenu).abstractMachineBlockEntity;
+                AbstractMachineBlockEntity tileEntity = ((MachineMenu) player.containerMenu).getBlockEntity();
                 if (tileEntity instanceof CompactorBlockEntity) {
                     ((CompactorBlockEntity) tileEntity).compactorMode = packet.mode;
                 }

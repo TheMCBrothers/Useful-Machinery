@@ -1,15 +1,16 @@
 package themcbros.usefulmachinery.items;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class UpgradeItem extends Item {
     public UpgradeItem(Properties properties) {
@@ -18,16 +19,11 @@ public class UpgradeItem extends Item {
 
     @Nonnull
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        final Level level = context.getLevel();
-        final BlockPos pos = context.getClickedPos();
-        final ItemStack stack = context.getItemInHand();
-        final BlockEntity blockEntity = level.getBlockEntity(pos);
+    public final InteractionResult useOn(UseOnContext context) {
+        return useOn(context.getPlayer(), context.getHand(), context.getItemInHand(), context.getLevel(), context.getClickedPos());
+    }
 
-        if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
-            //Todo interaction upgrade per item logic
-        }
-
+    public InteractionResult useOn(@Nullable Player player, InteractionHand hand, ItemStack stack, Level level, BlockPos pos) {
         return InteractionResult.PASS;
     }
 }

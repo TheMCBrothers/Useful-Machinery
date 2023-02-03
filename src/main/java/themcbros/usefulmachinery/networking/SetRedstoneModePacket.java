@@ -39,10 +39,8 @@ public class SetRedstoneModePacket {
     private static void handlePacket(SetRedstoneModePacket packet, ServerPlayer player) {
         if (player != null) {
             if (player.containerMenu instanceof MachineMenu) {
-                AbstractMachineBlockEntity tileEntity = ((MachineMenu) player.containerMenu).abstractMachineBlockEntity;
-                if (tileEntity != null) {
-                    tileEntity.setRedstoneMode(packet.mode);
-                }
+                AbstractMachineBlockEntity tileEntity = ((MachineMenu) player.containerMenu).getBlockEntity();
+                tileEntity.setRedstoneMode(packet.mode);
             }
         }
     }

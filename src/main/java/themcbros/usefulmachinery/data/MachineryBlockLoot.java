@@ -46,10 +46,7 @@ public class MachineryBlockLoot extends BlockLootSubProvider {
                                 .apply(SetContainerContents.setContents(Objects.requireNonNull(ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(ForgeRegistries.BLOCKS.getKey(block))))
                                         .withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("contents"))))
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                                        .copy("EnergyStored", "BlockEntityTag.EnergyStored")
-                                        .copy("Items", "BlockEntityTag.Items")
-                                        .copy("RedstoneMode", "BlockEntityTag.RedstoneMode")
-                                        .copy("Tier", "BlockEntityTag.Tier"))
+                                        .copy("", "BlockEntityTag"))
                         ));
     }
 

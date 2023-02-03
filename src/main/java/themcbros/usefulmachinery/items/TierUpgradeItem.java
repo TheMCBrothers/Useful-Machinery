@@ -5,13 +5,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.MachineTier;
 
@@ -24,13 +25,9 @@ public class TierUpgradeItem extends UpgradeItem {
 
     @Nonnull
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        final Player playerEntity = context.getPlayer();
-        final Level level = context.getLevel();
-        final BlockPos pos = context.getClickedPos();
-        final ItemStack stack = context.getItemInHand();
+    public InteractionResult useOn(@Nullable Player player, InteractionHand hand, ItemStack stack, Level level, BlockPos pos) {
         final BlockEntity blockEntity = level.getBlockEntity(pos);
-        final BlockState blockState = context.getLevel().getBlockState(pos);
+        final BlockState blockState = level.getBlockState(pos);
 
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
             MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
@@ -42,16 +39,16 @@ public class TierUpgradeItem extends UpgradeItem {
                     abstractMachineBlockEntity.setChanged();
                     abstractMachineBlockEntity.getEnergyStorage().setMaxEnergyStored(20000 * (itemTier.ordinal() + 1));
                     level.sendBlockUpdated(pos, blockState, blockState, 4);
-                    if (playerEntity != null) {
-                        if (!playerEntity.getAbilities().instabuild) {
+                    if (player != null) {
+                        if (!player.getAbilities().instabuild) {
                             stack.shrink(1);
                         }
-                        playerEntity.displayClientMessage(Component.literal("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
+                        player.displayClientMessage(Component.literal("Successfully upgraded machine to " + itemTier.getSerializedName()).withStyle(ChatFormatting.GREEN), true);
                     }
                     return InteractionResult.SUCCESS;
                 }
-            } else if (playerEntity != null) {
-                playerEntity.displayClientMessage(Component.literal("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
+            } else if (player != null) {
+                player.displayClientMessage(Component.literal("This is not a valid upgrade item").withStyle(ChatFormatting.RED), true);
             }
         }
 
