@@ -101,7 +101,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CoalGeneratorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+        return new CoalGeneratorMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override

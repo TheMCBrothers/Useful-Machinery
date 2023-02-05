@@ -1,15 +1,15 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.themcbrothers.lib.util.ContainerHelper;
-import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
@@ -17,18 +17,19 @@ import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
 public class CrusherMenu extends MachineMenu {
     public CrusherMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf), byteBuf.readInt());
+        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
+                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
-    public CrusherMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, int upgradeCountSlot) {
-        super(MachineryMenus.CRUSHER.get(), id, playerInventory, tileEntity, tileEntity.getContainerData(), upgradeCountSlot);
+    public CrusherMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {
+        super(MachineryMenus.CRUSHER.get(), id, playerInventory, tileEntity, data, upgradeContainer.getContainerSize());
 
         this.addSlot(new Slot(tileEntity, 0, 35, 35));
         this.addSlot(new Slot(tileEntity, 1, 95, 24));
         this.addSlot(new Slot(tileEntity, 2, 95, 48));
         this.addSlot(new EnergySlot(tileEntity, 3, 134, 33));
 
-        this.addUpgradeSlots(tileEntity.getUpgradeContainer());
+        this.addUpgradeSlots(upgradeContainer);
         this.addPlayerSlots(playerInventory);
     }
 
@@ -57,11 +58,11 @@ public class CrusherMenu extends MachineMenu {
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isEnergyItem(slotStack)) {
+                } else if (this.isEnergyItem(slotStack, false)) {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (slotStack.is(MachineryTags.Items.MACHINERY_UPGRADES)) {
+                } else if (this.isUpgradeItem(slotStack)) {
                     if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -90,11 +91,6 @@ public class CrusherMenu extends MachineMenu {
         }
 
         return itemstack;
-    }
-
-    private boolean isEnergyItem(ItemStack itemstack) {
-        return !itemstack.isEmpty() && itemstack.getCapability(ForgeCapabilities.ENERGY)
-                .map(IEnergyStorage::canExtract).orElse(false);
     }
 
     protected boolean canCrush(ItemStack stack) {

@@ -1,30 +1,33 @@
 package themcbros.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.themcbrothers.lib.util.ContainerHelper;
-import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
-import themcbros.usefulmachinery.blockentity.CoalGeneratorBlockEntity;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
 
 public class CoalGeneratorMenu extends MachineMenu {
     public CoalGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(CoalGeneratorBlockEntity.class, playerInventory, byteBuf), byteBuf.readInt());
+        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
+                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
-    public CoalGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, int upgradeSlotCount) {
-        super(MachineryMenus.COAL_GENERATOR.get(), id, playerInventory, tileEntity, tileEntity.getContainerData(), upgradeSlotCount);
+    public CoalGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {
+        super(MachineryMenus.COAL_GENERATOR.get(), id, playerInventory, tileEntity, data, upgradeContainer.getContainerSize());
 
         this.addSlot(new Slot(tileEntity, 0, 80, 33));
         this.addSlot(new EnergySlot(tileEntity, 1, 134, 33));
 
-        this.addUpgradeSlots(tileEntity.getUpgradeContainer());
+        this.addUpgradeSlots(upgradeContainer);
         this.addPlayerSlots(playerInventory);
     }
 
@@ -51,7 +54,7 @@ public class CoalGeneratorMenu extends MachineMenu {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (slotStack.is(MachineryTags.Items.MACHINERY_UPGRADES)) {
+                } else if (this.isUpgradeItem(slotStack)) {
                     if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;
                     }

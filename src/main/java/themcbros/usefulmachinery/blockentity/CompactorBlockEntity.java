@@ -130,7 +130,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CompactorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+        return new CompactorMenu(id, playerInventory, this, this.getUpgradeContainer() ,this.getContainerData());
     }
 
     private boolean isActive() {

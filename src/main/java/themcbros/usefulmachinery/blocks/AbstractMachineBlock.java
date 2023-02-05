@@ -90,6 +90,7 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
             NetworkHooks.openScreen(serverPlayer, blockEntity, data -> {
                 data.writeBlockPos(pos);
                 data.writeInt(blockEntity.getUpgradeSlotSize());
+                data.writeInt(blockEntity.getContainerData().getCount());
             });
             if (interactStat != null) {
                 player.awardStat(interactStat.get());

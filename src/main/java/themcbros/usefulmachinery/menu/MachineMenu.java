@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.themcbrothers.lib.energy.EnergyProvider;
+import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 
@@ -46,7 +47,7 @@ public abstract class MachineMenu extends AbstractContainerMenu implements Energ
     }
 
     protected void addUpgradeSlots(Container upgradeContainer) {
-        for (int i = 0; i < this.upgradeSlotCount; i++) {
+        for (int i = 0; i < upgradeContainer.getContainerSize(); i++) {
             this.addSlot(new Slot(upgradeContainer, i, 188, 9 + i * 18));
         }
     }
@@ -54,6 +55,10 @@ public abstract class MachineMenu extends AbstractContainerMenu implements Energ
     protected boolean isEnergyItem(ItemStack stack, boolean canReceive) {
         return !stack.isEmpty() && stack.getCapability(ForgeCapabilities.ENERGY)
                 .map(canReceive ? IEnergyStorage::canReceive : IEnergyStorage::canExtract).orElse(false);
+    }
+
+    protected boolean isUpgradeItem(ItemStack stack) {
+        return this.upgradeSlotCount > 0 && stack.is(MachineryTags.Items.MACHINERY_UPGRADES);
     }
 
     @Override

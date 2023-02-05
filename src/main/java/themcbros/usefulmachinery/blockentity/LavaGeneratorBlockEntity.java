@@ -139,7 +139,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new LavaGeneratorMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+        return new LavaGeneratorMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override

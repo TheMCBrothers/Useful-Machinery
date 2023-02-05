@@ -95,7 +95,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new ElectricSmelterMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+        return new ElectricSmelterMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     private boolean isActive() {

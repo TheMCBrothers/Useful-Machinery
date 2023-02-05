@@ -229,7 +229,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new CrusherMenu(id, playerInventory, this, this.getUpgradeSlotSize());
+        return new CrusherMenu(id, playerInventory, this, this.getUpgradeContainer(),this.getContainerData());
     }
 
     @Override

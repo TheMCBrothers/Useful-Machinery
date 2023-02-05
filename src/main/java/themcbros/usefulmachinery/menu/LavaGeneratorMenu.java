@@ -2,8 +2,12 @@ package themcbros.usefulmachinery.menu;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -23,17 +27,18 @@ import javax.annotation.Nonnull;
 
 public class LavaGeneratorMenu extends MachineMenu {
     public LavaGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf), byteBuf.readInt());
+        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
+                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
-    public LavaGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, int upgradeSlotCount) {
-        super(MachineryMenus.LAVA_GENERATOR.get(), id, playerInventory, tileEntity, tileEntity.getContainerData(), upgradeSlotCount);
+    public LavaGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {
+        super(MachineryMenus.LAVA_GENERATOR.get(), id, playerInventory, tileEntity, data, upgradeContainer.getContainerSize());
 
         this.addSlot(new FluidItemSlot(tileEntity, 0, 26, 17, fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA)));
         this.addSlot(new OutputSlot(tileEntity, 1, 26, 51));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
-        this.addUpgradeSlots(tileEntity.getUpgradeContainer());
+        this.addUpgradeSlots(upgradeContainer);
         this.addPlayerSlots(playerInventory);
     }
 
@@ -57,8 +62,12 @@ public class LavaGeneratorMenu extends MachineMenu {
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isEnergyItem(slotStack, true)) {
+                } else if (this.isEnergyItem(slotStack, true)) {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (this.isUpgradeItem(slotStack)) {
+                    if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index < invSlotEnd) {

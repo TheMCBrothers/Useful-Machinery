@@ -9,7 +9,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -203,12 +202,12 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public int calcBurnTime(int burnTime) {
-        return switch (this.machineTier) {
+        return (int) switch (this.machineTier) {
             case SIMPLE -> burnTime;
-            case BASIC -> burnTime * 2;
-            case REINFORCED -> burnTime * 4;
-            case FACTORY -> burnTime * 8;
-            case OVERKILL -> burnTime * 16;
+            case BASIC -> burnTime * 1.2;
+            case REINFORCED -> burnTime * 1.4;
+            case FACTORY -> burnTime * 1.6;
+            case OVERKILL -> burnTime * 1.8;
         };
     }
 
@@ -323,7 +322,5 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         return this.upgradeContainer;
     }
 
-    public ContainerData getContainerData() {
-        return new SimpleContainerData(0); // was das ?
-    }
+    public abstract ContainerData getContainerData();
 }
