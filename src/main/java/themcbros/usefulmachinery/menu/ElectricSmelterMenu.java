@@ -14,6 +14,7 @@ import net.themcbrothers.lib.util.ContainerHelper;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
+import themcbros.usefulmachinery.menu.slot.OutputSlot;
 
 public class ElectricSmelterMenu extends MachineMenu {
     public ElectricSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
@@ -25,7 +26,7 @@ public class ElectricSmelterMenu extends MachineMenu {
         super(MachineryMenus.ELECTRIC_SMELTER.get(), id, playerInventory, tileEntity, data, upgradeContainer.getContainerSize());
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
-        this.addSlot(new Slot(tileEntity, 1, 95, 33));
+        this.addSlot(new OutputSlot(tileEntity, 1, 95, 33));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);

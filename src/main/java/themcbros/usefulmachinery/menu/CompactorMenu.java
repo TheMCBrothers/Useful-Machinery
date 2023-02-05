@@ -15,19 +15,20 @@ import themcbros.usefulmachinery.blockentity.extension.SimpleCompactor;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
+import themcbros.usefulmachinery.menu.slot.OutputSlot;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
 public class CompactorMenu extends MachineMenu {
     public CompactorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
-                new SimpleContainer(byteBuf.readInt()),new SimpleContainerData(byteBuf.readInt()));
+                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
     public CompactorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {
         super(MachineryMenus.COMPACTOR.get(), id, playerInventory, tileEntity, data, upgradeContainer.getContainerSize());
 
         this.addSlot(new Slot(tileEntity, 0, 35, 33));
-        this.addSlot(new Slot(tileEntity, 1, 95, 33));
+        this.addSlot(new OutputSlot(tileEntity, 1, 95, 33));
         this.addSlot(new EnergySlot(tileEntity, 2, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);

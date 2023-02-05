@@ -74,22 +74,11 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     @Override
     public void load(CompoundTag compound) {
-        if (compound.contains("ProcessTime", Tag.TAG_INT)) {
-            this.processTime = compound.getInt("ProcessTime");
-        }
-        if (compound.contains("ProcessTimeTotal", Tag.TAG_INT)) {
-            this.processTimeTotal = compound.getInt("ProcessTimeTotal");
-        }
-        if (compound.contains("Tier", Tag.TAG_INT)) {
-            this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
-        }
-        if (compound.contains("RedstoneMode", Tag.TAG_INT)) {
-            this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        }
-        if (compound.contains("EnergyStored", Tag.TAG_INT)) {
-            this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
-        }
-
+        this.processTime = compound.getInt("ProcessTime");
+        this.processTimeTotal = compound.getInt("ProcessTimeTotal");
+        this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
+        this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
         this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
 
@@ -307,6 +296,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public void setMachineTier(MachineTier machineTier) {
         this.machineTier = machineTier;
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
+        this.setChanged();
     }
 
     public RedstoneMode getRedstoneMode() {

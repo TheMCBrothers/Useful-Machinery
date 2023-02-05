@@ -23,6 +23,7 @@ import themcbros.usefulmachinery.networking.Networking;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -92,7 +93,15 @@ public class CommonProxy {
                 }
             }
 
-            return itemStacks;
+            return itemStacks.stream()
+                    .sorted(Comparator.comparingInt(value -> {
+                        CompoundTag tag = value.getTag();
+                        if (tag != null) {
+                            return tag.getInt("Tier");
+                        }
+                        return 0;
+                    }))
+                    .toList();
         }
 
         return Collections.singleton(new ItemStack(itemLike));

@@ -36,8 +36,6 @@ public class TierUpgradeItem extends UpgradeItem {
                 MachineTier itemTier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
                 if (itemTier.ordinal() == machineTier.ordinal() + 1) {
                     abstractMachineBlockEntity.setMachineTier(itemTier);
-                    abstractMachineBlockEntity.setChanged();
-                    abstractMachineBlockEntity.getEnergyStorage().setMaxEnergyStored(20000 * (itemTier.ordinal() + 1));
                     level.sendBlockUpdated(pos, blockState, blockState, 4);
                     if (player != null) {
                         if (!player.getAbilities().instabuild) {

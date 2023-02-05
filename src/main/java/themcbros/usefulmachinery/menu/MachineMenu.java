@@ -15,6 +15,7 @@ import net.themcbrothers.lib.energy.EnergyProvider;
 import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.RedstoneMode;
+import themcbros.usefulmachinery.menu.slot.UpgradeSlot;
 
 import javax.annotation.Nullable;
 
@@ -48,7 +49,7 @@ public abstract class MachineMenu extends AbstractContainerMenu implements Energ
 
     protected void addUpgradeSlots(Container upgradeContainer) {
         for (int i = 0; i < upgradeContainer.getContainerSize(); i++) {
-            this.addSlot(new Slot(upgradeContainer, i, 188, 9 + i * 18));
+            this.addSlot(new UpgradeSlot(upgradeContainer, i, 188, 9 + i * 18));
         }
     }
 
