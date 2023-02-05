@@ -1,6 +1,8 @@
 {
-    "pack": {
-        "description": "usefulmachinery resources",
-        "pack_format": 12
-    }
+  "pack": {
+    "pack_format": 12,
+    "description": "Useful Machinery resources",
+    "forge:resource_pack_format": 12,
+    "forge:data_pack_format": 10
+  }
 }
