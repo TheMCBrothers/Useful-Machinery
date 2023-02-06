@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
@@ -16,9 +17,12 @@ import themcbros.usefulmachinery.machine.MachineTier;
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerItemColors);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerBlockColors);
+
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        bus.addListener(this::clientSetup);
+        bus.addListener(this::blockColors);
+        bus.addListener(this::itemColors);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
@@ -29,7 +33,7 @@ public class ClientProxy extends CommonProxy {
         MenuScreens.register(MachineryMenus.COMPACTOR.get(), CompactorScreen::new);
     }
 
-    private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
+    private void itemColors(final RegisterColorHandlersEvent.Item event) {
         event.register((stack, tintIndex) -> {
             if (!stack.isEmpty() && stack.hasTag() && stack.getTag() != null) {
                 MachineTier tier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
@@ -39,19 +43,19 @@ public class ClientProxy extends CommonProxy {
         }, MachineryItems.TIER_UPGRADE.get());
 
         event.register((stack, tintIndex) -> {
+            MachineTier tier = MachineTier.SIMPLE;
             CompoundTag tag = stack.getTagElement(BlockItem.BLOCK_STATE_TAG);
             if (!stack.isEmpty() && tag != null) {
-                MachineTier tier = MachineTier.valueOf(tag.getString("Tier"));
-
-                return tintIndex == 0 ? tier.getColor() : -1;
+                MachineTier tierFromItem = MachineTier.byName(tag.getString("tier"));
+                tier = tierFromItem != null ? tierFromItem : tier;
             }
-            return -1;
+            return tier.getColor();
         }, MachineryBlocks.COAL_GENERATOR, MachineryBlocks.COMPACTOR, MachineryBlocks.LAVA_GENERATOR, MachineryBlocks.CRUSHER, MachineryBlocks.ELECTRIC_SMELTER);
     }
 
-    private void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
+    private void blockColors(final RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            if (!state.hasProperty(AbstractMachineBlock.TIER)) {
+            if (state.hasProperty(AbstractMachineBlock.TIER)) {
                 return state.getValue(AbstractMachineBlock.TIER).getColor();
             }
             return -1;
