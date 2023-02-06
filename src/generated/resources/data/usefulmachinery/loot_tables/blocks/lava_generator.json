@@ -31,14 +31,66 @@
               "ops": [
                 {
                   "op": "replace",
-                  "source": "",
-                  "target": "BlockEntityTag"
+                  "source": "Items",
+                  "target": "BlockEntityTag.Items"
+                },
+                {
+                  "op": "replace",
+                  "source": "Upgrades",
+                  "target": "BlockEntityTag.Upgrades"
+                },
+                {
+                  "op": "replace",
+                  "source": "EnergyStored",
+                  "target": "BlockEntityTag.EnergyStored"
+                },
+                {
+                  "op": "replace",
+                  "source": "RedstoneMode",
+                  "target": "BlockEntityTag.RedstoneMode"
+                },
+                {
+                  "op": "replace",
+                  "source": "ProcessTime",
+                  "target": "BlockEntityTag.ProcessTime"
+                },
+                {
+                  "op": "replace",
+                  "source": "ProcessTimeTotal",
+                  "target": "BlockEntityTag.ProcessTimeTotal"
+                },
+                {
+                  "op": "replace",
+                  "source": "BurnTime",
+                  "target": "BlockEntityTag.BurnTime"
+                },
+                {
+                  "op": "replace",
+                  "source": "BurnTimeTotal",
+                  "target": "BlockEntityTag.BurnTimeTotal"
+                },
+                {
+                  "op": "replace",
+                  "source": "Tank",
+                  "target": "BlockEntityTag.Tank"
                 }
               ],
               "source": "block_entity"
             },
             {
               "block": "usefulmachinery:lava_generator",
+              "conditions": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "block": "usefulmachinery:lava_generator",
+                    "condition": "minecraft:block_state_property",
+                    "properties": {
+                      "tier": "simple"
+                    }
+                  }
+                }
+              ],
               "function": "minecraft:copy_state",
               "properties": [
                 "tier"
