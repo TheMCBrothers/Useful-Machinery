@@ -36,6 +36,13 @@
                 }
               ],
               "source": "block_entity"
+            },
+            {
+              "block": "usefulmachinery:compactor",
+              "function": "minecraft:copy_state",
+              "properties": [
+                "tier"
+              ]
             }
           ],
           "name": "usefulmachinery:compactor"

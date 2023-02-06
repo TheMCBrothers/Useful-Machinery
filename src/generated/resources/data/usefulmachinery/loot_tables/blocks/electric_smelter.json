@@ -36,6 +36,13 @@
                 }
               ],
               "source": "block_entity"
+            },
+            {
+              "block": "usefulmachinery:electric_smelter",
+              "function": "minecraft:copy_state",
+              "properties": [
+                "tier"
+              ]
             }
           ],
           "name": "usefulmachinery:electric_smelter"

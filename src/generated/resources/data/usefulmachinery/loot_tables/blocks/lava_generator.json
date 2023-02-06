@@ -36,6 +36,13 @@
                 }
               ],
               "source": "block_entity"
+            },
+            {
+              "block": "usefulmachinery:lava_generator",
+              "function": "minecraft:copy_state",
+              "properties": [
+                "tier"
+              ]
             }
           ],
           "name": "usefulmachinery:lava_generator"

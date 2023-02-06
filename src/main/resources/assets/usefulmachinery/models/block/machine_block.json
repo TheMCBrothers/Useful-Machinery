@@ -1,0 +1,35 @@
+{
+	"parent": "minecraft:block/orientable",
+	"textures": {
+		"particle": "usefulmachinery:block/machine_side",
+		"side": "usefulmachinery:block/machine_side",
+		"overlay": "usefulmachinery:block/machine_side_tier_overlay",
+		"top": "usefulmachinery:block/machine_top"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#front"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#top"}
+			}
+		},
+		{
+			"from": [-0.001, -0.001, -0.001],
+			"to": [16.001, 16.001, 16.001],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0}
+			}
+		}
+	]
+}

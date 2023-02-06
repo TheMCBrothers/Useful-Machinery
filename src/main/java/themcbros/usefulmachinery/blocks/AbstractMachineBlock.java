@@ -20,11 +20,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.items.UpgradeItem;
+import themcbros.usefulmachinery.machine.MachineTier;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,12 +34,13 @@ import java.util.function.Supplier;
 
 public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<MachineTier> TIER = EnumProperty.create("tier", MachineTier.class);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private final Supplier<ResourceLocation> interactStat;
 
     public AbstractMachineBlock(Properties properties, @Nullable Supplier<ResourceLocation> interactStat) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TIER, MachineTier.SIMPLE).setValue(LIT, Boolean.FALSE));
         this.interactStat = interactStat;
     }
 
@@ -53,7 +56,7 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LIT);
+        builder.add(FACING, TIER, LIT);
     }
 
     @Override

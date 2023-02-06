@@ -36,6 +36,13 @@
                 }
               ],
               "source": "block_entity"
+            },
+            {
+              "block": "usefulmachinery:coal_generator",
+              "function": "minecraft:copy_state",
+              "properties": [
+                "tier"
+              ]
             }
           ],
           "name": "usefulmachinery:coal_generator"

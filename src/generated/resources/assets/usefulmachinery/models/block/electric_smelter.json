@@ -1,8 +1,7 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "usefulmachinery:block/machine_block",
+  "render_type": "minecraft:cutout",
   "textures": {
-    "front": "usefulmachinery:block/electric_smelter_front",
-    "side": "usefulmachinery:block/machine_side",
-    "top": "usefulmachinery:block/machine_top"
+    "front": "usefulmachinery:block/electric_smelter_front"
   }
 }

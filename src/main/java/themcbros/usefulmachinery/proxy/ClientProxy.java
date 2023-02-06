@@ -1,17 +1,14 @@
 package themcbros.usefulmachinery.proxy;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import themcbros.usefulmachinery.client.screen.CoalGeneratorScreen;
-import themcbros.usefulmachinery.client.screen.CompactorScreen;
-import themcbros.usefulmachinery.client.screen.CrusherScreen;
-import themcbros.usefulmachinery.client.screen.ElectricSmelterScreen;
-import themcbros.usefulmachinery.client.screen.LavaGeneratorScreen;
-import themcbros.usefulmachinery.client.renderer.MachineRenderer;
-import themcbros.usefulmachinery.init.MachineryBlockEntities;
+import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
+import themcbros.usefulmachinery.client.screen.*;
+import themcbros.usefulmachinery.init.MachineryBlocks;
 import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.MachineTier;
@@ -21,6 +18,7 @@ public class ClientProxy extends CommonProxy {
         super();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerItemColors);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerBlockColors);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
@@ -29,12 +27,6 @@ public class ClientProxy extends CommonProxy {
         MenuScreens.register(MachineryMenus.CRUSHER.get(), CrusherScreen::new);
         MenuScreens.register(MachineryMenus.ELECTRIC_SMELTER.get(), ElectricSmelterScreen::new);
         MenuScreens.register(MachineryMenus.COMPACTOR.get(), CompactorScreen::new);
-
-        BlockEntityRenderers.register(MachineryBlockEntities.COAL_GENERATOR.get(), context4 -> new MachineRenderer());
-        BlockEntityRenderers.register(MachineryBlockEntities.LAVA_GENERATOR.get(), context3 -> new MachineRenderer());
-        BlockEntityRenderers.register(MachineryBlockEntities.CRUSHER.get(), context2 -> new MachineRenderer());
-        BlockEntityRenderers.register(MachineryBlockEntities.ELECTRIC_SMELTER.get(), context1 -> new MachineRenderer());
-        BlockEntityRenderers.register(MachineryBlockEntities.COMPACTOR.get(), context -> new MachineRenderer());
     }
 
     private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
@@ -45,5 +37,24 @@ public class ClientProxy extends CommonProxy {
             }
             return -1;
         }, MachineryItems.TIER_UPGRADE.get());
+
+        event.register((stack, tintIndex) -> {
+            CompoundTag tag = stack.getTagElement(BlockItem.BLOCK_STATE_TAG);
+            if (!stack.isEmpty() && tag != null) {
+                MachineTier tier = MachineTier.valueOf(tag.getString("Tier"));
+
+                return tintIndex == 0 ? tier.getColor() : -1;
+            }
+            return -1;
+        }, MachineryBlocks.COAL_GENERATOR, MachineryBlocks.COMPACTOR, MachineryBlocks.LAVA_GENERATOR, MachineryBlocks.CRUSHER, MachineryBlocks.ELECTRIC_SMELTER);
+    }
+
+    private void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> {
+            if (!state.hasProperty(AbstractMachineBlock.TIER)) {
+                return state.getValue(AbstractMachineBlock.TIER).getColor();
+            }
+            return -1;
+        }, MachineryBlocks.COAL_GENERATOR.get(), MachineryBlocks.COMPACTOR.get(), MachineryBlocks.LAVA_GENERATOR.get(), MachineryBlocks.CRUSHER.get(), MachineryBlocks.ELECTRIC_SMELTER.get());
     }
 }

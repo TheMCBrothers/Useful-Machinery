@@ -10,6 +10,7 @@ import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +37,6 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected SimpleContainer upgradeContainer;
     protected int processTime, processTimeTotal;
     protected ExtendedEnergyStorage energyStorage;
-    protected MachineTier machineTier = MachineTier.SIMPLE;
     protected RedstoneMode redstoneMode = RedstoneMode.IGNORED;
     private final boolean isGenerator;
     private int cooldown = -1;
@@ -44,7 +44,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
     }
 
@@ -55,9 +55,6 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         }
         if (this.processTimeTotal > 0) {
             compound.putInt("ProcessTimeTotal", this.processTimeTotal);
-        }
-        if (this.machineTier != MachineTier.SIMPLE) {
-            compound.putInt("Tier", this.machineTier.ordinal());
         }
         if (this.redstoneMode != RedstoneMode.IGNORED) {
             compound.putInt("RedstoneMode", this.redstoneMode.getIndex());
@@ -76,9 +73,8 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public void load(CompoundTag compound) {
         this.processTime = compound.getInt("ProcessTime");
         this.processTimeTotal = compound.getInt("ProcessTimeTotal");
-        this.machineTier = MachineTier.byOrdinal(compound.getInt("Tier"));
         this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
         this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
 
@@ -123,7 +119,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public abstract int getContainerSize();
 
     public int getUpgradeSlotSize() {
-        return this.machineTier.ordinal();
+        return this.getMachineTier().ordinal();
     }
 
     @Override
@@ -181,7 +177,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public int calcProcessTime(int processTime) {
-        return switch (this.machineTier) {
+        return switch (this.getMachineTier()) {
             case SIMPLE -> processTime;
             case BASIC -> processTime / 2;
             case REINFORCED -> processTime / 4;
@@ -191,7 +187,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public int calcBurnTime(int burnTime) {
-        return (int) switch (this.machineTier) {
+        return (int) switch (this.getMachineTier()) {
             case SIMPLE -> burnTime;
             case BASIC -> burnTime * 1.2;
             case REINFORCED -> burnTime * 1.4;
@@ -291,12 +287,19 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public MachineTier getMachineTier() {
-        return machineTier;
+        if (this.level != null) {
+            BlockState state = this.level.getBlockState(this.worldPosition);
+            return state.hasProperty(AbstractMachineBlock.TIER) ? state.getValue(AbstractMachineBlock.TIER) : MachineTier.SIMPLE;
+        }
+
+        return MachineTier.SIMPLE;
     }
 
     public void setMachineTier(MachineTier machineTier) {
-        this.machineTier = machineTier;
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.machineTier.ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        if (this.level != null) {
+            this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.TIER, machineTier), Block.UPDATE_ALL);
+        }
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
         this.setChanged();
     }

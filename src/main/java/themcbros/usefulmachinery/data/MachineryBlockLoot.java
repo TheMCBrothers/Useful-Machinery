@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.init.Registration;
 
 import javax.annotation.Nonnull;
@@ -47,6 +49,8 @@ public class MachineryBlockLoot extends BlockLootSubProvider {
                                         .withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("contents"))))
                                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                         .copy("", "BlockEntityTag"))
+                                .apply(CopyBlockState.copyState(block)
+                                        .copy(AbstractMachineBlock.TIER))
                         ));
     }
 
