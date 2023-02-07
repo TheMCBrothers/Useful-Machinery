@@ -19,6 +19,9 @@ public class MachineryItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         //Machinery Items
         basicItem(BATTERY.get());
+        basicItem(EFFICIENCY_UPGRADE.get());
+        basicItem(PRECISION_UPGRADE.get());
+        basicItem(SUSTAINED_UPGRADE.get());
 
         withExistingParent(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(TIER_UPGRADE.get())).getPath(), mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/tier_upgrade_0"))

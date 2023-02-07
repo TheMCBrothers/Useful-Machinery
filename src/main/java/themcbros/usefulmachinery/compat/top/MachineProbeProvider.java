@@ -37,9 +37,9 @@ public class MachineProbeProvider implements IProbeInfoProvider {
                 probeInfo.progress((long) progress, 100, style);
             }
 
-            if (machineBlockEntity.getMachineTier().ordinal() > 0) {
+            if (machineBlockEntity.getMachineTier(blockState).ordinal() > 0) {
                 ITextStyle style = probeInfo.defaultTextStyle();
-                probeInfo.text("Tier: " + machineBlockEntity.getMachineTier().getSerializedName(), style);
+                probeInfo.text("Tier: " + machineBlockEntity.getMachineTier(blockState).getSerializedName(), style);
             }
         }
     }

@@ -44,7 +44,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     AbstractMachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, boolean isGenerator) {
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(blockState).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
     }
 
@@ -74,9 +74,12 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.processTime = compound.getInt("ProcessTime");
         this.processTimeTotal = compound.getInt("ProcessTimeTotal");
         this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
-        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
-        this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
+
+        if (this.level != null) {
+            this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+            this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
+            this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
+        }
 
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -119,7 +122,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public abstract int getContainerSize();
 
     public int getUpgradeSlotSize() {
-        return this.getMachineTier().ordinal();
+        return this.getMachineTier(this.getBlockState()).ordinal();
     }
 
     @Override
@@ -177,7 +180,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public int calcProcessTime(int processTime) {
-        return switch (this.getMachineTier()) {
+        return switch (this.getMachineTier(this.getBlockState())) {
             case SIMPLE -> processTime;
             case BASIC -> processTime / 2;
             case REINFORCED -> processTime / 4;
@@ -187,7 +190,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public int calcBurnTime(int burnTime) {
-        return (int) switch (this.getMachineTier()) {
+        return (int) switch (this.getMachineTier(this.getBlockState())) {
             case SIMPLE -> burnTime;
             case BASIC -> burnTime * 1.2;
             case REINFORCED -> burnTime * 1.4;
@@ -286,20 +289,15 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         return processTimeTotal;
     }
 
-    public MachineTier getMachineTier() {
-        if (this.level != null) {
-            BlockState state = this.level.getBlockState(this.worldPosition);
-            return state.hasProperty(AbstractMachineBlock.TIER) ? state.getValue(AbstractMachineBlock.TIER) : MachineTier.SIMPLE;
-        }
-
-        return MachineTier.SIMPLE;
+    public MachineTier getMachineTier(BlockState state) {
+        return state.hasProperty(AbstractMachineBlock.TIER) ? state.getValue(AbstractMachineBlock.TIER) : MachineTier.SIMPLE;
     }
 
     public void setMachineTier(MachineTier machineTier) {
         if (this.level != null) {
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.TIER, machineTier), Block.UPDATE_ALL);
         }
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier().ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
         this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
         this.setChanged();
     }

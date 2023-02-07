@@ -30,7 +30,7 @@ public class TierUpgradeItem extends UpgradeItem {
         final BlockState blockState = level.getBlockState(pos);
 
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
-            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
+            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier(blockState);
 
             if (stack.getTag() != null && stack.getTag().contains("Tier", Tag.TAG_ANY_NUMERIC)) {
                 MachineTier itemTier = MachineTier.byOrdinal(stack.getTag().getInt("Tier"));
