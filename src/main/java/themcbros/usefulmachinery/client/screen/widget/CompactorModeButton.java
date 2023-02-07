@@ -35,6 +35,11 @@ public class CompactorModeButton extends Button {
     }
 
     @Override
+    public boolean changeFocus(boolean randomNumb) {
+        return false;
+    }
+
+    @Override
     public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float p_renderButton_3_) {
         super.renderButton(poseStack, mouseX, mouseY, p_renderButton_3_);
 

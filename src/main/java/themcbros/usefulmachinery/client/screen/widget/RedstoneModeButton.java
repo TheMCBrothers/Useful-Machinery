@@ -34,6 +34,11 @@ public class RedstoneModeButton extends ExtendedButton {
     }
 
     @Override
+    public boolean changeFocus(boolean randomNumb) {
+        return false;
+    }
+
+    @Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
         super.renderButton(poseStack, mouseX, mouseY, partial);
 
