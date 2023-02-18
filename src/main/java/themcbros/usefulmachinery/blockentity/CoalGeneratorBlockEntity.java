@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.CoalGeneratorMenu;
 
@@ -56,6 +57,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     };
 
     private int burnTime, burnTimeTotal;
+    private final int BASE_TICKING_ENERGY = 50;
 
     public CoalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(MachineryBlockEntities.COAL_GENERATOR.get(), blockPos, blockState, true);
@@ -108,33 +110,46 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public void tick() {
         boolean shouldLit = false;
 
-        assert this.level != null;
-        if (!level.isClientSide) {
-            if (this.burnTime > 0) {
-                --this.burnTime;
+       if (this.level != null) {
+           if (!this.level.isClientSide) {
+               if (this.burnTime > 0) {
+                   --this.burnTime;
 
-                this.energyStorage.growEnergy(60);
+                   int upgradeCount = 0;
 
-                shouldLit = true;
-            } else if (this.redstoneMode.canRun(this)) {
-                ItemStack generatorStack = this.stacks.get(0);
-                if (ForgeHooks.getBurnTime(generatorStack, null) == 1600) {
-                    int time = calcBurnTime(ForgeHooks.getBurnTime(generatorStack, null));
+                   for (int i = 0; i < this.upgradeContainer.getContainerSize(); i++) {
+                       ItemStack stack = this.upgradeContainer.getItem(i);
 
-                    this.burnTime = time;
-                    this.burnTimeTotal += time;
+                       if (stack.is(MachineryItems.SUSTAINED_UPGRADE.get())) {
+                           upgradeCount += stack.getCount();
+                       }
+                   }
+                   double multiplier = upgradeCount * BASE_TICKING_ENERGY / (double) this.upgradeContainer.getMaxStackSize();
 
-                    shouldLit = true;
-                    generatorStack.shrink(1);
-                }
-            }
+                   // generate energy
+                   this.energyStorage.growEnergy((int) (BASE_TICKING_ENERGY + multiplier));
 
-            this.sendEnergyToSlot();
+                   shouldLit = true;
+               } else if (this.redstoneMode.canRun(this)) {
+                   ItemStack generatorStack = this.stacks.get(0);
+                   if (ForgeHooks.getBurnTime(generatorStack, null) == 1600) {
+                       int time = calcBurnTime(ForgeHooks.getBurnTime(generatorStack, null));
 
-            if (this.getBlockState().getValue(AbstractMachineBlock.LIT) != shouldLit) {
-                this.sendUpdate(shouldLit);
-            }
-        }
+                       this.burnTime = time;
+                       this.burnTimeTotal += time;
+
+                       shouldLit = true;
+                       generatorStack.shrink(1);
+                   }
+               }
+
+               this.sendEnergyToSlot();
+
+               if (this.getBlockState().getValue(AbstractMachineBlock.LIT) != shouldLit) {
+                   this.sendUpdate(shouldLit);
+               }
+           }
+       }
 
         this.sendEnergy();
     }

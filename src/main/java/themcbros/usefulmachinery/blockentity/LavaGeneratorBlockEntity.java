@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.LavaGeneratorMenu;
 
@@ -35,7 +36,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int TANK_CAPACITY = 4000; // TODO config
     public static final int TICKS_PER_MB = 10; // TODO config
     public static final int MB_PER_USE = 10; // TODO config
-    public static final int RF_PER_TICK = 120; // TODO config
+    public static final int BASE_TICKING_ENERGY = 150; // TODO config
 
     private final ContainerData fields = new ContainerData() {
         @Override
@@ -93,9 +94,9 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public void load(CompoundTag compound) {
         this.burnTime = compound.getInt("BurnTime");
 
-        if (compound.contains("Tank", Tag.TAG_COMPOUND))
+        if (compound.contains("Tank", Tag.TAG_COMPOUND)) {
             this.LAVA_TANK.readFromNBT(compound.getCompound("Tank"));
-
+        }
         super.load(compound);
     }
 
@@ -170,7 +171,20 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         if (this.burnTime > 0) {
             --this.burnTime;
-            this.energyStorage.growEnergy(RF_PER_TICK);
+
+            int upgradeCount = 0;
+
+            for (int i = 0; i < this.upgradeContainer.getContainerSize(); i++) {
+                ItemStack stack = this.upgradeContainer.getItem(i);
+
+                if (stack.is(MachineryItems.SUSTAINED_UPGRADE.get())) {
+                    upgradeCount += stack.getCount();
+                }
+            }
+            double multiplier = upgradeCount * BASE_TICKING_ENERGY / (double) this.upgradeContainer.getMaxStackSize();
+
+            // generate energy
+            this.energyStorage.growEnergy((int) (BASE_TICKING_ENERGY + multiplier));
         }
 
         super.tick();
@@ -184,7 +198,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
         sendUpdate(canRun);
-        return this.level != null && canRun && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - RF_PER_TICK;
+        return this.level != null && canRun && this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - BASE_TICKING_ENERGY;
     }
 
     private void consumeFuel() {
