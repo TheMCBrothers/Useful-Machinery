@@ -34,6 +34,9 @@ public class MachineryLanguageProviders {
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_reinforced", "Reinforced Upgrade");
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_factory", "Factory Upgrade");
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_overkill", "Overkill Upgrade");
+            this.add(MachineryItems.EFFICIENCY_UPGRADE.get(), "Efficiency Upgrade");
+            this.add(MachineryItems.PRECISION_UPGRADE.get(), "Precision Upgrade");
+            this.add(MachineryItems.SUSTAINED_UPGRADE.get(), "Sustained Upgrade");
 
             //Container Titles
             this.add("container.usefulmachinery.coal_generator", "Coal Generator");
@@ -94,6 +97,9 @@ public class MachineryLanguageProviders {
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_reinforced", "Verstaerkts Oepgraid");
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_factory", "Fabrik Oepgraid");
             this.add(MachineryItems.TIER_UPGRADE.get().getDescriptionId() + "_overkill", "Übermaessigs Oepgraid");
+            this.add(MachineryItems.EFFICIENCY_UPGRADE.get(), "Effizianz Oepgrade");
+            this.add(MachineryItems.PRECISION_UPGRADE.get(), "Gnaus Oepgrade");
+            this.add(MachineryItems.SUSTAINED_UPGRADE.get(), "Oekologischs Oepgrade");
 
             //Container Titles
             this.add("container.usefulmachinery.coal_generator", "Cholegenerator");

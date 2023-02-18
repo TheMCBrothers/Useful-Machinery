@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:wither_skeleton_skull"
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade",
+    "usefulmachinery:sustained_upgrade"
   ]
 }

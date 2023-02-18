@@ -4,7 +4,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import themcbros.usefulmachinery.MachineryTags;
@@ -37,7 +36,7 @@ public class MachineryTagProvider {
         @Override
         protected void addTags(@Nonnull HolderLookup.Provider provider) {
             this.tag(MachineryTags.Items.BATTERIES).add(MachineryItems.BATTERY.get());
-            this.tag(MachineryTags.Items.MACHINERY_UPGRADES).add(Items.WITHER_SKELETON_SKULL);
+            this.tag(MachineryTags.Items.MACHINERY_UPGRADES).add(MachineryItems.EFFICIENCY_UPGRADE.get(), MachineryItems.PRECISION_UPGRADE.get(), MachineryItems.SUSTAINED_UPGRADE.get());
         }
     }
 }
