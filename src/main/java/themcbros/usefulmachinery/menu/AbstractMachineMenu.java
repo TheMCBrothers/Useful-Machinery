@@ -15,17 +15,16 @@ import net.themcbrothers.lib.energy.EnergyProvider;
 import themcbros.usefulmachinery.MachineryTags;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.menu.slot.UpgradeSlot;
 
 import javax.annotation.Nullable;
 
-public abstract class MachineMenu extends AbstractContainerMenu implements EnergyProvider {
+public abstract class AbstractMachineMenu extends AbstractContainerMenu implements EnergyProvider {
     protected final AbstractMachineBlockEntity blockEntity;
     protected final ContainerData fields;
     protected final Level level;
     protected final int upgradeSlotCount;
 
-    MachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
+    AbstractMachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
         super(type, id);
         this.level = playerInventory.player.getLevel();
         this.blockEntity = blockEntity;
@@ -99,5 +98,16 @@ public abstract class MachineMenu extends AbstractContainerMenu implements Energ
         long lower = this.fields.get(2) & 0xFFFF;
         long upper = this.fields.get(3) & 0xFFFF;
         return (upper << 16L) + lower;
+    }
+
+    private class UpgradeSlot extends Slot {
+        public UpgradeSlot(Container inventory, int id, int xPos, int yPos) {
+            super(inventory, id, xPos, yPos);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return isUpgradeItem(stack);
+        }
     }
 }

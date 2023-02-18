@@ -12,14 +12,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.themcbrothers.lib.util.ContainerHelper;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.extension.UpgradeContainer;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
 import themcbros.usefulmachinery.menu.slot.OutputSlot;
 
-public class ElectricSmelterMenu extends MachineMenu {
+public class ElectricSmelterMenu extends AbstractMachineMenu {
     public ElectricSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
-                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
+                new UpgradeContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
     public ElectricSmelterMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {

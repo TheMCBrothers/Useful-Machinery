@@ -12,7 +12,7 @@ import net.themcbrothers.lib.client.screen.widgets.EnergyBar;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.client.screen.widget.RedstoneModeButton;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.menu.MachineMenu;
+import themcbros.usefulmachinery.menu.AbstractMachineMenu;
 import themcbros.usefulmachinery.networking.Networking;
 import themcbros.usefulmachinery.networking.SetRedstoneModePacket;
 
@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 
 import static themcbros.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
-public abstract class AbstractMachineScreen<T extends MachineMenu> extends AbstractContainerScreen<T> {
+public abstract class AbstractMachineScreen<T extends AbstractMachineMenu> extends AbstractContainerScreen<T> {
     private static final ResourceLocation UPGRADE_SLOTS_TEXTURE = UsefulMachinery.getId("textures/gui/container/upgrade_slots.png");
 
     AbstractMachineScreen(T screenContainer, Inventory inv, Component titleIn) {

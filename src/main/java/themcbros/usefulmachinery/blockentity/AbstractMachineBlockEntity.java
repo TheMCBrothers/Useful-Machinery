@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.*;
@@ -23,6 +24,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import net.themcbrothers.lib.energy.ExtendedEnergyStorage;
 import net.themcbrothers.lib.util.EnergyUtils;
 import org.jetbrains.annotations.NotNull;
+import themcbros.usefulmachinery.blockentity.extension.UpgradeContainer;
 import themcbros.usefulmachinery.blocks.AbstractMachineBlock;
 import themcbros.usefulmachinery.machine.MachineTier;
 import themcbros.usefulmachinery.machine.RedstoneMode;
@@ -34,7 +36,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
     protected final NonNullList<ItemStack> stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-    protected SimpleContainer upgradeContainer;
+    protected UpgradeContainer upgradeContainer;
     protected int processTime, processTimeTotal;
     protected ExtendedEnergyStorage energyStorage;
     protected RedstoneMode redstoneMode = RedstoneMode.IGNORED;
@@ -45,7 +47,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         super(blockEntityType, blockPos, blockState);
         this.isGenerator = isGenerator;
         this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(blockState).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
-        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
+        this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
     }
 
     @Override
@@ -74,12 +76,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.processTime = compound.getInt("ProcessTime");
         this.processTimeTotal = compound.getInt("ProcessTimeTotal");
         this.redstoneMode = RedstoneMode.byIndex(compound.getInt("RedstoneMode"));
-
-        if (this.level != null) {
-            this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
-            this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
-            this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
-        }
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, compound.getInt("EnergyStored"));
+        this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
+        this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND));
 
         ContainerHelper.loadAllItems(compound, this.stacks);
 
@@ -298,7 +297,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.TIER, machineTier), Block.UPDATE_ALL);
         }
         this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
-        this.upgradeContainer = new SimpleContainer(this.getUpgradeSlotSize());
+        ListTag previousItems = this.upgradeContainer.createTag();
+        this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
+        this.upgradeContainer.fromTag(previousItems);
         this.setChanged();
     }
 

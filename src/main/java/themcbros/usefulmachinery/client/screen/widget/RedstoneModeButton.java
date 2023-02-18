@@ -7,12 +7,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import themcbros.usefulmachinery.machine.RedstoneMode;
-import themcbros.usefulmachinery.menu.MachineMenu;
+import themcbros.usefulmachinery.menu.AbstractMachineMenu;
 
 public class RedstoneModeButton extends ExtendedButton {
-    private final MachineMenu container;
+    private final AbstractMachineMenu container;
 
-    public RedstoneModeButton(MachineMenu container, int x, int y, OnPress onPress) {
+    public RedstoneModeButton(AbstractMachineMenu container, int x, int y, OnPress onPress) {
         super(x, y, 16, 16, Component.empty(), button -> {
             ((RedstoneModeButton) button).cycleMode();
             onPress.onPress(button);

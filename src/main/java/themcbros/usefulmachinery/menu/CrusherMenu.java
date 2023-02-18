@@ -11,15 +11,16 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.themcbrothers.lib.util.ContainerHelper;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
+import themcbros.usefulmachinery.blockentity.extension.UpgradeContainer;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
 import themcbros.usefulmachinery.menu.slot.OutputSlot;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
-public class CrusherMenu extends MachineMenu {
+public class CrusherMenu extends AbstractMachineMenu {
     public CrusherMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
-                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
+                new UpgradeContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
     public CrusherMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {

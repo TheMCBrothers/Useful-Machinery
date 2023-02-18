@@ -2,7 +2,6 @@ package themcbros.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
@@ -12,16 +11,17 @@ import net.minecraft.world.item.ItemStack;
 import net.themcbrothers.lib.util.ContainerHelper;
 import themcbros.usefulmachinery.blockentity.AbstractMachineBlockEntity;
 import themcbros.usefulmachinery.blockentity.extension.SimpleCompactor;
+import themcbros.usefulmachinery.blockentity.extension.UpgradeContainer;
 import themcbros.usefulmachinery.init.MachineryMenus;
 import themcbros.usefulmachinery.machine.CompactorMode;
 import themcbros.usefulmachinery.menu.slot.EnergySlot;
 import themcbros.usefulmachinery.menu.slot.OutputSlot;
 import themcbros.usefulmachinery.recipes.MachineryRecipeTypes;
 
-public class CompactorMenu extends MachineMenu {
+public class CompactorMenu extends AbstractMachineMenu {
     public CompactorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
         this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
-                new SimpleContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
+                new UpgradeContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
     public CompactorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity tileEntity, Container upgradeContainer, ContainerData data) {
