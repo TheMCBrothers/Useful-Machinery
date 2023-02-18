@@ -8,7 +8,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
+import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.machine.RedstoneMode;
 import themcbros.usefulmachinery.menu.CrusherMenu;
 import themcbros.usefulmachinery.recipes.CrushingRecipe;
@@ -19,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private static final int RF_PER_TICK = 10;
-
+    private double efficiencyAdditionalChance;
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
@@ -76,6 +78,21 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public void tick() {
+        int efficiencyUpgradeCount = 0;
+        int precisionUpgradeCount = 0;
+
+        for (int i = 0; i < this.upgradeContainer.getContainerSize(); i++) {
+            ItemStack stack = this.upgradeContainer.getItem(i);
+            if (stack.is(MachineryItems.EFFICIENCY_UPGRADE.get())) {
+                efficiencyUpgradeCount += stack.getCount();
+            }
+            if (stack.is(MachineryItems.PRECISION_UPGRADE.get())) {
+                precisionUpgradeCount += stack.getCount();
+            }
+        }
+
+        this.efficiencyAdditionalChance = 0.0625 * efficiencyUpgradeCount;
+
         boolean shouldLit = this.isActive();
         boolean flag1 = false;
 
@@ -131,6 +148,13 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
             ItemStack recipeOutputStack = recipe.getResultItem();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
+            int efficiencyAdditionalCount = 0;
+
+            if (this.efficiencyAdditionalChance > 0.5) {
+                efficiencyAdditionalCount += 2;
+            } else if (this.efficiencyAdditionalChance <= 0.5 && this.efficiencyAdditionalChance != 0) {
+                efficiencyAdditionalCount += 1;
+            }
 
             if (!recipeSecondOutputStack.isEmpty()) {
                 if (recipeOutputStack.isEmpty()) {
@@ -141,16 +165,16 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
                     if (crusherOutputStack.isEmpty() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (crusherOutputStack.sameItem(recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
+                    } else if (crusherOutputStack.sameItem(recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
+                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + efficiencyAdditionalCount <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
                         return true;
                     } else if (!crusherOutputStack.sameItem(recipeOutputStack) || !crusherSecondOutputStack.sameItem(recipeSecondOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize() && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize() && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
-                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= recipeSecondOutputStack.getMaxStackSize();
+                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + efficiencyAdditionalCount <= recipeSecondOutputStack.getMaxStackSize();
                     }
                 }
             } else {
@@ -163,7 +187,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                         return true;
                     } else if (!crusherOutputStack.sameItem(recipeOutputStack)) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
                         return crusherOutputStack.getCount() + recipeOutputStack.getCount() <= recipeOutputStack.getMaxStackSize();
@@ -184,13 +208,32 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             ItemStack secondaryOutputSlot = this.stacks.get(2);
             float secondaryChance = recipe.getSecondaryChance();
 
+
             if (outputSlot.isEmpty()) {
                 this.stacks.set(1, recipeResultItem.copy());
+                outputSlot = this.stacks.get(1);
             } else if (outputSlot.getItem() == recipeResultItem.getItem()) {
                 outputSlot.grow(recipeResultItem.getCount());
             }
 
-            if (!secondaryRecipeResultItem.isEmpty() && Math.random() <= secondaryChance) {
+            if (recipe.getResultItem().is(Tags.Items.RAW_MATERIALS)) {
+                if (this.efficiencyAdditionalChance == 1) {
+                    outputSlot.grow(recipeResultItem.getCount());
+                } else if (this.efficiencyAdditionalChance < 0.5) {
+                    if (Math.random() <= this.efficiencyAdditionalChance) {
+                        outputSlot.grow(1);
+                    }
+                } else if (this.efficiencyAdditionalChance == 0.5) {
+                    outputSlot.grow(1);
+                } else {
+                    outputSlot.grow(1);
+                    if (Math.random() <= (this.efficiencyAdditionalChance - 0.5)) {
+                        outputSlot.grow(1);
+                    }
+                }
+            }
+
+            if (!secondaryRecipeResultItem.isEmpty() && Math.random() <= secondaryChance && this.efficiencyAdditionalChance != 1) {
                 if (secondaryOutputSlot.isEmpty()) {
                     this.stacks.set(2, secondaryRecipeResultItem.copy());
                 } else if (secondaryOutputSlot.getItem() == secondaryRecipeResultItem.getItem()) {
@@ -229,7 +272,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new CrusherMenu(id, playerInventory, this, this.getUpgradeContainer(),this.getContainerData());
+        return new CrusherMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override
