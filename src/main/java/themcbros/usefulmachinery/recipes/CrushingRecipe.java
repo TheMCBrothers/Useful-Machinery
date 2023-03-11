@@ -10,11 +10,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import themcbros.usefulmachinery.init.MachineryBlocks;
@@ -33,8 +29,9 @@ public class CrushingRecipe implements Recipe<Container> {
     private final ItemStack secondary;
     private final float secondaryChance;
     private final int crushTime;
+    private final Ingredient supportedUpgrades;
 
-    public CrushingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, ItemStack secondary, float secondaryChance, int crushTime) {
+    public CrushingRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, ItemStack secondary, float secondaryChance, int crushTime, Ingredient supportedUpgrades) {
         this.id = id;
         this.group = group;
         this.ingredient = ingredient;
@@ -42,6 +39,7 @@ public class CrushingRecipe implements Recipe<Container> {
         this.secondary = secondary;
         this.secondaryChance = secondaryChance;
         this.crushTime = crushTime;
+        this.supportedUpgrades = supportedUpgrades;
     }
 
     @Override
@@ -108,12 +106,22 @@ public class CrushingRecipe implements Recipe<Container> {
         return this.secondary;
     }
 
+    public boolean supportsUpgrade(ItemStack itemStack) {
+        return supportedUpgrades.test(itemStack);
+    }
+
     public static class Serializer implements RecipeSerializer<CrushingRecipe> {
         @Override
         public CrushingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             String s = GsonHelper.getAsString(json, "group", "");
-            JsonElement jsonelement = (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
-            Ingredient ingredient = Ingredient.fromJson(jsonelement);
+            JsonElement ingredientJsonElement = (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
+            Ingredient ingredient = Ingredient.fromJson(ingredientJsonElement);
+            Ingredient supportedUpgrades = Ingredient.EMPTY;
+
+            if (json.has("supportedUpgrades")) {
+                JsonElement supportedUpgradesJsonElement = (GsonHelper.isArrayNode(json, "supportedUpgrades") ? GsonHelper.getAsJsonArray(json, "supportedUpgrades") : GsonHelper.getAsJsonObject(json, "supportedUpgrades"));
+                supportedUpgrades = Ingredient.fromJson(supportedUpgradesJsonElement);
+            }
 
             if (!json.has("result")) {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
@@ -144,7 +152,7 @@ public class CrushingRecipe implements Recipe<Container> {
 
             int i = GsonHelper.getAsInt(json, "processingtime", 200);
 
-            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i);
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i, supportedUpgrades);
         }
 
         @Nullable
@@ -158,7 +166,9 @@ public class CrushingRecipe implements Recipe<Container> {
             float chance = buffer.readFloat();
             int i = buffer.readVarInt();
 
-            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i);
+            Ingredient supportedUpgrades = Ingredient.fromNetwork(buffer);
+
+            return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack2, chance, i, supportedUpgrades);
         }
 
         @Override
@@ -169,6 +179,7 @@ public class CrushingRecipe implements Recipe<Container> {
             buffer.writeItem(recipe.secondary);
             buffer.writeFloat(recipe.secondaryChance);
             buffer.writeVarInt(recipe.crushTime);
+            recipe.supportedUpgrades.toNetwork(buffer);
         }
     }
 }

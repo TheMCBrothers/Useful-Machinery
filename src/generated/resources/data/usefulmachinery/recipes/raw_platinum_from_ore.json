@@ -7,5 +7,13 @@
   "result": {
     "count": 2,
     "item": "usefulfoundation:raw_platinum"
-  }
+  },
+  "supportedUpgrades": [
+    {
+      "item": "usefulmachinery:efficiency_upgrade"
+    },
+    {
+      "item": "usefulmachinery:precision_upgrade"
+    }
+  ]
 }

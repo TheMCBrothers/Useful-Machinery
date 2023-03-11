@@ -11,5 +11,13 @@
   "secondary": {
     "chance": 0.4,
     "item": "minecraft:raw_copper"
-  }
+  },
+  "supportedUpgrades": [
+    {
+      "item": "usefulmachinery:efficiency_upgrade"
+    },
+    {
+      "item": "usefulmachinery:precision_upgrade"
+    }
+  ]
 }

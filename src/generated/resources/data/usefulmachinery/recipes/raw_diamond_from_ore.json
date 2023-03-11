@@ -7,5 +7,13 @@
   "result": {
     "count": 2,
     "item": "minecraft:diamond"
-  }
+  },
+  "supportedUpgrades": [
+    {
+      "item": "usefulmachinery:efficiency_upgrade"
+    },
+    {
+      "item": "usefulmachinery:precision_upgrade"
+    }
+  ]
 }

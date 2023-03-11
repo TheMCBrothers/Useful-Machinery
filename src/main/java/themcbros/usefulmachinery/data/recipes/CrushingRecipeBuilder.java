@@ -32,6 +32,7 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     @Nullable
     private String group;
+    private Ingredient supportedUpgrades = Ingredient.EMPTY;
 
     private CrushingRecipeBuilder(ItemLike item, int count, Ingredient ingredient, int processTime) {
         this.item = item.asItem();
@@ -48,6 +49,11 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
         this.secondary = item.asItem();
         this.secondaryChance = chance;
 
+        return this;
+    }
+
+    public CrushingRecipeBuilder supportedUpgrades(Ingredient supportedUpgrades) {
+        this.supportedUpgrades = supportedUpgrades;
         return this;
     }
 
@@ -76,7 +82,7 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
         this.validate(location);
         this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(location)).rewards(AdvancementRewards.Builder.recipe(location)).requirements(RequirementsStrategy.OR);
 
-        recipe.accept(new Result(location, group == null ? "" : group, ingredient, item, count, secondary, processTime, secondaryChance, advancement, new ResourceLocation(location.getNamespace(), "recipes/" + location.getPath())));
+        recipe.accept(new Result(location, group == null ? "" : group, ingredient, item, count, secondary, processTime, secondaryChance, supportedUpgrades, advancement, new ResourceLocation(location.getNamespace(), "recipes/" + location.getPath())));
     }
 
     private void validate(ResourceLocation location) {
@@ -94,10 +100,11 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
         private final Item secondary;
         private final int processTime;
         private final float secondaryChance;
+        private final Ingredient supportedUpgrades;
         private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
 
-        public Result(ResourceLocation id, String group, Ingredient ingredient, Item result, int count, Item secondary, int processTime, float secondaryChance, Advancement.Builder advancement, ResourceLocation advancementId) {
+        public Result(ResourceLocation id, String group, Ingredient ingredient, Item result, int count, Item secondary, int processTime, float secondaryChance, Ingredient supportedUpgrades, Advancement.Builder advancement, ResourceLocation advancementId) {
             this.id = id;
             this.group = group;
             this.ingredient = ingredient;
@@ -106,6 +113,7 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
             this.secondary = secondary;
             this.processTime = processTime;
             this.secondaryChance = secondaryChance;
+            this.supportedUpgrades = supportedUpgrades;
             this.advancement = advancement;
             this.advancementId = advancementId;
         }
@@ -118,6 +126,10 @@ public class CrushingRecipeBuilder implements RecipeBuilder {
             object.add("ingredient", this.ingredient.toJson());
             object.addProperty("processingtime", this.processTime);
             object.addProperty("result", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.result)).toString());
+
+            if (!this.supportedUpgrades.isEmpty()) {
+                object.add("supportedUpgrades", this.supportedUpgrades.toJson());
+            }
 
             JsonObject resultObject = new JsonObject();
             resultObject.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.result)).toString());

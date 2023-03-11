@@ -11,5 +11,13 @@
   "secondary": {
     "chance": 0.09,
     "item": "usefulfoundation:raw_lead"
-  }
+  },
+  "supportedUpgrades": [
+    {
+      "item": "usefulmachinery:efficiency_upgrade"
+    },
+    {
+      "item": "usefulmachinery:precision_upgrade"
+    }
+  ]
 }

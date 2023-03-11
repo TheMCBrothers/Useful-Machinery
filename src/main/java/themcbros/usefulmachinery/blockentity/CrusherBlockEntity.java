@@ -78,21 +78,6 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public void tick() {
-        int efficiencyUpgradeCount = 0;
-        int precisionUpgradeCount = 0;
-
-        for (int i = 0; i < this.upgradeContainer.getContainerSize(); i++) {
-            ItemStack stack = this.upgradeContainer.getItem(i);
-            if (stack.is(MachineryItems.EFFICIENCY_UPGRADE.get())) {
-                efficiencyUpgradeCount += stack.getCount();
-            }
-            if (stack.is(MachineryItems.PRECISION_UPGRADE.get())) {
-                precisionUpgradeCount += stack.getCount();
-            }
-        }
-
-        this.efficiencyAdditionalChance = 0.0625 * efficiencyUpgradeCount;
-
         boolean shouldLit = this.isActive();
         boolean flag1 = false;
 
@@ -103,6 +88,23 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
             if (this.isActive() || this.energyStorage.getEnergyStored() >= RF_PER_TICK && !this.stacks.get(0).isEmpty()) {
                 CrushingRecipe crushingRecipe = this.level.getRecipeManager().getRecipeFor(MachineryRecipeTypes.CRUSHING.get(), this, this.level).orElse(null);
+
+                if (crushingRecipe != null) {
+                    int efficiencyUpgradeCount = 0;
+                    int precisionUpgradeCount = 0;
+
+                    for (int i = 0; i < this.upgradeContainer.getContainerSize(); i++) {
+                        ItemStack stack = this.upgradeContainer.getItem(i);
+                        if (stack.is(MachineryItems.EFFICIENCY_UPGRADE.get()) && crushingRecipe.supportsUpgrade(stack)) {
+                            efficiencyUpgradeCount += stack.getCount();
+                        }
+                        if (stack.is(MachineryItems.PRECISION_UPGRADE.get()) && crushingRecipe.supportsUpgrade(stack)) {
+                            precisionUpgradeCount += stack.getCount();
+                        }
+                    }
+
+                    this.efficiencyAdditionalChance = 0.0625 * efficiencyUpgradeCount;
+                }
 
                 if (!this.isActive() && this.canCrush(crushingRecipe)) {
                     this.energyStorage.consumeEnergy(RF_PER_TICK);
