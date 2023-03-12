@@ -8,7 +8,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
 import themcbros.usefulmachinery.init.MachineryBlockEntities;
 import themcbros.usefulmachinery.init.MachineryItems;
 import themcbros.usefulmachinery.machine.RedstoneMode;
@@ -22,6 +21,7 @@ import javax.annotation.Nullable;
 public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private static final int RF_PER_TICK = 10;
     private double efficiencyAdditionalChance;
+    private double precisionAdditionalChance;
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
@@ -104,6 +104,8 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                     }
 
                     this.efficiencyAdditionalChance = 0.0625 * efficiencyUpgradeCount;
+                    this.precisionAdditionalChance = 0.0625 * precisionUpgradeCount;
+
                 }
 
                 if (!this.isActive() && this.canCrush(crushingRecipe)) {
@@ -151,11 +153,16 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             ItemStack recipeOutputStack = recipe.getResultItem();
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
             int efficiencyAdditionalCount = 0;
+            int precisionAdditionalCount = 0;
 
             if (this.efficiencyAdditionalChance > 0.5) {
                 efficiencyAdditionalCount += 2;
             } else if (this.efficiencyAdditionalChance <= 0.5 && this.efficiencyAdditionalChance != 0) {
                 efficiencyAdditionalCount += 1;
+            }
+
+            if (this.precisionAdditionalChance > 0) {
+                precisionAdditionalCount += 1;
             }
 
             if (!recipeSecondOutputStack.isEmpty()) {
@@ -165,18 +172,22 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                     ItemStack crusherOutputStack = this.stacks.get(1);
                     ItemStack crusherSecondOutputStack = this.stacks.get(2);
 
+                    if (this.precisionAdditionalChance == 1) {
+                        recipeOutputStack = ItemStack.EMPTY;
+                    }
+
                     if (crusherOutputStack.isEmpty() && crusherSecondOutputStack.isEmpty()) {
                         return true;
                     } else if (crusherOutputStack.sameItem(recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + efficiencyAdditionalCount <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
+                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + precisionAdditionalCount <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
                         return true;
-                    } else if (!crusherOutputStack.sameItem(recipeOutputStack) || !crusherSecondOutputStack.sameItem(recipeSecondOutputStack)) {
+                    } else if (!crusherOutputStack.is(recipeOutputStack.getItem()) || !crusherSecondOutputStack.is(recipeSecondOutputStack.getItem())) {
                         return false;
-                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() <= this.getMaxStackSize() && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
+                    } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + precisionAdditionalCount <= this.getMaxStackSize() && crusherSecondOutputStack.getCount() < crusherSecondOutputStack.getMaxStackSize()) {
                         return true;
                     } else {
-                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + efficiencyAdditionalCount <= recipeSecondOutputStack.getMaxStackSize();
+                        return crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + precisionAdditionalCount <= recipeSecondOutputStack.getMaxStackSize();
                     }
                 }
             } else {
@@ -211,14 +222,14 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             float secondaryChance = recipe.getSecondaryChance();
 
 
-            if (outputSlot.isEmpty()) {
-                this.stacks.set(1, recipeResultItem.copy());
-                outputSlot = this.stacks.get(1);
-            } else if (outputSlot.getItem() == recipeResultItem.getItem()) {
-                outputSlot.grow(recipeResultItem.getCount());
-            }
+            if (this.precisionAdditionalChance != 1) {
+                if (outputSlot.isEmpty()) {
+                    this.stacks.set(1, recipeResultItem.copy());
+                    outputSlot = this.stacks.get(1);
+                } else if (outputSlot.getItem() == recipeResultItem.getItem()) {
+                    outputSlot.grow(recipeResultItem.getCount());
+                }
 
-            if (recipe.getResultItem().is(Tags.Items.RAW_MATERIALS)) {
                 if (this.efficiencyAdditionalChance == 1) {
                     outputSlot.grow(recipeResultItem.getCount());
                 } else if (this.efficiencyAdditionalChance < 0.5) {
@@ -235,11 +246,27 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                 }
             }
 
-            if (!secondaryRecipeResultItem.isEmpty() && Math.random() <= secondaryChance && this.efficiencyAdditionalChance != 1) {
+            if (!secondaryRecipeResultItem.isEmpty() && (Math.random() <= secondaryChance || this.precisionAdditionalChance == 1) && this.efficiencyAdditionalChance != 1) {
                 if (secondaryOutputSlot.isEmpty()) {
                     this.stacks.set(2, secondaryRecipeResultItem.copy());
+                    secondaryOutputSlot = this.stacks.get(2);
                 } else if (secondaryOutputSlot.getItem() == secondaryRecipeResultItem.getItem()) {
                     secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                }
+
+                if (this.precisionAdditionalChance == 1) {
+                    secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                } else if (this.precisionAdditionalChance < 0.5) {
+                    if (Math.random() <= this.precisionAdditionalChance) {
+                        secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                    }
+                } else if (this.precisionAdditionalChance == 0.5) {
+                    secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                } else {
+                    secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                    if (Math.random() <= this.precisionAdditionalChance - 0.5) {
+                        secondaryOutputSlot.grow(secondaryRecipeResultItem.getCount());
+                    }
                 }
             }
 
