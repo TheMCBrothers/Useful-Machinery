@@ -74,8 +74,8 @@ sourceSets.main.resources {
 repositories {
     maven {
         // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://nexus.themcbrothers.net/repository/maven-progwml6"
+        name = "Blamejared"
+        url = "https://nexus.themcbrothers.net/repository/maven-blamejared"
     }
     maven {
         // TOP
