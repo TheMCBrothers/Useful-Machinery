@@ -25,5 +25,6 @@
   ],
   "result": {
     "item": "usefulmachinery:electric_smelter"
-  }
+  },
+  "show_notification": true
 }

@@ -35,19 +35,19 @@ public class CompactorModeButton extends Button {
     }
 
     @Override
-    public boolean changeFocus(boolean randomNumb) {
-        return false;
+    public void setFocused(boolean focus) {
+        super.setFocused(false);
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float p_renderButton_3_) {
-        super.renderButton(poseStack, mouseX, mouseY, p_renderButton_3_);
+    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float p_renderButton_3_) {
+        super.renderWidget(poseStack, mouseX, mouseY, p_renderButton_3_);
 
         final Minecraft minecraft = Minecraft.getInstance();
         final ItemStack renderStack = this.container.getCompactorMode().getIconStack();
 
-        minecraft.getItemRenderer().renderGuiItemDecorations(minecraft.font, renderStack, this.getX() + 2, this.getY() + 2, "");
-        minecraft.getItemRenderer().renderGuiItem(renderStack, this.getX() + 2, this.getY() + 2);
+        minecraft.getItemRenderer().renderGuiItemDecorations(poseStack, minecraft.font, renderStack, this.getX() + 2, this.getY() + 2, "");
+        minecraft.getItemRenderer().renderGuiItem(poseStack, renderStack, this.getX() + 2, this.getY() + 2);
     }
 
 }

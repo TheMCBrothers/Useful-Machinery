@@ -161,7 +161,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
 
     private boolean canProcess(@Nullable AbstractCookingRecipe recipeIn) {
         if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this)) {
-            ItemStack itemstack = recipeIn.getResultItem();
+            ItemStack itemstack = recipeIn.getResultItem(this.level.registryAccess());
 
             if (itemstack.isEmpty()) {
                 return false;
@@ -186,7 +186,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     private void processItem(@Nullable AbstractCookingRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
-            ItemStack itemstack1 = recipe.getResultItem();
+            ItemStack itemstack1 = recipe.getResultItem(this.level.registryAccess());
             ItemStack itemstack2 = this.stacks.get(1);
 
             if (itemstack2.isEmpty()) {

@@ -150,7 +150,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     private boolean canCrush(@Nullable CrushingRecipe recipe) {
         if (!this.stacks.get(0).isEmpty() && recipe != null && this.redstoneMode.canRun(this)) {
-            ItemStack recipeOutputStack = recipe.getResultItem();
+            ItemStack recipeOutputStack = recipe.getResultItem(this.level.registryAccess());
             ItemStack recipeSecondOutputStack = recipe.getSecondRecipeOutput();
             int efficiencyAdditionalCount = 0;
             int precisionAdditionalCount = 0;
@@ -215,7 +215,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     private void crushItem(@Nullable CrushingRecipe recipe) {
         if (recipe != null && this.canCrush(recipe)) {
             ItemStack inputSlot = this.stacks.get(0);
-            ItemStack recipeResultItem = recipe.getResultItem();
+            ItemStack recipeResultItem = recipe.getResultItem(this.level.registryAccess());
             ItemStack outputSlot = this.stacks.get(1);
             ItemStack secondaryRecipeResultItem = recipe.getSecondRecipeOutput();
             ItemStack secondaryOutputSlot = this.stacks.get(2);

@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "usefulmachinery:machine_frame"
-  }
+  },
+  "show_notification": true
 }

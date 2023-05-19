@@ -195,7 +195,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
     private boolean canProcess(@Nullable CompactingRecipe recipeIn) {
         if (!this.stacks.get(0).isEmpty() && recipeIn != null && this.redstoneMode.canRun(this) && recipeIn.getCompactorMode().equals(this.compactorMode)) {
-            ItemStack itemstack = recipeIn.getResultItem();
+            ItemStack itemstack = recipeIn.getResultItem(this.level.registryAccess());
 
             if (itemstack.isEmpty()) {
                 return false;
@@ -220,7 +220,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     private void processItem(@Nullable CompactingRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             ItemStack itemstack = this.stacks.get(0);
-            ItemStack itemstack1 = recipe.getResultItem();
+            ItemStack itemstack1 = recipe.getResultItem(this.level.registryAccess());
             ItemStack itemstack2 = this.stacks.get(1);
 
             if (itemstack2.isEmpty()) {

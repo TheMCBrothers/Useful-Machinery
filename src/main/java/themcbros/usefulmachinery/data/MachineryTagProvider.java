@@ -29,8 +29,8 @@ public class MachineryTagProvider {
     }
 
     public static class Item extends ItemTagsProvider {
-        public Item(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, BlockTagsProvider blockTagsProvider, @Nullable ExistingFileHelper existingFileHelper) {
-            super(output, provider, blockTagsProvider, UsefulMachinery.MOD_ID, existingFileHelper);
+        public Item(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, CompletableFuture<TagLookup<net.minecraft.world.level.block.Block>> blockTagLookup, @Nullable ExistingFileHelper existingFileHelper) {
+            super(output, provider, blockTagLookup, UsefulMachinery.MOD_ID, existingFileHelper);
         }
 
         @Override
@@ -39,4 +39,6 @@ public class MachineryTagProvider {
             this.tag(MachineryTags.Items.MACHINERY_UPGRADES).add(MachineryItems.EFFICIENCY_UPGRADE.get(), MachineryItems.PRECISION_UPGRADE.get(), MachineryItems.SUSTAINED_UPGRADE.get());
         }
     }
+
+
 }

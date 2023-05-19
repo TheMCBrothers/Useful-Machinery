@@ -55,7 +55,7 @@ public class BatteryItem extends Item implements EnergyContainerItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        EnergyUnit energyUnit = Config.CLIENT_CONFIG.energyUnit;
+        EnergyUnit energyUnit = Config.CLIENT_CONFIG.getEnergyUnit();
 
         MutableComponent component = TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), energyUnit);
         tooltip.add(component.withStyle(ChatFormatting.GRAY));

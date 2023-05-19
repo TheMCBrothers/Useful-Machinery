@@ -25,5 +25,6 @@
   ],
   "result": {
     "item": "usefulmachinery:lava_generator"
-  }
+  },
+  "show_notification": true
 }

@@ -34,13 +34,13 @@ public class RedstoneModeButton extends ExtendedButton {
     }
 
     @Override
-    public boolean changeFocus(boolean randomNumb) {
-        return false;
+    public void setFocused(boolean focus) {
+        super.setFocused(false);
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
-        super.renderButton(poseStack, mouseX, mouseY, partial);
+    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+        super.renderWidget(poseStack, mouseX, mouseY, partial);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

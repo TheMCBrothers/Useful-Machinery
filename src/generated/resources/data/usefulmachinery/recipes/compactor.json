@@ -25,5 +25,6 @@
   ],
   "result": {
     "item": "usefulmachinery:compactor"
-  }
+  },
+  "show_notification": true
 }

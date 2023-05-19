@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -72,6 +73,6 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
         }
 
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addItemStacks(List.of(stacks));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 17).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 17).addItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
     }
 }

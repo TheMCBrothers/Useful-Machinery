@@ -3,16 +3,13 @@ package themcbros.usefulmachinery.recipes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import themcbros.usefulmachinery.blockentity.extension.Compactor;
@@ -47,7 +44,7 @@ public class CompactingRecipe implements Recipe<Compactor> {
     }
 
     @Override
-    public ItemStack assemble(Compactor compactor) {
+    public ItemStack assemble(Compactor compactor, RegistryAccess registryAccess) {
         return this.result.copy();
     }
 
@@ -57,7 +54,7 @@ public class CompactingRecipe implements Recipe<Compactor> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         return this.result;
     }
 
@@ -97,7 +94,6 @@ public class CompactingRecipe implements Recipe<Compactor> {
     public NonNullList<Ingredient> getIngredients() {
         return NonNullList.withSize(1, this.ingredient);
     }
-
 
 
     public static class Serializer implements RecipeSerializer<CompactingRecipe> {

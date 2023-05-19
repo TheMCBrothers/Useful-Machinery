@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "usefulmachinery:battery"
-  }
+  },
+  "show_notification": true
 }
