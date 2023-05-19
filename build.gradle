@@ -162,8 +162,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                username = getSecretByKey("nexus_uname")
-                password = getSecretByKey("nexus_pwd")
+                username = getSecret("nexus_uname")
+                password = getSecret("nexus_pwd")
             }
 
             url "https://nexus.themcbrothers.net/repository/maven-releases/"
@@ -171,22 +171,24 @@ publishing {
     }
 }
 
-private String getSecretByKey(String key) {
-    File secretFile = file("secrets.properties")
+private String getSecret(String key) {
+    def secret = System.getenv(key)
+    if (secret != null) {
+        return secret.trim()
+    }
 
+    File secretFile = file('secrets.properties')
     if (secretFile.canRead()) {
         Properties secretProps = new Properties()
         secretProps.load(new FileInputStream(secretFile))
-
-        return secretProps[key].toString()
+        return secretProps.getProperty(key).toString()
     }
-
     return null
 }
 
 // For CurseForge Deployment
 curseforge {
-    apiKey = getSecretByKey("curseForgeToken") // This should be kept private.
+    apiKey = getSecret("cf_key") // This should be kept private.
     options {
         forgeGradleIntegration = true
     }

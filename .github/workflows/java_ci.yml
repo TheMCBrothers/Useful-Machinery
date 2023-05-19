@@ -1,0 +1,35 @@
+name: Java CI
+
+on:
+  push:
+    paths-ignore:
+      - '.github/**'
+      - '**.md'
+      - '**.txt'
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '**.md'
+      - '**.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      cf_key: ${{ secrets.CURSEFORGE_TOKEN }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'microsoft'
+    - name: Set up Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Build with Gradle
+      run: chmod +x ./gradlew && ./gradlew build
