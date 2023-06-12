@@ -1,3 +1,6 @@
+1.2.0:
+- Added recipes for Efficiency and Precision Upgrades
+
 1.1.0:
 - Bug fixes
 - Upgrade slots for machines
