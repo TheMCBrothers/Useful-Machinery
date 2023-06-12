@@ -83,7 +83,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
+        boolean flag = !stack.isEmpty() && ItemStack.matches(stack, itemstack);
         this.stacks.set(index, stack);
         if (stack.getCount() > this.getMaxEnergyStored()) {
             stack.setCount(this.getMaxEnergyStored());
@@ -130,7 +130,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
-        return new CompactorMenu(id, playerInventory, this, this.getUpgradeContainer() ,this.getContainerData());
+        return new CompactorMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     private boolean isActive() {
@@ -204,7 +204,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!itemstack1.sameItem(itemstack)) {
+                } else if (!ItemStack.isSameItem(itemstack1, itemstack)) {
                     return false;
                 } else if (itemstack1.getCount() + itemstack.getCount() <= this.getMaxEnergyStored() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;

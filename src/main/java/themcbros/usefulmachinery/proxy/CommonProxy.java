@@ -1,10 +1,10 @@
 package themcbros.usefulmachinery.proxy;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.themcbrothers.lib.energy.EnergyContainerItem;
 import themcbros.usefulmachinery.UsefulMachinery;
 import themcbros.usefulmachinery.compat.top.TheOneProbeSupport;
-import themcbros.usefulmachinery.init.MachineryItems;
+import themcbros.usefulmachinery.init.MachineryCreativeModeTabs;
 import themcbros.usefulmachinery.init.Registration;
 import themcbros.usefulmachinery.items.TierUpgradeItem;
 import themcbros.usefulmachinery.machine.MachineTier;
@@ -35,7 +35,6 @@ public class CommonProxy {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC);
         modEventBus.addListener(this::processIMC);
-        modEventBus.addListener(this::registerCreativeModeTab);
         modEventBus.addListener(this::buildContentsCreativeModeTab);
 
         Networking.init();
@@ -57,16 +56,10 @@ public class CommonProxy {
                 collect(Collectors.toList()));
     }
 
-    private void registerCreativeModeTab(CreativeModeTabEvent.Register event) {
-        UsefulMachinery.GROUP = event.registerCreativeModeTab(UsefulMachinery.getId("tab"), (builder) -> {
-            builder.icon(() -> new ItemStack(MachineryItems.BATTERY.get())).title(Component.translatable("itemGroup.usefulmachinery"));
-        });
-    }
-
-    private void buildContentsCreativeModeTab(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == UsefulMachinery.GROUP) {
-            Registration.BLOCKS.getEntries().forEach(block -> event.accept(block.get()));
-            Registration.ITEMS.getEntries().forEach((item) -> event.acceptAll(considerSpecialNeeds(item.get())));
+    private void buildContentsCreativeModeTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTab() == MachineryCreativeModeTabs.BASE.get()) {
+            Registration.BLOCKS.getEntries().forEach(block -> event.accept(block.get(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
+            Registration.ITEMS.getEntries().forEach((item) -> event.acceptAll(considerSpecialNeeds(item.get()), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
         }
     }
 

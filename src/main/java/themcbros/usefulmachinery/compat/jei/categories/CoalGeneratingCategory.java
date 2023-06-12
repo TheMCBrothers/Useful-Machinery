@@ -1,6 +1,5 @@
 package themcbros.usefulmachinery.compat.jei.categories;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -12,6 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.vanilla.IJeiFuelingRecipe;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +27,7 @@ public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
     private final IDrawable icon;
     private final IDrawableAnimated energyBar;
     private final IDrawableAnimated fire;
+
     public CoalGeneratingCategory(IGuiHelper helper) {
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineryBlocks.COAL_GENERATOR.get()));
         this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
@@ -37,9 +38,9 @@ public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
     }
 
     @Override
-    public void draw(IJeiFuelingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        this.energyBar.draw(stack, 121, 1);
-        this.fire.draw(stack, 20, 18);
+    public void draw(IJeiFuelingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        this.energyBar.draw(graphics, 121, 1);
+        this.fire.draw(graphics, 20, 18);
     }
 
     @Override

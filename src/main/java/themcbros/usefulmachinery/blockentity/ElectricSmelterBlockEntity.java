@@ -73,7 +73,8 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
+
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, itemstack);
         this.stacks.set(index, stack);
         if (stack.getCount() > this.getMaxEnergyStored()) {
             stack.setCount(this.getMaxEnergyStored());
@@ -170,7 +171,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
 
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!itemstack1.sameItem(itemstack)) {
+                } else if (!ItemStack.isSameItem(itemstack1, itemstack)) {
                     return false;
                 } else if (itemstack1.getCount() + itemstack.getCount() <= this.getMaxEnergyStored() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;

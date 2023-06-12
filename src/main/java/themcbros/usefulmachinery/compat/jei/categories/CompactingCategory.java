@@ -1,6 +1,5 @@
 package themcbros.usefulmachinery.compat.jei.categories;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -12,6 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -39,9 +39,9 @@ public class CompactingCategory implements IRecipeCategory<CompactingRecipe> {
     }
 
     @Override
-    public void draw(CompactingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY) {
-        this.arrow.draw(poseStack, 24, 16);
-        this.energyBar.draw(poseStack, 121, 1);
+    public void draw(CompactingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        this.arrow.draw(graphics, 24, 16);
+        this.energyBar.draw(graphics, 121, 1);
     }
 
     @Override

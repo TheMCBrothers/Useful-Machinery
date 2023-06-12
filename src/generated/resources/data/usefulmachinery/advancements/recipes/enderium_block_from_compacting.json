@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:enderium_block_from_compacting"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

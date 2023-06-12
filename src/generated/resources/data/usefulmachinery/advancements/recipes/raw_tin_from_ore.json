@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:raw_tin_from_ore"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

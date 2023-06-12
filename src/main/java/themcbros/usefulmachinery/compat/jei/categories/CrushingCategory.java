@@ -1,6 +1,5 @@
 package themcbros.usefulmachinery.compat.jei.categories;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -12,7 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -37,11 +36,11 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
     }
 
     @Override
-    public void draw(CrushingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY) {
-        this.arrow.draw(poseStack, 24, 18);
-        this.energyBar.draw(poseStack, 121, 1);
+    public void draw(CrushingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        this.arrow.draw(graphics, 24, 18);
+        this.energyBar.draw(graphics, 121, 1);
 
-        drawChance(recipe, poseStack);
+        drawChance(recipe, graphics);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
         return MachineryJeiRecipeTypes.CRUSHING;
     }
 
-    protected void drawChance(CrushingRecipe recipe, PoseStack poseStack) {
+    protected void drawChance(CrushingRecipe recipe, GuiGraphics graphics) {
         float secondaryChance = recipe.getSecondaryChance();
         if (secondaryChance > 0) {
             float secondaryChanceInPercent = secondaryChance * 100;
@@ -57,8 +56,7 @@ public class CrushingCategory implements IRecipeCategory<CrushingRecipe> {
             Component text = Component.translatable(secondaryChanceInPercent + "%");
             Minecraft minecraft = Minecraft.getInstance();
 
-            Font fontRenderer = minecraft.font;
-            fontRenderer.draw(poseStack, text, 79, 39, 0xFF808080);
+            graphics.drawString(minecraft.font, text, 79, 39, 0xFF808080);
         }
     }
 

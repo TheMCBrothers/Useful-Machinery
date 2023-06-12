@@ -1,8 +1,7 @@
 package themcbros.usefulmachinery.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -39,17 +38,13 @@ public class RedstoneModeButton extends ExtendedButton {
     }
 
     @Override
-    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partial) {
-        super.renderWidget(poseStack, mouseX, mouseY, partial);
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
+        super.renderWidget(graphics, mouseX, mouseY, partial);
         ResourceLocation icon = this.container.getRedstoneMode().getIcon();
-        RenderSystem.setShaderTexture(0, icon);
 
         RenderSystem.disableDepthTest();
 
-        blit(poseStack, this.getX(), this.getY(), 0, this.container.getRedstoneMode().getIndex() == 0 ? 0 : 2, this.width, this.height, 16, 16);
+        graphics.blit(icon, this.getX(), this.getY(), 0, this.container.getRedstoneMode().getIndex() == 0 ? 0 : 2, this.width, this.height, 16, 16);
 
         RenderSystem.enableDepthTest();
     }

@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:raw_diamond_from_ore"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

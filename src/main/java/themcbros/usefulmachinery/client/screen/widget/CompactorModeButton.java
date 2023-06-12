@@ -1,7 +1,7 @@
 package themcbros.usefulmachinery.client.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -40,14 +40,14 @@ public class CompactorModeButton extends Button {
     }
 
     @Override
-    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float p_renderButton_3_) {
-        super.renderWidget(poseStack, mouseX, mouseY, p_renderButton_3_);
+    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float p_renderButton_3_) {
+        super.renderWidget(graphics, mouseX, mouseY, p_renderButton_3_);
 
         final Minecraft minecraft = Minecraft.getInstance();
         final ItemStack renderStack = this.container.getCompactorMode().getIconStack();
 
-        minecraft.getItemRenderer().renderGuiItemDecorations(poseStack, minecraft.font, renderStack, this.getX() + 2, this.getY() + 2, "");
-        minecraft.getItemRenderer().renderGuiItem(poseStack, renderStack, this.getX() + 2, this.getY() + 2);
+        graphics.renderItemDecorations(minecraft.font, renderStack, this.getX() + 2, this.getY() + 2, "");
+        graphics.renderItem(renderStack, this.getX() + 2, this.getY() + 2);
     }
 
 }

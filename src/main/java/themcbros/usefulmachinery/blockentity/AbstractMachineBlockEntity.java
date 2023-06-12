@@ -7,7 +7,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.*;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -210,7 +213,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     private final LazyOptional<IItemHandlerModifiable>[] itemHandlers = SidedInvWrapper.create(this, Direction.values());
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> this.energyStorage);
+    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(this::getEnergyStorage);
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -296,11 +299,14 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         if (this.level != null) {
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.TIER, machineTier), Block.UPDATE_ALL);
         }
-        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0);
+        this.energyStorage = new ExtendedEnergyStorage(ENERGY_CAPACITY * (this.getMachineTier(this.getBlockState()).ordinal() + 1), !isGenerator ? MAX_TRANSFER : 0, isGenerator ? MAX_TRANSFER : 0, this.getEnergyStored());
         ListTag previousItems = this.upgradeContainer.createTag();
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
         this.upgradeContainer.fromTag(previousItems);
         this.setChanged();
+        this.invalidateCaps();
+        this.reviveCaps();
+        this.energyHandler = LazyOptional.of(this::getEnergyStorage);
     }
 
     public RedstoneMode getRedstoneMode() {
@@ -317,4 +323,10 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     }
 
     public abstract ContainerData getContainerData();
+
+    @Override
+    public void invalidateCaps() {
+        this.energyHandler.invalidate();
+        super.invalidateCaps();
+    }
 }

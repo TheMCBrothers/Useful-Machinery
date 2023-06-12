@@ -2,6 +2,7 @@ package themcbros.usefulmachinery.init;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,6 +22,7 @@ public class Registration {
     public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UsefulMachinery.MOD_ID);
 
     public static void register(IEventBus bus) {
         MachineryBlocks.init();
@@ -30,6 +32,7 @@ public class Registration {
         MachineryStats.init();
         MachineryRecipeTypes.init();
         MachineryRecipeSerializers.init();
+        MachineryCreativeModeTabs.init();
 
         BLOCKS.register(bus);
         BLOCK_ENTITY_TYPES.register(bus);
@@ -38,5 +41,6 @@ public class Registration {
         CUSTOM_STATS.register(bus);
         RECIPE_TYPES.register(bus);
         RECIPE_SERIALIZERS.register(bus);
+        CREATIVE_MODE_TABS.register(bus);
     }
 }

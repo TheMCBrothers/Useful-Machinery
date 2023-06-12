@@ -30,5 +30,6 @@
     "recipes": [
       "usefulmachinery:electric_smelter"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

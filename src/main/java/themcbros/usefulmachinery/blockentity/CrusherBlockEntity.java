@@ -178,9 +178,9 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
                     if (crusherOutputStack.isEmpty() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (crusherOutputStack.sameItem(recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
+                    } else if (ItemStack.isSameItem(crusherOutputStack, recipeOutputStack) && crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= recipeOutputStack.getMaxStackSize() && crusherSecondOutputStack.isEmpty()) {
                         return true;
-                    } else if (crusherSecondOutputStack.sameItem(recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + precisionAdditionalCount <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
+                    } else if (ItemStack.isSameItem(crusherSecondOutputStack, recipeSecondOutputStack) && crusherSecondOutputStack.getCount() + recipeSecondOutputStack.getCount() + precisionAdditionalCount <= recipeSecondOutputStack.getMaxStackSize() && crusherOutputStack.isEmpty()) {
                         return true;
                     } else if (!crusherOutputStack.is(recipeOutputStack.getItem()) || !crusherSecondOutputStack.is(recipeSecondOutputStack.getItem())) {
                         return false;
@@ -198,7 +198,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
                     if (crusherOutputStack.isEmpty()) {
                         return true;
-                    } else if (!crusherOutputStack.sameItem(recipeOutputStack)) {
+                    } else if (!ItemStack.isSameItem(crusherOutputStack, recipeOutputStack)) {
                         return false;
                     } else if (crusherOutputStack.getCount() + recipeOutputStack.getCount() + efficiencyAdditionalCount <= this.getMaxStackSize() && crusherOutputStack.getCount() < crusherOutputStack.getMaxStackSize()) {
                         return true;
@@ -277,7 +277,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.stacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.isSameItemSameTags(stack, itemstack);
+        boolean flag = !stack.isEmpty() && ItemStack.matches(stack, itemstack);
 
         this.stacks.set(index, stack);
 

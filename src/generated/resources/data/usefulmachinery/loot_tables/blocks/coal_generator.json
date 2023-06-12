@@ -97,5 +97,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "usefulmachinery:blocks/coal_generator"
 }

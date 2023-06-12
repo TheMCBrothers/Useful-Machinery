@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:silver_plate_from_compacting"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

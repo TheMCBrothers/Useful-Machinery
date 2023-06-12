@@ -154,7 +154,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 ItemStack outputSlotStack = this.stacks.get(1);
                 ItemStack resultStack = result.getResult();
 
-                if (resultStack.sameItem(outputSlotStack) && resultStack.getMaxStackSize() > 1 && outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
+                if (ItemStack.isSameItem(resultStack, outputSlotStack) && resultStack.getMaxStackSize() > 1 && outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
                     outputSlotStack.grow(resultStack.getCount());
                     bucketStack.shrink(1);
                 } else if (outputSlotStack.isEmpty()) {

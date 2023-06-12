@@ -26,7 +26,7 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
 
     AbstractMachineMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
         super(type, id);
-        this.level = playerInventory.player.getLevel();
+        this.level = playerInventory.player.level();
         this.blockEntity = blockEntity;
         this.upgradeSlotCount = upgradeSlotCount;
 

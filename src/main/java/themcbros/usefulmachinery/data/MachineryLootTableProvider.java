@@ -4,8 +4,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.packs.VanillaLootTableProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootDataId;
+import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
@@ -27,6 +28,8 @@ public class MachineryLootTableProvider extends LootTableProvider {
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationContext context) {
-        map.forEach((location, table) -> LootTables.validate(context, location, table));
+        map.forEach((location, lootTable) -> {
+            lootTable.validate(context.setParams(lootTable.getParamSet()).enterElement("{" + location + "}", new LootDataId(LootDataType.TABLE, location)));
+        });
     }
 }

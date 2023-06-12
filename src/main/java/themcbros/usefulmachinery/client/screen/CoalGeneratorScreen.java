@@ -1,8 +1,6 @@
 package themcbros.usefulmachinery.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,21 +17,17 @@ public class CoalGeneratorScreen extends AbstractMachineScreen<CoalGeneratorMenu
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack poseStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURES);
-
+    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
-        this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURES, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
         // Render burning flame
         if (this.menu.isBurning()) {
             int l = this.menu.getBurnTimeScaled();
-            this.blit(poseStack, 54 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1);
+            graphics.blit(TEXTURES, 54 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1);
         }
 
-        this.renderUpgradeSlots(poseStack, partialTicks, mouseX, mouseY);
+        this.renderUpgradeSlots(graphics);
     }
 }

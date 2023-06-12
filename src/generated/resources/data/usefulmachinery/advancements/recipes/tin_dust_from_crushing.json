@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:tin_dust_from_crushing"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

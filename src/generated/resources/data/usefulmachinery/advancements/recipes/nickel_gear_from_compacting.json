@@ -28,5 +28,6 @@
     "recipes": [
       "usefulmachinery:nickel_gear_from_compacting"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }
