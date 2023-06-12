@@ -36,6 +36,6 @@ This is a mod that adds machines
 [[dependencies.usefulmachinery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4,1.20)"
+    versionRange="[1.19.4,)"
     ordering="NONE"
     side="BOTH"

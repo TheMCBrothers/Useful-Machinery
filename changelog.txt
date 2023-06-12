@@ -1,2 +1,6 @@
-2.0.0
+2.1.0:
+- Fixed bug regarding Upgrades
+- Added recipes for Efficiency and Precision Upgrades
+
+2.0.0:
 - Updated to 1.19.4
