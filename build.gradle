@@ -3,6 +3,7 @@ plugins {
     id "maven-publish"
     id "net.minecraftforge.gradle" version "6.0.+"
     id "me.hypherionmc.cursegradle" version "2.0.1"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 group = "net.themcbrothers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -186,27 +187,48 @@ private String getSecret(String key) {
     return null
 }
 
-// For CurseForge Deployment
-curseforge {
-    apiKey = getSecret("cf_key") // This should be kept private.
-    options {
-        forgeGradleIntegration = true
-    }
-    project {
-        id = "355129" // The ID of your project. You can find this on your project Curseforge page
-        changelog = file("changelog.txt") // A file can also be set using: changelog = file("changelog.txt")
-        releaseType = project.curse_type // beta, alpha, release
-        addGameVersion(project.mc_version)
-        mainArtifact(jar) {
-            displayName = "${modname} ${mod_version}"
-            relations {
-                requiredDependency "useful-foundation"
-                requiredDependency "themcbroslib"
-                optionalDependency "jei"
-                optionalDependency "the-one-probe"
+var curseForgeKey = getSecret('cf_key')
+var modrinthToken = getSecret('modrinth_token')
+var refName = System.getenv('ref_name') ?: 'HEAD'
+
+// Publish to CurseForge
+if (curseForgeKey != null) {
+    curseforge {
+        apiKey = curseForgeKey
+
+        project {
+            id = curse_project
+            changelog = file('changelog.txt')
+            changelogType = "markdown"
+            releaseType = artifact_type
+            addGameVersion(mc_version)
+            mainArtifact(tasks.jar) {
+                displayName = "$modname $mod_version"
+                relations {
+                    requiredDependency "useful-foundation"
+                    requiredDependency "themcbroslib"
+                    optionalDependency "jei"
+                    optionalDependency "the-one-probe"
+                }
             }
         }
     }
 }
 
-tasks.named("curseforge") { finalizedBy("publish") }
+// Publish to Modrinth
+if (modrinthToken != null) {
+    modrinth {
+        token = modrinthToken
+        projectId = modrinth_project
+        versionName = "$modname $mod_version"
+        versionType = artifact_type
+        changelog = "[View changelog.txt on GitHub](https://raw.githubusercontent.com/TheMCBrothers/Useful-Machinery/$refName/changelog.txt)"
+        uploadFile = tasks.jar
+        dependencies {
+            required.project "themcbroslib"
+            required.project "useful-foundation"
+            optional.project "jei"
+            optional.project "the-one-probe"
+        }
+    }
+}
