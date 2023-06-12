@@ -10,11 +10,13 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       cf_key: ${{ secrets.CURSEFORGE_TOKEN }}
+      modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
       nexus_uname: ${{ secrets.PUBLISH_USER }}
       nexus_pwd: ${{ secrets.PUBLISH_PASSWORD }}
+      ref_name: ${{ github.ref_name }}
 
     steps:
     - name: Checkout
@@ -26,5 +28,11 @@ jobs:
         distribution: 'microsoft'
     - name: Set up Gradle
       uses: gradle/gradle-build-action@v2
-    - name: Build and publish with Gradle
-      run: chmod +x ./gradlew && ./gradlew curseforge
+    - name: Build with Gradle
+      run: chmod +x ./gradlew && ./gradlew build
+    - name: Publish to Nexus
+      run: ./gradlew publish
+    - name: Publish to Modrinth
+      run: ./gradlew modrinth
+    - name: Publish to CurseForge
+      run: ./gradlew curseforge
