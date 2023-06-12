@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:dusts/redstone"
+    },
+    "O": {
+      "tag": "forge:plates/steel"
+    },
+    "R": {
+      "item": "minecraft:flint"
+    },
+    "X": {
+      "tag": "forge:ingots/bronze"
+    }
+  },
+  "pattern": [
+    "X#X",
+    "ROR",
+    "X#X"
+  ],
+  "result": {
+    "count": 2,
+    "item": "usefulmachinery:efficiency_upgrade"
+  },
+  "show_notification": true
+}
