@@ -125,9 +125,54 @@ public class MachineryRecipeProvider extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, LAVA_GENERATOR.get(), 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipe);
 
         //Items
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MACHINE_FRAME.get(), 1).pattern("X#X").pattern("#R#").pattern("X#X").define('X', INGOTS_TIN).define('#', Tags.Items.GLASS).define('R', GEARS_IRON).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BATTERY.get(), 1).pattern(" X ").pattern("#R#").pattern("#R#").define('X', Tags.Items.NUGGETS_GOLD).define('#', INGOTS_TIN).define('R', Tags.Items.DUSTS_REDSTONE).unlockedBy("has_tin_ingot", has(INGOTS_TIN)).save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MACHINE_FRAME.get(), 1)
+                .pattern("X#X")
+                .pattern("#R#")
+                .pattern("X#X")
+                .define('X', INGOTS_TIN)
+                .define('#', Tags.Items.GLASS)
+                .define('R', GEARS_IRON)
+                .unlockedBy("has_tin_ingot", has(INGOTS_TIN))
+                .save(recipe);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BATTERY.get(), 1)
+                .pattern(" X ")
+                .pattern("#R#")
+                .pattern("#R#")
+                .define('X', Tags.Items.NUGGETS_GOLD)
+                .define('#', INGOTS_TIN)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .unlockedBy("has_tin_ingot", has(INGOTS_TIN))
+                .save(recipe);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, COMPACTOR_KIT.get(), 1).requires(GEARS_GOLD).requires(PLATES_LEAD).requires(HAMMER.get()).unlockedBy("has_hammer", has(HAMMER.get())).save(recipe);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, COMPACTOR_KIT.get(), 1)
+                .requires(GEARS_GOLD)
+                .requires(PLATES_LEAD)
+                .requires(HAMMER.get())
+                .unlockedBy("has_hammer", has(HAMMER.get()))
+                .save(recipe);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, PRECISION_UPGRADE.get(), 2)
+                .pattern("X#X")
+                .pattern("ROR")
+                .pattern("X#X")
+                .define('X', INGOTS_NICKEL)
+                .define('#', Tags.Items.DUSTS_GLOWSTONE)
+                .define('R', Tags.Items.GEMS_AMETHYST)
+                .define('O', PLATES_STEEL)
+                .unlockedBy("has_amethyst_shard", has(Tags.Items.GEMS_AMETHYST))
+                .unlockedBy("has_glowstone_dust", has(Tags.Items.DUSTS_GLOWSTONE))
+                .save(recipe);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EFFICIENCY_UPGRADE.get(), 2)
+                .pattern("X#X")
+                .pattern("ROR")
+                .pattern("X#X")
+                .define('X', INGOTS_BRONZE)
+                .define('#', Tags.Items.DUSTS_REDSTONE)
+                .define('R', Items.FLINT)
+                .define('O', PLATES_STEEL)
+                .unlockedBy("has_flint", has(Items.FLINT))
+                .unlockedBy("has_redstone_dust", has(Tags.Items.DUSTS_REDSTONE))
+                .save(recipe);
     }
 }

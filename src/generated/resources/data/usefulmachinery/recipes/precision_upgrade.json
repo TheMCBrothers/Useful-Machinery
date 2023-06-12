@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "O": {
+      "tag": "forge:plates/steel"
+    },
+    "R": {
+      "tag": "forge:gems/amethyst"
+    },
+    "X": {
+      "tag": "forge:ingots/nickel"
+    }
+  },
+  "pattern": [
+    "X#X",
+    "ROR",
+    "X#X"
+  ],
+  "result": {
+    "count": 2,
+    "item": "usefulmachinery:precision_upgrade"
+  }
+}
