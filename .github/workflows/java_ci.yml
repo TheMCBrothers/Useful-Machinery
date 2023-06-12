@@ -13,6 +13,3 @@ permissions:
 jobs:
   build:
     uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@main
-    secrets:
-      GH_APP_KEY: ${{ secrets.GH_APP_KEY }}
-      GH_APP_NAME: ${{ secrets.GH_APP_NAME }}
