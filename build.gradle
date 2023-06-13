@@ -135,8 +135,8 @@ dependencies {
 
     if (project.hasProperty("top_version")) {
         // TOP
-        compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:$top_version:api")
-        runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:$top_version")
+        compileOnly "mcjty.theoneprobe:theoneprobe:${top_version}:api"
+        runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}", { transitive = false })
     }
 }
 
