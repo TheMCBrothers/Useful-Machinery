@@ -1,41 +1,48 @@
-modLoader="javafml" #mandatory
-loaderVersion="[46,)" #mandatory
-license="MIT License"
-# issueTrackerURL="http://my.issue.tracker/" #optional
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+issueTrackerURL = "https://github.com/TheMCBrothers/Useful-Machinery/issues"
+license = "MIT License"
 
-[[mods]] #mandatory
-modId="usefulmachinery" #mandatory
-version="${file.jarVersion}" #mandatory
-displayName="Useful Machinery" #mandatory
-# updateJSONURL="http://myurl.me/" #optional
-displayURL="https://themcbrothers.net/" #optional
-# logoFile="examplemod.png" #optional
-# credits="Thanks for this example mod goes to Java" #optional
-authors="TheMCBrothers" #optional
-description='''
-This is a mod that adds machines
-'''
+[[mods]]
+    modId = "usefulmachinery"
+    version = "${file.jarVersion}"
+    displayName = "Useful Machinery"
+    updateJSONURL = "https://forge.curseupdate.com/355129/usefulmachinery"
+    displayURL = "https://themcbrothers.net/mods/usefulmachinery"
+    logoFile = "logo.png"
+    logoBlur = false
+    authors = "TheMCBrothers"
+    description = '''
+    This is a mod that adds machines
+    '''
+
 [[dependencies.usefulmachinery]]
-    modId="forge"
-    mandatory=true
-    versionRange="[46,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "forge"
+    mandatory = true
+    versionRange = "${forge_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
 [[dependencies.usefulmachinery]]
-    modId="tmcb_lib"
-    mandatory=true
-    versionRange="[1.20-4.1.0,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "${minecraft_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
 [[dependencies.usefulmachinery]]
-    modId="usefulfoundation"
-    mandatory=true
-    versionRange="[1.20-2.0.0,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "tmcb_lib"
+    mandatory = true
+    versionRange = "${themcbroslib_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
 [[dependencies.usefulmachinery]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "usefulfoundation"
+    mandatory = true
+    versionRange = "${usefulfoundation_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[modproperties.usefulmachinery]
+    catalogueItemIcon = "usefulmachinery:battery"
