@@ -1,3 +1,5 @@
+name: Java CI
+
 on:
   push:
     branches-ignore:
@@ -11,5 +13,5 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  ci:
     uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@main
