@@ -1,0 +1,17 @@
+name: Java CI
+
+on:
+  push:
+    branches-ignore:
+      - '**-dev'
+    paths-ignore:
+      - '.github/**'
+      - '**.md'
+      - '**.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@neo
