@@ -48,7 +48,7 @@ runs {
     }
 
     data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath(), '--existing-mod', 'usefulfoundation'
     }
 }
 
@@ -60,6 +60,21 @@ dependencies {
 
     // TheMCBrosLib
     implementation "net.themcbrothers:themcbroslib:$lib_version"
+
+    // Useful Foundation
+    implementation "net.themcbrothers:useful-foundation:$foundation_version"
+
+    // JEI
+    compileOnly("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version")
+    runtimeOnly("mezz.jei:jei-$minecraft_version-neoforge:$jei_version")
+
+    // TOP
+    compileOnly("mcjty.theoneprobe:theoneprobe:$top_version:api")
+    runtimeOnly("mcjty.theoneprobe:theoneprobe:$top_version")
+
+    // Jade
+    implementation "curse.maven:jade-324717:$jade_id"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -68,13 +83,17 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
-            neo_version         : neo_version, neo_version_range: neo_version_range,
-            loader_version_range: loader_version_range,
-            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, version: version,
-            mod_authors         : mod_authors, mod_description: mod_description,
-            github_repo         : github_repo, curse_project: curse_project,
-            lib_version_range   : lib_version_range
+            minecraft_version       : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version             : neo_version, neo_version_range: neo_version_range,
+            loader_version_range    : loader_version_range,
+            mod_id                  : mod_id, mod_name: mod_name, mod_license: mod_license, version: version,
+            mod_authors             : mod_authors, mod_description: mod_description,
+            github_repo             : github_repo, curse_project: curse_project,
+            lib_version_range       : lib_version_range,
+            foundation_version_range: foundation_version_range,
+            jei_version_range       : jei_version_range,
+            top_version_range       : top_version_range,
+            jade_version_range      : jade_version_range
     ]
     inputs.properties replaceProperties
 
@@ -144,6 +163,14 @@ unifiedPublishing {
                 id = curse_project
                 changelog = changes
                 gameVersions.addAll 'Java 17'
+
+                relations {
+                    depends "usefulfoundation"
+                    depends "themcbroslib"
+                    optional "jei"
+                    optional "the-one-probe"
+                    optional "jade"
+                }
             }
         }
 
@@ -152,6 +179,14 @@ unifiedPublishing {
                 token = modrinthToken
                 id = modrinth_project
                 changelog = changes.substring(changes.indexOf('\n'), changes.indexOf('\n\n'))
+
+                relations {
+                    depends "usefulfoundation"
+                    depends "themcbroslib"
+                    optional "jei"
+                    optional "the-one-probe"
+                    optional "jade"
+                }
             }
         }
     }
