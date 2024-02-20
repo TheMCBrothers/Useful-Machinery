@@ -1,0 +1,15 @@
+{
+  "name": "Crusher",
+  "icon": "usefulmachinery:crusher",
+  "category": "machines",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The $(thing)Crusher$() can crush things like ores. This is useful for ore processing because it doubles the amount of material."
+    },
+    {
+      "type": "crafting",
+      "recipe": "usefulmachinery:shaped/crusher"
+    }
+  ]
+}

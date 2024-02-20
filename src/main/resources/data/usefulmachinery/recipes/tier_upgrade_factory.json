@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "IGI",
+    "RIR"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/signalum"
+    },
+    "G": {
+      "tag": "forge:gears/electrum"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "item": "usefulmachinery:tier_upgrade",
+    "nbt": {
+      "Tier": 3
+    },
+    "count": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": {
+    "tag": "forge:ingots/iron"
+  },
+  "primary": {
+    "count": 1,
+    "result": "usefulfoundation:iron_dust"
+  }
+}

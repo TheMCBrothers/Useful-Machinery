@@ -1,0 +1,9 @@
+{
+  "values": [
+    "usefulmachinery:coal_generator",
+    "usefulmachinery:compactor",
+    "usefulmachinery:crusher",
+    "usefulmachinery:electric_smelter",
+    "usefulmachinery:lava_generator"
+  ]
+}

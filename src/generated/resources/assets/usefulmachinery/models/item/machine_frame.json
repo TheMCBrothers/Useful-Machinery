@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "usefulmachinery:block/machine_frame"
+  }
+}

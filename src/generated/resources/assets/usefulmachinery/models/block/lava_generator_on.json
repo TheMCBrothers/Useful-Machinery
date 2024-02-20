@@ -1,0 +1,7 @@
+{
+  "parent": "usefulmachinery:block/machine_block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "front": "usefulmachinery:block/lava_generator_front_on"
+  }
+}

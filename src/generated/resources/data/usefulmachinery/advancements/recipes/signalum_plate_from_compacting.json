@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_signalum": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/signalum"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "usefulmachinery:signalum_plate_from_compacting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_signalum"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:signalum_plate_from_compacting"
+    ]
+  }
+}

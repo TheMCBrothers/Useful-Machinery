@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/tin"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "X": {
+      "tag": "forge:nuggets/gold"
+    }
+  },
+  "pattern": [
+    " X ",
+    "#R#",
+    "#R#"
+  ],
+  "result": {
+    "item": "usefulmachinery:battery"
+  }
+}

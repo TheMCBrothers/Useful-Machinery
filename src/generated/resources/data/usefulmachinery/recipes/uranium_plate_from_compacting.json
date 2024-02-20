@@ -1,0 +1,13 @@
+{
+  "type": "usefulmachinery:compacting",
+  "compactTime": 200,
+  "ingredient": {
+    "type": "usefulmachinery:count",
+    "tag": "forge:ingots/uranium"
+  },
+  "mode": "plate",
+  "result": {
+    "count": 1,
+    "result": "usefulfoundation:uranium_plate"
+  }
+}

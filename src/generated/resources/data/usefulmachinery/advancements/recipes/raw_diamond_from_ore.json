@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_diamond_ore": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ores/diamond"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "usefulmachinery:raw_diamond_from_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_diamond_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:raw_diamond_from_ore"
+    ]
+  }
+}

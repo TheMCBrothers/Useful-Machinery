@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_enderium": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/enderium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "usefulmachinery:enderium_dust_from_crushing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_enderium"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:enderium_dust_from_crushing"
+    ]
+  }
+}

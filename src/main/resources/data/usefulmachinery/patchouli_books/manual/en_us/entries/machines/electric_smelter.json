@@ -1,0 +1,15 @@
+{
+  "name": "Electric Smelter",
+  "icon": "usefulmachinery:electric_smelter",
+  "category": "machines",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The $(thing)Electric Smelter$() is an electric variant of the vanilla $(thing)Furnace$()."
+    },
+    {
+      "type": "crafting",
+      "recipe": "usefulmachinery:shaped/electric_smelter"
+    }
+  ]
+}

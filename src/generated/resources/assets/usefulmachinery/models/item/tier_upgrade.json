@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "usefulmachinery:item/tier_upgrade_0",
+    "layer1": "usefulmachinery:item/tier_upgrade_1"
+  }
+}

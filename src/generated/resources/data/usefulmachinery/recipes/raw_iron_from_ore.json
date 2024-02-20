@@ -1,0 +1,24 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": {
+    "tag": "forge:ores/iron"
+  },
+  "primary": {
+    "count": 2,
+    "result": "minecraft:raw_iron"
+  },
+  "secondary": {
+    "count": 1,
+    "result": "usefulfoundation:raw_nickel"
+  },
+  "secondaryChance": 0.1,
+  "supportedUpgrades": [
+    {
+      "item": "usefulmachinery:efficiency_upgrade"
+    },
+    {
+      "item": "usefulmachinery:precision_upgrade"
+    }
+  ]
+}

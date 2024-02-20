@@ -1,0 +1,92 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "type": "usefulmachinery:compactor",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "minecraft:contents"
+                }
+              ],
+              "function": "minecraft:set_contents"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "Items",
+                  "target": "BlockEntityTag.Items"
+                },
+                {
+                  "op": "replace",
+                  "source": "Upgrades",
+                  "target": "BlockEntityTag.Upgrades"
+                },
+                {
+                  "op": "replace",
+                  "source": "EnergyStored",
+                  "target": "BlockEntityTag.EnergyStored"
+                },
+                {
+                  "op": "replace",
+                  "source": "RedstoneMode",
+                  "target": "BlockEntityTag.RedstoneMode"
+                },
+                {
+                  "op": "replace",
+                  "source": "ProcessTime",
+                  "target": "BlockEntityTag.ProcessTime"
+                },
+                {
+                  "op": "replace",
+                  "source": "ProcessTimeTotal",
+                  "target": "BlockEntityTag.ProcessTimeTotal"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "block": "usefulmachinery:compactor",
+              "conditions": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "block": "usefulmachinery:compactor",
+                    "condition": "minecraft:block_state_property",
+                    "properties": {
+                      "tier": "simple"
+                    }
+                  }
+                }
+              ],
+              "function": "minecraft:copy_state",
+              "properties": [
+                "tier"
+              ]
+            }
+          ],
+          "name": "usefulmachinery:compactor"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "usefulmachinery:blocks/compactor"
+}

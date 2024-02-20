@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "B": {
+      "tag": "forge:batteries"
+    },
+    "I": {
+      "tag": "forge:ingots/copper"
+    },
+    "R": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "X": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    " X ",
+    "#R#",
+    "IBI"
+  ],
+  "result": {
+    "item": "usefulmachinery:crusher"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:dusts/redstone"
+    },
+    "B": {
+      "tag": "forge:batteries"
+    },
+    "I": {
+      "tag": "forge:ingots/electrum"
+    },
+    "R": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "X": {
+      "item": "usefulmachinery:compactor_kit"
+    }
+  },
+  "pattern": [
+    " X ",
+    "#R#",
+    "IBI"
+  ],
+  "result": {
+    "item": "usefulmachinery:compactor"
+  }
+}

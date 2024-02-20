@@ -33,3 +33,31 @@ issueTrackerURL = "https://github.com/${github_repo}/issues"
     versionRange = "${lib_version_range}"
     ordering = "NONE"
     side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "usefulfoundation"
+    type = "required"
+    versionRange = "${foundation_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "jei"
+    type = "optional"
+    versionRange = "${jei_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "theoneprobe"
+    type = "optional"
+    versionRange = "${top_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "jade"
+    type = "optional"
+    versionRange = "${jade_version_range}"
+    ordering = "NONE"
+    side = "BOTH"

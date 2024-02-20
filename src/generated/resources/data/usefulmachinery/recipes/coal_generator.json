@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:coals"
+    },
+    "B": {
+      "tag": "forge:batteries"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "R": {
+      "item": "usefulmachinery:machine_frame"
+    },
+    "X": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    " X ",
+    "#R#",
+    "IBI"
+  ],
+  "result": {
+    "item": "usefulmachinery:coal_generator"
+  }
+}
