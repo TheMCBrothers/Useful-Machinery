@@ -349,4 +349,12 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public Container getUpgradeContainer() {
         return this.upgradeContainer;
     }
+
+    public int[] getInputsForJade() {
+        return this.getInputSlots();
+    }
+
+    public int[] getOutputsForJade() {
+        return this.getOutputSlots();
+    }
 }
