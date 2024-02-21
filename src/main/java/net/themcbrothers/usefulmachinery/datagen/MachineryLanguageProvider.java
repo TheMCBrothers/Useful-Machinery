@@ -38,6 +38,14 @@ public class MachineryLanguageProvider extends LanguageProvider {
         this.add(MachineryItems.PRECISION_UPGRADE.get(), "Precision Upgrade");
         this.add(MachineryItems.SUSTAINED_UPGRADE.get(), "Sustained Upgrade");
 
+        // Item Tooltips
+        this.add("tooltip.usefulmachinery.upgrade.shift.header", "Supported by:");
+        this.add("tooltip.usefulmachinery.upgrade.header", "Hold shift to see more...");
+
+        // Messages
+        this.add("message.usefulmachinery.upgrade.applied.success", "Successfully upgraded machine to ");
+        this.add("message.usefulmachinery.upgrade.applied.fail", "This is not a valid upgrade item");
+
         // Container Titles
         this.add("container.usefulmachinery.coal_generator", "Coal Generator");
         this.add("container.usefulmachinery.compactor", "Compactor");

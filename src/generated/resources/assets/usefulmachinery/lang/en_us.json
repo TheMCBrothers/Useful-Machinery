@@ -25,6 +25,8 @@
   "jei.usefulmachinery.crushing": "Crushing",
   "jei.usefulmachinery.electric_smelting": "Electric Smelting",
   "jei.usefulmachinery.fuel": "Fuel for RF",
+  "message.usefulmachinery.upgrade.applied.fail": "This is not a valid upgrade item",
+  "message.usefulmachinery.upgrade.applied.success": "Successfully upgraded machine to ",
   "misc.usefulmachinery.compact_block": "Block Former",
   "misc.usefulmachinery.compact_gear": "Gear Manufacturing",
   "misc.usefulmachinery.compact_plate": "Plate Press",
@@ -38,5 +40,7 @@
   "stat.usefulmachinery.interact_with_compactor": "Interactions with Compactor",
   "stat.usefulmachinery.interact_with_crusher": "Interactions with Crusher",
   "stat.usefulmachinery.interact_with_electric_smelter": "Interactions with Electric Smelter",
-  "stat.usefulmachinery.interact_with_lava_generator": "Interactions with Lava Generator"
+  "stat.usefulmachinery.interact_with_lava_generator": "Interactions with Lava Generator",
+  "tooltip.usefulmachinery.upgrade.header": "Hold shift to see more...",
+  "tooltip.usefulmachinery.upgrade.shift.header": "Supported by:"
 }
