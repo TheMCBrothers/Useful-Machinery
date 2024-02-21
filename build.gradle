@@ -165,11 +165,10 @@ unifiedPublishing {
                 gameVersions.addAll 'Java 17'
 
                 relations {
-                    depends "usefulfoundation"
                     depends "themcbroslib"
+                    depends "useful-foundation"
                     optional "jei"
                     optional "the-one-probe"
-                    optional "jade"
                 }
             }
         }
@@ -181,11 +180,10 @@ unifiedPublishing {
                 changelog = changes.substring(changes.indexOf('\n'), changes.indexOf('\n\n'))
 
                 relations {
-                    depends "usefulfoundation"
                     depends "themcbroslib"
+                    depends "useful-foundation"
                     optional "jei"
                     optional "the-one-probe"
-                    optional "jade"
                 }
             }
         }
