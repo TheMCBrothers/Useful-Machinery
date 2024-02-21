@@ -45,7 +45,7 @@ public record CompactingRecipe(String group, Ingredient ingredient, ItemStack re
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(this.ingredient);
+        return NonNullList.of(Ingredient.EMPTY, this.ingredient);
     }
 
     @Override

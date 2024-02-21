@@ -18,8 +18,6 @@ import net.themcbrothers.usefulmachinery.compat.jei.recipes.LavaGeneratingRecipe
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 import net.themcbrothers.usefulmachinery.menu.*;
-import net.themcbrothers.usefulmachinery.recipe.CompactingRecipe;
-import net.themcbrothers.usefulmachinery.recipe.CrushingRecipe;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
 import static net.themcbrothers.usefulmachinery.core.MachineryItems.TIER_UPGRADE;
@@ -51,8 +49,8 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(MachineryJeiRecipeTypes.CRUSHING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING.get(), CrushingRecipe.class));
-        registration.addRecipes(MachineryJeiRecipeTypes.COMPACTING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING.get(), CompactingRecipe.class));
+        registration.addRecipes(MachineryJeiRecipeTypes.CRUSHING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING.get()));
+        registration.addRecipes(MachineryJeiRecipeTypes.COMPACTING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING.get()));
         registration.addRecipes(MachineryJeiRecipeTypes.LAVA_GENERATING, LavaGeneratingRecipeMaker.getLavaGeneratingRecipes(registration.getIngredientManager()));
         registration.addRecipes(MachineryJeiRecipeTypes.COAL_GENERATING, CoalGeneratingRecipeMaker.getCoalGeneratingRecipes(registration.getIngredientManager()));
     }

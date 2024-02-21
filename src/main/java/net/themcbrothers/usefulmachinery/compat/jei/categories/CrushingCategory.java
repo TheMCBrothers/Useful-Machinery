@@ -60,7 +60,7 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
             Component text = Component.translatable(secondaryChanceInPercent + "%");
             Minecraft minecraft = Minecraft.getInstance();
 
-            graphics.drawString(minecraft.font, text, 79, 39, 0xFF808080);
+            graphics.drawString(minecraft.font, text, 84, 39, 0xFF808080, false);
         }
     }
 
