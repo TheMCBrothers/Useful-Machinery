@@ -341,10 +341,6 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.level.invalidateCapabilities(this.worldPosition);
     }
 
-    public RedstoneMode getRedstoneMode() {
-        return this.redstoneMode;
-    }
-
     public void setRedstoneMode(RedstoneMode redstoneMode) {
         this.redstoneMode = redstoneMode;
         this.setChanged();
