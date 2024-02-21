@@ -18,7 +18,6 @@ import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import static net.themcbrothers.usefulmachinery.core.MachineryItems.SUSTAINED_UPGRADE;
 
 public class CoalGeneratorMenu extends AbstractMachineMenu {
-
     public CoalGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
         this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, buffer),
                 new UpgradeContainer(buffer.readInt()), new SimpleContainerData(buffer.readInt()));
@@ -35,7 +34,7 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
     }
 
     @Override
-    protected boolean isUpgradeItem(ItemStack stack) {
+    protected boolean supportsUpgrade(ItemStack stack) {
         return stack.is(SUSTAINED_UPGRADE.get());
     }
 
@@ -67,7 +66,7 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isUpgradeItem(slotStack)) {
+                } else if (this.supportsUpgrade(slotStack)) {
                     // Checking if stack has not been moved into the upgrade container
                     if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;

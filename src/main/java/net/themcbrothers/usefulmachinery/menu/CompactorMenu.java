@@ -83,7 +83,7 @@ public class CompactorMenu extends AbstractMachineMenu {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isUpgradeItem(slotStack)) {
+                } else if (this.supportsUpgrade(slotStack)) {
                     // Checking if stack has not been moved into the upgrade container
                     if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;

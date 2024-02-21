@@ -45,7 +45,7 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
     }
 
     @Override
-    protected boolean isUpgradeItem(ItemStack stack) {
+    protected boolean supportsUpgrade(ItemStack stack) {
         return stack.is(SUSTAINED_UPGRADE.get());
     }
 
@@ -80,7 +80,7 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
                     if (!this.moveItemStackTo(slotStack, containerSize - 1, containerSize, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isUpgradeItem(slotStack)) {
+                } else if (this.supportsUpgrade(slotStack)) {
                     // Checking if stack has not been moved into the upgrade container
                     if (!this.moveItemStackTo(slotStack, containerSize, invSlotStart, false)) {
                         return ItemStack.EMPTY;

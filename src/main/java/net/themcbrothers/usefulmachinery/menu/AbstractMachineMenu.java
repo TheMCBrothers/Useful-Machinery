@@ -12,10 +12,10 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.themcbrothers.lib.energy.EnergyProvider;
 import net.themcbrothers.lib.inventory.EnergySlot;
+import net.themcbrothers.lib.inventory.PredicateSlot;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
-import net.themcbrothers.usefulmachinery.core.MachineryTags;
+import net.themcbrothers.usefulmachinery.item.UpgradeItem;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
-import net.themcbrothers.usefulmachinery.menu.slot.UpgradeSlot;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
 
     protected void addUpgradeSlots(Container upgradeContainer) {
         for (int i = 0; i < upgradeContainer.getContainerSize(); i++) {
-            this.addSlot(new UpgradeSlot(upgradeContainer, i, 188, 9 + i * 18));
+            this.addSlot(new PredicateSlot(upgradeContainer, i, 188, 9 + i * 18, this::supportsUpgrade));
         }
     }
 
@@ -91,11 +91,13 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
         return EnergySlot.isValid(stack, mode);
     }
 
-    protected boolean isUpgradeItem(ItemStack stack) {
-        return this.upgradeSlotCount > 0 && stack.is(MachineryTags.Items.MACHINERY_UPGRADES);
-    }
+    protected boolean supportsUpgrade(ItemStack stack) {
+        if (this.upgradeSlotCount > 0) {
+            if (stack.getItem() instanceof UpgradeItem upgradeItem) {
+                return upgradeItem.isSupported(this.blockEntity.getBlockState());
+            }
+        }
 
-    protected ContainerData getFields() {
-        return this.fields;
+        return false;
     }
 }

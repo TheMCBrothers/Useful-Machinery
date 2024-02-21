@@ -31,11 +31,8 @@ import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
 
-// TODO: capabilities via event
 public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
@@ -50,8 +47,10 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public AbstractMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, boolean isGenerator) {
         super(type, pos, state);
+
         this.isGenerator = isGenerator;
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
+
         this.initEnergyStorage(0);
     }
 
