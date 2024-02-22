@@ -59,7 +59,7 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
         AbstractMachineBlockEntity machine = (AbstractMachineBlockEntity) accessor.getBlockEntity();
-        if (!machine.isEmpty()) {
+        if (machine.showJadeProgress()) {
             ListTag items = new ListTag();
 
             for (int i = 0; i < machine.getContainerSize(); ++i) {
