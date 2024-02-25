@@ -220,7 +220,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
             if (energy != null && energy.canExtract()) {
                 int maxExtract = this.energyStorage.receiveEnergy(Integer.MAX_VALUE, true);
-                int accepted = energy.receiveEnergy(maxExtract, false);
+                int accepted = energy.extractEnergy(maxExtract, false);
 
                 this.energyStorage.growEnergy(accepted);
             }
