@@ -157,9 +157,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.stacks.clear();
     }
 
-    protected abstract int[] getInputSlots();
+    public abstract int[] getInputSlots();
 
-    protected abstract int[] getOutputSlots();
+    public abstract int[] getOutputSlots();
 
     protected abstract boolean canRun();
 

@@ -59,6 +59,9 @@ public class MachineryLanguageProvider extends LanguageProvider {
         this.add("jei.usefulmachinery.compacting", "Compacting");
         this.add("jei.usefulmachinery.fuel", "Fuel for RF");
 
+        // Jade
+        this.add("config.jade.plugin_usefulmachinery.machine", "Machine");
+
         // Misc
         this.add("misc.usefulmachinery.energy", "%s FE");
         this.add("misc.usefulmachinery.energyWithMax", "%s / %s FE");

@@ -12,6 +12,7 @@ import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import net.themcbrothers.lib.energy.EnergyContainerItem;
 import net.themcbrothers.lib.util.Version;
@@ -52,11 +53,11 @@ public class CommonSetup {
 
     private void capabilities(final RegisterCapabilitiesEvent event) {
         // Items
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COAL_GENERATOR.get(), SidedInvWrapper::new);
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COMPACTOR.get(), SidedInvWrapper::new);
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CRUSHER.get(), SidedInvWrapper::new);
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ELECTRIC_SMELTER.get(), SidedInvWrapper::new);
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LAVA_GENERATOR.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COAL_GENERATOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COMPACTOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CRUSHER.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ELECTRIC_SMELTER.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LAVA_GENERATOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
 
         // Energy
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, COAL_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());

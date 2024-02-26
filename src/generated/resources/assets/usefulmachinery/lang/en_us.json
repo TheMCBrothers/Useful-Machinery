@@ -5,6 +5,7 @@
   "block.usefulmachinery.crusher": "Crusher",
   "block.usefulmachinery.electric_smelter": "Electric Smelter",
   "block.usefulmachinery.lava_generator": "Lava Generator",
+  "config.jade.plugin_usefulmachinery.machine": "Machine",
   "container.usefulmachinery.coal_generator": "Coal Generator",
   "container.usefulmachinery.compactor": "Compactor",
   "container.usefulmachinery.crusher": "Crusher",
