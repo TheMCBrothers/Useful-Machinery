@@ -63,12 +63,12 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    protected int[] getInputSlots() {
+    public int[] getInputSlots() {
         return new int[]{0};
     }
 
     @Override
-    protected int[] getOutputSlots() {
+    public int[] getOutputSlots() {
         return new int[]{1};
     }
 

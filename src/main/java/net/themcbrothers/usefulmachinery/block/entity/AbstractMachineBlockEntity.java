@@ -31,7 +31,6 @@ import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.function.Function;
 
 public abstract class AbstractMachineBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
@@ -158,9 +157,9 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
         this.stacks.clear();
     }
 
-    protected abstract int[] getInputSlots();
+    public abstract int[] getInputSlots();
 
-    protected abstract int[] getOutputSlots();
+    public abstract int[] getOutputSlots();
 
     protected abstract boolean canRun();
 
@@ -349,17 +348,5 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public Container getUpgradeContainer() {
         return this.upgradeContainer;
-    }
-
-    public int[] getInputsForJade() {
-        return this.getInputSlots();
-    }
-
-    public int[] getOutputsForJade() {
-        return this.getOutputSlots();
-    }
-
-    public boolean showJadeProgress() {
-        return Arrays.stream(ArrayUtils.addAll(this.getInputSlots(), this.getOutputSlots())).mapToObj(this::getItem).anyMatch(itemStack -> !itemStack.isEmpty());
     }
 }

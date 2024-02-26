@@ -61,6 +61,7 @@ public class MachineryLanguageProvider extends LanguageProvider {
 
         // Jade
         this.add("config.jade.plugin_usefulmachinery.machine", "Machine");
+        this.add("config.jade.plugin_usefulmachinery.remove_vanilla_stuff", "Remove Vanilla Stuff");
 
         // Misc
         this.add("misc.usefulmachinery.energy", "%s FE");

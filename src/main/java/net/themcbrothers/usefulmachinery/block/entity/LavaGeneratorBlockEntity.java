@@ -18,7 +18,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
@@ -76,12 +75,12 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    protected int[] getInputSlots() {
+    public int[] getInputSlots() {
         return new int[]{0};
     }
 
     @Override
-    protected int[] getOutputSlots() {
+    public int[] getOutputSlots() {
         return new int[0];
     }
 

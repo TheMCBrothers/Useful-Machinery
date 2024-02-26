@@ -20,5 +20,6 @@ public class MachineryJadePlugin implements IWailaPlugin {
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(MachineProvider.INSTANCE, AbstractMachineBlock.class);
+        registration.registerBlockComponent(RemoveVanillaStuffProvider.INSTANCE, AbstractMachineBlock.class);
     }
 }
