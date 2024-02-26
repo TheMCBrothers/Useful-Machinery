@@ -22,6 +22,9 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+/**
+ * Adds the machine's progress and tier information
+ */
 public enum MachineProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
 
@@ -75,7 +78,6 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
             tooltip.append(helper.spacer(4, 0));
             tooltip.append(helper.text(Component.literal(tier.getSerializedName())));
         }
-
     }
 
     @Override

@@ -9,6 +9,9 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.Identifiers;
 import snownee.jade.api.config.IPluginConfig;
 
+/**
+ * Provider that removes tooltip components from our machines
+ */
 public enum RemoveVanillaStuffProvider implements IBlockComponentProvider {
     INSTANCE;
 
