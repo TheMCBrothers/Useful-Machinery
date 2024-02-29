@@ -83,4 +83,9 @@ public class TierUpgradeItem extends UpgradeItem {
 
         return this.getDescriptionId();
     }
+
+    @Override
+    public boolean isSupported(BlockState machine) {
+        return false;
+    }
 }
