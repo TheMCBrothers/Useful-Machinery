@@ -167,6 +167,7 @@ unifiedPublishing {
                 relations {
                     depends "themcbroslib"
                     depends "useful-foundation"
+                    optional "jade"
                     optional "jei"
                     optional "the-one-probe"
                 }
@@ -182,6 +183,7 @@ unifiedPublishing {
                 relations {
                     depends "themcbroslib"
                     depends "useful-foundation"
+                    optional "jade"
                     optional "jei"
                     optional "the-one-probe"
                 }
