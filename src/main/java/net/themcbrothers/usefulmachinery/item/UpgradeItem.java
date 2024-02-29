@@ -14,7 +14,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
+import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -63,6 +66,23 @@ public class UpgradeItem extends Item {
     }
 
     public InteractionResult useOn(@Nullable Player player, InteractionHand hand, ItemStack stack, Level level, BlockPos pos) {
+        if (!this.isSupported(level.getBlockState(pos))) {
+            return InteractionResult.PASS;
+        }
+
+        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity) {
+            InvWrapper upgradeWrapper = new InvWrapper(blockEntity.getUpgradeContainer());
+            ItemStack result = ItemHandlerHelper.insertItemStacked(upgradeWrapper, stack, false);
+
+            if (player != null) {
+                player.setItemInHand(hand, result);
+            }
+
+            if (!ItemStack.matches(stack, result)) {
+                return InteractionResult.sidedSuccess(level.isClientSide());
+            }
+        }
+
         return InteractionResult.PASS;
     }
 
