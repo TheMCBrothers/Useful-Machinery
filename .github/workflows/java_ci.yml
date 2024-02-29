@@ -14,4 +14,4 @@ permissions:
 
 jobs:
   ci:
-    uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@neo
+    uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@main
