@@ -9,3 +9,5 @@ on:
 jobs:
   crowdin:
     uses: TheMCBrothers/.github/.github/workflows/crowdin_upload.yml@main
+    secrets:
+      CROWDIN_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
