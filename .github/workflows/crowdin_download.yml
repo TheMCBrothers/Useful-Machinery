@@ -1,0 +1,17 @@
+name: Crowdin Download
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  crowdin:
+    uses: TheMCBrothers/.github/.github/workflows/crowdin_download.yml@main
+    with:
+      pull_request_base_branch_name: '1.20.X'
+    secrets:
+      GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CROWDIN_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

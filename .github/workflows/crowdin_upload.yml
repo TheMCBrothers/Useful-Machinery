@@ -1,0 +1,11 @@
+name: Crowdin Upload
+
+on:
+  push:
+    paths: [ 'src/generated/resources/assets/*/lang/**' ]
+    branches: [ '1.20.X' ]
+  workflow_dispatch:
+
+jobs:
+  crowdin:
+    uses: TheMCBrothers/.github/.github/workflows/crowdin_upload.yml@main
