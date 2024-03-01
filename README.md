@@ -1,5 +1,7 @@
 Useful Machinery
 ===
+[![Java-CI](https://github.com/TheMCBrothers/Useful-Machinery/actions/workflows/java_ci.yml/badge.svg?branch=1.20.4)](https://github.com/TheMCBrothers/Useful-Machinery/actions/workflows/java_ci.yml?query=branch:1.20.4)
+[![Crowdin](https://badges.crowdin.net/useful-machinery/localized.svg)](https://crowdin.com/project/useful-machinery)
 
 Useful Machinery is a mod `by TheMCBrothers` developed for [NeoForge]
 
