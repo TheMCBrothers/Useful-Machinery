@@ -3,7 +3,7 @@ name: Crowdin Upload
 on:
   push:
     paths: [ 'src/generated/resources/assets/*/lang/**' ]
-    branches: [ '1.20.X' ]
+    branches: [ '1.20.4' ]
   workflow_dispatch:
 
 jobs:
