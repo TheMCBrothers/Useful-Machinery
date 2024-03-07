@@ -8,6 +8,8 @@ on:
       - '.github/**'
       - '**.md'
       - '**.txt'
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
