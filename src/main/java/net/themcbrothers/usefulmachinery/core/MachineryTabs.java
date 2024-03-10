@@ -5,15 +5,12 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.themcbrothers.lib.energy.EnergyContainerItem;
 import net.themcbrothers.usefulfoundation.core.FoundationTabs;
+import net.themcbrothers.usefulmachinery.item.BatteryItem;
 import net.themcbrothers.usefulmachinery.item.TierUpgradeItem;
 import net.themcbrothers.usefulmachinery.machine.MachineTier;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.*;
 
 import static net.themcbrothers.lib.energy.EnergyContainerItem.TAG_ENERGY;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
@@ -25,7 +22,6 @@ public final class MachineryTabs {
             .icon(() -> new ItemStack(MachineryItems.BATTERY.get()))
             .title(TEXT_UTILS.translate("itemGroup", "base"))
             .displayItems((params, output) -> {
-                Registration.BLOCKS.getEntries().forEach(block -> output.accept(block.get()));
                 Registration.ITEMS.getEntries().stream()
                         .map(DeferredHolder::get)
                         .map(MachineryTabs::considerSpecialNeeds)
@@ -34,14 +30,14 @@ public final class MachineryTabs {
             .build());
 
     private static Collection<ItemStack> considerSpecialNeeds(ItemLike itemLike) {
-        if (itemLike.asItem() instanceof EnergyContainerItem energyContainerItem) {
+        if (itemLike.asItem() instanceof BatteryItem batteryItem) {
             ItemStack stack = new ItemStack(itemLike);
             CompoundTag tag = new CompoundTag();
 
-            tag.putInt(TAG_ENERGY, energyContainerItem.getMaxEnergyStored(stack));
+            tag.putInt(TAG_ENERGY, batteryItem.getMaxEnergyStored(stack));
             stack.setTag(tag);
 
-            return Collections.singleton(stack);
+            return List.of(stack, new ItemStack(itemLike));
         } else if (itemLike.asItem() instanceof TierUpgradeItem) {
             Collection<ItemStack> stacks = new HashSet<>();
 
