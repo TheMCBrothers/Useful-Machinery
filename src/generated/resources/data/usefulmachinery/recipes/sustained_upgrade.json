@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "D": {
-      "tag": "forge:dusts/glowstone"
+      "item": "minecraft:bone_meal"
     },
     "G": {
-      "tag": "forge:gems/amethyst"
+      "tag": "minecraft:saplings"
     },
     "I": {
-      "tag": "forge:ingots/nickel"
+      "tag": "forge:ingots/copper"
     },
     "P": {
       "tag": "forge:plates/steel"
@@ -22,6 +22,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "usefulmachinery:precision_upgrade"
+    "item": "usefulmachinery:sustained_upgrade"
   }
 }

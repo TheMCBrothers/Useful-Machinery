@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "forge:gears/bronze"
+    },
+    "I": {
+      "tag": "forge:ingots/invar"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IGI",
+    "RIR"
+  ],
+  "result": {
+    "item": "usefulmachinery:tier_upgrade",
+    "nbt": "{Tier:1}"
+  }
+}

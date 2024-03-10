@@ -2,20 +2,20 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
+    "B": {
       "tag": "forge:glass"
     },
-    "R": {
+    "G": {
       "tag": "forge:gears/iron"
     },
-    "X": {
+    "I": {
       "tag": "forge:ingots/tin"
     }
   },
   "pattern": [
-    "X#X",
-    "#R#",
-    "X#X"
+    "IBI",
+    "BGB",
+    "IBI"
   ],
   "result": {
     "item": "usefulmachinery:machine_frame"

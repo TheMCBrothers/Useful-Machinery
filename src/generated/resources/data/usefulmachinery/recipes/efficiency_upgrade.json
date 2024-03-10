@@ -2,23 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
+    "D": {
       "tag": "forge:dusts/redstone"
     },
-    "O": {
-      "tag": "forge:plates/steel"
-    },
-    "R": {
+    "G": {
       "item": "minecraft:flint"
     },
-    "X": {
+    "I": {
       "tag": "forge:ingots/bronze"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
     }
   },
   "pattern": [
-    "X#X",
-    "ROR",
-    "X#X"
+    "IDI",
+    "GPG",
+    "IDI"
   ],
   "result": {
     "count": 2,

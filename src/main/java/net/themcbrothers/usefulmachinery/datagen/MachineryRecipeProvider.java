@@ -3,12 +3,16 @@ package net.themcbrothers.usefulmachinery.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
 import net.themcbrothers.usefulmachinery.datagen.recipe.CompactingRecipeBuilder;
 import net.themcbrothers.usefulmachinery.datagen.recipe.CrushingRecipeBuilder;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
+import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import net.themcbrothers.usefulmachinery.recipe.ingredient.CountIngredient;
 
 import static net.themcbrothers.usefulfoundation.core.FoundationBlocks.*;
@@ -124,20 +128,21 @@ public class MachineryRecipeProvider extends RecipeProvider {
 
         // Items
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MACHINE_FRAME, 1)
-                .pattern("X#X")
-                .pattern("#R#")
-                .pattern("X#X")
-                .define('X', INGOTS_TIN)
-                .define('#', Tags.Items.GLASS)
-                .define('R', GEARS_IRON)
+                .pattern("IBI")
+                .pattern("BGB")
+                .pattern("IBI")
+                .define('I', INGOTS_TIN)
+                .define('B', Tags.Items.GLASS)
+                .define('G', GEARS_IRON)
                 .unlockedBy("has_tin_ingot", has(INGOTS_TIN))
                 .save(recipeOutput);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BATTERY, 1)
-                .pattern(" X ")
-                .pattern("#R#")
-                .pattern("#R#")
-                .define('X', Tags.Items.NUGGETS_GOLD)
-                .define('#', INGOTS_TIN)
+                .pattern(" N ")
+                .pattern("IRI")
+                .pattern("IRI")
+                .define('N', Tags.Items.NUGGETS_GOLD)
+                .define('I', INGOTS_TIN)
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .unlockedBy("has_tin_ingot", has(INGOTS_TIN))
                 .save(recipeOutput);
@@ -149,28 +154,62 @@ public class MachineryRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_hammer", has(HAMMER.get()))
                 .save(recipeOutput);
 
+        // Upgrades
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, PRECISION_UPGRADE, 2)
-                .pattern("X#X")
-                .pattern("ROR")
-                .pattern("X#X")
-                .define('X', INGOTS_NICKEL)
-                .define('#', Tags.Items.DUSTS_GLOWSTONE)
-                .define('R', Tags.Items.GEMS_AMETHYST)
-                .define('O', PLATES_STEEL)
+                .pattern("IDI")
+                .pattern("GPG")
+                .pattern("IDI")
+                .define('I', INGOTS_NICKEL)
+                .define('D', Tags.Items.DUSTS_GLOWSTONE)
+                .define('G', Tags.Items.GEMS_AMETHYST)
+                .define('P', PLATES_STEEL)
                 .unlockedBy("has_amethyst_shard", has(Tags.Items.GEMS_AMETHYST))
                 .unlockedBy("has_glowstone_dust", has(Tags.Items.DUSTS_GLOWSTONE))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EFFICIENCY_UPGRADE, 2)
-                .pattern("X#X")
-                .pattern("ROR")
-                .pattern("X#X")
-                .define('X', INGOTS_BRONZE)
-                .define('#', Tags.Items.DUSTS_REDSTONE)
-                .define('R', Items.FLINT)
-                .define('O', PLATES_STEEL)
+                .pattern("IDI")
+                .pattern("GPG")
+                .pattern("IDI")
+                .define('I', INGOTS_BRONZE)
+                .define('D', Tags.Items.DUSTS_REDSTONE)
+                .define('G', Items.FLINT)
+                .define('P', PLATES_STEEL)
                 .unlockedBy("has_flint", has(Items.FLINT))
                 .unlockedBy("has_redstone_dust", has(Tags.Items.DUSTS_REDSTONE))
                 .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SUSTAINED_UPGRADE, 2)
+                .pattern("IDI")
+                .pattern("GPG")
+                .pattern("IDI")
+                .define('I', Tags.Items.INGOTS_COPPER)
+                .define('D', Items.BONE_MEAL)
+                .define('G', ItemTags.SAPLINGS)
+                .define('P', PLATES_STEEL)
+                .unlockedBy("has_sapling", has(ItemTags.SAPLINGS))
+                .unlockedBy("has_bone_meal", has(Items.BONE_MEAL))
+                .save(recipeOutput);
+
+        // Tier Upgrades
+        this.tierUpgradeRecipe(recipeOutput, INGOTS_INVAR, GEARS_BRONZE, MachineTier.BASIC);
+        this.tierUpgradeRecipe(recipeOutput, INGOTS_ELECTRUM, GEARS_SILVER, MachineTier.REINFORCED);
+        this.tierUpgradeRecipe(recipeOutput, INGOTS_SIGNALUM, GEARS_ELECTRUM, MachineTier.FACTORY);
+        this.tierUpgradeRecipe(recipeOutput, INGOTS_ENDERIUM, GEARS_SIGNALUM, MachineTier.OVERKILL);
+    }
+
+    private void tierUpgradeRecipe(RecipeOutput recipeOutput, TagKey<Item> ingotTag, TagKey<Item> gearTag, MachineTier tier) {
+        ItemStack result = new ItemStack(TIER_UPGRADE.get());
+        result.getOrCreateTag().putInt("Tier", tier.ordinal());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result)
+                .pattern(" I ")
+                .pattern("IGI")
+                .pattern("RIR")
+                .define('I', ingotTag)
+                .define('G', gearTag)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .unlockedBy("has_gear", has(gearTag))
+                .save(recipeOutput, rl("tier_upgrade_" + tier.getSerializedName()));
     }
 }
