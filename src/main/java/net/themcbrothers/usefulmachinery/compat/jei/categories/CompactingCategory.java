@@ -12,6 +12,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,17 +24,26 @@ import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import net.themcbrothers.usefulmachinery.recipe.CompactingRecipe;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CompactingCategory implements IRecipeCategory<RecipeHolder<CompactingRecipe>> {
     private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/compactor.png");
-
-    private final IDrawable icon, background;
-    private final IDrawableAnimated arrow, energyBar;
+    private final IDrawable icon;
+    private final IDrawable background;
+    private final IDrawableAnimated arrow;
+    private final IDrawableAnimated energyBar;
+    private final float modeScale;
+    private final int modePosX;
+    private final int modePosY;
 
     public CompactingCategory(IGuiHelper helper) {
+        this.modeScale = 0.9F;
+        this.modePosX = 28;
+        this.modePosY = 34;
+
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineryBlocks.COMPACTOR.get()));
         this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
 
@@ -42,9 +52,28 @@ public class CompactingCategory implements IRecipeCategory<RecipeHolder<Compacti
     }
 
     @Override
-    public void draw(RecipeHolder<CompactingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        this.arrow.draw(graphics, 24, 16);
-        this.energyBar.draw(graphics, 121, 1);
+    public void draw(RecipeHolder<CompactingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        this.arrow.draw(guiGraphics, 24, 16);
+        this.energyBar.draw(guiGraphics, 121, 1);
+
+        Font font = Minecraft.getInstance().font;
+        ItemStack renderStack = recipe.value().mode().getItemProvider().asItem().getDefaultInstance();
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(this.modeScale, this.modeScale, this.modeScale);
+        guiGraphics.renderItemDecorations(font, renderStack, Math.round(this.modePosX / this.modeScale), Math.round(this.modePosY / this.modeScale));
+        guiGraphics.renderItem(renderStack, Math.round(this.modePosX / this.modeScale), Math.round(this.modePosY / this.modeScale));
+        guiGraphics.pose().popPose();
+    }
+
+    @Override
+    public List<Component> getTooltipStrings(RecipeHolder<CompactingRecipe> recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        if (mouseX >= this.modePosX && mouseX < this.modePosX + Math.round(16 * this.modeScale)
+                && mouseY >= this.modePosY && mouseY < this.modePosY + Math.round(16 * this.modeScale)) {
+            return List.of(TEXT_UTILS.translate("misc", "compact_" + recipe.value().mode().getSerializedName()));
+        }
+
+        return List.of();
     }
 
     @Override
