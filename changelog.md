@@ -1,3 +1,10 @@
+## 1.2.0
+- Added Compactor Mode in JEI Compacting Recipe
+- Added Sustained Upgrade Recipe
+- Fixed Tier Upgrade Recipes
+- Fixed duplicate Creative Power Cell in Creative Inventory
+- Fixed missing empty Battery Item in Creative Inventory
+
 ## 1.1.0
 - Added Jade Integration
 - Lava can be inserted by clicking on Machine
