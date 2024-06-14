@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 250,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 9,
-    "tag": "forge:ingots/copper"
+    "tag": "c:ingots/copper"
   },
   "mode": "block",
   "result": {
-    "count": 1,
-    "result": "minecraft:copper_block"
+    "id": "minecraft:copper_block"
   }
 }

@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "#": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "B": {
-      "tag": "forge:batteries"
+      "tag": "c:batteries"
     },
     "I": {
-      "tag": "forge:ingots/nether_brick"
+      "item": "minecraft:nether_brick"
     },
     "R": {
       "item": "usefulmachinery:machine_frame"
@@ -24,6 +24,7 @@
     "IBI"
   ],
   "result": {
-    "item": "usefulmachinery:lava_generator"
+    "count": 1,
+    "id": "usefulmachinery:lava_generator"
   }
 }

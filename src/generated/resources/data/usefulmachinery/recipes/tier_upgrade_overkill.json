@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "G": {
-      "tag": "forge:gears/signalum"
+      "tag": "c:gears/signalum"
     },
     "I": {
-      "tag": "forge:ingots/enderium"
+      "tag": "c:ingots/enderium"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -18,7 +18,10 @@
     "RIR"
   ],
   "result": {
-    "item": "usefulmachinery:tier_upgrade",
-    "nbt": "{Tier:4}"
+    "components": {
+      "usefulmachinery:tier": "overkill"
+    },
+    "count": 1,
+    "id": "usefulmachinery:tier_upgrade"
   }
 }

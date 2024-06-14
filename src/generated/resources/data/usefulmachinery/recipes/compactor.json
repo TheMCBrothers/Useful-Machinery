@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "#": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "B": {
-      "tag": "forge:batteries"
+      "tag": "c:batteries"
     },
     "I": {
-      "tag": "forge:ingots/electrum"
+      "tag": "c:ingots/electrum"
     },
     "R": {
       "item": "usefulmachinery:machine_frame"
@@ -24,6 +24,7 @@
     "IBI"
   ],
   "result": {
-    "item": "usefulmachinery:compactor"
+    "count": 1,
+    "id": "usefulmachinery:compactor"
   }
 }

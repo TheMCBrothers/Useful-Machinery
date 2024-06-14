@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/platinum"
+    "tag": "c:ingots/platinum"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:platinum_dust"
+    "id": "usefulfoundation:platinum_dust"
   }
 }

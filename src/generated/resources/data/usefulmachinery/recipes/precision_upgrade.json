@@ -3,16 +3,16 @@
   "category": "misc",
   "key": {
     "D": {
-      "tag": "forge:dusts/glowstone"
+      "tag": "c:dusts/glowstone"
     },
     "G": {
-      "tag": "forge:gems/amethyst"
+      "tag": "c:gems/amethyst"
     },
     "I": {
-      "tag": "forge:ingots/nickel"
+      "tag": "c:ingots/nickel"
     },
     "P": {
-      "tag": "forge:plates/steel"
+      "tag": "c:plates/steel"
     }
   },
   "pattern": [
@@ -22,6 +22,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "usefulmachinery:precision_upgrade"
+    "id": "usefulmachinery:precision_upgrade"
   }
 }

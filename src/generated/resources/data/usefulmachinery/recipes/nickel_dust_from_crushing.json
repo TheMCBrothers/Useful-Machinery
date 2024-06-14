@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/nickel"
+    "tag": "c:ingots/nickel"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:nickel_dust"
+    "id": "usefulfoundation:nickel_dust"
   }
 }

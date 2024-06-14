@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "usefulmachinery:machine_frame"
-            ]
+            "items": "usefulmachinery:machine_frame"
           }
         ]
       },

@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "G": {
-      "tag": "forge:gears/silver"
+      "tag": "c:gears/silver"
     },
     "I": {
-      "tag": "forge:ingots/electrum"
+      "tag": "c:ingots/electrum"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -18,7 +18,10 @@
     "RIR"
   ],
   "result": {
-    "item": "usefulmachinery:tier_upgrade",
-    "nbt": "{Tier:2}"
+    "components": {
+      "usefulmachinery:tier": "reinforced"
+    },
+    "count": 1,
+    "id": "usefulmachinery:tier_upgrade"
   }
 }

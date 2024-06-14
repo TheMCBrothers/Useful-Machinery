@@ -3,16 +3,17 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forge:gears/gold"
+      "tag": "c:gears/gold"
     },
     {
-      "tag": "forge:plates/lead"
+      "tag": "c:plates/lead"
     },
     {
       "item": "usefulfoundation:hammer"
     }
   ],
   "result": {
-    "item": "usefulmachinery:compactor_kit"
+    "count": 1,
+    "id": "usefulmachinery:compactor_kit"
   }
 }

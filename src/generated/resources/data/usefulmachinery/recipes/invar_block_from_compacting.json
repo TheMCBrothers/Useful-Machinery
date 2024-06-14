@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 250,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 9,
-    "tag": "forge:ingots/invar"
+    "tag": "c:ingots/invar"
   },
   "mode": "block",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:invar_block"
+    "id": "usefulfoundation:invar_block"
   }
 }

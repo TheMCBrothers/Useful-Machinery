@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 4,
-    "tag": "forge:ingots/uranium"
+    "tag": "c:ingots/uranium"
   },
   "mode": "gear",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:uranium_gear"
+    "id": "usefulfoundation:uranium_gear"
   }
 }

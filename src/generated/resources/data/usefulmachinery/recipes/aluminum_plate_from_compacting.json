@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/aluminum"
+    "count": 1,
+    "tag": "c:ingots/aluminum"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:aluminum_plate"
+    "id": "usefulfoundation:aluminum_plate"
   }
 }

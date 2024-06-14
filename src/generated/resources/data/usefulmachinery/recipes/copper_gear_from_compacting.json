@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 4,
-    "tag": "forge:ingots/copper"
+    "tag": "c:ingots/copper"
   },
   "mode": "gear",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:copper_gear"
+    "id": "usefulfoundation:copper_gear"
   }
 }

@@ -9,10 +9,10 @@
       "tag": "minecraft:saplings"
     },
     "I": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "P": {
-      "tag": "forge:plates/steel"
+      "tag": "c:plates/steel"
     }
   },
   "pattern": [
@@ -22,6 +22,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "usefulmachinery:sustained_upgrade"
+    "id": "usefulmachinery:sustained_upgrade"
   }
 }

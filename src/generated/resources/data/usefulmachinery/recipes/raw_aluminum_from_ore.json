@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/aluminum"
+    "tag": "c:ores/aluminum"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_aluminum"
+    "id": "usefulfoundation:raw_aluminum"
   },
   "supportedUpgrades": [
     {

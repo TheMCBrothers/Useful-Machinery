@@ -2,15 +2,15 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/silver"
+    "tag": "c:ores/silver"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_silver"
+    "id": "usefulfoundation:raw_silver"
   },
   "secondary": {
     "count": 1,
-    "result": "usefulfoundation:raw_lead"
+    "id": "usefulfoundation:raw_lead"
   },
   "secondaryChance": 0.09,
   "supportedUpgrades": [

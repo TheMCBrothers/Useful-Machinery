@@ -2,15 +2,15 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/iron"
+    "tag": "c:ores/iron"
   },
   "primary": {
     "count": 2,
-    "result": "minecraft:raw_iron"
+    "id": "minecraft:raw_iron"
   },
   "secondary": {
     "count": 1,
-    "result": "usefulfoundation:raw_nickel"
+    "id": "usefulfoundation:raw_nickel"
   },
   "secondaryChance": 0.1,
   "supportedUpgrades": [

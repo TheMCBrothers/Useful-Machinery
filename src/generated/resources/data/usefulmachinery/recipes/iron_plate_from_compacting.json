@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/iron"
+    "count": 1,
+    "tag": "c:ingots/iron"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:iron_plate"
+    "id": "usefulfoundation:iron_plate"
   }
 }

@@ -3,19 +3,19 @@
   "category": "misc",
   "key": {
     "#": {
-      "tag": "forge:gears/copper"
+      "tag": "c:gears/copper"
     },
     "B": {
-      "tag": "forge:batteries"
+      "tag": "c:batteries"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "R": {
       "item": "minecraft:furnace"
     },
     "X": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -24,6 +24,7 @@
     "IBI"
   ],
   "result": {
-    "item": "usefulmachinery:electric_smelter"
+    "count": 1,
+    "id": "usefulmachinery:electric_smelter"
   }
 }

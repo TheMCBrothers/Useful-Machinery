@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/nickel"
+            "items": "#c:ingots/nickel"
           }
         ]
       },

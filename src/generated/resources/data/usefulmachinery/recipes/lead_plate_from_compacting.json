@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/lead"
+    "count": 1,
+    "tag": "c:ingots/lead"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:lead_plate"
+    "id": "usefulfoundation:lead_plate"
   }
 }

@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/nickel"
+    "tag": "c:ores/nickel"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_nickel"
+    "id": "usefulfoundation:raw_nickel"
   },
   "supportedUpgrades": [
     {

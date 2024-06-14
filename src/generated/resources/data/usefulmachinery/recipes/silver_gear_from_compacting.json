@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 4,
-    "tag": "forge:ingots/silver"
+    "tag": "c:ingots/silver"
   },
   "mode": "gear",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:silver_gear"
+    "id": "usefulfoundation:silver_gear"
   }
 }
