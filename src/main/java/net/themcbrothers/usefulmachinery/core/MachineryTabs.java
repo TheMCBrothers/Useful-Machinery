@@ -1,6 +1,5 @@
 package net.themcbrothers.usefulmachinery.core;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -12,8 +11,9 @@ import net.themcbrothers.usefulmachinery.machine.MachineTier;
 
 import java.util.*;
 
-import static net.themcbrothers.lib.energy.EnergyContainerItem.TAG_ENERGY;
+import static net.themcbrothers.lib.LibDataComponents.ENERGY;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.TIER;
 import static net.themcbrothers.usefulmachinery.core.Registration.CREATIVE_MODE_TABS;
 
 public final class MachineryTabs {
@@ -32,10 +32,8 @@ public final class MachineryTabs {
     private static Collection<ItemStack> considerSpecialNeeds(ItemLike itemLike) {
         if (itemLike.asItem() instanceof BatteryItem batteryItem) {
             ItemStack stack = new ItemStack(itemLike);
-            CompoundTag tag = new CompoundTag();
 
-            tag.putInt(TAG_ENERGY, batteryItem.getMaxEnergyStored(stack));
-            stack.setTag(tag);
+            stack.set(ENERGY, batteryItem.getMaxEnergyStored(stack));
 
             return List.of(stack, new ItemStack(itemLike));
         } else if (itemLike.asItem() instanceof TierUpgradeItem) {
@@ -44,23 +42,15 @@ public final class MachineryTabs {
             for (MachineTier tier : MachineTier.values()) {
                 if (tier != MachineTier.SIMPLE) {
                     ItemStack stack = new ItemStack(itemLike);
-                    CompoundTag tag = new CompoundTag();
 
-                    tag.putInt("Tier", tier.ordinal());
-                    stack.setTag(tag);
+                    stack.set(TIER, tier);
 
                     stacks.add(stack);
                 }
             }
 
             return stacks.stream()
-                    .sorted(Comparator.comparingInt(value -> {
-                        CompoundTag tag = value.getTag();
-                        if (tag != null) {
-                            return tag.getInt("Tier");
-                        }
-                        return 0;
-                    }))
+                    .sorted(Comparator.comparingInt(value -> value.getOrDefault(TIER, MachineTier.SIMPLE).ordinal()))
                     .toList();
         }
 

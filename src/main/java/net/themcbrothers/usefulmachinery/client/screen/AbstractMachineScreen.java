@@ -6,8 +6,8 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.themcbrothers.lib.client.screen.widgets.EnergyBar;
-import net.themcbrothers.lib.network.PacketUtils;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.client.screen.widget.RedstoneModeButton;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
@@ -37,7 +37,7 @@ public abstract class AbstractMachineScreen<T extends AbstractMachineMenu> exten
         RedstoneModeButton redstoneModeButton = new RedstoneModeButton(this.menu, this.leftPos - 16, this.topPos, button -> {
             RedstoneMode mode = ((RedstoneModeButton) button).getMode();
 
-            PacketUtils.sendToServer(new SetRedstoneModePacket(mode));
+            PacketDistributor.sendToServer(new SetRedstoneModePacket(mode));
         });
 
         this.addRenderableWidget(redstoneModeButton);

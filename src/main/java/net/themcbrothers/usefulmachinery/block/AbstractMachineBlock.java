@@ -2,14 +2,15 @@ package net.themcbrothers.usefulmachinery.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -41,7 +42,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-// TODO: pick item copy state!
 public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<MachineTier> TIER = EnumProperty.create("tier", MachineTier.class);
@@ -77,8 +77,10 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
             MachineTier tier = blockEntity.getMachineTier(state);
 
             if (tier != MachineTier.SIMPLE) {
-                CompoundTag stateTag = stack.getOrCreateTagElement(BlockItem.BLOCK_STATE_TAG);
-                stateTag.putString(TIER.getName(), tier.getSerializedName());
+                BlockItemStateProperties stateProps = stack.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
+                stateProps = stateProps.with(TIER, tier);
+
+                stack.set(DataComponents.BLOCK_STATE, stateProps);
             }
         }
 
@@ -108,32 +110,48 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand interaction, BlockHitResult hit) {
-        if (this.tryWrench(state, level, pos, player, interaction, hit)) {
-            return InteractionResult.sidedSuccess(level.isClientSide());
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (this.tryWrench(state, level, pos, player, hand, hit)) {
+            return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
-
-        ItemStack stack = player.getItemInHand(interaction);
 
         if (stack.getItem() instanceof UpgradeItem) {
-            InteractionResult interactionResult = stack.useOn(new UseOnContext(player, interaction, hit));
+            InteractionResult interactionResult = stack.useOn(new UseOnContext(player, hand, hit));
 
-            if (interactionResult != InteractionResult.PASS) {
-                return interactionResult;
+            switch (interactionResult) {
+                case SUCCESS:
+                    return ItemInteractionResult.SUCCESS;
+                case CONSUME:
+                    return ItemInteractionResult.CONSUME;
+                case CONSUME_PARTIAL:
+                    return ItemInteractionResult.CONSUME_PARTIAL;
+                case FAIL:
+                    return ItemInteractionResult.FAIL;
+                default:
+                    break;
             }
+
         }
 
-        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer serverPlayer) {
+        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer) {
             if (blockEntity instanceof LavaGeneratorBlockEntity lavaGeneratorBlockEntity) {
                 FluidTank lavaTank = lavaGeneratorBlockEntity.getLavaTank();
                 IItemHandler itemHandler = player.getCapability(Capabilities.ItemHandler.ENTITY);
                 FluidActionResult actionResult = FluidUtil.tryEmptyContainerAndStow(stack, lavaTank, itemHandler, Integer.MAX_VALUE, player, true);
 
                 if (actionResult.isSuccess()) {
-                    return InteractionResult.sidedSuccess(level.isClientSide());
+                    return ItemInteractionResult.sidedSuccess(level.isClientSide());
                 }
             }
+        }
 
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer serverPlayer) {
             serverPlayer.openMenu(blockEntity, data -> {
                 data.writeBlockPos(pos);
                 data.writeInt(blockEntity.getUpgradeSlotSize());

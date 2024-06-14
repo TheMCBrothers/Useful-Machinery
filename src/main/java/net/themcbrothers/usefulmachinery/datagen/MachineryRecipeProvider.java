@@ -1,5 +1,6 @@
 package net.themcbrothers.usefulmachinery.datagen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
@@ -9,11 +10,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes;
 import net.themcbrothers.usefulmachinery.datagen.recipe.CompactingRecipeBuilder;
 import net.themcbrothers.usefulmachinery.datagen.recipe.CrushingRecipeBuilder;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.machine.MachineTier;
-import net.themcbrothers.usefulmachinery.recipe.ingredient.CountIngredient;
+
+import java.util.concurrent.CompletableFuture;
 
 import static net.themcbrothers.usefulfoundation.core.FoundationBlocks.*;
 import static net.themcbrothers.usefulfoundation.core.FoundationItems.*;
@@ -24,67 +28,67 @@ import static net.themcbrothers.usefulmachinery.core.MachineryItems.*;
 import static net.themcbrothers.usefulmachinery.core.MachineryTags.Items.BATTERIES;
 
 public class MachineryRecipeProvider extends RecipeProvider {
-    public MachineryRecipeProvider(PackOutput output) {
-        super(output);
+    public MachineryRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries);
     }
 
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
         // Gears
-        CompactingRecipeBuilder.compacting(ALUMINUM_GEAR, CountIngredient.of(4, INGOTS_ALUMINUM), 200, CompactorMode.GEAR).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(BRONZE_GEAR, CountIngredient.of(4, INGOTS_BRONZE), 200, CompactorMode.GEAR).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(COPPER_GEAR, CountIngredient.of(4, Tags.Items.INGOTS_COPPER), 200, CompactorMode.GEAR).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(DIAMOND_GEAR, CountIngredient.of(4, Tags.Items.GEMS_DIAMOND), 200, CompactorMode.GEAR).unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(recipeOutput, rl("diamond_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(ELECTRUM_GEAR, CountIngredient.of(4, INGOTS_ELECTRUM), 200, CompactorMode.GEAR).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(ENDERIUM_GEAR, CountIngredient.of(4, INGOTS_ENDERIUM), 200, CompactorMode.GEAR).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(GOLD_GEAR, CountIngredient.of(4, Tags.Items.INGOTS_GOLD), 200, CompactorMode.GEAR).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(INVAR_GEAR, CountIngredient.of(4, INGOTS_INVAR), 200, CompactorMode.GEAR).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(IRON_GEAR, CountIngredient.of(4, Tags.Items.INGOTS_IRON), 200, CompactorMode.GEAR).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(LEAD_GEAR, CountIngredient.of(4, INGOTS_LEAD), 200, CompactorMode.GEAR).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(NICKEL_GEAR, CountIngredient.of(4, INGOTS_NICKEL), 200, CompactorMode.GEAR).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(PLATINUM_GEAR, CountIngredient.of(4, INGOTS_PLATINUM), 200, CompactorMode.GEAR).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(SIGNALUM_GEAR, CountIngredient.of(4, INGOTS_SIGNALUM), 200, CompactorMode.GEAR).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(SILVER_GEAR, CountIngredient.of(4, INGOTS_SILVER), 200, CompactorMode.GEAR).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(STEEL_GEAR, CountIngredient.of(4, INGOTS_STEEL), 200, CompactorMode.GEAR).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(TIN_GEAR, CountIngredient.of(4, INGOTS_TIN), 200, CompactorMode.GEAR).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_gear_from_compacting"));
-        CompactingRecipeBuilder.compacting(URANIUM_GEAR, CountIngredient.of(4, INGOTS_URANIUM), 200, CompactorMode.GEAR).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(ALUMINUM_GEAR, SizedIngredient.of(INGOTS_ALUMINUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(BRONZE_GEAR, SizedIngredient.of(INGOTS_BRONZE, 4), 200, CompactorMode.GEAR).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(COPPER_GEAR, SizedIngredient.of(Tags.Items.INGOTS_COPPER, 4), 200, CompactorMode.GEAR).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(DIAMOND_GEAR, SizedIngredient.of(Tags.Items.GEMS_DIAMOND, 4), 200, CompactorMode.GEAR).unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(recipeOutput, rl("diamond_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(ELECTRUM_GEAR, SizedIngredient.of(INGOTS_ELECTRUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(ENDERIUM_GEAR, SizedIngredient.of(INGOTS_ENDERIUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(GOLD_GEAR, SizedIngredient.of(Tags.Items.INGOTS_GOLD, 4), 200, CompactorMode.GEAR).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(INVAR_GEAR, SizedIngredient.of(INGOTS_INVAR, 4), 200, CompactorMode.GEAR).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(IRON_GEAR, SizedIngredient.of(Tags.Items.INGOTS_IRON, 4), 200, CompactorMode.GEAR).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(LEAD_GEAR, SizedIngredient.of(INGOTS_LEAD, 4), 200, CompactorMode.GEAR).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(NICKEL_GEAR, SizedIngredient.of(INGOTS_NICKEL, 4), 200, CompactorMode.GEAR).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(PLATINUM_GEAR, SizedIngredient.of(INGOTS_PLATINUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(SIGNALUM_GEAR, SizedIngredient.of(INGOTS_SIGNALUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(SILVER_GEAR, SizedIngredient.of(INGOTS_SILVER, 4), 200, CompactorMode.GEAR).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(STEEL_GEAR, SizedIngredient.of(INGOTS_STEEL, 4), 200, CompactorMode.GEAR).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(TIN_GEAR, SizedIngredient.of(INGOTS_TIN, 4), 200, CompactorMode.GEAR).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_gear_from_compacting"));
+        CompactingRecipeBuilder.compacting(URANIUM_GEAR, SizedIngredient.of(INGOTS_URANIUM, 4), 200, CompactorMode.GEAR).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_gear_from_compacting"));
 
         // Storage Blocks
-        CompactingRecipeBuilder.compacting(ALUMINUM_BLOCK, CountIngredient.of(9, INGOTS_ALUMINUM), 250, CompactorMode.BLOCK).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(BRONZE_BLOCK, CountIngredient.of(9, INGOTS_BRONZE), 250, CompactorMode.BLOCK).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(Items.COPPER_BLOCK, CountIngredient.of(9, Tags.Items.INGOTS_COPPER), 250, CompactorMode.BLOCK).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(ELECTRUM_BLOCK, CountIngredient.of(9, INGOTS_ELECTRUM), 250, CompactorMode.BLOCK).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(ENDERIUM_BLOCK, CountIngredient.of(9, INGOTS_ENDERIUM), 250, CompactorMode.BLOCK).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(Items.GOLD_BLOCK, CountIngredient.of(9, Tags.Items.INGOTS_GOLD), 250, CompactorMode.BLOCK).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(INVAR_BLOCK, CountIngredient.of(9, INGOTS_INVAR), 250, CompactorMode.BLOCK).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(Items.IRON_BLOCK, CountIngredient.of(9, Tags.Items.INGOTS_IRON), 250, CompactorMode.BLOCK).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(LEAD_BLOCK, CountIngredient.of(9, INGOTS_LEAD), 250, CompactorMode.BLOCK).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(NICKEL_BLOCK, CountIngredient.of(9, INGOTS_NICKEL), 250, CompactorMode.BLOCK).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(PLATINUM_BLOCK, CountIngredient.of(9, INGOTS_PLATINUM), 250, CompactorMode.BLOCK).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(SIGNALUM_BLOCK, CountIngredient.of(9, INGOTS_SIGNALUM), 250, CompactorMode.BLOCK).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(SILVER_BLOCK, CountIngredient.of(9, INGOTS_SILVER), 250, CompactorMode.BLOCK).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(STEEL_BLOCK, CountIngredient.of(9, INGOTS_STEEL), 250, CompactorMode.BLOCK).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(TIN_BLOCK, CountIngredient.of(9, INGOTS_TIN), 250, CompactorMode.BLOCK).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_block_from_compacting"));
-        CompactingRecipeBuilder.compacting(URANIUM_BLOCK, CountIngredient.of(9, INGOTS_URANIUM), 250, CompactorMode.BLOCK).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(ALUMINUM_BLOCK, SizedIngredient.of(INGOTS_ALUMINUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(BRONZE_BLOCK, SizedIngredient.of(INGOTS_BRONZE, 9), 250, CompactorMode.BLOCK).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(Items.COPPER_BLOCK, SizedIngredient.of(Tags.Items.INGOTS_COPPER, 9), 250, CompactorMode.BLOCK).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(ELECTRUM_BLOCK, SizedIngredient.of(INGOTS_ELECTRUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(ENDERIUM_BLOCK, SizedIngredient.of(INGOTS_ENDERIUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(Items.GOLD_BLOCK, SizedIngredient.of(Tags.Items.INGOTS_GOLD, 9), 250, CompactorMode.BLOCK).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(INVAR_BLOCK, SizedIngredient.of(INGOTS_INVAR, 9), 250, CompactorMode.BLOCK).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(Items.IRON_BLOCK, SizedIngredient.of(Tags.Items.INGOTS_IRON, 9), 250, CompactorMode.BLOCK).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(LEAD_BLOCK, SizedIngredient.of(INGOTS_LEAD, 9), 250, CompactorMode.BLOCK).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(NICKEL_BLOCK, SizedIngredient.of(INGOTS_NICKEL, 9), 250, CompactorMode.BLOCK).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(PLATINUM_BLOCK, SizedIngredient.of(INGOTS_PLATINUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(SIGNALUM_BLOCK, SizedIngredient.of(INGOTS_SIGNALUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(SILVER_BLOCK, SizedIngredient.of(INGOTS_SILVER, 9), 250, CompactorMode.BLOCK).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(STEEL_BLOCK, SizedIngredient.of(INGOTS_STEEL, 9), 250, CompactorMode.BLOCK).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(TIN_BLOCK, SizedIngredient.of(INGOTS_TIN, 9), 250, CompactorMode.BLOCK).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_block_from_compacting"));
+        CompactingRecipeBuilder.compacting(URANIUM_BLOCK, SizedIngredient.of(INGOTS_URANIUM, 9), 250, CompactorMode.BLOCK).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_block_from_compacting"));
 
         // Plates
-        CompactingRecipeBuilder.compacting(ALUMINUM_PLATE, CountIngredient.of(1, INGOTS_ALUMINUM), 200, CompactorMode.PLATE).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(BRONZE_PLATE, CountIngredient.of(1, INGOTS_BRONZE), 200, CompactorMode.PLATE).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(COPPER_PLATE, CountIngredient.of(1, Tags.Items.INGOTS_COPPER), 200, CompactorMode.PLATE).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(DIAMOND_PLATE, CountIngredient.of(1, Tags.Items.GEMS_DIAMOND), 200, CompactorMode.PLATE).unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(recipeOutput, rl("diamond_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(ELECTRUM_PLATE, CountIngredient.of(1, INGOTS_ELECTRUM), 200, CompactorMode.PLATE).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(ENDERIUM_PLATE, CountIngredient.of(1, INGOTS_ENDERIUM), 200, CompactorMode.PLATE).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(GOLD_PLATE, CountIngredient.of(1, Tags.Items.INGOTS_GOLD), 200, CompactorMode.PLATE).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(INVAR_PLATE, CountIngredient.of(1, INGOTS_INVAR), 200, CompactorMode.PLATE).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(IRON_PLATE, CountIngredient.of(1, Tags.Items.INGOTS_IRON), 200, CompactorMode.PLATE).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(LEAD_PLATE, CountIngredient.of(1, INGOTS_LEAD), 200, CompactorMode.PLATE).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(NICKEL_PLATE, CountIngredient.of(1, INGOTS_NICKEL), 200, CompactorMode.PLATE).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(PLATINUM_PLATE, CountIngredient.of(1, INGOTS_PLATINUM), 200, CompactorMode.PLATE).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(SIGNALUM_PLATE, CountIngredient.of(1, INGOTS_SIGNALUM), 200, CompactorMode.PLATE).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(SILVER_PLATE, CountIngredient.of(1, INGOTS_SILVER), 200, CompactorMode.PLATE).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(STEEL_PLATE, CountIngredient.of(1, INGOTS_STEEL), 200, CompactorMode.PLATE).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(TIN_PLATE, CountIngredient.of(1, INGOTS_TIN), 200, CompactorMode.PLATE).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_plate_from_compacting"));
-        CompactingRecipeBuilder.compacting(URANIUM_PLATE, CountIngredient.of(1, INGOTS_URANIUM), 200, CompactorMode.PLATE).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(ALUMINUM_PLATE, SizedIngredient.of(INGOTS_ALUMINUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(recipeOutput, rl("aluminum_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(BRONZE_PLATE, SizedIngredient.of(INGOTS_BRONZE, 1), 200, CompactorMode.PLATE).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(recipeOutput, rl("bronze_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(COPPER_PLATE, SizedIngredient.of(Tags.Items.INGOTS_COPPER, 1), 200, CompactorMode.PLATE).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(recipeOutput, rl("copper_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(DIAMOND_PLATE, SizedIngredient.of(Tags.Items.GEMS_DIAMOND, 1), 200, CompactorMode.PLATE).unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(recipeOutput, rl("diamond_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(ELECTRUM_PLATE, SizedIngredient.of(INGOTS_ELECTRUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_electrum", has(INGOTS_ELECTRUM)).save(recipeOutput, rl("electrum_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(ENDERIUM_PLATE, SizedIngredient.of(INGOTS_ENDERIUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_enderium", has(INGOTS_ENDERIUM)).save(recipeOutput, rl("enderium_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(GOLD_PLATE, SizedIngredient.of(Tags.Items.INGOTS_GOLD, 1), 200, CompactorMode.PLATE).unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipeOutput, rl("gold_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(INVAR_PLATE, SizedIngredient.of(INGOTS_INVAR, 1), 200, CompactorMode.PLATE).unlockedBy("has_invar", has(INGOTS_INVAR)).save(recipeOutput, rl("invar_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(IRON_PLATE, SizedIngredient.of(Tags.Items.INGOTS_IRON, 1), 200, CompactorMode.PLATE).unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON)).save(recipeOutput, rl("iron_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(LEAD_PLATE, SizedIngredient.of(INGOTS_LEAD, 1), 200, CompactorMode.PLATE).unlockedBy("has_lead", has(INGOTS_LEAD)).save(recipeOutput, rl("lead_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(NICKEL_PLATE, SizedIngredient.of(INGOTS_NICKEL, 1), 200, CompactorMode.PLATE).unlockedBy("has_nickel", has(INGOTS_NICKEL)).save(recipeOutput, rl("nickel_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(PLATINUM_PLATE, SizedIngredient.of(INGOTS_PLATINUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_platinum", has(INGOTS_PLATINUM)).save(recipeOutput, rl("platinum_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(SIGNALUM_PLATE, SizedIngredient.of(INGOTS_SIGNALUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_signalum", has(INGOTS_SIGNALUM)).save(recipeOutput, rl("signalum_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(SILVER_PLATE, SizedIngredient.of(INGOTS_SILVER, 1), 200, CompactorMode.PLATE).unlockedBy("has_silver", has(INGOTS_SILVER)).save(recipeOutput, rl("silver_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(STEEL_PLATE, SizedIngredient.of(INGOTS_STEEL, 1), 200, CompactorMode.PLATE).unlockedBy("has_steel", has(INGOTS_STEEL)).save(recipeOutput, rl("steel_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(TIN_PLATE, SizedIngredient.of(INGOTS_TIN, 1), 200, CompactorMode.PLATE).unlockedBy("has_tin", has(INGOTS_TIN)).save(recipeOutput, rl("tin_plate_from_compacting"));
+        CompactingRecipeBuilder.compacting(URANIUM_PLATE, SizedIngredient.of(INGOTS_URANIUM, 1), 200, CompactorMode.PLATE).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(recipeOutput, rl("uranium_plate_from_compacting"));
 
         // Raw Materials
         Ingredient upgrades = Ingredient.of(EFFICIENCY_UPGRADE, PRECISION_UPGRADE);
@@ -124,7 +128,7 @@ public class MachineryRecipeProvider extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, COMPACTOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', COMPACTOR_KIT.get()).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', INGOTS_ELECTRUM).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipeOutput);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CRUSHER, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', Items.FLINT).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_COPPER).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipeOutput);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ELECTRIC_SMELTER, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Tags.Items.DUSTS_REDSTONE).define('#', GEARS_COPPER).define('R', Items.FURNACE).define('I', Tags.Items.INGOTS_IRON).define('B', BATTERIES).unlockedBy("has_furnace", has(Items.FURNACE)).save(recipeOutput);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, LAVA_GENERATOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', Tags.Items.INGOTS_NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, LAVA_GENERATOR, 1).pattern(" X ").pattern("#R#").pattern("IBI").define('X', Items.BUCKET).define('#', Tags.Items.DUSTS_REDSTONE).define('R', MACHINE_FRAME.get()).define('I', Items.NETHER_BRICK).define('B', BATTERIES).unlockedBy("has_machine_frame", has(MACHINE_FRAME.get())).save(recipeOutput);
 
         // Items
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MACHINE_FRAME, 1)
@@ -132,7 +136,7 @@ public class MachineryRecipeProvider extends RecipeProvider {
                 .pattern("BGB")
                 .pattern("IBI")
                 .define('I', INGOTS_TIN)
-                .define('B', Tags.Items.GLASS)
+                .define('B', Tags.Items.GLASS_BLOCKS)
                 .define('G', GEARS_IRON)
                 .unlockedBy("has_tin_ingot", has(INGOTS_TIN))
                 .save(recipeOutput);
@@ -200,7 +204,7 @@ public class MachineryRecipeProvider extends RecipeProvider {
 
     private void tierUpgradeRecipe(RecipeOutput recipeOutput, TagKey<Item> ingotTag, TagKey<Item> gearTag, MachineTier tier) {
         ItemStack result = new ItemStack(TIER_UPGRADE.get());
-        result.getOrCreateTag().putInt("Tier", tier.ordinal());
+        result.set(MachineryDataComponentTypes.TIER, tier);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result)
                 .pattern(" I ")

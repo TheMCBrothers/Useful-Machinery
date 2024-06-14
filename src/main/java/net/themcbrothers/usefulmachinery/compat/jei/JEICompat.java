@@ -15,8 +15,10 @@ import net.themcbrothers.usefulmachinery.compat.jei.categories.CrushingCategory;
 import net.themcbrothers.usefulmachinery.compat.jei.categories.LavaGeneratingCategory;
 import net.themcbrothers.usefulmachinery.compat.jei.recipes.CoalGeneratingRecipeMaker;
 import net.themcbrothers.usefulmachinery.compat.jei.recipes.LavaGeneratingRecipeMaker;
+import net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes;
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
+import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import net.themcbrothers.usefulmachinery.menu.*;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
@@ -34,7 +36,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.useNbtForSubtypes(TIER_UPGRADE.get());
+        registration.registerSubtypeInterpreter(TIER_UPGRADE.get(), (stack, uidContext) -> stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE).getSerializedName());
     }
 
     @Override

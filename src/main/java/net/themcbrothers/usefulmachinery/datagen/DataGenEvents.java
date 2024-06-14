@@ -1,11 +1,11 @@
 package net.themcbrothers.usefulmachinery.datagen;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 
-@Mod.EventBusSubscriber(modid = UsefulMachinery.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = UsefulMachinery.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class DataGenEvents {
     @SubscribeEvent
     static void onDataGen(final GatherDataEvent event) {
@@ -18,8 +18,8 @@ public final class DataGenEvents {
         MachineryBlockTagsProvider blockTagsProvider = new MachineryBlockTagsProvider(output, lookupProvider, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new MachineryItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
-        generator.addProvider(event.includeServer(), new MachineryLootTableProvider(output));
-        generator.addProvider(event.includeServer(), new MachineryRecipeProvider(output));
+        generator.addProvider(event.includeServer(), new MachineryLootTableProvider(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new MachineryRecipeProvider(output, lookupProvider));
 
         // Client resources
         generator.addProvider(event.includeClient(), new MachineryBlockStateProvider(output, existingFileHelper));

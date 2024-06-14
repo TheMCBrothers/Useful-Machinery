@@ -5,11 +5,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.themcbrothers.lib.config.Config;
 import net.themcbrothers.lib.energy.BasicEnergyContainerItem;
 import net.themcbrothers.lib.energy.EnergyUnit;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class BatteryItem extends BasicEnergyContainerItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         EnergyUnit energyUnit = Config.CLIENT_CONFIG.getEnergyUnit();
 
         MutableComponent component = TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), energyUnit);

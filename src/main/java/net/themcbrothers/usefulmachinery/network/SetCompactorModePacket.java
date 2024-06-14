@@ -1,8 +1,8 @@
 package net.themcbrothers.usefulmachinery.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.themcbrothers.lib.network.PacketMessage;
 import net.themcbrothers.lib.network.PacketUtils;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
@@ -11,16 +11,22 @@ import net.themcbrothers.usefulmachinery.block.entity.CompactorBlockEntity;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.menu.CompactorMenu;
 
-public record SetCompactorModePacket(CompactorMode mode) implements PacketMessage<PlayPayloadContext> {
+public record SetCompactorModePacket(CompactorMode mode) implements PacketMessage {
+    public static final Type<SetCompactorModePacket> TYPE = new Type<>(UsefulMachinery.rl("set_compactor_mode"));
+    public static final StreamCodec<FriendlyByteBuf, SetCompactorModePacket> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public SetCompactorModePacket decode(FriendlyByteBuf buffer) {
+            return new SetCompactorModePacket(CompactorMode.STREAM_CODEC.decode(buffer));
+        }
 
-    public static final ResourceLocation ID = UsefulMachinery.rl("set_compactor_mode");
-
-    public SetCompactorModePacket(FriendlyByteBuf buffer) {
-        this(CompactorMode.byOrdinal(buffer.readByte()));
-    }
+        @Override
+        public void encode(FriendlyByteBuf buffer, SetCompactorModePacket packet) {
+            CompactorMode.STREAM_CODEC.encode(buffer, packet.mode());
+        }
+    };
 
     @Override
-    public void handle(PlayPayloadContext context) {
+    public void handle(IPayloadContext context) {
         PacketUtils.container(context, CompactorMenu.class)
                 .ifPresent(menu -> {
                     AbstractMachineBlockEntity blockEntity = menu.getBlockEntity();
@@ -31,12 +37,7 @@ public record SetCompactorModePacket(CompactorMode mode) implements PacketMessag
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.mode.ordinal());
-    }
-
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<SetCompactorModePacket> type() {
+        return TYPE;
     }
 }

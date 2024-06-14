@@ -5,7 +5,7 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.themcbrothers.lib.network.PacketUtils;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.client.screen.widget.CompactorModeButton;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
@@ -28,7 +28,7 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
         CompactorModeButton compactorModeButton = new CompactorModeButton(this.menu, this.leftPos + 9, this.topPos + 31, 20, 20, button -> {
             CompactorMode mode = ((CompactorModeButton) button).getMode();
 
-            PacketUtils.sendToServer(new SetCompactorModePacket(mode));
+            PacketDistributor.sendToServer(new SetCompactorModePacket(mode));
         });
 
         this.addRenderableWidget(compactorModeButton);

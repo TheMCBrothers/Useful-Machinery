@@ -2,14 +2,16 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidActionResult;
@@ -18,6 +20,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.themcbrothers.usefulmachinery.component.MachineContents;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
@@ -25,6 +28,7 @@ import net.themcbrothers.usefulmachinery.menu.LavaGeneratorMenu;
 import org.jetbrains.annotations.Nullable;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
 
 public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int TANK_CAPACITY = 4000; // TODO config
@@ -93,6 +97,33 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+
+        MachineContents contents = input.get(CONTENTS.get());
+
+        if (contents != null) {
+            this.burnTime = contents.burnTime();
+            this.burnTimeTotal = contents.burnTimeTotal();
+        }
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+
+        builder.set(CONTENTS.get(), new MachineContents(ItemContainerContents.fromItems(
+                this.upgradeContainer.getItems()),
+                this.energyStorage.getEnergyStored(),
+                this.redstoneMode,
+                this.processTime,
+                this.processTimeTotal,
+                this.burnTime,
+                this.burnTimeTotal
+        ));
+    }
+
+    @Override
     public ContainerData getContainerData() {
         return this.fields;
     }
@@ -103,38 +134,36 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public Component getDefaultName() {
         return TEXT_UTILS.translate("container", "lava_generator");
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player pPlayer) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new LavaGeneratorMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        super.saveAdditional(compound, registries);
 
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("BurnTimeTotal", this.burnTimeTotal);
 
         if (!this.lavaTank.getFluid().isEmpty()) {
-            compound.put("Tank", this.lavaTank.writeToNBT(new CompoundTag()));
+            compound.put("Tank", this.lavaTank.writeToNBT(registries, new CompoundTag()));
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         this.burnTime = compound.getInt("BurnTime");
         this.burnTimeTotal = compound.getInt("BurnTimeTotal");
 
         if (compound.contains("Tank", CompoundTag.TAG_COMPOUND)) {
-            this.lavaTank.readFromNBT(compound.getCompound("Tank"));
+            this.lavaTank.readFromNBT(registries, compound.getCompound("Tank"));
         }
 
-        super.load(compound);
+        super.loadAdditional(compound, registries);
     }
 
     @Override
@@ -186,20 +215,20 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private void transferFluid() {
-        final ItemStack bucketStack = this.stacks.get(0);
+        final ItemStack bucketStack = this.getItems().get(0);
 
         if (!bucketStack.isEmpty()) {
             FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidType.BUCKET_VOLUME, null, true);
 
             if (result.isSuccess()) {
-                ItemStack outputSlotStack = this.stacks.get(1);
+                ItemStack outputSlotStack = this.getItems().get(1);
                 ItemStack resultStack = result.getResult();
 
                 if (ItemStack.isSameItem(resultStack, outputSlotStack) && resultStack.getMaxStackSize() > 1 && outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
                     outputSlotStack.grow(resultStack.getCount());
                     bucketStack.shrink(1);
                 } else if (outputSlotStack.isEmpty()) {
-                    this.stacks.set(1, resultStack);
+                    this.getItems().set(1, resultStack);
 
                     bucketStack.shrink(1);
                 }

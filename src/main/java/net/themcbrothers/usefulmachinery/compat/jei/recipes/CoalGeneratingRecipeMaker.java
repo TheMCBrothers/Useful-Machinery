@@ -12,7 +12,7 @@ public class CoalGeneratingRecipeMaker {
     public static List<IJeiFuelingRecipe> getCoalGeneratingRecipes(IIngredientManager ingredientManager) {
         return Objects.requireNonNull(ingredientManager).getAllItemStacks().stream()
                 .<IJeiFuelingRecipe>mapMulti((stack, consumer) -> {
-                    int burnTime = CommonHooks.getBurnTime(stack, null);
+                    int burnTime = stack.getBurnTime(null);
 
                     if (burnTime == 1600) {
                         consumer.accept(new CoalGeneratingRecipe(List.of(stack), burnTime));

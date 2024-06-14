@@ -1,5 +1,6 @@
 package net.themcbrothers.usefulmachinery.machine;
 
+import net.minecraft.util.FastColor;
 import net.minecraft.util.StringRepresentable;
 
 import java.util.Arrays;
@@ -38,6 +39,6 @@ public enum MachineTier implements StringRepresentable {
     }
 
     public int getColor() {
-        return this.color;
+        return FastColor.ARGB32.color(0xFF, this.color);
     }
 }

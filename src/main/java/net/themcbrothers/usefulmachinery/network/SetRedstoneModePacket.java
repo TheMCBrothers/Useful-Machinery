@@ -1,8 +1,8 @@
 package net.themcbrothers.usefulmachinery.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.themcbrothers.lib.network.PacketMessage;
 import net.themcbrothers.lib.network.PacketUtils;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
@@ -10,16 +10,23 @@ import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.AbstractMachineMenu;
 
-public record SetRedstoneModePacket(RedstoneMode mode) implements PacketMessage<PlayPayloadContext> {
+public record SetRedstoneModePacket(RedstoneMode mode) implements PacketMessage {
 
-    public static final ResourceLocation ID = UsefulMachinery.rl("set_redstone_mode");
+    public static final Type<SetRedstoneModePacket> TYPE = new Type<>(UsefulMachinery.rl("set_redstone_mode"));
+    public static final StreamCodec<FriendlyByteBuf, SetRedstoneModePacket> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public SetRedstoneModePacket decode(FriendlyByteBuf buffer) {
+            return new SetRedstoneModePacket(RedstoneMode.STREAM_CODEC.decode(buffer));
+        }
 
-    public SetRedstoneModePacket(FriendlyByteBuf buffer) {
-        this(RedstoneMode.byOrdinal(buffer.readByte()));
-    }
+        @Override
+        public void encode(FriendlyByteBuf buffer, SetRedstoneModePacket packet) {
+            RedstoneMode.STREAM_CODEC.encode(buffer, packet.mode());
+        }
+    };
 
     @Override
-    public void handle(PlayPayloadContext context) {
+    public void handle(IPayloadContext context) {
         PacketUtils.container(context, AbstractMachineMenu.class)
                 .ifPresent(menu -> {
                     AbstractMachineBlockEntity blockEntity = menu.getBlockEntity();
@@ -28,12 +35,7 @@ public record SetRedstoneModePacket(RedstoneMode mode) implements PacketMessage<
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.mode.ordinal());
-    }
-
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<SetRedstoneModePacket> type() {
+        return TYPE;
     }
 }

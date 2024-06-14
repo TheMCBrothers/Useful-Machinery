@@ -12,7 +12,7 @@ public class LavaGeneratingRecipeMaker {
     public static List<IJeiFuelingRecipe> getLavaGeneratingRecipes(IIngredientManager ingredientManager) {
         return Objects.requireNonNull(ingredientManager).getAllItemStacks().stream()
                 .<IJeiFuelingRecipe>mapMulti((stack, consumer) -> {
-                    int burnTime = CommonHooks.getBurnTime(stack, null);
+                    int burnTime = stack.getBurnTime(null);
 
                     if (burnTime == 20000) {
                         consumer.accept(new LavaGeneratingRecipe(List.of(stack), burnTime));

@@ -1,22 +1,22 @@
 package net.themcbrothers.usefulmachinery.datagen;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.packs.VanillaLootTableProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootDataId;
-import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class MachineryLootTableProvider extends LootTableProvider {
-    public MachineryLootTableProvider(PackOutput output) {
-        super(output, Set.of(), VanillaLootTableProvider.create(output).getTables());
+    public MachineryLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, Set.of(), VanillaLootTableProvider.create(output, registries).getTables(), registries);
     }
 
     @Override
@@ -25,11 +25,13 @@ public class MachineryLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext context) {
-        map.forEach((location, lootTable) -> {
-            LootDataId<?> id = new LootDataId<>(LootDataType.TABLE, location);
+    protected void validate(WritableRegistry<LootTable> registry, ValidationContext context, ProblemReporter.Collector collector) {
+        super.validate(registry, context, collector);
 
-            lootTable.validate(context.setParams(lootTable.getParamSet()).enterElement("{" + location + "}", id));
+        registry.holders().forEach((lootTable) -> {
+            lootTable.value()
+                    .validate(context.setParams(lootTable.value().getParamSet())
+                            .enterElement("{" + lootTable.key().location() + "}", lootTable.key()));
         });
     }
 }
