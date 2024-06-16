@@ -1,13 +1,11 @@
 package net.themcbrothers.usefulmachinery.setup;
 
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.component.BlockItemStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
+import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import net.themcbrothers.usefulmachinery.client.screen.*;
 import net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
@@ -40,23 +38,17 @@ public class ClientSetup extends CommonSetup {
             return tintIndex == 1 ? tier.getColor() : -1;
         }, MachineryItems.TIER_UPGRADE.get());
 
-        event.register((stack, tintIndex) -> {
-            MachineTier tier = MachineTier.SIMPLE;
-            BlockItemStateProperties props = stack.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
-
-            MachineTier tierFromProps = props.get(AbstractMachineBlock.TIER);
-            tier = tierFromProps != null ? tierFromProps : tier;
-
-            return tier.getColor();
-        }, COAL_GENERATOR, COMPACTOR, CRUSHER, ELECTRIC_SMELTER, LAVA_GENERATOR);
+        event.register((stack, tintIndex) -> stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE).getColor(), COAL_GENERATOR, COMPACTOR, CRUSHER, ELECTRIC_SMELTER, LAVA_GENERATOR);
     }
 
     private void blockColors(final RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            EnumProperty<MachineTier> tier = AbstractMachineBlock.TIER;
+            if (level != null && pos != null) {
+                BlockEntity blockEntity = level.getBlockEntity(pos);
 
-            if (state.hasProperty(tier)) {
-                return state.getValue(tier).getColor();
+                if (blockEntity instanceof AbstractMachineBlockEntity machineBlockEntity) {
+                    return machineBlockEntity.getMachineTier().getColor();
+                }
             }
 
             return -1;

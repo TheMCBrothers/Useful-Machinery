@@ -110,7 +110,7 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
 
         }
 
-        data.putInt("tier", machine.getMachineTier(accessor.getBlockState()).ordinal());
+        data.putInt("tier", machine.getMachineTier().ordinal());
     }
 
     @Override

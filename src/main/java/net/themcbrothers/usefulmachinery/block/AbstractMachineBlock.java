@@ -2,7 +2,6 @@ package net.themcbrothers.usefulmachinery.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -10,11 +9,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -24,9 +21,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
@@ -35,21 +30,19 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import net.themcbrothers.usefulmachinery.block.entity.LavaGeneratorBlockEntity;
-import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final EnumProperty<MachineTier> TIER = EnumProperty.create("tier", MachineTier.class);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     @Nullable
     private final Supplier<ResourceLocation> interactStat;
 
     protected AbstractMachineBlock(Properties props, @Nullable Supplier<ResourceLocation> interactStat) {
         super(props);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TIER, MachineTier.SIMPLE).setValue(LIT, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.FALSE));
         this.interactStat = interactStat;
     }
 
@@ -59,30 +52,12 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, TIER, LIT);
+        builder.add(FACING, LIT);
     }
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
-        ItemStack stack = super.getCloneItemStack(state, target, level, pos, player);
-
-        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity) {
-            MachineTier tier = blockEntity.getMachineTier(state);
-
-            if (tier != MachineTier.SIMPLE) {
-                BlockItemStateProperties stateProps = stack.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
-                stateProps = stateProps.with(TIER, tier);
-
-                stack.set(DataComponents.BLOCK_STATE, stateProps);
-            }
-        }
-
-        return stack;
     }
 
     @Nullable

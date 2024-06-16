@@ -13,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,6 +33,7 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.TIER;
 
 public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     protected static final int ENERGY_CAPACITY = 20_000;
@@ -46,6 +46,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     protected int processTimeTotal;
     protected ExtendedEnergyStorage energyStorage;
     protected RedstoneMode redstoneMode = RedstoneMode.IGNORED;
+    protected MachineTier tier = MachineTier.SIMPLE;
 
     public AbstractMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, boolean isGenerator) {
         super(type, pos, state);
@@ -75,6 +76,9 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         }
         if (this.energyStorage.getEnergyStored() > 0) {
             tag.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+        }
+        if (this.tier != MachineTier.SIMPLE) {
+            tag.putInt("Tier", this.tier.ordinal());
         }
 
         ContainerHelper.saveAllItems(tag, this.getItems(), false, registries);
@@ -107,6 +111,8 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
             this.processTime = contents.processTime();
             this.processTimeTotal = contents.processTimeTotal();
         }
+
+        this.setMachineTier(input.getOrDefault(TIER.get(), MachineTier.SIMPLE));
     }
 
     @Override
@@ -122,6 +128,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
                 0,
                 0
         ));
+        builder.set(TIER.get(), this.tier);
     }
 
     @Override
@@ -135,6 +142,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         tag.remove("ProcessTimeTotal");
         tag.remove("BurnTime");
         tag.remove("BurnTimeTotal");
+        tag.remove("Tier");
     }
 
     @Override
@@ -144,6 +152,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         this.redstoneMode = RedstoneMode.byOrdinal(compound.getInt("RedstoneMode"));
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
         this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND), registries);
+        this.tier = MachineTier.byOrdinal(compound.getInt("Tier"));
 
         this.initEnergyStorage(compound.getInt("EnergyStored"));
 
@@ -237,7 +246,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     protected int calcProcessTime(int processTime) {
-        return switch (this.getMachineTier(this.getBlockState())) {
+        return switch (this.getMachineTier()) {
             case SIMPLE -> processTime;
             case BASIC -> processTime / 2;
             case REINFORCED -> processTime / 4;
@@ -247,7 +256,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     protected int calcBurnTime(int burnTime) {
-        return (int) switch (this.getMachineTier(this.getBlockState())) {
+        return (int) switch (this.getMachineTier()) {
             case SIMPLE -> burnTime;
             case BASIC -> burnTime * 1.2;
             case REINFORCED -> burnTime * 1.4;
@@ -309,7 +318,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     public int getUpgradeSlotSize() {
-        return this.getMachineTier(this.getBlockState()).ordinal();
+        return this.getMachineTier().ordinal();
     }
 
     public void tick() {
@@ -380,23 +389,22 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         return this.processTimeTotal;
     }
 
-    public MachineTier getMachineTier(BlockState state) {
-        return state.hasProperty(AbstractMachineBlock.TIER) ? state.getValue(AbstractMachineBlock.TIER) : MachineTier.SIMPLE;
+    public MachineTier getMachineTier() {
+        return this.tier;
     }
 
-    public void setMachineTier(MachineTier machineTier) {
+    public void setMachineTier(MachineTier tier) {
         if (this.level == null) {
             return;
         }
 
-        this.level.setBlock(this.worldPosition, this.getBlockState().setValue(AbstractMachineBlock.TIER, machineTier), Block.UPDATE_ALL);
+        this.tier = tier;
 
         RegistryAccess registry = this.level.registryAccess();
 
         ListTag previousItems = this.upgradeContainer.createTag(registry);
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
         this.upgradeContainer.fromTag(previousItems, registry);
-
 
         this.initEnergyStorage(this.getEnergyStored());
 

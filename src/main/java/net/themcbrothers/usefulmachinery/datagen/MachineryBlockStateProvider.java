@@ -11,7 +11,6 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
-import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
 
@@ -59,11 +58,10 @@ public class MachineryBlockStateProvider extends BlockStateProvider {
                 .renderType("cutout");
 
         getVariantBuilder(block)
-                .forAllStatesExcept(state -> ConfiguredModel.builder()
-                                .modelFile(state.getValue(BlockStateProperties.LIT) ? modelOn : model)
-                                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
-                                .build(),
-                        AbstractMachineBlock.TIER
+                .forAllStates(state -> ConfiguredModel.builder()
+                        .modelFile(state.getValue(BlockStateProperties.LIT) ? modelOn : model)
+                        .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
+                        .build()
                 );
     }
 }

@@ -38,10 +38,10 @@ public enum MachineProbeProvider implements IProbeInfoProvider {
             }
 
             // display tier on upgraded machines
-            if (machine.getMachineTier(state).ordinal() > 0) {
+            if (machine.getMachineTier().ordinal() > 0) {
                 ITextStyle style = probeInfo.defaultTextStyle();
 
-                probeInfo.text("Tier: " + machine.getMachineTier(state).getSerializedName(), style);
+                probeInfo.text("Tier: " + machine.getMachineTier().getSerializedName(), style);
             }
         }
     }

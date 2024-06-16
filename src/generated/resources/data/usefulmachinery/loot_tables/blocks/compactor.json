@@ -21,28 +21,10 @@
               "include": [
                 "minecraft:container",
                 "usefulmachinery:contents",
+                "usefulmachinery:tier",
                 "usefulmachinery:mode"
               ],
               "source": "block_entity"
-            },
-            {
-              "block": "usefulmachinery:compactor",
-              "conditions": [
-                {
-                  "condition": "minecraft:inverted",
-                  "term": {
-                    "block": "usefulmachinery:compactor",
-                    "condition": "minecraft:block_state_property",
-                    "properties": {
-                      "tier": "simple"
-                    }
-                  }
-                }
-              ],
-              "function": "minecraft:copy_state",
-              "properties": [
-                "tier"
-              ]
             }
           ],
           "name": "usefulmachinery:compactor"

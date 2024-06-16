@@ -16,9 +16,7 @@ import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemConditi
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
 import net.themcbrothers.usefulmachinery.core.Registration;
-import net.themcbrothers.usefulmachinery.machine.MachineTier;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -52,22 +50,14 @@ public class MachineryBlockLootSubProvider extends BlockLootSubProvider {
                         .add(LootItem.lootTableItem(block)
                                 .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
                                 .apply(builder)
-                                .apply(copyBlockState(block))
                         ));
-    }
-
-    private CopyBlockState.Builder copyBlockState(Block block) {
-        return CopyBlockState.copyState(block)
-                .copy(AbstractMachineBlock.TIER)
-                .when(InvertedLootItemCondition.invert(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                        .setProperties(StatePropertiesPredicate.Builder.properties()
-                                .hasProperty(AbstractMachineBlock.TIER, MachineTier.SIMPLE))));
     }
 
     private CopyComponentsFunction.Builder copyMachineComponents() {
         return CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                 .include(DataComponents.CONTAINER)
-                .include(CONTENTS.get());
+                .include(CONTENTS.get())
+                .include(TIER.get());
     }
 
 

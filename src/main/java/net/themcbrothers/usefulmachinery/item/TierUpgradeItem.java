@@ -30,7 +30,7 @@ public class TierUpgradeItem extends UpgradeItem {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof AbstractMachineBlockEntity abstractMachineBlockEntity) {
-            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier(state);
+            MachineTier machineTier = abstractMachineBlockEntity.getMachineTier();
 
 
             MachineTier itemTier = stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE);

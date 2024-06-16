@@ -21,28 +21,10 @@
               "include": [
                 "minecraft:container",
                 "usefulmachinery:contents",
+                "usefulmachinery:tier",
                 "usefulmachinery:tank"
               ],
               "source": "block_entity"
-            },
-            {
-              "block": "usefulmachinery:lava_generator",
-              "conditions": [
-                {
-                  "condition": "minecraft:inverted",
-                  "term": {
-                    "block": "usefulmachinery:lava_generator",
-                    "condition": "minecraft:block_state_property",
-                    "properties": {
-                      "tier": "simple"
-                    }
-                  }
-                }
-              ],
-              "function": "minecraft:copy_state",
-              "properties": [
-                "tier"
-              ]
             }
           ],
           "name": "usefulmachinery:lava_generator"
