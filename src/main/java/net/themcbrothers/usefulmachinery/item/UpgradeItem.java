@@ -20,7 +20,6 @@ import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,11 +34,6 @@ public class UpgradeItem extends Item {
         super(props);
 
         this.supportedBy.addAll(Arrays.stream(machines).toList());
-    }
-
-    @Override
-    public final InteractionResult useOn(UseOnContext context) {
-        return this.useOn(context.getPlayer(), context.getHand(), context.getItemInHand(), context.getLevel(), context.getClickedPos());
     }
 
     @Override
@@ -65,7 +59,13 @@ public class UpgradeItem extends Item {
         }
     }
 
-    public InteractionResult useOn(@Nullable Player player, InteractionHand hand, ItemStack stack, Level level, BlockPos pos) {
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+        InteractionHand hand = context.getHand();
+
         if (!this.isSupported(level.getBlockState(pos))) {
             return InteractionResult.PASS;
         }
