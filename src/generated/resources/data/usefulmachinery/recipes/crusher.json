@@ -6,16 +6,16 @@
       "item": "minecraft:flint"
     },
     "B": {
-      "tag": "forge:batteries"
+      "tag": "c:batteries"
     },
     "I": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "R": {
       "item": "usefulmachinery:machine_frame"
     },
     "X": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -24,6 +24,7 @@
     "IBI"
   ],
   "result": {
-    "item": "usefulmachinery:crusher"
+    "count": 1,
+    "id": "usefulmachinery:crusher"
   }
 }

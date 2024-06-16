@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/diamond"
+    "tag": "c:ores/diamond"
   },
   "primary": {
     "count": 2,
-    "result": "minecraft:diamond"
+    "id": "minecraft:diamond"
   },
   "supportedUpgrades": [
     {

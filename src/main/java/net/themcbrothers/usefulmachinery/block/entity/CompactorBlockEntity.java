@@ -1,10 +1,11 @@
 package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -17,10 +18,10 @@ import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.CompactorMenu;
 import net.themcbrothers.usefulmachinery.recipe.CompactingRecipe;
-import net.themcbrothers.usefulmachinery.recipe.ingredient.CountIngredient;
 import org.jetbrains.annotations.Nullable;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.MODE;
 
 public class CompactorBlockEntity extends AbstractMachineBlockEntity implements Compactor {
     private static final int RF_PER_TICK = 15;
@@ -63,19 +64,9 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    public int[] getInputSlots() {
-        return new int[]{0};
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[]{1};
-    }
-
-    @Override
     protected boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
-        boolean hasItem = !this.stacks.get(0).isEmpty();
+        boolean hasItem = !this.getItems().get(0).isEmpty();
         boolean hasEnergy = this.getEnergyStored() >= RF_PER_TICK;
 
         return this.level != null && canRun && hasEnergy && hasItem;
@@ -94,10 +85,44 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
                 .orElse(200));
     }
 
+    @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+
+        CompactorMode mode = input.get(MODE.get());
+
+        if (mode != null) {
+            this.compactorMode = mode;
+        }
+    }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+
+        builder.set(MODE.get(), this.compactorMode);
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag) {
+        super.removeComponentsFromTag(tag);
+
+        tag.remove("Mode");
+    }
+
+    @Override
+    public int[] getInputSlots() {
+        return new int[]{0};
+    }
+
+    @Override
+    public int[] getOutputSlots() {
+        return new int[]{1};
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        super.saveAdditional(compound, registries);
 
         if (this.compactorMode != CompactorMode.PLATE) {
             compound.putInt("Mode", this.compactorMode.ordinal());
@@ -105,8 +130,8 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        super.load(compound);
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        super.loadAdditional(compound, registries);
 
         if (compound.contains("Mode")) {
             this.compactorMode = CompactorMode.byOrdinal(compound.getInt("Mode"));
@@ -136,13 +161,11 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    public Component getDisplayName() {
+    public Component getDefaultName() {
         return TEXT_UTILS.translate("container", "compactor");
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new CompactorMenu(id, playerInventory, this, this.upgradeContainer, this.fields);
     }
 
@@ -196,10 +219,10 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
     @Override
     public void setItem(int index, ItemStack givenStack) {
-        ItemStack stack = this.stacks.get(index);
-        boolean sameItem = ItemStack.isSameItemSameTags(givenStack, stack);
+        ItemStack stack = this.getItems().get(index);
+        boolean sameItem = ItemStack.isSameItemSameComponents(givenStack, stack);
 
-        this.stacks.set(index, givenStack);
+        this.getItems().set(index, givenStack);
 
         if (givenStack.getCount() > this.getMaxStackSize()) {
             givenStack.setCount(this.getMaxStackSize());
@@ -220,7 +243,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
             if (recipeOutputStack.isEmpty()) {
                 return false;
             } else {
-                ItemStack machineOutputStack = this.stacks.get(1);
+                ItemStack machineOutputStack = this.getItems().get(1);
 
                 if (machineOutputStack.isEmpty()) {
                     return true;
@@ -241,20 +264,17 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
 
     private void processItem(@Nullable RecipeHolder<CompactingRecipe> recipe) {
         if (recipe != null && this.level != null) {
-            ItemStack machineInputStack = this.stacks.get(0);
-            ItemStack machineOutputStack = this.stacks.get(1);
+            ItemStack machineInputStack = this.getItems().get(0);
+            ItemStack machineOutputStack = this.getItems().get(1);
             ItemStack recipeResultStack = recipe.value().getResultItem(this.level.registryAccess());
 
             if (machineOutputStack.isEmpty()) {
-                this.stacks.set(1, recipeResultStack.copy());
+                this.getItems().set(1, recipeResultStack.copy());
             } else if (ItemStack.isSameItem(machineOutputStack, recipeResultStack)) {
                 machineOutputStack.grow(recipeResultStack.getCount());
             }
-            if (recipe.value().ingredient() instanceof CountIngredient countIngredient) {
-                machineInputStack.shrink(countIngredient.getCount());
-            } else {
-                machineInputStack.shrink(1);
-            }
+
+            machineInputStack.shrink(recipe.value().sizedIngredient().count());
         }
     }
 }

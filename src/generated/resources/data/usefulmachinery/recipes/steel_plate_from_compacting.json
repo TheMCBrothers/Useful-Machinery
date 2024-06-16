@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/steel"
+    "count": 1,
+    "tag": "c:ingots/steel"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:steel_plate"
+    "id": "usefulfoundation:steel_plate"
   }
 }

@@ -17,63 +17,11 @@
               "source": "block_entity"
             },
             {
-              "type": "usefulmachinery:lava_generator",
-              "entries": [
-                {
-                  "type": "minecraft:dynamic",
-                  "name": "minecraft:contents"
-                }
-              ],
-              "function": "minecraft:set_contents"
-            },
-            {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "Items",
-                  "target": "BlockEntityTag.Items"
-                },
-                {
-                  "op": "replace",
-                  "source": "Upgrades",
-                  "target": "BlockEntityTag.Upgrades"
-                },
-                {
-                  "op": "replace",
-                  "source": "EnergyStored",
-                  "target": "BlockEntityTag.EnergyStored"
-                },
-                {
-                  "op": "replace",
-                  "source": "RedstoneMode",
-                  "target": "BlockEntityTag.RedstoneMode"
-                },
-                {
-                  "op": "replace",
-                  "source": "ProcessTime",
-                  "target": "BlockEntityTag.ProcessTime"
-                },
-                {
-                  "op": "replace",
-                  "source": "ProcessTimeTotal",
-                  "target": "BlockEntityTag.ProcessTimeTotal"
-                },
-                {
-                  "op": "replace",
-                  "source": "BurnTime",
-                  "target": "BlockEntityTag.BurnTime"
-                },
-                {
-                  "op": "replace",
-                  "source": "BurnTimeTotal",
-                  "target": "BlockEntityTag.BurnTimeTotal"
-                },
-                {
-                  "op": "replace",
-                  "source": "Tank",
-                  "target": "BlockEntityTag.Tank"
-                }
+              "function": "minecraft:copy_components",
+              "include": [
+                "minecraft:container",
+                "usefulmachinery:contents",
+                "usefulmachinery:tank"
               ],
               "source": "block_entity"
             },

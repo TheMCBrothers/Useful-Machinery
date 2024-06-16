@@ -17,48 +17,11 @@
               "source": "block_entity"
             },
             {
-              "type": "usefulmachinery:compactor",
-              "entries": [
-                {
-                  "type": "minecraft:dynamic",
-                  "name": "minecraft:contents"
-                }
-              ],
-              "function": "minecraft:set_contents"
-            },
-            {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "Items",
-                  "target": "BlockEntityTag.Items"
-                },
-                {
-                  "op": "replace",
-                  "source": "Upgrades",
-                  "target": "BlockEntityTag.Upgrades"
-                },
-                {
-                  "op": "replace",
-                  "source": "EnergyStored",
-                  "target": "BlockEntityTag.EnergyStored"
-                },
-                {
-                  "op": "replace",
-                  "source": "RedstoneMode",
-                  "target": "BlockEntityTag.RedstoneMode"
-                },
-                {
-                  "op": "replace",
-                  "source": "ProcessTime",
-                  "target": "BlockEntityTag.ProcessTime"
-                },
-                {
-                  "op": "replace",
-                  "source": "ProcessTimeTotal",
-                  "target": "BlockEntityTag.ProcessTimeTotal"
-                }
+              "function": "minecraft:copy_components",
+              "include": [
+                "minecraft:container",
+                "usefulmachinery:contents",
+                "usefulmachinery:mode"
               ],
               "source": "block_entity"
             },

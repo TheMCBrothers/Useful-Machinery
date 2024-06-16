@@ -6,9 +6,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.themcbrothers.lib.registries.BlockDeferredRegister;
 import net.themcbrothers.lib.registries.BlockEntityTypeDeferredRegister;
 import net.themcbrothers.lib.registries.ItemDeferredRegister;
@@ -24,10 +22,7 @@ public final class Registration {
     public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UsefulMachinery.MOD_ID);
-    /**
-     * @deprecated Please remove me soon! ;-)
-     */
-    public static final DeferredRegister<IngredientType<?>> INGREDIENT_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.INGREDIENT_TYPES, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(UsefulMachinery.MOD_ID);
 
     public static void register(IEventBus modEventBus) {
         MachineryBlockEntities.init();
@@ -38,7 +33,7 @@ public final class Registration {
         MachineryStats.init();
         MachineryRecipeTypes.init();
         MachineryRecipeSerializers.init();
-        MachineryIngredientTypes.init();
+        MachineryDataComponentTypes.init();
 
         BLOCK_ENTITY_TYPES.register(modEventBus);
         MENUS.register(modEventBus);
@@ -48,6 +43,6 @@ public final class Registration {
         CUSTOM_STATS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
-        INGREDIENT_TYPES.register(modEventBus);
+        DATA_COMPONENT_TYPES.register(modEventBus);
     }
 }

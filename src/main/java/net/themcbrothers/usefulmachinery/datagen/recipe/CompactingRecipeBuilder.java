@@ -10,9 +10,8 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.crafting.NBTIngredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.recipe.CompactingRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -22,21 +21,21 @@ import java.util.Map;
 
 public class CompactingRecipeBuilder implements RecipeBuilder {
     private final ItemStack result;
-    private final Ingredient ingredient;
+    private final SizedIngredient sizedIngredient;
     private final int processTime;
     private final CompactorMode mode;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
     private String group = "";
 
-    private CompactingRecipeBuilder(ItemStack result, Ingredient ingredient, int processTime, CompactorMode mode) {
+    private CompactingRecipeBuilder(ItemStack result, SizedIngredient sizedIngredient, int processTime, CompactorMode mode) {
         this.result = result;
-        this.ingredient = ingredient;
+        this.sizedIngredient = sizedIngredient;
         this.processTime = processTime;
         this.mode = mode;
     }
 
-    public static CompactingRecipeBuilder compacting(ItemLike item, Ingredient ingredient, int processTime, CompactorMode mode) {
-        return new CompactingRecipeBuilder(item.asItem().getDefaultInstance(), ingredient, processTime, mode);
+    public static CompactingRecipeBuilder compacting(ItemLike item, SizedIngredient sizedIngredient, int processTime, CompactorMode mode) {
+        return new CompactingRecipeBuilder(item.asItem().getDefaultInstance(), sizedIngredient, processTime, mode);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class CompactingRecipeBuilder implements RecipeBuilder {
 
         this.criteria.forEach(advancement::addCriterion);
 
-        recipeOutput.accept(id, new CompactingRecipe(this.group, this.ingredient, this.result,this.processTime, this.mode),
+        recipeOutput.accept(id, new CompactingRecipe(this.group, this.sizedIngredient, this.result, this.processTime, this.mode),
                 advancement.build(id.withPrefix("recipes/")));
     }
 

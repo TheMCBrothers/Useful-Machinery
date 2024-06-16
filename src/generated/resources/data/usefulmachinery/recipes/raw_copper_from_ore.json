@@ -2,15 +2,15 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/copper"
+    "tag": "c:ores/copper"
   },
   "primary": {
     "count": 2,
-    "result": "minecraft:raw_copper"
+    "id": "minecraft:raw_copper"
   },
   "secondary": {
     "count": 1,
-    "result": "minecraft:raw_gold"
+    "id": "minecraft:raw_gold"
   },
   "secondaryChance": 0.05,
   "supportedUpgrades": [

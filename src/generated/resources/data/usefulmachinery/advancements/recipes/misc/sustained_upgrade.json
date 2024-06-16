@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:bone_meal"
-            ]
+            "items": "minecraft:bone_meal"
           }
         ]
       },
@@ -17,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:saplings"
+            "items": "#minecraft:saplings"
           }
         ]
       },

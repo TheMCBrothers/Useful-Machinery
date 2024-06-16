@@ -10,13 +10,14 @@ public class MachineryPacketHandler extends BasePacketHandler {
         super(modEventBus, UsefulMachinery.MOD_ID, version);
     }
 
+
     @Override
-    protected void registerClientToServer(PacketRegistrar registrar) {
-        registrar.play(SetRedstoneModePacket.ID, SetRedstoneModePacket::new);
-        registrar.play(SetCompactorModePacket.ID, SetCompactorModePacket::new);
+    protected void registerPackets(PacketRegistrar registrar) {
+        registrar.playToServer(SetRedstoneModePacket.TYPE, SetRedstoneModePacket.STREAM_CODEC);
+        registrar.playToServer(SetCompactorModePacket.TYPE, SetCompactorModePacket.STREAM_CODEC);
     }
 
     @Override
-    protected void registerServerToClient(PacketRegistrar registrar) {
+    protected void registerPacketsNetworkThread(PacketRegistrar registrar) {
     }
 }

@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/tin"
+    "count": 1,
+    "tag": "c:ingots/tin"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:tin_plate"
+    "id": "usefulfoundation:tin_plate"
   }
 }

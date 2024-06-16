@@ -98,7 +98,7 @@ public class CompactingCategory implements IRecipeCategory<RecipeHolder<Compacti
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CompactingRecipe> recipe, IFocusGroup focusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addItemStacks(Arrays.asList(recipe.value().getIngredients().get(0).getItems()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addItemStacks(Arrays.asList(recipe.value().sizedIngredient().getItems()));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 17).addItemStack(recipe.value().getResultItem(Objects.requireNonNull(Minecraft.getInstance().level).registryAccess()));
     }
 }

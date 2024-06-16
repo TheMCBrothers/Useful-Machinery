@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/bronze"
+    "tag": "c:ingots/bronze"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:bronze_dust"
+    "id": "usefulfoundation:bronze_dust"
   }
 }

@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/platinum"
+    "tag": "c:ores/platinum"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_platinum"
+    "id": "usefulfoundation:raw_platinum"
   },
   "supportedUpgrades": [
     {

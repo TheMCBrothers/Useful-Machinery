@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/bronze"
+    "count": 1,
+    "tag": "c:ingots/bronze"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:bronze_plate"
+    "id": "usefulfoundation:bronze_plate"
   }
 }

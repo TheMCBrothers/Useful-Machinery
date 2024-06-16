@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gears/electrum"
+            "items": "#c:gears/electrum"
           }
         ]
       },

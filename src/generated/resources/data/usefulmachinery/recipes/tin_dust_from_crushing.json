@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/tin"
+    "tag": "c:ingots/tin"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:tin_dust"
+    "id": "usefulfoundation:tin_dust"
   }
 }

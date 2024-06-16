@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 250,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 9,
-    "tag": "forge:ingots/signalum"
+    "tag": "c:ingots/signalum"
   },
   "mode": "block",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:signalum_block"
+    "id": "usefulfoundation:signalum_block"
   }
 }

@@ -1,13 +1,17 @@
 package net.themcbrothers.usefulmachinery.machine;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.IntFunction;
 
 public enum RedstoneMode implements StringRepresentable {
     IGNORED(new ResourceLocation("textures/item/gunpowder.png")),
@@ -17,9 +21,11 @@ public enum RedstoneMode implements StringRepresentable {
     LOW(new ResourceLocation("textures/block/redstone_torch_off.png"));
 
     private static final RedstoneMode[] VALUES = values();
-    private static final StringRepresentable.EnumCodec<RedstoneMode> CODEC = StringRepresentable.fromEnum(RedstoneMode::values);
     private static final RedstoneMode[] BY_ORDINAL = Arrays.stream(VALUES).sorted(Comparator.comparingInt(Enum::ordinal)).toArray(RedstoneMode[]::new);
     private final ResourceLocation icon;
+    private static final IntFunction<RedstoneMode> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+    public static final StringRepresentable.EnumCodec<RedstoneMode> CODEC = StringRepresentable.fromEnum(RedstoneMode::values);
+    public static final StreamCodec<ByteBuf, RedstoneMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
 
     RedstoneMode(ResourceLocation icon) {
         this.icon = icon;

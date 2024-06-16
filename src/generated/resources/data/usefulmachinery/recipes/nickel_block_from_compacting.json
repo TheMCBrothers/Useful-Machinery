@@ -2,13 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 250,
   "ingredient": {
-    "type": "usefulmachinery:count",
     "count": 9,
-    "tag": "forge:ingots/nickel"
+    "tag": "c:ingots/nickel"
   },
   "mode": "block",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:nickel_block"
+    "id": "usefulfoundation:nickel_block"
   }
 }

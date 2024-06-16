@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:flint"
-            ]
+            "items": "minecraft:flint"
           }
         ]
       },
@@ -17,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:dusts/redstone"
+            "items": "#c:dusts/redstone"
           }
         ]
       },

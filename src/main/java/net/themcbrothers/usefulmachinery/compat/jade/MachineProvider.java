@@ -1,6 +1,7 @@
 package net.themcbrothers.usefulmachinery.compat.jade;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
+import net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
 import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import snownee.jade.api.BlockAccessor;
@@ -19,8 +21,6 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElementHelper;
 
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 /**
  * Adds the machine's progress and tier information
@@ -40,7 +40,7 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
             NonNullList<ItemStack> inventory = NonNullList.withSize(data.getInt("size"), ItemStack.EMPTY);
 
             for (int i = 0; i < machineItems.size(); ++i) {
-                inventory.set(i, ItemStack.of(machineItems.getCompound(i)));
+                inventory.set(i, ItemStack.parseOptional(accessor.getLevel().registryAccess(), machineItems.getCompound(i)));
             }
 
             int progress = data.getInt("progress");
@@ -70,11 +70,11 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
         MachineTier tier = MachineTier.byOrdinal(data.getInt("tier"));
 
         if (accessor.getPlayer().isShiftKeyDown() && tier.ordinal() > 0) {
-            CompoundTag tierTag = new CompoundTag();
-            tierTag.putInt("Tier", tier.ordinal());
+            ItemStack itemStack = new ItemStack(MachineryItems.TIER_UPGRADE.get(), 1);
+            itemStack.set(MachineryDataComponentTypes.TIER, tier);
 
             // Tier
-            tooltip.add(helper.smallItem(new ItemStack(MachineryItems.TIER_UPGRADE.get(), 1, Optional.of(tierTag))));
+            tooltip.add(helper.smallItem(itemStack));
             tooltip.append(helper.spacer(4, 0));
             tooltip.append(helper.text(Component.literal(tier.getSerializedName())));
         }
@@ -91,10 +91,11 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
         if (showJadeProgress) {
             ListTag items = new ListTag();
 
-            IntStream.range(0, machine.getContainerSize())
-                    .mapToObj(machine::getItem)
-                    .map(stack -> stack.save(new CompoundTag()))
-                    .forEach(items::add);
+            RegistryAccess registryAccess = accessor.getLevel().registryAccess();
+
+            for (int i = 0; i < machine.getContainerSize(); i++) {
+                items.add(machine.getItem(i).saveOptional(registryAccess));
+            }
 
             data.putIntArray("inputs", machine.getInputSlots());
             data.putIntArray("outputs", machine.getOutputSlots());
@@ -102,7 +103,7 @@ public enum MachineProvider implements IBlockComponentProvider, IServerDataProvi
             data.putInt("size", machine.getContainerSize());
             data.put("machine", items);
 
-            CompoundTag furnaceTag = machine.saveWithoutMetadata();
+            CompoundTag furnaceTag = machine.saveWithoutMetadata(registryAccess);
 
             data.putInt("progress", furnaceTag.getInt("ProcessTime"));
             data.putInt("total", furnaceTag.getInt("ProcessTimeTotal"));

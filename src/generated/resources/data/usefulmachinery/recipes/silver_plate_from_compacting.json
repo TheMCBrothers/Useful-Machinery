@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/silver"
+    "count": 1,
+    "tag": "c:ingots/silver"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:silver_plate"
+    "id": "usefulfoundation:silver_plate"
   }
 }

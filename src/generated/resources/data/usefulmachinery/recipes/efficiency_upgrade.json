@@ -3,16 +3,16 @@
   "category": "misc",
   "key": {
     "D": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "G": {
       "item": "minecraft:flint"
     },
     "I": {
-      "tag": "forge:ingots/bronze"
+      "tag": "c:ingots/bronze"
     },
     "P": {
-      "tag": "forge:plates/steel"
+      "tag": "c:plates/steel"
     }
   },
   "pattern": [
@@ -22,6 +22,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "usefulmachinery:efficiency_upgrade"
+    "id": "usefulmachinery:efficiency_upgrade"
   }
 }

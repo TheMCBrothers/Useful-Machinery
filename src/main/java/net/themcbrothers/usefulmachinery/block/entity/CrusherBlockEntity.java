@@ -3,7 +3,6 @@ package net.themcbrothers.usefulmachinery.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -71,7 +70,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     @Override
     protected boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
-        boolean hasItem = !this.stacks.get(0).isEmpty();
+        boolean hasItem = !this.getItems().get(0).isEmpty();
         boolean hasEnergy = this.getEnergyStored() >= RF_PER_TICK;
 
         return this.level != null && canRun && hasEnergy && hasItem;
@@ -102,13 +101,12 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public Component getDefaultName() {
         return TEXT_UTILS.translate("container", "crusher");
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new CrusherMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
@@ -170,10 +168,10 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     public void setItem(int index, ItemStack givenStack) {
-        ItemStack stack = this.stacks.get(index);
-        boolean sameItem = ItemStack.isSameItemSameTags(givenStack, stack);
+        ItemStack stack = this.getItems().get(index);
+        boolean sameItem = ItemStack.isSameItemSameComponents(givenStack, stack);
 
-        this.stacks.set(index, givenStack);
+        this.getItems().set(index, givenStack);
 
         if (givenStack.getCount() > this.getMaxStackSize()) {
             givenStack.setCount(this.getMaxStackSize());
@@ -209,8 +207,8 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                 if (recipePrimaryOutputStack.isEmpty()) {
                     return false;
                 } else {
-                    ItemStack machinePrimaryOutputStack = this.stacks.get(1);
-                    ItemStack machineSecondOutputStack = this.stacks.get(2);
+                    ItemStack machinePrimaryOutputStack = this.getItems().get(1);
+                    ItemStack machineSecondOutputStack = this.getItems().get(2);
 
                     if (this.precisionAdditionalChance == 1) {
                         recipePrimaryOutputStack = ItemStack.EMPTY;
@@ -247,7 +245,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
                 if (recipePrimaryOutputStack.isEmpty()) {
                     return false;
                 } else {
-                    ItemStack machinePrimaryOutputStack = this.stacks.get(1);
+                    ItemStack machinePrimaryOutputStack = this.getItems().get(1);
 
                     if (machinePrimaryOutputStack.isEmpty()) {
                         return true;
@@ -271,17 +269,17 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         if (recipe != null && this.level != null) {
             ItemStack primaryResultStack = recipe.value().getResultItem(this.level.registryAccess());
             ItemStack secondaryResultStack = recipe.value().secondaryResult();
-            ItemStack inputSlot = this.stacks.get(0);
-            ItemStack primaryOutputSlot = this.stacks.get(1);
-            ItemStack secondaryOutputSlot = this.stacks.get(2);
+            ItemStack inputSlot = this.getItems().get(0);
+            ItemStack primaryOutputSlot = this.getItems().get(1);
+            ItemStack secondaryOutputSlot = this.getItems().get(2);
             float secondaryChance = recipe.value().secondaryChance();
 
             // Checking if machine not in precision mode
             if (this.precisionAdditionalChance != 1) {
                 if (primaryOutputSlot.isEmpty()) {
-                    this.stacks.set(1, primaryResultStack.copy());
+                    this.getItems().set(1, primaryResultStack.copy());
 
-                    primaryOutputSlot = this.stacks.get(1);
+                    primaryOutputSlot = this.getItems().get(1);
                 } else if (ItemStack.isSameItem(primaryOutputSlot, primaryResultStack)) {
                     primaryOutputSlot.grow(primaryResultStack.getCount());
                 }
@@ -308,9 +306,9 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             // Checking if machine not in efficiency mode
             if (this.efficiencyAdditionalChance != 1 && !secondaryResultStack.isEmpty() && isSecondaryOutputPossible) {
                 if (secondaryOutputSlot.isEmpty()) {
-                    this.stacks.set(2, secondaryResultStack.copy());
+                    this.getItems().set(2, secondaryResultStack.copy());
 
-                    secondaryOutputSlot = this.stacks.get(2);
+                    secondaryOutputSlot = this.getItems().get(2);
                 } else if (ItemStack.isSameItem(secondaryOutputSlot, secondaryResultStack)) {
                     secondaryOutputSlot.grow(secondaryResultStack.getCount());
                 }

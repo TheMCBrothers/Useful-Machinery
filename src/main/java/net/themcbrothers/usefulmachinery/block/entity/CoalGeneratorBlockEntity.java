@@ -2,22 +2,24 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.CommonHooks;
+import net.themcbrothers.usefulmachinery.component.MachineContents;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.CoalGeneratorMenu;
-import org.jetbrains.annotations.Nullable;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
 
 public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private int burnTime;
@@ -58,6 +60,41 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
+    protected boolean canRun() {
+        boolean canRun = this.redstoneMode.canRun(this);
+        boolean canGenerate = this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored();
+
+        return this.level != null && canRun && canGenerate;
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+
+        MachineContents contents = input.get(CONTENTS.get());
+
+        if (contents != null) {
+            this.burnTime = contents.burnTime();
+            this.burnTimeTotal = contents.burnTimeTotal();
+        }
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+
+        builder.set(CONTENTS.get(), new MachineContents(ItemContainerContents.fromItems(
+                this.upgradeContainer.getItems()),
+                this.energyStorage.getEnergyStored(),
+                this.redstoneMode,
+                this.processTime,
+                this.processTimeTotal,
+                this.burnTime,
+                this.burnTimeTotal
+        ));
+    }
+
+    @Override
     public int[] getInputSlots() {
         return new int[]{0};
     }
@@ -65,14 +102,6 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public int[] getOutputSlots() {
         return new int[0];
-    }
-
-    @Override
-    protected boolean canRun() {
-        boolean canRun = this.redstoneMode.canRun(this);
-        boolean canGenerate = this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored();
-
-        return this.level != null && canRun && canGenerate;
     }
 
     @Override
@@ -86,27 +115,26 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public Component getDefaultName() {
         return TEXT_UTILS.translate("container", "coal_generator");
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new CoalGeneratorMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        super.saveAdditional(compound, registries);
 
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("BurnTimeTotal", this.burnTimeTotal);
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        super.load(compound);
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        super.loadAdditional(compound, registries);
 
         this.burnTime = compound.getInt("BurnTime");
         this.burnTimeTotal = compound.getInt("BurnTimeTotal");
@@ -155,8 +183,8 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean consumeFuel() {
-        ItemStack generatorStack = this.stacks.get(0);
-        int burnTime = CommonHooks.getBurnTime(generatorStack, null);
+        ItemStack generatorStack = this.getItems().get(0);
+        int burnTime = generatorStack.getBurnTime(null);
 
         if (burnTime == 1600) {
             int time = this.calcBurnTime(burnTime);

@@ -1,11 +1,16 @@
 package net.themcbrothers.usefulmachinery.machine;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.IntFunction;
 
 import static net.themcbrothers.usefulfoundation.core.FoundationBlocks.BRONZE_BLOCK;
 import static net.themcbrothers.usefulfoundation.core.FoundationItems.GOLD_GEAR;
@@ -16,9 +21,11 @@ public enum CompactorMode implements StringRepresentable {
     GEAR(GOLD_GEAR),
     BLOCK(BRONZE_BLOCK);
 
-    public static final StringRepresentable.EnumCodec<CompactorMode> CODEC = StringRepresentable.fromEnum(CompactorMode::values);
     private static final CompactorMode[] VALUES = values();
     private static final CompactorMode[] BY_ORDINAL = Arrays.stream(VALUES).sorted(Comparator.comparingInt(Enum::ordinal)).toArray(CompactorMode[]::new);
+    private static final IntFunction<CompactorMode> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+    public static final StringRepresentable.EnumCodec<CompactorMode> CODEC = StringRepresentable.fromEnum(CompactorMode::values);
+    public static final StreamCodec<ByteBuf, CompactorMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
 
     private final ItemLike displayItem;
 

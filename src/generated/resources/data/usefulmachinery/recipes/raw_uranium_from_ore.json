@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/uranium"
+    "tag": "c:ores/uranium"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_uranium"
+    "id": "usefulfoundation:raw_uranium"
   },
   "supportedUpgrades": [
     {

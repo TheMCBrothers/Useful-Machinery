@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/invar"
+    "tag": "c:ingots/invar"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:invar_dust"
+    "id": "usefulfoundation:invar_dust"
   }
 }

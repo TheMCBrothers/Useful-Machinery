@@ -2,11 +2,11 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ores/tin"
+    "tag": "c:ores/tin"
   },
   "primary": {
     "count": 2,
-    "result": "usefulfoundation:raw_tin"
+    "id": "usefulfoundation:raw_tin"
   },
   "supportedUpgrades": [
     {

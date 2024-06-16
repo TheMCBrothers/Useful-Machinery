@@ -2,12 +2,11 @@
   "type": "usefulmachinery:compacting",
   "compactTime": 200,
   "ingredient": {
-    "type": "usefulmachinery:count",
-    "tag": "forge:ingots/invar"
+    "count": 1,
+    "tag": "c:ingots/invar"
   },
   "mode": "plate",
   "result": {
-    "count": 1,
-    "result": "usefulfoundation:invar_plate"
+    "id": "usefulfoundation:invar_plate"
   }
 }

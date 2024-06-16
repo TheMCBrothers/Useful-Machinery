@@ -2,10 +2,10 @@
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
   "ingredient": {
-    "tag": "forge:ingots/copper"
+    "tag": "c:ingots/copper"
   },
   "primary": {
     "count": 1,
-    "result": "usefulfoundation:copper_dust"
+    "id": "usefulfoundation:copper_dust"
   }
 }

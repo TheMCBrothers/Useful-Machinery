@@ -3,7 +3,6 @@ package net.themcbrothers.usefulmachinery.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -68,7 +67,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     @Override
     protected boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
-        boolean hasItem = !this.stacks.get(0).isEmpty();
+        boolean hasItem = !this.getItems().get(0).isEmpty();
         boolean hasEnergy = this.getEnergyStored() >= RF_PER_TICK;
 
         return this.level != null && canRun && hasEnergy && hasItem;
@@ -102,22 +101,20 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public Component getDefaultName() {
         return TEXT_UTILS.translate("container", "electric_smelter");
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new ElectricSmelterMenu(id, playerInventory, this, this.getUpgradeContainer(), this.getContainerData());
     }
 
     @Override
     public void setItem(int index, ItemStack givenStack) {
-        ItemStack stack = this.stacks.get(index);
-        boolean sameItem = ItemStack.isSameItemSameTags(givenStack, stack);
+        ItemStack stack = this.getItems().get(index);
+        boolean sameItem = ItemStack.isSameItemSameComponents(givenStack, stack);
 
-        this.stacks.set(index, givenStack);
+        this.getItems().set(index, givenStack);
 
         if (givenStack.getCount() > this.getMaxStackSize()) {
             givenStack.setCount(this.getMaxStackSize());
@@ -192,7 +189,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
             if (recipeOutputStack.isEmpty()) {
                 return false;
             } else {
-                ItemStack machineOutputStack = this.stacks.get(1);
+                ItemStack machineOutputStack = this.getItems().get(1);
 
                 if (machineOutputStack.isEmpty()) {
                     return true;
@@ -214,11 +211,11 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
     private void processItem(@Nullable RecipeHolder<? extends AbstractCookingRecipe> recipe) {
         if (recipe != null && this.level != null) {
             ItemStack resultStack = recipe.value().getResultItem(this.level.registryAccess());
-            ItemStack inputSlot = this.stacks.get(0);
-            ItemStack outputSlot = this.stacks.get(1);
+            ItemStack inputSlot = this.getItems().get(0);
+            ItemStack outputSlot = this.getItems().get(1);
 
             if (outputSlot.isEmpty()) {
-                this.stacks.set(1, resultStack.copy());
+                this.getItems().set(1, resultStack.copy());
             } else if (ItemStack.isSameItem(outputSlot, resultStack)) {
                 outputSlot.grow(resultStack.getCount());
             }

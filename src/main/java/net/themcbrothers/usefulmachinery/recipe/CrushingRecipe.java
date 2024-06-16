@@ -1,11 +1,12 @@
 package net.themcbrothers.usefulmachinery.recipe;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,7 +18,8 @@ import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeSerializers;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 
-public record CrushingRecipe(String group, Ingredient ingredient, Ingredient supportedUpgrades, ItemStack primaryResult,
+public record CrushingRecipe(String group, Ingredient ingredient, Ingredient supportedUpgrades,
+                             ItemStack primaryResult,
                              ItemStack secondaryResult, float secondaryChance,
                              int crushTime) implements CommonRecipe<Container> {
 
@@ -27,7 +29,7 @@ public record CrushingRecipe(String group, Ingredient ingredient, Ingredient sup
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return this.primaryResult;
     }
 
@@ -56,31 +58,39 @@ public record CrushingRecipe(String group, Ingredient ingredient, Ingredient sup
     }
 
     public static class Serializer implements RecipeSerializer<CrushingRecipe> {
-        private static final Codec<CrushingRecipe> CODEC = RecordCodecBuilder.create(instance ->
+        private static final MapCodec<CrushingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 instance.group(
-                        ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(CrushingRecipe::group),
-                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(CrushingRecipe::ingredient),
-                        ExtraCodecs.strictOptionalField(Ingredient.CODEC, "supportedUpgrades", Ingredient.EMPTY).forGetter(CrushingRecipe::supportedUpgrades),
-                        ItemStack.RESULT_CODEC.fieldOf("primary").forGetter(CrushingRecipe::primaryResult),
-                        ExtraCodecs.strictOptionalField(ItemStack.RESULT_CODEC.codec(), "secondary", ItemStack.EMPTY).forGetter(CrushingRecipe::secondaryResult),
-                        ExtraCodecs.strictOptionalField(Codec.FLOAT, "secondaryChance", 0F).forGetter(CrushingRecipe::secondaryChance),
+                        Codec.STRING.optionalFieldOf("group", "").forGetter(CrushingRecipe::group),
+                        Ingredient.CODEC.fieldOf("ingredient").forGetter(CrushingRecipe::ingredient),
+                        Ingredient.CODEC.optionalFieldOf("supportedUpgrades", Ingredient.EMPTY).forGetter(CrushingRecipe::supportedUpgrades),
+                        ItemStack.STRICT_CODEC.fieldOf("primary").forGetter(CrushingRecipe::primaryResult),
+                        ItemStack.STRICT_CODEC.optionalFieldOf("secondary", ItemStack.EMPTY).forGetter(CrushingRecipe::secondaryResult),
+                        Codec.FLOAT.optionalFieldOf("secondaryChance", 0F).forGetter(CrushingRecipe::secondaryChance),
                         Codec.INT.fieldOf("crushTime").forGetter(CrushingRecipe::crushTime)
                 ).apply(instance, CrushingRecipe::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, CrushingRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 
         @Override
-        public Codec<CrushingRecipe> codec() {
+        public MapCodec<CrushingRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public CrushingRecipe fromNetwork(FriendlyByteBuf buffer) {
+        public StreamCodec<RegistryFriendlyByteBuf, CrushingRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
+
+        public static CrushingRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
             String group = buffer.readUtf(32767);
 
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Ingredient supportedUpgrades = Ingredient.fromNetwork(buffer);
+            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+            Ingredient supportedUpgrades = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+            ItemStack primaryResult = ItemStack.STREAM_CODEC.decode(buffer);
+            ItemStack secondaryResult = ItemStack.EMPTY;
 
-            ItemStack primaryResult = buffer.readItem();
-            ItemStack secondaryResult = buffer.readItem();
+            if (buffer.readBoolean()) {
+                secondaryResult = ItemStack.STREAM_CODEC.decode(buffer);
+            }
 
             float secondaryChance = buffer.readFloat();
             int crushTime = buffer.readVarInt();
@@ -88,15 +98,21 @@ public record CrushingRecipe(String group, Ingredient ingredient, Ingredient sup
             return new CrushingRecipe(group, ingredient, supportedUpgrades, primaryResult, secondaryResult, secondaryChance, crushTime);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrushingRecipe recipe) {
+
+        public static void toNetwork(RegistryFriendlyByteBuf buffer, CrushingRecipe recipe) {
             buffer.writeUtf(recipe.group);
 
-            recipe.ingredient.toNetwork(buffer);
-            recipe.supportedUpgrades.toNetwork(buffer);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient());
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.supportedUpgrades());
 
-            buffer.writeItem(recipe.primaryResult);
-            buffer.writeItem(recipe.secondaryResult);
+            ItemStack.STREAM_CODEC.encode(buffer, recipe.primaryResult());
+
+            if (!recipe.secondaryResult().isEmpty()) {
+                buffer.writeBoolean(true);
+                ItemStack.STREAM_CODEC.encode(buffer, recipe.secondaryResult());
+            } else {
+                buffer.writeBoolean(false);
+            }
 
             buffer.writeFloat(recipe.secondaryChance);
             buffer.writeVarInt(recipe.crushTime);

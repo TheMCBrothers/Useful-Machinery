@@ -1,10 +1,17 @@
 package net.themcbrothers.usefulmachinery.machine;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.StringRepresentable;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.IntFunction;
 
 public enum MachineTier implements StringRepresentable {
     SIMPLE(0x39516d),
@@ -13,10 +20,12 @@ public enum MachineTier implements StringRepresentable {
     FACTORY(0xe53600),
     OVERKILL(0x005554);
 
-    public static final StringRepresentable.EnumCodec<MachineTier> CODEC = StringRepresentable.fromEnum(MachineTier::values);
+    private final int color;
     private static final MachineTier[] VALUES = values();
     private static final MachineTier[] BY_ORDINAL = Arrays.stream(VALUES).sorted(Comparator.comparingInt(Enum::ordinal)).toArray(MachineTier[]::new);
-    private final int color;
+    private static final IntFunction<MachineTier> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+    public static final StringRepresentable.EnumCodec<MachineTier> CODEC = StringRepresentable.fromEnum(MachineTier::values);
+    public static final StreamCodec<ByteBuf, MachineTier> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
 
     MachineTier(int color) {
         this.color = color;
@@ -38,6 +47,6 @@ public enum MachineTier implements StringRepresentable {
     }
 
     public int getColor() {
-        return this.color;
+        return FastColor.ARGB32.color(0xFF, this.color);
     }
 }
