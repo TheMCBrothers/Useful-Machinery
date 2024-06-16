@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -36,7 +35,6 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import net.themcbrothers.usefulmachinery.block.entity.LavaGeneratorBlockEntity;
-import net.themcbrothers.usefulmachinery.item.UpgradeItem;
 import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,24 +113,6 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
 
-        if (stack.getItem() instanceof UpgradeItem) {
-            InteractionResult interactionResult = stack.useOn(new UseOnContext(player, hand, hit));
-
-            switch (interactionResult) {
-                case SUCCESS:
-                    return ItemInteractionResult.SUCCESS;
-                case CONSUME:
-                    return ItemInteractionResult.CONSUME;
-                case CONSUME_PARTIAL:
-                    return ItemInteractionResult.CONSUME_PARTIAL;
-                case FAIL:
-                    return ItemInteractionResult.FAIL;
-                default:
-                    break;
-            }
-
-        }
-
         if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer) {
             if (blockEntity instanceof LavaGeneratorBlockEntity lavaGeneratorBlockEntity) {
                 FluidTank lavaTank = lavaGeneratorBlockEntity.getLavaTank();
@@ -144,7 +124,6 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
                 }
             }
         }
-
 
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }

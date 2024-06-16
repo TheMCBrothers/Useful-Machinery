@@ -14,10 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidActionResult;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.*;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.themcbrothers.usefulmachinery.component.MachineContents;
@@ -29,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
+import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.TANK;
 
 public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int TANK_CAPACITY = 4000; // TODO config
@@ -106,6 +104,12 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
             this.burnTime = contents.burnTime();
             this.burnTimeTotal = contents.burnTimeTotal();
         }
+
+        SimpleFluidContent simpleFluidContent = input.get(TANK.get());
+
+        if (simpleFluidContent != null) {
+            this.lavaTank.setFluid(simpleFluidContent.copy());
+        }
     }
 
     @Override
@@ -121,6 +125,14 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 this.burnTime,
                 this.burnTimeTotal
         ));
+        builder.set(TANK.get(), SimpleFluidContent.copyOf(this.lavaTank.getFluid()));
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag) {
+        super.removeComponentsFromTag(tag);
+
+        tag.remove("Tank");
     }
 
     @Override
