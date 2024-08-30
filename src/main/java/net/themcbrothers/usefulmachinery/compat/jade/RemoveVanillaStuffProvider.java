@@ -6,7 +6,7 @@ import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
-import snownee.jade.api.Identifiers;
+import snownee.jade.api.JadeIds;
 import snownee.jade.api.config.IPluginConfig;
 
 /**
@@ -20,7 +20,7 @@ public enum RemoveVanillaStuffProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig pluginConfig) {
         if (accessor.getBlockEntity() instanceof AbstractMachineBlockEntity) {
-            tooltip.remove(Identifiers.UNIVERSAL_ITEM_STORAGE);
+            tooltip.remove(JadeIds.UNIVERSAL_ITEM_STORAGE);
         }
     }
 

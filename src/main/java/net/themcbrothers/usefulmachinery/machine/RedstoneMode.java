@@ -14,11 +14,11 @@ import java.util.Locale;
 import java.util.function.IntFunction;
 
 public enum RedstoneMode implements StringRepresentable {
-    IGNORED(new ResourceLocation("textures/item/gunpowder.png")),
+    IGNORED(ResourceLocation.withDefaultNamespace("textures/item/gunpowder.png")),
 
-    HIGH(new ResourceLocation("textures/block/redstone_torch.png")),
+    HIGH(ResourceLocation.withDefaultNamespace("textures/block/redstone_torch.png")),
 
-    LOW(new ResourceLocation("textures/block/redstone_torch_off.png"));
+    LOW(ResourceLocation.withDefaultNamespace("textures/block/redstone_torch_off.png"));
 
     private static final RedstoneMode[] VALUES = values();
     private static final RedstoneMode[] BY_ORDINAL = Arrays.stream(VALUES).sorted(Comparator.comparingInt(Enum::ordinal)).toArray(RedstoneMode[]::new);

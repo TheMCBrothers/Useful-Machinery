@@ -33,7 +33,7 @@ public final class MachineryTabs {
         if (itemLike.asItem() instanceof BatteryItem batteryItem) {
             ItemStack stack = new ItemStack(itemLike);
 
-            stack.set(ENERGY, batteryItem.getMaxEnergyStored(stack));
+            stack.set(ENERGY, batteryItem.getCapacity());
 
             return List.of(stack, new ItemStack(itemLike));
         } else if (itemLike.asItem() instanceof TierUpgradeItem) {

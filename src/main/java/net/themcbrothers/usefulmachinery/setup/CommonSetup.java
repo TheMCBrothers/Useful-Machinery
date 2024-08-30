@@ -69,46 +69,5 @@ public class CommonSetup {
 
         // Fluid
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, LAVA_GENERATOR.get(), (machine, context) -> machine.getLavaTank());
-
-        // Item Energy
-        event.registerItem(Capabilities.EnergyStorage.ITEM, this::energyItem, MachineryBlocks.CREATIVE_POWER_CELL, MachineryItems.BATTERY);
-    }
-
-    private IEnergyStorage energyItem(ItemStack stack, Void context) {
-        if (stack.getItem() instanceof EnergyContainerItem energyItem) {
-            return new IEnergyStorage() {
-                @Override
-                public int receiveEnergy(int maxReceive, boolean simulate) {
-                    return energyItem.receiveEnergy(stack, maxReceive, simulate);
-                }
-
-                @Override
-                public int extractEnergy(int maxExtract, boolean simulate) {
-                    return energyItem.extractEnergy(stack, maxExtract, simulate);
-                }
-
-                @Override
-                public int getEnergyStored() {
-                    return energyItem.getEnergyStored(stack);
-                }
-
-                @Override
-                public int getMaxEnergyStored() {
-                    return energyItem.getMaxEnergyStored(stack);
-                }
-
-                @Override
-                public boolean canExtract() {
-                    return extractEnergy(1, true) > 0;
-                }
-
-                @Override
-                public boolean canReceive() {
-                    return receiveEnergy(1, true) > 0;
-                }
-            };
-        }
-
-        return null;
     }
 }

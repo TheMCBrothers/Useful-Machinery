@@ -21,11 +21,11 @@ public class LavaGeneratingRecipe implements IJeiFuelingRecipe {
 
     @Override
     public @Unmodifiable List<ItemStack> getInputs() {
-        return inputs;
+        return this.inputs;
     }
 
     @Override
     public int getBurnTime() {
-        return burnTime;
+        return this.burnTime;
     }
 }
