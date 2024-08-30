@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
@@ -80,11 +81,11 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
 
         return this.calcProcessTime(this.level.getRecipeManager()
-                .getRecipeFor(RecipeType.BLASTING, this, this.level)
+                .getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(this.getItem(0)), this.level)
                 .map(RecipeHolder::value)
                 .map(AbstractCookingRecipe::getCookingTime)
                 .orElse(this.level.getRecipeManager()
-                        .getRecipeFor(RecipeType.SMELTING, this, this.level)
+                        .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.getItem(0)), this.level)
                         .map(RecipeHolder::value)
                         .map(AbstractCookingRecipe::getCookingTime)
                         .orElse(200)));
@@ -139,12 +140,12 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
 
         if (this.canRun() && this.level != null) {
             RecipeHolder<? extends AbstractCookingRecipe> recipe = this.level.getRecipeManager()
-                    .getRecipeFor(RecipeType.BLASTING, this, this.level)
+                    .getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(this.getItem(0)), this.level)
                     .orElse(null);
 
             if (recipe == null) {
                 recipe = this.level.getRecipeManager()
-                        .getRecipeFor(RecipeType.SMELTING, this, this.level)
+                        .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.getItem(0)), this.level)
                         .orElse(null);
             }
 

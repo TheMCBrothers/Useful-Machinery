@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.themcbrothers.lib.energy.EnergyProvider;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.inventory.PredicateSlot;
@@ -25,7 +26,7 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
     protected final AbstractMachineBlockEntity blockEntity;
     protected final ContainerData fields;
     protected final int upgradeSlotCount;
-    protected final List<RecipeHolder<? extends Recipe<Container>>> recipes;
+    protected final List<RecipeHolder<? extends Recipe<? extends RecipeInput>>> recipes;
 
     protected AbstractMachineMenu(@Nullable MenuType<?> type, int id, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
         super(type, id);
