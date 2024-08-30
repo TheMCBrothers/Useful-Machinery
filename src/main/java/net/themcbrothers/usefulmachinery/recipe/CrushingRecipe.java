@@ -7,9 +7,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -21,11 +21,11 @@ import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 public record CrushingRecipe(String group, Ingredient ingredient, Ingredient supportedUpgrades,
                              ItemStack primaryResult,
                              ItemStack secondaryResult, float secondaryChance,
-                             int crushTime) implements CommonRecipe<Container> {
+                             int crushTime) implements CommonRecipe<RecipeInput> {
 
     @Override
-    public boolean matches(Container container, Level level) {
-        return this.ingredient.test(container.getItem(0));
+    public boolean matches(RecipeInput recipeInput, Level level) {
+        return this.ingredient.test(recipeInput.getItem(0));
     }
 
     @Override

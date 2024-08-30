@@ -2,14 +2,13 @@ package net.themcbrothers.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
@@ -17,6 +16,7 @@ import net.themcbrothers.usefulmachinery.block.entity.extension.UpgradeContainer
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
+import net.themcbrothers.usefulmachinery.recipe.CrushingRecipe;
 
 import java.util.Objects;
 
@@ -123,8 +123,8 @@ public class CrusherMenu extends AbstractMachineMenu {
 
     protected boolean canCrush(ItemStack stack) {
         return this.recipes.stream()
-                .map(RecipeHolder::value)
-                .anyMatch(recipe -> recipe.matches(new SimpleContainer(stack), Objects.requireNonNull(this.blockEntity.getLevel())));
+                .map(recipeHolder -> (CrushingRecipe) recipeHolder.value())
+                .anyMatch(recipe -> recipe.matches(new SingleRecipeInput(stack), Objects.requireNonNull(this.blockEntity.getLevel())));
     }
 
     public int getProgressScaled(int width) {

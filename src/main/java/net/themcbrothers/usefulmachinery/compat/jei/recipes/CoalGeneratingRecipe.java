@@ -5,7 +5,6 @@ import mezz.jei.api.recipe.vanilla.IJeiFuelingRecipe;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,11 +21,11 @@ public class CoalGeneratingRecipe implements IJeiFuelingRecipe {
 
     @Override
     public @Unmodifiable List<ItemStack> getInputs() {
-        return inputs;
+        return this.inputs;
     }
 
     @Override
     public int getBurnTime() {
-        return burnTime;
+        return this.burnTime;
     }
 }

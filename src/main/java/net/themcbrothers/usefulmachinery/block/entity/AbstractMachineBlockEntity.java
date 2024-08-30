@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +36,7 @@ import java.util.function.Function;
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.TIER;
 
-public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
+public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, RecipeInput {
     protected static final int ENERGY_CAPACITY = 20_000;
     protected static final int MAX_TRANSFER = 100;
     private final boolean isGenerator;
@@ -196,8 +197,8 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     @Override
-    public ItemStack getItem(int index) {
-        return this.getItems().get(index);
+    public int size() {
+        return this.getContainerSize();
     }
 
     @Override

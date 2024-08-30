@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.themcbrothers.lib.LibDataComponents;
 import net.themcbrothers.lib.config.Config;
 import net.themcbrothers.lib.energy.BasicEnergyContainerItem;
 import net.themcbrothers.lib.energy.EnergyUnit;
@@ -20,7 +21,7 @@ public class BatteryItem extends BasicEnergyContainerItem {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return this.getEnergyStored(stack) > 0;
+        return stack.getOrDefault(LibDataComponents.ENERGY, 0) > 0;
     }
 
     @Override
@@ -30,8 +31,8 @@ public class BatteryItem extends BasicEnergyContainerItem {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        int stored = this.getMaxEnergyStored(stack) - this.getEnergyStored(stack) + 1;
-        int max = this.getMaxEnergyStored(stack) + 1;
+        int stored = this.getCapacity() - stack.getOrDefault(LibDataComponents.ENERGY, 0) + 1;
+        int max = this.getCapacity() + 1;
 
         return (int) Math.round(13.0 - stored * 13.0 / max);
     }
@@ -40,7 +41,7 @@ public class BatteryItem extends BasicEnergyContainerItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         EnergyUnit energyUnit = Config.CLIENT_CONFIG.getEnergyUnit();
 
-        MutableComponent component = TEXT_UTILS.energyWithMax(this.getEnergyStored(stack), this.getMaxEnergyStored(stack), energyUnit);
+        MutableComponent component = TEXT_UTILS.energyWithMax(stack.getOrDefault(LibDataComponents.ENERGY, 0), this.getCapacity(), energyUnit);
         tooltipComponents.add(component.withStyle(ChatFormatting.GRAY));
     }
 }

@@ -55,12 +55,12 @@ public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
 
     @Override
     public IDrawable getBackground() {
-        return background;
+        return this.background;
     }
 
     @Override
     public IDrawable getIcon() {
-        return icon;
+        return this.icon;
     }
 
     @Override

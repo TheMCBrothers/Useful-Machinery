@@ -2,15 +2,15 @@ package net.themcbrothers.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
@@ -121,8 +121,8 @@ public class ElectricSmelterMenu extends AbstractMachineMenu {
 
     protected boolean canCook(ItemStack stack) {
         return this.recipes.stream()
-                .map(RecipeHolder::value)
-                .anyMatch(recipe -> recipe.matches(new SimpleContainer(stack), Objects.requireNonNull(this.blockEntity.getLevel())));
+                .map(recipeHolder -> (AbstractCookingRecipe) recipeHolder.value())
+                .anyMatch(recipe -> recipe.matches(new SingleRecipeInput(stack), Objects.requireNonNull(this.blockEntity.getLevel())));
     }
 
     public int getProgressScaled(int width) {

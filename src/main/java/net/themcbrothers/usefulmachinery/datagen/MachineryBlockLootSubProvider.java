@@ -1,6 +1,6 @@
 package net.themcbrothers.usefulmachinery.datagen;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -8,12 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.themcbrothers.usefulmachinery.core.Registration;
@@ -25,8 +22,8 @@ import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.*;
 
 public class MachineryBlockLootSubProvider extends BlockLootSubProvider {
-    protected MachineryBlockLootSubProvider() {
-        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+    protected MachineryBlockLootSubProvider(HolderLookup.Provider lookupProvider) {
+        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags(), lookupProvider);
     }
 
     @Override
