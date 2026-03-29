@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "D": {
-      "tag": "c:dusts/redstone"
-    },
-    "G": {
-      "item": "minecraft:flint"
-    },
-    "I": {
-      "tag": "c:ingots/bronze"
-    },
-    "P": {
-      "tag": "c:plates/steel"
-    }
+    "D": "#c:dusts/redstone",
+    "G": "minecraft:flint",
+    "I": "#c:ingots/bronze",
+    "P": "#c:plates/steel"
   },
   "pattern": [
     "IDI",

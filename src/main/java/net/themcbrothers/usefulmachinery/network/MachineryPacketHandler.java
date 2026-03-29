@@ -10,7 +10,6 @@ public class MachineryPacketHandler extends BasePacketHandler {
         super(modEventBus, UsefulMachinery.MOD_ID, version);
     }
 
-
     @Override
     protected void registerPackets(PacketRegistrar registrar) {
         registrar.playToServer(SetRedstoneModePacket.TYPE, SetRedstoneModePacket.STREAM_CODEC);

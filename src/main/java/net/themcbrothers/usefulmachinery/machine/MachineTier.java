@@ -1,11 +1,10 @@
 package net.themcbrothers.usefulmachinery.machine;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.ByIdMap;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.StringRepresentable;
 
 import java.util.Arrays;
@@ -47,6 +46,6 @@ public enum MachineTier implements StringRepresentable {
     }
 
     public int getColor() {
-        return FastColor.ARGB32.color(0xFF, this.color);
+        return ARGB.color(0xFF, this.color);
     }
 }

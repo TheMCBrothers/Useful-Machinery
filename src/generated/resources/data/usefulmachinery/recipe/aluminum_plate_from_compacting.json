@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:ingots/aluminum"
+    "ingredient": "#c:ingots/aluminum"
   },
   "mode": "plate",
   "result": {

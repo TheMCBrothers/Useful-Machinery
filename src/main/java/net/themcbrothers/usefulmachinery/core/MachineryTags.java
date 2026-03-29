@@ -13,6 +13,6 @@ public class MachineryTags {
 
     public static class Items {
         public static final TagKey<Item> BATTERIES = TagUtils.commonItemTag("batteries");
-        public static final TagKey<Item> MACHINERY_UPGRADES = ItemTags.create(UsefulMachinery.rl("machinery_upgrades"));
+        public static final TagKey<Item> MACHINERY_UPGRADES = ItemTags.create(UsefulMachinery.id("machinery_upgrades"));
     }
 }

@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 4,
-    "tag": "c:ingots/signalum"
+    "ingredient": "#c:ingots/signalum"
   },
   "mode": "gear",
   "result": {

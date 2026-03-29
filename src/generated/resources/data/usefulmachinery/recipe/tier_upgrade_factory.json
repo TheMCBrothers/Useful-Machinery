@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/electrum"
-    },
-    "I": {
-      "tag": "c:ingots/signalum"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "G": "#c:gears/electrum",
+    "I": "#c:ingots/signalum",
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " I ",
@@ -21,7 +15,6 @@
     "components": {
       "usefulmachinery:tier": "factory"
     },
-    "count": 1,
     "id": "usefulmachinery:tier_upgrade"
   }
 }

@@ -3,7 +3,7 @@
   "compactTime": 250,
   "ingredient": {
     "count": 9,
-    "tag": "c:ingots/bronze"
+    "ingredient": "#c:ingots/bronze"
   },
   "mode": "block",
   "result": {

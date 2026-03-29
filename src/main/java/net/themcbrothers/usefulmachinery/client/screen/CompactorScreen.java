@@ -1,21 +1,26 @@
 package net.themcbrothers.usefulmachinery.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.client.screen.widget.CompactorModeButton;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.menu.CompactorMenu;
 import net.themcbrothers.usefulmachinery.network.SetCompactorModePacket;
 
+import java.util.List;
+
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/compactor.png");
+    private static final Identifier TEXTURE = UsefulMachinery.id("textures/gui/container/compactor.png");
 
     public CompactorScreen(CompactorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -28,36 +33,41 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
         CompactorModeButton compactorModeButton = new CompactorModeButton(this.menu, this.leftPos + 9, this.topPos + 31, 20, 20, button -> {
             CompactorMode mode = ((CompactorModeButton) button).getMode();
 
-            PacketDistributor.sendToServer(new SetCompactorModePacket(mode));
+            ClientPacketDistributor.sendToServer(new SetCompactorModePacket(mode));
         });
 
         this.addRenderableWidget(compactorModeButton);
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int x, int y) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+
         int i = this.leftPos;
         int j = this.topPos;
 
-        guiGraphics.blit(TEXTURES, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
         // Render arrow
         int l = this.menu.getProgressScaled(24);
 
-        guiGraphics.blit(TEXTURES, 58 + i, 32 + j, 176, 14, l, 17);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + i, 32 + j, 176, 14, l, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
-        this.renderUpgradeSlots(guiGraphics);
+        this.extractUpgradeSlots(graphics);
     }
 
     @Override
-    protected void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
-        super.renderTooltip(guiGraphics, x, y);
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
 
         for (Renderable renderable : this.renderables) {
             if (renderable instanceof CompactorModeButton button && button.isHoveredOrFocused()) {
                 CompactorMode mode = button.getMode();
 
-                guiGraphics.renderTooltip(this.font, TEXT_UTILS.translate("misc", "compact_" + mode.getSerializedName()), x, y);
+                Component compactorMode = TEXT_UTILS.translate("misc", "compact_" + mode.getSerializedName(), mode.name());
+                ClientTooltipComponent tooltipComponent = ClientTooltipComponent.create(compactorMode.getVisualOrderText());
+
+                graphics.tooltip(this.font, List.of(tooltipComponent), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
             }
         }
     }

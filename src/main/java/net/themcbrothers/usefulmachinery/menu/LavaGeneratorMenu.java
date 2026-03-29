@@ -11,10 +11,11 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
@@ -27,21 +28,20 @@ import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
 import static net.themcbrothers.usefulmachinery.core.MachineryItems.SUSTAINED_UPGRADE;
 
 public class LavaGeneratorMenu extends AbstractMachineMenu {
-    public LavaGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf byteBuf) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, byteBuf),
+    public LavaGeneratorMenu(int id, Inventory inventory, FriendlyByteBuf byteBuf) {
+        this(id, inventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, inventory, byteBuf),
                 new UpgradeContainer(byteBuf.readInt()), new SimpleContainerData(byteBuf.readInt()));
     }
 
-
-    public LavaGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
-        super(MachineryMenus.LAVA_GENERATOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize());
+    public LavaGeneratorMenu(int id, Inventory inventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
+        super(MachineryMenus.LAVA_GENERATOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize(), inventory);
 
         this.addSlot(new FluidItemSlot(blockEntity, 0, 26, 17, stack -> stack.getFluid().isSame(Fluids.LAVA)));
         this.addSlot(new OutputSlot(blockEntity, 1, 26, 51));
         this.addSlot(new EnergySlot(blockEntity, 2, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);
-        this.addPlayerSlots(playerInventory);
+        this.addPlayerSlots(inventory);
     }
 
     @Override
@@ -136,9 +136,6 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
         return this.fields.get(4) > 0;
     }
 
-    public FluidStack getTank() {
-        return new FluidStack(this.getTankFluid(), this.getFluidAmount());
-    }
 
     public int getFluidAmount() {
         return this.fields.get(6);
@@ -152,41 +149,41 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
         return BuiltInRegistries.FLUID.byId(this.fields.get(8));
     }
 
-    public IFluidHandler getFluidTankHandler() {
-        return new IFluidHandler() {
+    public ResourceHandler<FluidResource> getFluidTankHandler() {
+        return new ResourceHandler<>() {
             @Override
-            public int getTanks() {
-                return 1;
-            }
-
-            @Override
-            public FluidStack getFluidInTank(int tank) {
-                return LavaGeneratorMenu.this.getTank();
-            }
-
-            @Override
-            public int getTankCapacity(int tank) {
-                return LavaGeneratorMenu.this.getTankCapacity();
-            }
-
-            @Override
-            public boolean isFluidValid(int tank, FluidStack stack) {
-                return true;
-            }
-
-            @Override
-            public int fill(FluidStack resource, FluidAction action) {
+            public int size() {
                 return 0;
             }
 
             @Override
-            public FluidStack drain(FluidStack resource, FluidAction action) {
-                return resource;
+            public FluidResource getResource(int index) {
+                return FluidResource.of(LavaGeneratorMenu.this.getTankFluid());
             }
 
             @Override
-            public FluidStack drain(int maxDrain, FluidAction action) {
-                return FluidStack.EMPTY;
+            public long getAmountAsLong(int index) {
+                return LavaGeneratorMenu.this.getFluidAmount();
+            }
+
+            @Override
+            public long getCapacityAsLong(int index, FluidResource resource) {
+                return LavaGeneratorMenu.this.getTankCapacity();
+            }
+
+            @Override
+            public boolean isValid(int index, FluidResource resource) {
+                return true;
+            }
+
+            @Override
+            public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+                return 0;
+            }
+
+            @Override
+            public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+                return 0;
             }
         };
     }

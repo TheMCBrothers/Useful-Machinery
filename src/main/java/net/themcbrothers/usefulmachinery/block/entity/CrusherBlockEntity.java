@@ -2,11 +2,15 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
@@ -52,9 +56,12 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             };
         }
     };
+    private final RecipeManager.CachedCheck<RecipeInput, CrushingRecipe> quickCheck;
 
     public CrusherBlockEntity(BlockPos pos, BlockState state) {
         super(MachineryBlockEntities.CRUSHER.get(), pos, state, false);
+
+        this.quickCheck = RecipeManager.createCheck(MachineryRecipeTypes.CRUSHING.get());
     }
 
     @Override
@@ -82,12 +89,13 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             return 200;
         }
 
-        return this.calcProcessTime(this.level.getRecipeManager()
-                .getRecipeFor(MachineryRecipeTypes.CRUSHING.get(), this, this.level)
-                .map(RecipeHolder::value)
-                .map(CrushingRecipe::crushTime)
-                .orElse(200)
-        );
+        CrushingRecipe currentRecipe = this.getCurrentRecipe();
+
+        if (currentRecipe == null) {
+            return 200;
+        }
+
+        return this.calcProcessTime(currentRecipe.crushTime());
     }
 
     @Override
@@ -118,13 +126,11 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         this.receiveEnergyFromSlot(3);
 
         if (this.canRun() && this.level != null) {
-            RecipeHolder<CrushingRecipe> recipe = this.level.getRecipeManager()
-                    .getRecipeFor(MachineryRecipeTypes.CRUSHING.get(), this, this.level)
-                    .orElse(null);
+            CrushingRecipe recipe = this.getCurrentRecipe();
 
             if (recipe != null) {
-                int efficiencyUpgradeCount = this.getUpgradeCount(MachineryItems.EFFICIENCY_UPGRADE, stack -> recipe.value().supportUpgrade(stack));
-                int precisionUpgradeCount = this.getUpgradeCount(MachineryItems.PRECISION_UPGRADE, stack -> recipe.value().supportUpgrade(stack));
+                int efficiencyUpgradeCount = this.getUpgradeCount(MachineryItems.EFFICIENCY_UPGRADE, recipe::supportUpgrade);
+                int precisionUpgradeCount = this.getUpgradeCount(MachineryItems.PRECISION_UPGRADE, recipe::supportUpgrade);
 
                 this.efficiencyAdditionalChance = 0.0625 * efficiencyUpgradeCount;
                 this.precisionAdditionalChance = 0.0625 * precisionUpgradeCount;
@@ -185,10 +191,26 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private boolean canProcess(@Nullable RecipeHolder<CrushingRecipe> recipe) {
+    @Nullable
+    private CrushingRecipe getCurrentRecipe() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+
+        RecipeHolder<CrushingRecipe> recipeHolder = this.quickCheck.getRecipeFor(this, serverLevel).orElse(null);
+
+        if (recipeHolder != null && this.canProcess(recipeHolder.value())) {
+            return recipeHolder.value();
+        }
+
+        return null;
+    }
+
+    private boolean canProcess(@Nullable CrushingRecipe recipe) {
         if (recipe != null && this.level != null) {
-            ItemStack recipePrimaryOutputStack = recipe.value().getResultItem(this.level.registryAccess());
-            ItemStack recipeSecondOutputStack = recipe.value().secondaryResult();
+            ItemStack inputSlot = this.getItems().get(0);
+            ItemStack recipePrimaryOutputStack = recipe.assemble(new SingleRecipeInput(inputSlot));
+            ItemStack recipeSecondOutputStack = recipe.assembleSecondary();
 
             int efficiencyAdditionalCount = 0;
             int precisionAdditionalCount = 0;
@@ -265,14 +287,14 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private void processItem(@Nullable RecipeHolder<CrushingRecipe> recipe) {
+    private void processItem(@Nullable CrushingRecipe recipe) {
         if (recipe != null && this.level != null) {
-            ItemStack primaryResultStack = recipe.value().getResultItem(this.level.registryAccess());
-            ItemStack secondaryResultStack = recipe.value().secondaryResult();
             ItemStack inputSlot = this.getItems().get(0);
+            ItemStack primaryResultStack = recipe.assemble(new SingleRecipeInput(inputSlot));
+            ItemStack secondaryResultStack = recipe.assembleSecondary();
             ItemStack primaryOutputSlot = this.getItems().get(1);
             ItemStack secondaryOutputSlot = this.getItems().get(2);
-            float secondaryChance = recipe.value().secondaryChance();
+            float secondaryChance = recipe.secondaryChance();
 
             // Checking if machine not in precision mode
             if (this.precisionAdditionalChance != 1) {

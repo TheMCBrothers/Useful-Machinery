@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 4,
-    "tag": "c:ingots/bronze"
+    "ingredient": "#c:ingots/bronze"
   },
   "mode": "gear",
   "result": {

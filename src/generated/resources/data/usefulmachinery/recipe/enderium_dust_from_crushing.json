@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/enderium"
-  },
+  "ingredient": "#c:ingots/enderium",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:enderium_dust"
   }
 }

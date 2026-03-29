@@ -77,9 +77,9 @@ dependencies {
     implementation "net.themcbrothers:useful-foundation:$foundation_version"
 
     // JEI
-    compileOnly("mezz.jei:jei-$minecraft_version-pre-3-common-api:$jei_version")
-    compileOnly("mezz.jei:jei-$minecraft_version-pre-3-neoforge-api:$jei_version")
-    runtimeOnly("mezz.jei:jei-$minecraft_version-pre-3-neoforge:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version")
+    runtimeOnly("mezz.jei:jei-$minecraft_version-neoforge:$jei_version")
 
     // TOP
     // compileOnly("mcjty.theoneprobe:theoneprobe:$top_version:api")
@@ -104,7 +104,7 @@ tasks.withType(ProcessResources).configureEach {
             lib_version_range       : lib_version_range,
             foundation_version_range: foundation_version_range,
             jei_version_range       : jei_version_range,
-//            top_version_range       : top_version_range,
+            top_version_range       : top_version_range,
             jade_version_range      : jade_version_range
     ]
     inputs.properties replaceProperties

@@ -3,7 +3,7 @@
   "compactTime": 250,
   "ingredient": {
     "count": 9,
-    "tag": "c:ingots/copper"
+    "ingredient": "#c:ingots/copper"
   },
   "mode": "block",
   "result": {

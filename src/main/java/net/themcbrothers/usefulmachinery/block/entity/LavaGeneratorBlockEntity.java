@@ -2,7 +2,7 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.*;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -89,23 +91,23 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     protected boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
-        boolean canGenerate = this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored() - BASE_TICKING_ENERGY;
+        boolean canGenerate = this.energyStorage.getAmountAsInt() <= this.energyStorage.getCapacityAsInt() - BASE_TICKING_ENERGY;
 
         return this.level != null && canRun && canGenerate;
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
-        super.applyImplicitComponents(input);
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
 
-        MachineContents contents = input.get(CONTENTS.get());
+        MachineContents contents = components.get(CONTENTS.get());
 
         if (contents != null) {
             this.burnTime = contents.burnTime();
             this.burnTimeTotal = contents.burnTimeTotal();
         }
 
-        SimpleFluidContent simpleFluidContent = input.get(TANK.get());
+        SimpleFluidContent simpleFluidContent = components.get(TANK.get());
 
         if (simpleFluidContent != null) {
             this.lavaTank.setFluid(simpleFluidContent.copy());
@@ -118,7 +120,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         builder.set(CONTENTS.get(), new MachineContents(ItemContainerContents.fromItems(
                 this.upgradeContainer.getItems()),
-                this.energyStorage.getEnergyStored(),
+                this.energyStorage.getAmountAsInt(),
                 this.redstoneMode,
                 this.processTime,
                 this.processTimeTotal,
@@ -129,10 +131,10 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public void removeComponentsFromTag(CompoundTag tag) {
-        super.removeComponentsFromTag(tag);
+    public void removeComponentsFromTag(ValueOutput output) {
+        super.removeComponentsFromTag(output);
 
-        tag.remove("Tank");
+        output.discard("Tank");
     }
 
     @Override
@@ -155,27 +157,27 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        super.saveAdditional(compound, registries);
+    public void saveAdditional(ValueOutput compound) {
+        super.saveAdditional(compound);
 
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("BurnTimeTotal", this.burnTimeTotal);
 
         if (!this.lavaTank.getFluid().isEmpty()) {
-            compound.put("Tank", this.lavaTank.writeToNBT(registries, new CompoundTag()));
+            compound.store("Tank", FluidStack.CODEC,  this.lavaTank.getFluid());
         }
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        this.burnTime = compound.getInt("BurnTime");
-        this.burnTimeTotal = compound.getInt("BurnTimeTotal");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        if (compound.contains("Tank", CompoundTag.TAG_COMPOUND)) {
-            this.lavaTank.readFromNBT(registries, compound.getCompound("Tank"));
+        this.burnTime = input.getIntOr("BurnTime", 0);
+        this.burnTimeTotal = input.getIntOr("BurnTimeTotal", 0);
+
+        if (input.child("Tank").isPresent()) {
+            this.lavaTank.setFluid(input.read("Tank", FluidStack.CODEC).orElse(FluidStack.EMPTY));
         }
-
-        super.loadAdditional(compound, registries);
     }
 
     @Override

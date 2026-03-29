@@ -1,10 +1,12 @@
 package net.themcbrothers.usefulmachinery.block.entity;
 
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -17,9 +19,10 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.themcbrothers.lib.energy.ExtendedEnergyStorage;
 import net.themcbrothers.lib.util.EnergyUtils;
 import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
@@ -62,27 +65,28 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     public abstract int getContainerSize();
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+
+        this.energyStorage.serialize(output);
+
         if (this.processTime > 0) {
-            tag.putInt("ProcessTime", this.processTime);
+            output.putInt("ProcessTime", this.processTime);
         }
         if (this.processTimeTotal > 0) {
-            tag.putInt("ProcessTimeTotal", this.processTimeTotal);
+            output.putInt("ProcessTimeTotal", this.processTimeTotal);
         }
         if (this.redstoneMode != RedstoneMode.IGNORED) {
-            tag.putInt("RedstoneMode", this.redstoneMode.ordinal());
+            output.putInt("RedstoneMode", this.redstoneMode.ordinal());
         }
         if (!this.upgradeContainer.isEmpty()) {
-            tag.put("Upgrades", this.upgradeContainer.createTag(registries));
-        }
-        if (this.energyStorage.getEnergyStored() > 0) {
-            tag.putInt("EnergyStored", this.energyStorage.getEnergyStored());
+            this.upgradeContainer.serialize(output);
         }
         if (this.tier != MachineTier.SIMPLE) {
-            tag.putInt("Tier", this.tier.ordinal());
+            output.putInt("Tier", this.tier.ordinal());
         }
 
-        ContainerHelper.saveAllItems(tag, this.getItems(), false, registries);
+        ContainerHelper.saveAllItems(output, this.stacks, false);
     }
 
     @Override
@@ -99,21 +103,21 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
-        super.applyImplicitComponents(input);
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
 
-        MachineContents contents = input.get(CONTENTS.get());
+        MachineContents contents = components.get(CONTENTS.get());
 
         if (contents != null) {
             contents.upgrades().copyInto(this.upgradeContainer.getItems());
 
-            this.energyStorage.setEnergyStored(contents.energyStored());
+            this.energyStorage.set(contents.energyStored());
             this.redstoneMode = contents.redstoneMode();
             this.processTime = contents.processTime();
             this.processTimeTotal = contents.processTimeTotal();
         }
 
-        this.setMachineTier(input.getOrDefault(TIER.get(), MachineTier.SIMPLE));
+        this.setMachineTier(components.getOrDefault(TIER.get(), MachineTier.SIMPLE));
     }
 
     @Override
@@ -122,7 +126,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
 
         builder.set(CONTENTS.get(), new MachineContents(ItemContainerContents.fromItems(
                 this.upgradeContainer.getItems()),
-                this.energyStorage.getEnergyStored(),
+                this.energyStorage.getAmountAsInt(),
                 this.redstoneMode,
                 this.processTime,
                 this.processTimeTotal,
@@ -133,33 +137,34 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     @Override
-    public void removeComponentsFromTag(CompoundTag tag) {
-        super.removeComponentsFromTag(tag);
+    public void removeComponentsFromTag(ValueOutput output) {
+        super.removeComponentsFromTag(output);
 
-        tag.remove("Upgrades");
-        tag.remove("EnergyStored");
-        tag.remove("RedstoneMode");
-        tag.remove("ProcessTime");
-        tag.remove("ProcessTimeTotal");
-        tag.remove("BurnTime");
-        tag.remove("BurnTimeTotal");
-        tag.remove("Tier");
+        output.discard("Upgrades");
+        output.discard("EnergyStored");
+        output.discard("RedstoneMode");
+        output.discard("ProcessTime");
+        output.discard("ProcessTimeTotal");
+        output.discard("BurnTime");
+        output.discard("BurnTimeTotal");
+        output.discard("Tier");
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        this.processTime = compound.getInt("ProcessTime");
-        this.processTimeTotal = compound.getInt("ProcessTimeTotal");
-        this.redstoneMode = RedstoneMode.byOrdinal(compound.getInt("RedstoneMode"));
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+
+        this.processTime = input.getIntOr("ProcessTime", 0);
+        this.processTimeTotal = input.getIntOr("ProcessTimeTotal", 0);
+        this.redstoneMode = RedstoneMode.byOrdinal(input.getIntOr("RedstoneMode", 0));
+        this.tier = MachineTier.byOrdinal(input.getIntOr("Tier", 0));
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
-        this.upgradeContainer.fromTag(compound.getList("Upgrades", Tag.TAG_COMPOUND), registries);
-        this.tier = MachineTier.byOrdinal(compound.getInt("Tier"));
+        this.upgradeContainer.deserialize(input);
 
-        this.initEnergyStorage(compound.getInt("EnergyStored"));
+        this.energyStorage.deserialize(input);
+        this.initEnergyStorage(this.energyStorage.getAmountAsInt());
 
-        ContainerHelper.loadAllItems(compound, this.getItems(), registries);
-
-        super.loadAdditional(compound, registries);
+        ContainerHelper.loadAllItems(input, this.getItems());
     }
 
     @Override
@@ -270,14 +275,16 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         final ItemStack energyStack = this.getItems().get(this.getContainerSize() - 1);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(Capabilities.EnergyStorage.ITEM);
+            EnergyUtils.getEnergy(energyStack).ifPresent(energyHandler -> {
+                try (Transaction transaction = Transaction.openRoot()) {
+                    int maxReceive = this.energyStorage.extract(Integer.MAX_VALUE, transaction);
+                    int accepted = energyHandler.insert(maxReceive, transaction);
 
-            if (energy != null && energy.canReceive()) {
-                int maxReceive = this.energyStorage.extractEnergy(Integer.MAX_VALUE, true);
-                int accepted = energy.receiveEnergy(maxReceive, false);
+                    this.energyStorage.extract(accepted, transaction);
 
-                this.energyStorage.consumeEnergy(accepted);
-            }
+                    transaction.commit();
+                }
+            });
         }
     }
 
@@ -285,14 +292,16 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         final ItemStack energyStack = this.getItems().get(slotIndex);
 
         if (!energyStack.isEmpty()) {
-            IEnergyStorage energy = energyStack.getCapability(Capabilities.EnergyStorage.ITEM);
+            EnergyUtils.getEnergy(energyStack).ifPresent(energyHandler -> {
+                try (Transaction transaction = Transaction.openRoot()) {
+                    int maxExtract = this.energyStorage.insert(Integer.MAX_VALUE, transaction);
+                    int accepted = energyHandler.extract(maxExtract, transaction);
 
-            if (energy != null && energy.canExtract()) {
-                int maxExtract = this.energyStorage.receiveEnergy(Integer.MAX_VALUE, true);
-                int accepted = energy.extractEnergy(maxExtract, false);
+                    this.energyStorage.insert(accepted, transaction);
 
-                this.energyStorage.growEnergy(accepted);
-            }
+                    transaction.commit();
+                }
+            });
         }
     }
 
@@ -315,7 +324,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     protected boolean isActive(int RFPerTick) {
-        return this.processTime > 0 && this.energyStorage.getEnergyStored() >= RFPerTick;
+        return this.processTime > 0 && this.energyStorage.getAmountAsInt() >= RFPerTick;
     }
 
     public int getUpgradeSlotSize() {
@@ -351,7 +360,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     public int getEnergyStored() {
-        return this.energyStorage.getEnergyStored();
+        return this.energyStorage.getAmountAsInt();
     }
 
     public ExtendedEnergyStorage getEnergyStorage() {
@@ -359,7 +368,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
     }
 
     public int getMaxEnergyStored() {
-        return this.energyStorage.getMaxEnergyStored();
+        return this.energyStorage.getCapacityAsInt();
     }
 
     public void sendEnergy() {
@@ -370,12 +379,18 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
                 }
 
                 EnergyUtils.getEnergy(this.level, this.worldPosition.relative(facing), facing.getOpposite())
-                        .ifPresent(energy -> {
-                            if (energy.canReceive()) {
-                                int maxReceive = Math.min(MAX_TRANSFER, this.getEnergyStored());
-                                int accepted = energy.receiveEnergy(maxReceive, false);
+                        .ifPresent(energyHandler -> {
+                            boolean canReceive = energyHandler.getAmountAsInt() < energyHandler.getCapacityAsInt();
 
-                                this.energyStorage.consumeEnergy(accepted);
+                            if (canReceive) {
+                                try (Transaction transaction = Transaction.openRoot()) {
+                                    int maxReceive = Math.min(MAX_TRANSFER, this.getEnergyStored());
+                                    int accepted = energyHandler.insert(maxReceive, transaction);
+
+                                    this.energyStorage.extract(accepted, transaction);
+
+                                    transaction.commit();
+                                }
                             }
                         });
             }
@@ -400,12 +415,7 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         }
 
         this.tier = tier;
-
-        RegistryAccess registry = this.level.registryAccess();
-
-        ListTag previousItems = this.upgradeContainer.createTag(registry);
         this.upgradeContainer = new UpgradeContainer(this.getUpgradeSlotSize());
-        this.upgradeContainer.fromTag(previousItems, registry);
 
         this.initEnergyStorage(this.getEnergyStored());
 

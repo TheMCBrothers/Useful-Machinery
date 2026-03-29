@@ -1,6 +1,6 @@
 package net.themcbrothers.usefulmachinery.compat.top;
 
-import mcjty.theoneprobe.api.ITheOneProbe;
+import mcjty.theoneprobe.apiip.ITheOneProbe;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 
 import java.util.function.Function;

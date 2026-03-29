@@ -2,14 +2,12 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
@@ -50,9 +48,14 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
             };
         }
     };
+    private final RecipeManager.CachedCheck<SingleRecipeInput, BlastingRecipe> blastingQuickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> smeltingQuickCheck;
 
     public ElectricSmelterBlockEntity(BlockPos pos, BlockState state) {
         super(MachineryBlockEntities.ELECTRIC_SMELTER.get(), pos, state, false);
+
+        this.blastingQuickCheck = RecipeManager.createCheck(RecipeType.BLASTING);
+        this.smeltingQuickCheck = RecipeManager.createCheck(RecipeType.SMELTING);
     }
 
     @Override
@@ -80,15 +83,13 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
             return 200;
         }
 
-        return this.calcProcessTime(this.level.getRecipeManager()
-                .getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(this.getItem(0)), this.level)
-                .map(RecipeHolder::value)
-                .map(AbstractCookingRecipe::getCookingTime)
-                .orElse(this.level.getRecipeManager()
-                        .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.getItem(0)), this.level)
-                        .map(RecipeHolder::value)
-                        .map(AbstractCookingRecipe::getCookingTime)
-                        .orElse(200)));
+        AbstractCookingRecipe currentRecipe = this.getCurrentRecipe();
+
+        if (currentRecipe == null) {
+            return 200;
+        }
+
+        return this.calcProcessTime(currentRecipe.cookingTime());
     }
 
     @Override
@@ -139,15 +140,7 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         this.receiveEnergyFromSlot(2);
 
         if (this.canRun() && this.level != null) {
-            RecipeHolder<? extends AbstractCookingRecipe> recipe = this.level.getRecipeManager()
-                    .getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(this.getItem(0)), this.level)
-                    .orElse(null);
-
-            if (recipe == null) {
-                recipe = this.level.getRecipeManager()
-                        .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.getItem(0)), this.level)
-                        .orElse(null);
-            }
+            AbstractCookingRecipe recipe = this.getCurrentRecipe();
 
             // Machine kickoff
             if (!this.isActive(RF_PER_TICK) && this.canProcess(recipe)) {
@@ -183,9 +176,31 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private boolean canProcess(@Nullable RecipeHolder<? extends AbstractCookingRecipe> recipe) {
+    private SingleRecipeInput getRecipeInput() {
+        return new SingleRecipeInput(this.getItem(0));
+    }
+
+    @Nullable
+    private AbstractCookingRecipe getCurrentRecipe() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+
+        RecipeHolder<BlastingRecipe> blastingRecipeHolder = this.blastingQuickCheck.getRecipeFor(this.getRecipeInput(), serverLevel).orElse(null);
+        RecipeHolder<SmeltingRecipe> smeltingRecipeHolder = this.smeltingQuickCheck.getRecipeFor(this.getRecipeInput(), serverLevel).orElse(null);
+
+        if (blastingRecipeHolder != null) {
+            return blastingRecipeHolder.value();
+        } else if (smeltingRecipeHolder != null) {
+            return smeltingRecipeHolder.value();
+        }
+
+        return null;
+    }
+
+    private boolean canProcess(@Nullable AbstractCookingRecipe recipe) {
         if (recipe != null && this.level != null) {
-            ItemStack recipeOutputStack = recipe.value().getResultItem(this.level.registryAccess());
+            ItemStack recipeOutputStack = recipe.assemble(this.getRecipeInput());
 
             if (recipeOutputStack.isEmpty()) {
                 return false;
@@ -209,9 +224,9 @@ public class ElectricSmelterBlockEntity extends AbstractMachineBlockEntity {
         }
     }
 
-    private void processItem(@Nullable RecipeHolder<? extends AbstractCookingRecipe> recipe) {
+    private void processItem(@Nullable AbstractCookingRecipe recipe) {
         if (recipe != null && this.level != null) {
-            ItemStack resultStack = recipe.value().getResultItem(this.level.registryAccess());
+            ItemStack resultStack = recipe.assemble(this.getRecipeInput());
             ItemStack inputSlot = this.getItems().get(0);
             ItemStack outputSlot = this.getItems().get(1);
 

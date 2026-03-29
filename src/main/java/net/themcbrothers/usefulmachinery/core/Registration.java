@@ -1,7 +1,7 @@
 package net.themcbrothers.usefulmachinery.core;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -19,10 +19,10 @@ public final class Registration {
     public static final ItemDeferredRegister ITEMS = ItemDeferredRegister.create(UsefulMachinery.MOD_ID);
     public static final BlockDeferredRegister BLOCKS = BlockDeferredRegister.create(UsefulMachinery.MOD_ID, ITEMS);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UsefulMachinery.MOD_ID);
-    public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<Identifier> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UsefulMachinery.MOD_ID);
-    public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(UsefulMachinery.MOD_ID);
+    public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, UsefulMachinery.MOD_ID);
 
     public static void register(IEventBus modEventBus) {
         MachineryBlockEntities.init();

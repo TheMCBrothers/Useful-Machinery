@@ -1,9 +1,2 @@
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-@ParametersAreNullableByDefault
+@org.jspecify.annotations.NullMarked
 package net.themcbrothers.usefulmachinery.compat.jei.recipes;
-
-import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNullableByDefault;

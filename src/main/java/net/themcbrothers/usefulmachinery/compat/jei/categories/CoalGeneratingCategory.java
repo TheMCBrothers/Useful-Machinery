@@ -22,7 +22,7 @@ import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/coal_generator.png");
+    private static final ResourceLocation TEXTURES = UsefulMachinery.id("textures/gui/container/coal_generator.png");
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated energyBar;

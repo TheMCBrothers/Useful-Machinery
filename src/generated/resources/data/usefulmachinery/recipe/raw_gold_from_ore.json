@@ -1,24 +1,17 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ores/gold"
-  },
+  "ingredient": "#c:ores/gold",
   "primary": {
     "count": 2,
     "id": "minecraft:raw_gold"
   },
   "secondary": {
-    "count": 1,
     "id": "minecraft:raw_copper"
   },
   "secondaryChance": 0.4,
   "supportedUpgrades": [
-    {
-      "item": "usefulmachinery:efficiency_upgrade"
-    },
-    {
-      "item": "usefulmachinery:precision_upgrade"
-    }
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
   ]
 }

@@ -8,43 +8,32 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
-import net.themcbrothers.usefulmachinery.block.entity.extension.SimpleCompactor;
 import net.themcbrothers.usefulmachinery.block.entity.extension.UpgradeContainer;
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
-import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
+import net.themcbrothers.usefulmachinery.core.MachineryRecipePropertySet;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
-import net.themcbrothers.usefulmachinery.recipe.CompactingRecipe;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class CompactorMenu extends AbstractMachineMenu {
-    private final List<RecipeHolder<CompactingRecipe>> recipes = new ArrayList<>();
-
-    public CompactorMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, buffer),
+    public CompactorMenu(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, inventory, buffer),
                 new UpgradeContainer(buffer.readInt()), new SimpleContainerData(buffer.readInt()));
     }
 
-    public CompactorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
-        super(MachineryMenus.COMPACTOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize());
+    public CompactorMenu(int id, Inventory inventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
+        super(MachineryMenus.COMPACTOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize(), inventory);
 
-        this.recipes.addAll(Objects.requireNonNull(blockEntity.getLevel())
-                .getRecipeManager()
-                .getAllRecipesFor(MachineryRecipeTypes.COMPACTING.get()));
+        this.acceptedInputs = this.level.recipeAccess().propertySet(MachineryRecipePropertySet.COMPACTOR_INPUT);
 
         this.addSlot(new Slot(blockEntity, 0, 35, 33));
         this.addSlot(new OutputSlot(blockEntity, 1, 95, 33));
         this.addSlot(new EnergySlot(blockEntity, 2, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);
-        this.addPlayerSlots(playerInventory);
+        this.addPlayerSlots(inventory);
     }
 
     @Override
@@ -127,9 +116,7 @@ public class CompactorMenu extends AbstractMachineMenu {
     }
 
     protected boolean canCompact(ItemStack stack) {
-        return this.recipes.stream()
-                .map(RecipeHolder::value)
-                .anyMatch(recipe -> recipe.matches(new SimpleCompactor(this.getCompactorMode(), stack), Objects.requireNonNull(this.blockEntity.getLevel())));
+        return this.acceptedInputs.test(stack);
     }
 
     public CompactorMode getCompactorMode() {
@@ -141,11 +128,9 @@ public class CompactorMenu extends AbstractMachineMenu {
     }
 
     public int getProgressScaled(int width) {
-        // Compact time
-        int i = this.fields.get(4);
-        // Total compact time
-        int j = this.fields.get(5);
+        int compactTime = this.fields.get(4);
+        int totalCompactTime = this.fields.get(5);
 
-        return i != 0 && j != 0 ? i * width / j : 0;
+        return compactTime != 0 && totalCompactTime != 0 ? compactTime * width / totalCompactTime : 0;
     }
 }

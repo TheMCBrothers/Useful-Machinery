@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 4,
-    "tag": "c:ingots/tin"
+    "ingredient": "#c:ingots/tin"
   },
   "mode": "gear",
   "result": {

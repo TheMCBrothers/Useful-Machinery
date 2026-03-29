@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "usefulmachinery:block/redstone_block"
+      "model": "minecraft:block/redstone_block"
     }
   }
 }

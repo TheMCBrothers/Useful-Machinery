@@ -2,18 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:gears/gold"
-    },
-    {
-      "tag": "c:plates/lead"
-    },
-    {
-      "item": "usefulfoundation:hammer"
-    }
+    "#c:gears/gold",
+    "#c:plates/lead",
+    "usefulfoundation:hammer"
   ],
   "result": {
-    "count": 1,
     "id": "usefulmachinery:compactor_kit"
   }
 }

@@ -1,7 +1,6 @@
 package net.themcbrothers.usefulmachinery.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,18 +10,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 import net.themcbrothers.usefulmachinery.block.AbstractMachineBlock;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
@@ -37,25 +41,24 @@ public class UpgradeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag tooltipFlag) {
-
-        if (GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        if (tooltipFlag.hasShiftDown()) {
 
             MutableComponent header = TEXT_UTILS.translate("tooltip", "upgrade.shift.header").withStyle(ChatFormatting.GRAY);
 
-            components.add(Component.empty());
-            components.add(header);
+            builder.accept(Component.empty());
+            builder.accept(header);
 
             this.supportedBy.stream()
                     .map(machine -> Component.literal(" ")
                             .append(Component.translatable(machine.getDescriptionId()))
                             .withStyle(ChatFormatting.DARK_GREEN))
-                    .forEach(components::add);
+                    .forEach(builder);
 
         } else {
             MutableComponent header = TEXT_UTILS.translate("tooltip", "upgrade.header").withStyle(ChatFormatting.GRAY);
 
-            components.add(header);
+            builder.accept(header);
         }
     }
 
@@ -71,15 +74,15 @@ public class UpgradeItem extends Item {
         }
 
         if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity) {
-            InvWrapper upgradeWrapper = new InvWrapper(blockEntity.getUpgradeContainer());
-            ItemStack result = ItemHandlerHelper.insertItemStacked(upgradeWrapper, stack, false);
+            ResourceHandler<ItemResource> upgradeWrapper = VanillaContainerWrapper.of(blockEntity.getUpgradeContainer());
+            ItemStack result = ItemHandlerHelper.insertItemStacked(IItemHandler.of(upgradeWrapper), stack, false);
 
             if (player != null) {
                 player.setItemInHand(hand, result);
             }
 
             if (!ItemStack.matches(stack, result)) {
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return InteractionResult.SUCCESS;
             }
         }
 

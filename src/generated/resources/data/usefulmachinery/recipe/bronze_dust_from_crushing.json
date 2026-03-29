@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/bronze"
-  },
+  "ingredient": "#c:ingots/bronze",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:bronze_dust"
   }
 }

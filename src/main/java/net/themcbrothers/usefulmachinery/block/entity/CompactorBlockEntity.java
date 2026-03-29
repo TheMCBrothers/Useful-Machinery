@@ -1,17 +1,21 @@
 package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.themcbrothers.usefulmachinery.block.entity.extension.Compactor;
+import net.themcbrothers.usefulmachinery.block.entity.extension.SimpleCompactor;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
@@ -57,10 +61,13 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
             };
         }
     };
+    private final RecipeManager.CachedCheck<Compactor, CompactingRecipe> quickCheck;
     public CompactorMode compactorMode = CompactorMode.PLATE;
 
     public CompactorBlockEntity(BlockPos pos, BlockState state) {
         super(MachineryBlockEntities.COMPACTOR.get(), pos, state, false);
+
+        this.quickCheck = RecipeManager.createCheck(MachineryRecipeTypes.COMPACTING.get());
     }
 
     @Override
@@ -78,18 +85,20 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
             return 200;
         }
 
-        return this.calcProcessTime(this.level.getRecipeManager()
-                .getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level)
-                .map(RecipeHolder::value)
-                .map(CompactingRecipe::compactTime)
-                .orElse(200));
+        CompactingRecipe currentRecipe = this.getCurrentRecipe();
+
+        if (currentRecipe == null) {
+            return 200;
+        }
+
+        return this.calcProcessTime(currentRecipe.compactTime());
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
-        super.applyImplicitComponents(input);
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
 
-        CompactorMode mode = input.get(MODE.get());
+        CompactorMode mode = components.get(MODE.get());
 
         if (mode != null) {
             this.compactorMode = mode;
@@ -104,10 +113,10 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    public void removeComponentsFromTag(CompoundTag tag) {
-        super.removeComponentsFromTag(tag);
+    public void removeComponentsFromTag(ValueOutput output) {
+        super.removeComponentsFromTag(output);
 
-        tag.remove("Mode");
+        output.discard("Mode");
     }
 
     @Override
@@ -121,21 +130,19 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        super.saveAdditional(compound, registries);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
         if (this.compactorMode != CompactorMode.PLATE) {
-            compound.putInt("Mode", this.compactorMode.ordinal());
+            output.putInt("Mode", this.compactorMode.ordinal());
         }
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        super.loadAdditional(compound, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        if (compound.contains("Mode")) {
-            this.compactorMode = CompactorMode.byOrdinal(compound.getInt("Mode"));
-        }
+        this.compactorMode = CompactorMode.byOrdinal(input.getIntOr("Mode", 0));
     }
 
     @Override
@@ -179,9 +186,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         this.receiveEnergyFromSlot(2);
 
         if (this.canRun() && this.level != null) {
-            RecipeHolder<CompactingRecipe> recipe = this.level.getRecipeManager()
-                    .getRecipeFor(MachineryRecipeTypes.COMPACTING.get(), this, this.level)
-                    .orElse(null);
+            CompactingRecipe recipe = this.getCurrentRecipe();
 
             // Machine kickoff
             if (!this.isActive(RF_PER_TICK) && this.canProcess(recipe)) {
@@ -236,9 +241,25 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         }
     }
 
-    private boolean canProcess(@Nullable RecipeHolder<CompactingRecipe> recipe) {
-        if (recipe != null && recipe.value().mode().equals(this.compactorMode) && this.level != null) {
-            ItemStack recipeOutputStack = recipe.value().getResultItem(this.level.registryAccess());
+    @Nullable
+    private CompactingRecipe getCurrentRecipe() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+
+        RecipeHolder<CompactingRecipe> recipeHolder = this.quickCheck.getRecipeFor(this, serverLevel).orElse(null);
+
+        if (recipeHolder != null && this.canProcess(recipeHolder.value())) {
+            return recipeHolder.value();
+        }
+
+        return null;
+    }
+
+    private boolean canProcess(@Nullable CompactingRecipe recipe) {
+        if (recipe != null && recipe.mode().equals(this.compactorMode) && this.level != null) {
+            ItemStack machineInputStack = this.getItems().get(0);
+            ItemStack recipeOutputStack = recipe.assemble(new SimpleCompactor(this.compactorMode, machineInputStack));
 
             if (recipeOutputStack.isEmpty()) {
                 return false;
@@ -262,11 +283,11 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
         }
     }
 
-    private void processItem(@Nullable RecipeHolder<CompactingRecipe> recipe) {
+    private void processItem(@Nullable CompactingRecipe recipe) {
         if (recipe != null && this.level != null) {
             ItemStack machineInputStack = this.getItems().get(0);
             ItemStack machineOutputStack = this.getItems().get(1);
-            ItemStack recipeResultStack = recipe.value().getResultItem(this.level.registryAccess());
+            ItemStack recipeResultStack = recipe.assemble(new SimpleCompactor(this.compactorMode, machineInputStack));
 
             if (machineOutputStack.isEmpty()) {
                 this.getItems().set(1, recipeResultStack.copy());
@@ -274,7 +295,7 @@ public class CompactorBlockEntity extends AbstractMachineBlockEntity implements 
                 machineOutputStack.grow(recipeResultStack.getCount());
             }
 
-            machineInputStack.shrink(recipe.value().sizedIngredient().count());
+            machineInputStack.shrink(recipe.sizedIngredient().count());
         }
     }
 }

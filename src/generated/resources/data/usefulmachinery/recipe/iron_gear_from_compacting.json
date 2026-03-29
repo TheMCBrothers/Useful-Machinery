@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 4,
-    "tag": "c:ingots/iron"
+    "ingredient": "#c:ingots/iron"
   },
   "mode": "gear",
   "result": {

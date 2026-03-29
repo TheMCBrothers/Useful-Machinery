@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:ingots/gold"
+    "ingredient": "#c:ingots/gold"
   },
   "mode": "plate",
   "result": {

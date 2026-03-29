@@ -5,7 +5,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.client.screen.*;
@@ -30,8 +30,8 @@ import static net.themcbrothers.usefulmachinery.core.MachineryItems.TIER_UPGRADE
 @JeiPlugin
 public class JEICompat implements IModPlugin {
     @Override
-    public ResourceLocation getPluginUid() {
-        return UsefulMachinery.rl("jeicompat");
+    public Identifier getPluginUid() {
+        return UsefulMachinery.id("jeicompat");
     }
 
     @Override

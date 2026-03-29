@@ -1,7 +1,7 @@
 package net.themcbrothers.usefulmachinery.compat.top;
 
 import mcjty.theoneprobe.api.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,10 +11,10 @@ import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity
 public enum MachineProbeProvider implements IProbeInfoProvider {
     INSTANCE;
 
-    private static final ResourceLocation ID = UsefulMachinery.rl("machine_info");
+    private static final Identifier ID = UsefulMachinery.id("machine_info");
 
     @Override
-    public ResourceLocation getID() {
+    public Identifier getID() {
         return ID;
     }
 

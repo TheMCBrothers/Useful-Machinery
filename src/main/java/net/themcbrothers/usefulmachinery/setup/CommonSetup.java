@@ -2,29 +2,27 @@ package net.themcbrothers.usefulmachinery.setup;
 
 import net.minecraft.core.Holder;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
-import net.themcbrothers.lib.energy.EnergyContainerItem;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import net.themcbrothers.lib.util.Version;
-import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
-import net.themcbrothers.usefulmachinery.core.MachineryItems;
+import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.core.Registration;
 import net.themcbrothers.usefulmachinery.network.MachineryPacketHandler;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlockEntities.*;
 
+@Mod(UsefulMachinery.MOD_ID)
 public class CommonSetup {
-    protected CommonSetup(IEventBus modEventBus, ModContainer modContainer) {
+    public CommonSetup(IEventBus modEventBus, ModContainer modContainer) {
         // Register stuff
         Registration.register(modEventBus);
 
@@ -44,30 +42,30 @@ public class CommonSetup {
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
-        if (ModList.get().isLoaded("theoneprobe")) {
-            InterModComms.sendTo(
-                    "theoneprobe", "getTheOneProbe",
-                    net.themcbrothers.usefulmachinery.compat.top.TheOneProbeSupport::new);
-        }
+//        if (ModList.get().isLoaded("theoneprobe")) {
+//            InterModComms.sendTo(
+//                    "theoneprobe", "getTheOneProbe",
+//                    net.themcbrothers.usefulmachinery.compat.top.TheOneProbeSupport::new);
+//        }
     }
 
     private void capabilities(final RegisterCapabilitiesEvent event) {
         // Items
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COAL_GENERATOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COMPACTOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CRUSHER.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ELECTRIC_SMELTER.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LAVA_GENERATOR.get(), (sidedContainer, side) -> side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, COAL_GENERATOR.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, COMPACTOR.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, CRUSHER.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, ELECTRIC_SMELTER.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, LAVA_GENERATOR.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
 
         // Energy
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, COAL_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, COMPACTOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CRUSHER.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ELECTRIC_SMELTER.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, LAVA_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CREATIVE_POWER_CELL.get(), (machine, context) -> machine);
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, COAL_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, COMPACTOR.get(), (machine, context) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, CRUSHER.get(), (machine, context) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ELECTRIC_SMELTER.get(), (machine, context) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, LAVA_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, CREATIVE_POWER_CELL.get(), (creativePowerCell, context) -> creativePowerCell.getEnergyStorage());
 
         // Fluid
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, LAVA_GENERATOR.get(), (machine, context) -> machine.getLavaTank());
+//        event.registerBlockEntity(Capabilities.Energy.BLOCK, LAVA_GENERATOR.get(), (generator, context) -> generator.getLavaTank());
     }
 }

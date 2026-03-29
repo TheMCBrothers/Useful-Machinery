@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "tag": "c:glass_blocks"
-    },
-    "G": {
-      "tag": "c:gears/iron"
-    },
-    "I": {
-      "tag": "c:ingots/tin"
-    }
+    "B": "#c:glass_blocks",
+    "G": "#c:gears/iron",
+    "I": "#c:ingots/tin"
   },
   "pattern": [
     "IBI",
@@ -18,7 +12,6 @@
     "IBI"
   ],
   "result": {
-    "count": 1,
     "id": "usefulmachinery:machine_frame"
   }
 }

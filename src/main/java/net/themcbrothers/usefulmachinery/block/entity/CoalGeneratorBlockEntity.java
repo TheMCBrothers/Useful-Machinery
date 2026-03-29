@@ -2,9 +2,8 @@ package net.themcbrothers.usefulmachinery.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -12,6 +11,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.themcbrothers.usefulmachinery.component.MachineContents;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
@@ -62,16 +63,16 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     @Override
     protected boolean canRun() {
         boolean canRun = this.redstoneMode.canRun(this);
-        boolean canGenerate = this.energyStorage.getEnergyStored() <= this.energyStorage.getMaxEnergyStored();
+        boolean canGenerate = this.energyStorage.getAmountAsInt() <= this.energyStorage.getCapacityAsInt();
 
         return this.level != null && canRun && canGenerate;
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
-        super.applyImplicitComponents(input);
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
 
-        MachineContents contents = input.get(CONTENTS.get());
+        MachineContents contents = components.get(CONTENTS.get());
 
         if (contents != null) {
             this.burnTime = contents.burnTime();
@@ -85,7 +86,7 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
         builder.set(CONTENTS.get(), new MachineContents(ItemContainerContents.fromItems(
                 this.upgradeContainer.getItems()),
-                this.energyStorage.getEnergyStored(),
+                this.energyStorage.getAmountAsInt(),
                 this.redstoneMode,
                 this.processTime,
                 this.processTimeTotal,
@@ -125,19 +126,19 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        super.saveAdditional(compound, registries);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        compound.putInt("BurnTime", this.burnTime);
-        compound.putInt("BurnTimeTotal", this.burnTimeTotal);
+        output.putInt("BurnTime", this.burnTime);
+        output.putInt("BurnTimeTotal", this.burnTimeTotal);
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-        super.loadAdditional(compound, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        this.burnTime = compound.getInt("BurnTime");
-        this.burnTimeTotal = compound.getInt("BurnTimeTotal");
+        this.burnTime = input.getIntOr("BurnTime", 0);
+        this.burnTimeTotal = input.getIntOr("BurnTimeTotal", 0);
     }
 
     @Override
@@ -183,8 +184,12 @@ public class CoalGeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private boolean consumeFuel() {
+        if (this.level == null) {
+            return false;
+        }
+
         ItemStack generatorStack = this.getItems().get(0);
-        int burnTime = generatorStack.getBurnTime(null);
+        int burnTime = generatorStack.getBurnTime(null, this.level.fuelValues());
 
         if (burnTime == 1600) {
             int time = this.calcBurnTime(burnTime);

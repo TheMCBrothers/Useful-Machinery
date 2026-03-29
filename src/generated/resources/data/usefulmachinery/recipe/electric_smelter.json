@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:gears/copper"
-    },
-    "B": {
-      "tag": "c:batteries"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "R": {
-      "item": "minecraft:furnace"
-    },
-    "X": {
-      "tag": "c:dusts/redstone"
-    }
+    "#": "#c:gears/copper",
+    "B": "#c:batteries",
+    "I": "#c:ingots/iron",
+    "R": "minecraft:furnace",
+    "X": "#c:dusts/redstone"
   },
   "pattern": [
     " X ",
@@ -24,7 +14,6 @@
     "IBI"
   ],
   "result": {
-    "count": 1,
     "id": "usefulmachinery:electric_smelter"
   }
 }

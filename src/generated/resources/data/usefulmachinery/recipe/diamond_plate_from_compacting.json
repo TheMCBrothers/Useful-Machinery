@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:gems/diamond"
+    "ingredient": "#c:gems/diamond"
   },
   "mode": "plate",
   "result": {

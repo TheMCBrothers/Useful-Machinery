@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum RemoveVanillaStuffProvider implements IBlockComponentProvider {
     INSTANCE;
 
-    private static final ResourceLocation UID = UsefulMachinery.rl("remove_vanilla_stuff");
+    private static final ResourceLocation UID = UsefulMachinery.id("remove_vanilla_stuff");
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig pluginConfig) {

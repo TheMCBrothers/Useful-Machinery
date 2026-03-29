@@ -2,7 +2,7 @@ package net.themcbrothers.usefulmachinery.client.screen.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
@@ -30,14 +30,14 @@ public class CompactorModeButton extends ExtendedButton {
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractContents(graphics, mouseX, mouseY, partialTick);
 
         Font font = Minecraft.getInstance().font;
         ItemStack renderStack = this.getMode().getItemProvider().asItem().getDefaultInstance();
 
-        guiGraphics.renderItemDecorations(font, renderStack, this.getX() + 2, this.getY() + 2);
-        guiGraphics.renderItem(renderStack, this.getX() + 2, this.getY() + 2);
+        graphics.itemDecorations(font, renderStack, this.getX() + 2, this.getY() + 2);
+        graphics.item(renderStack, this.getX() + 2, this.getY() + 2);
     }
 
     private void cycleMode() {
@@ -47,7 +47,7 @@ public class CompactorModeButton extends ExtendedButton {
             ordinal = 0;
         }
 
-       this.menu.setCompactorMode(CompactorMode.byOrdinal(ordinal));
+        this.menu.setCompactorMode(CompactorMode.byOrdinal(ordinal));
     }
 
     public CompactorMode getMode() {

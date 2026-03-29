@@ -4,12 +4,12 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
@@ -20,14 +20,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CompactingRecipeBuilder implements RecipeBuilder {
-    private final ItemStack result;
+    private final ItemStackTemplate result;
     private final SizedIngredient sizedIngredient;
     private final int processTime;
     private final CompactorMode mode;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
     private String group = "";
 
-    private CompactingRecipeBuilder(ItemStack result, SizedIngredient sizedIngredient, int processTime, CompactorMode mode) {
+    private CompactingRecipeBuilder(ItemStackTemplate result, SizedIngredient sizedIngredient, int processTime, CompactorMode mode) {
         this.result = result;
         this.sizedIngredient = sizedIngredient;
         this.processTime = processTime;
@@ -35,7 +35,14 @@ public class CompactingRecipeBuilder implements RecipeBuilder {
     }
 
     public static CompactingRecipeBuilder compacting(ItemLike item, SizedIngredient sizedIngredient, int processTime, CompactorMode mode) {
-        return new CompactingRecipeBuilder(item.asItem().getDefaultInstance(), sizedIngredient, processTime, mode);
+        ItemStackTemplate itemStackTemplate = new ItemStackTemplate(item.asItem());
+
+        return new CompactingRecipeBuilder(itemStackTemplate, sizedIngredient, processTime, mode);
+    }
+
+    @Override
+    public ResourceKey<Recipe<?>> defaultId() {
+        return RecipeBuilder.getDefaultRecipeId(this.result);
     }
 
     @Override
@@ -53,28 +60,23 @@ public class CompactingRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public Item getResult() {
-        return this.result.getItem();
-    }
-
-    @Override
-    public void save(RecipeOutput recipeOutput, ResourceLocation id) {
-        this.validate(id);
+    public void save(RecipeOutput recipeOutput, ResourceKey<Recipe<?>> resourceKey) {
+        this.validate(resourceKey);
 
         Advancement.Builder advancement = recipeOutput.advancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
-                .rewards(AdvancementRewards.Builder.recipe(id))
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceKey))
+                .rewards(AdvancementRewards.Builder.recipe(resourceKey))
                 .requirements(AdvancementRequirements.Strategy.OR);
 
         this.criteria.forEach(advancement::addCriterion);
 
-        recipeOutput.accept(id, new CompactingRecipe(this.group, this.sizedIngredient, this.result, this.processTime, this.mode),
-                advancement.build(id.withPrefix("recipes/")));
+        recipeOutput.accept(resourceKey, new CompactingRecipe(this.group, this.sizedIngredient, this.result, this.processTime, this.mode),
+                advancement.build(resourceKey.identifier().withPrefix("recipes/")));
     }
 
-    private void validate(ResourceLocation id) {
+    private void validate(ResourceKey<Recipe<?>> resourceKey) {
         if (this.criteria.isEmpty()) {
-            throw new IllegalStateException("No way of obtaining recipe: " + id);
+            throw new IllegalStateException("No way of obtaining recipe: " + resourceKey);
         }
     }
 }

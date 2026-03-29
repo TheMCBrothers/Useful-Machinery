@@ -28,7 +28,7 @@ import java.util.Arrays;
 public enum MachineProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
 
-    private static final ResourceLocation UID = UsefulMachinery.rl("machine");
+    private static final ResourceLocation UID = UsefulMachinery.id("machine");
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig pluginConfig) {

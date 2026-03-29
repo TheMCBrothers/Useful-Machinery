@@ -3,9 +3,7 @@ package net.themcbrothers.usefulmachinery.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,8 +11,8 @@ import static net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE;
 import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
 
 public class MachineryBlockTagsProvider extends BlockTagsProvider {
-    public MachineryBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, UsefulMachinery.MOD_ID, existingFileHelper);
+    public MachineryBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, UsefulMachinery.MOD_ID);
     }
 
     @Override

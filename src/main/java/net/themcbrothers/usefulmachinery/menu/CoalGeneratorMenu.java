@@ -8,7 +8,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
@@ -18,19 +17,19 @@ import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import static net.themcbrothers.usefulmachinery.core.MachineryItems.SUSTAINED_UPGRADE;
 
 public class CoalGeneratorMenu extends AbstractMachineMenu {
-    public CoalGeneratorMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, buffer),
+    public CoalGeneratorMenu(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, inventory, buffer),
                 new UpgradeContainer(buffer.readInt()), new SimpleContainerData(buffer.readInt()));
     }
 
-    public CoalGeneratorMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
-        super(MachineryMenus.COAL_GENERATOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize());
+    public CoalGeneratorMenu(int id, Inventory inventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
+        super(MachineryMenus.COAL_GENERATOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize(), inventory);
 
         this.addSlot(new Slot(blockEntity, 0, 80, 33));
         this.addSlot(new EnergySlot(blockEntity, 1, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);
-        this.addPlayerSlots(playerInventory);
+        this.addPlayerSlots(inventory);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
 
             // Checking if shift clicking stack out of inventory into the machine
             if (index >= invSlotStart) {
-                if (AbstractFurnaceBlockEntity.isFuel(slotStack)) {
+                if (this.isFuel(slotStack)) {
                     // Checking if stack has not been moved into fuel slot
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
@@ -107,6 +106,10 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
         }
 
         return stack;
+    }
+
+    private boolean isFuel(ItemStack itemStack) {
+        return itemStack.getBurnTime(null, this.level.fuelValues()) > 0;
     }
 
     public int getBurnTimeScaled() {

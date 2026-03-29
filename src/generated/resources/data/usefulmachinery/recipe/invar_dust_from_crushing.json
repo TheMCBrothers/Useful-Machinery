@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/invar"
-  },
+  "ingredient": "#c:ingots/invar",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:invar_dust"
   }
 }

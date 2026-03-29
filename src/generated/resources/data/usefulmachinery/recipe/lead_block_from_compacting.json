@@ -3,7 +3,7 @@
   "compactTime": 250,
   "ingredient": {
     "count": 9,
-    "tag": "c:ingots/lead"
+    "ingredient": "#c:ingots/lead"
   },
   "mode": "block",
   "result": {

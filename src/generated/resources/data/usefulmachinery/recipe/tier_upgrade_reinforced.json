@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/silver"
-    },
-    "I": {
-      "tag": "c:ingots/electrum"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "G": "#c:gears/silver",
+    "I": "#c:ingots/electrum",
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " I ",
@@ -21,7 +15,6 @@
     "components": {
       "usefulmachinery:tier": "reinforced"
     },
-    "count": 1,
     "id": "usefulmachinery:tier_upgrade"
   }
 }

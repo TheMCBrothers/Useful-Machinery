@@ -1,9 +1,9 @@
 package net.themcbrothers.usefulmachinery.client.screen.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.AbstractMachineMenu;
@@ -26,15 +26,13 @@ public class RedstoneModeButton extends ExtendedButton {
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractContents(graphics, mouseX, mouseY, partialTick);
 
         RedstoneMode mode = this.getMode();
-        ResourceLocation icon = mode.getIcon();
+        Identifier icon = mode.getIcon();
 
-        RenderSystem.disableDepthTest();
-
-        guiGraphics.blit(icon, this.getX(), this.getY(), 0, mode.ordinal() == 0 ? 0 : 2, this.width, this.height, 16, 16);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, icon, this.getX(), this.getY(), 0, mode.ordinal() == 0 ? 0 : 2, this.width, this.height, 16, 16);
     }
 
     private void cycleMode() {

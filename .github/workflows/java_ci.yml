@@ -18,4 +18,4 @@ jobs:
   ci:
     uses: TheMCBrothers/.github/.github/workflows/mod_ci.yml@main
     with:
-      java_version: '21'
+      java_version: '25'

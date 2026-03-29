@@ -13,7 +13,7 @@ jobs:
   publish:
     uses: TheMCBrothers/.github/.github/workflows/mod_publish_unified.yml@main
     with:
-      java_version: '21'
+      java_version: '25'
     secrets:
       CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
       MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

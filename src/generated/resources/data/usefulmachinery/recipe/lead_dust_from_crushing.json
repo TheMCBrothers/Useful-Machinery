@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/lead"
-  },
+  "ingredient": "#c:ingots/lead",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:lead_dust"
   }
 }

@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/silver"
-  },
+  "ingredient": "#c:ingots/silver",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:silver_dust"
   }
 }

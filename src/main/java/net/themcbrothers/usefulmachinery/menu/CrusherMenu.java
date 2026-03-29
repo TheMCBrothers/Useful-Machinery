@@ -8,30 +8,24 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import net.themcbrothers.usefulmachinery.block.entity.extension.UpgradeContainer;
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
-import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
+import net.themcbrothers.usefulmachinery.core.MachineryRecipePropertySet;
 import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
-import net.themcbrothers.usefulmachinery.recipe.CrushingRecipe;
-
-import java.util.Objects;
 
 public class CrusherMenu extends AbstractMachineMenu {
-    public CrusherMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, playerInventory, buffer),
+    public CrusherMenu(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, ContainerHelper.getBlockEntity(AbstractMachineBlockEntity.class, inventory, buffer),
                 new UpgradeContainer(buffer.readInt()), new SimpleContainerData(buffer.readInt()));
     }
 
-    public CrusherMenu(int id, Inventory playerInventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
-        super(MachineryMenus.CRUSHER.get(), id, blockEntity, fields, upgradeContainer.getContainerSize());
+    public CrusherMenu(int id, Inventory inventory, AbstractMachineBlockEntity blockEntity, Container upgradeContainer, ContainerData fields) {
+        super(MachineryMenus.CRUSHER.get(), id, blockEntity, fields, upgradeContainer.getContainerSize(), inventory);
 
-        this.recipes.addAll(Objects.requireNonNull(blockEntity.getLevel())
-                .getRecipeManager()
-                .getAllRecipesFor(MachineryRecipeTypes.CRUSHING.get()));
+        this.acceptedInputs = this.level.recipeAccess().propertySet(MachineryRecipePropertySet.CRUSHER_INPUT);
 
         this.addSlot(new Slot(blockEntity, 0, 35, 35));
         this.addSlot(new OutputSlot(blockEntity, 1, 95, 24));
@@ -39,7 +33,7 @@ public class CrusherMenu extends AbstractMachineMenu {
         this.addSlot(new EnergySlot(blockEntity, 3, 134, 33));
 
         this.addUpgradeSlots(upgradeContainer);
-        this.addPlayerSlots(playerInventory);
+        this.addPlayerSlots(inventory);
     }
 
     @Override
@@ -122,17 +116,13 @@ public class CrusherMenu extends AbstractMachineMenu {
     }
 
     protected boolean canCrush(ItemStack stack) {
-        return this.recipes.stream()
-                .map(recipeHolder -> (CrushingRecipe) recipeHolder.value())
-                .anyMatch(recipe -> recipe.matches(new SingleRecipeInput(stack), Objects.requireNonNull(this.blockEntity.getLevel())));
+        return this.acceptedInputs.test(stack);
     }
 
     public int getProgressScaled(int width) {
-        // Crush time
-        int i = this.fields.get(4);
-        // Total crush time
-        int j = this.fields.get(5);
+        int crustTime = this.fields.get(4);
+        int totalCrushTime = this.fields.get(5);
 
-        return i != 0 && j != 0 ? i * width / j : 0;
+        return crustTime != 0 && totalCrushTime != 0 ? crustTime * width / totalCrushTime : 0;
     }
 }

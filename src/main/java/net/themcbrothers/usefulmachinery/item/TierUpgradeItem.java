@@ -2,6 +2,7 @@ package net.themcbrothers.usefulmachinery.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -45,9 +46,9 @@ public class TierUpgradeItem extends UpgradeItem {
                         stack.shrink(1);
                     }
 
-                    player.displayClientMessage(TEXT_UTILS.translate("message", "upgrade.applied.success")
+                    player.sendOverlayMessage(TEXT_UTILS.translate("message", "upgrade.applied.success")
                             .append(itemTier.getSerializedName())
-                            .withStyle(ChatFormatting.GREEN), true);
+                            .withStyle(ChatFormatting.GREEN));
                 }
 
                 return InteractionResult.SUCCESS;
@@ -66,11 +67,12 @@ public class TierUpgradeItem extends UpgradeItem {
     }
 
     @Override
-    public String getDescriptionId(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         MachineTier tier = stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE);
 
-        return String.format("%s_%s", this.getDescriptionId(), tier.getSerializedName());
+        return Component.translatable(String.format("%s_%s", this.getDescriptionId(), tier.getSerializedName()));
     }
+
 
     @Override
     public boolean isSupported(BlockState machine) {

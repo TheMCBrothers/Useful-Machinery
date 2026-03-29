@@ -12,7 +12,7 @@ import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.menu.CompactorMenu;
 
 public record SetCompactorModePacket(CompactorMode mode) implements PacketMessage {
-    public static final Type<SetCompactorModePacket> TYPE = new Type<>(UsefulMachinery.rl("set_compactor_mode"));
+    public static final Type<SetCompactorModePacket> TYPE = new Type<>(UsefulMachinery.id("set_compactor_mode"));
     public static final StreamCodec<FriendlyByteBuf, SetCompactorModePacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public SetCompactorModePacket decode(FriendlyByteBuf buffer) {

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/signalum"
-    },
-    "I": {
-      "tag": "c:ingots/enderium"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "G": "#c:gears/signalum",
+    "I": "#c:ingots/enderium",
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " I ",
@@ -21,7 +15,6 @@
     "components": {
       "usefulmachinery:tier": "overkill"
     },
-    "count": 1,
     "id": "usefulmachinery:tier_upgrade"
   }
 }

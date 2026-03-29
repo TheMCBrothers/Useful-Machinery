@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:ingots/enderium"
+    "ingredient": "#c:ingots/enderium"
   },
   "mode": "plate",
   "result": {

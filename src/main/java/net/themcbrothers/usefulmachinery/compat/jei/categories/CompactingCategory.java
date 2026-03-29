@@ -30,7 +30,7 @@ import java.util.Objects;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CompactingCategory implements IRecipeCategory<RecipeHolder<CompactingRecipe>> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/compactor.png");
+    private static final ResourceLocation TEXTURES = UsefulMachinery.id("textures/gui/container/compactor.png");
     private final IDrawable icon;
     private final IDrawable background;
     private final IDrawableAnimated arrow;

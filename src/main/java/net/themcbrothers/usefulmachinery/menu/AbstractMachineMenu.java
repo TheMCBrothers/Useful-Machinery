@@ -8,9 +8,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipePropertySet;
+import net.minecraft.world.level.Level;
 import net.themcbrothers.lib.energy.EnergyProvider;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.inventory.PredicateSlot;
@@ -19,22 +18,20 @@ import net.themcbrothers.usefulmachinery.item.UpgradeItem;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class AbstractMachineMenu extends AbstractContainerMenu implements EnergyProvider {
     protected final AbstractMachineBlockEntity blockEntity;
     protected final ContainerData fields;
     protected final int upgradeSlotCount;
-    protected final List<RecipeHolder<? extends Recipe<? extends RecipeInput>>> recipes;
+    protected final Level level;
+    protected RecipePropertySet acceptedInputs = RecipePropertySet.EMPTY;
 
-    protected AbstractMachineMenu(@Nullable MenuType<?> type, int id, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount) {
+    protected AbstractMachineMenu(@Nullable MenuType<?> type, int id, AbstractMachineBlockEntity blockEntity, ContainerData fields, int upgradeSlotCount, Inventory inventory) {
         super(type, id);
 
         this.blockEntity = blockEntity;
         this.fields = fields;
         this.upgradeSlotCount = upgradeSlotCount;
-        this.recipes = new ArrayList<>();
+        this.level = inventory.player.level();
 
         this.addDataSlots(fields);
     }
@@ -70,15 +67,15 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
         return this.blockEntity;
     }
 
-    protected void addPlayerSlots(Inventory playerInventory) {
+    protected void addPlayerSlots(Inventory inventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
+            this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
     }
 

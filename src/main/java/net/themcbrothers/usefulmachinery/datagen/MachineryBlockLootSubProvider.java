@@ -5,12 +5,14 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.themcbrothers.usefulmachinery.core.Registration;
@@ -45,13 +47,13 @@ public class MachineryBlockLootSubProvider extends BlockLootSubProvider {
                 .withPool(applyExplosionCondition(block, LootPool.lootPool())
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(block)
-                                .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                .apply(CopyNameFunction.copyName(LootContext.BlockEntityTarget.BLOCK_ENTITY))
                                 .apply(builder)
                         ));
     }
 
     private CopyComponentsFunction.Builder copyMachineComponents() {
-        return CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+        return CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                 .include(DataComponents.CONTAINER)
                 .include(CONTENTS.get())
                 .include(TIER.get());

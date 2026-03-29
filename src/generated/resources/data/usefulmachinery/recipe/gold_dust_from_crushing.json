@@ -1,11 +1,8 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": {
-    "tag": "c:ingots/gold"
-  },
+  "ingredient": "#c:ingots/gold",
   "primary": {
-    "count": 1,
     "id": "usefulfoundation:gold_dust"
   }
 }

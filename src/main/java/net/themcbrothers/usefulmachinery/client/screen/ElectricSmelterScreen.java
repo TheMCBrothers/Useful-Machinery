@@ -1,31 +1,34 @@
 package net.themcbrothers.usefulmachinery.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.menu.ElectricSmelterMenu;
 
 public class ElectricSmelterScreen extends AbstractMachineScreen<ElectricSmelterMenu> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/electric_smelter.png");
+    private static final Identifier TEXTURE = UsefulMachinery.id("textures/gui/container/electric_smelter.png");
 
     public ElectricSmelterScreen(ElectricSmelterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int x, int y) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+
         int i = this.leftPos;
         int j = this.topPos;
 
-        guiGraphics.blit(TEXTURES, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
         // Render arrow
         int l = this.menu.getProgressScaled(24);
 
-        guiGraphics.blit(TEXTURES, 58 + i, 32 + j, 176, 14, l, 17);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + i, 32 + j, 176, 14, l, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
-        this.renderUpgradeSlots(guiGraphics);
+        this.extractUpgradeSlots(graphics);
     }
 }

@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:ingots/tin"
+    "ingredient": "#c:ingots/tin"
   },
   "mode": "plate",
   "result": {

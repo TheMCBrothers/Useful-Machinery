@@ -11,8 +11,7 @@ import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.AbstractMachineMenu;
 
 public record SetRedstoneModePacket(RedstoneMode mode) implements PacketMessage {
-
-    public static final Type<SetRedstoneModePacket> TYPE = new Type<>(UsefulMachinery.rl("set_redstone_mode"));
+    public static final Type<SetRedstoneModePacket> TYPE = new Type<>(UsefulMachinery.id("set_redstone_mode"));
     public static final StreamCodec<FriendlyByteBuf, SetRedstoneModePacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public SetRedstoneModePacket decode(FriendlyByteBuf buffer) {

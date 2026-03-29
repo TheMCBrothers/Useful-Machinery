@@ -11,9 +11,9 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
@@ -26,20 +26,20 @@ import java.util.Objects;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRecipe>> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.rl("textures/gui/container/crusher.png");
+    private static final Identifier TEXTURE = UsefulMachinery.id("textures/gui/container/crusher.png");
 
     private final IDrawable icon, background;
     private final IDrawableAnimated arrow, energyBar;
 
     public CrushingCategory(IGuiHelper helper) {
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineryBlocks.CRUSHER.get()));
-        this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
-        this.arrow = helper.drawableBuilder(TEXTURES, 176, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        this.energyBar = helper.drawableBuilder(TEXTURES, 246, 0, 10, 50).buildAnimated(200, IDrawableAnimated.StartDirection.TOP, true);
+        this.background = helper.createDrawable(TEXTURE, 34, 16, 132, 52);
+        this.arrow = helper.drawableBuilder(TEXTURE, 176, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
+        this.energyBar = helper.drawableBuilder(TEXTURE, 246, 0, 10, 50).buildAnimated(200, IDrawableAnimated.StartDirection.TOP, true);
     }
 
     @Override
-    public void draw(RecipeHolder<CrushingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<CrushingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         this.arrow.draw(graphics, 24, 18);
         this.energyBar.draw(graphics, 121, 1);
 
@@ -51,7 +51,7 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
         return MachineryJeiRecipeTypes.CRUSHING;
     }
 
-    protected void drawChance(RecipeHolder<CrushingRecipe> recipe, GuiGraphics graphics) {
+    protected void drawChance(RecipeHolder<CrushingRecipe> recipe, GuiGraphicsExtractor graphics) {
         float secondaryChance = recipe.value().secondaryChance();
 
         if (secondaryChance > 0) {

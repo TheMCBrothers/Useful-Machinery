@@ -3,7 +3,7 @@
   "compactTime": 250,
   "ingredient": {
     "count": 9,
-    "tag": "c:ingots/steel"
+    "ingredient": "#c:ingots/steel"
   },
   "mode": "block",
   "result": {

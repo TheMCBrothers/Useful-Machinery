@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/bronze"
-    },
-    "I": {
-      "tag": "c:ingots/invar"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "G": "#c:gears/bronze",
+    "I": "#c:ingots/invar",
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " I ",
@@ -21,7 +15,6 @@
     "components": {
       "usefulmachinery:tier": "basic"
     },
-    "count": 1,
     "id": "usefulmachinery:tier_upgrade"
   }
 }

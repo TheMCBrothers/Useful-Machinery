@@ -1,7 +1,2 @@
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package themcbros.usefulmachinery.compat.jei.categories;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+@org.jspecify.annotations.NullMarked
+package net.themcbrothers.usefulmachinery.compat.jei.categories;

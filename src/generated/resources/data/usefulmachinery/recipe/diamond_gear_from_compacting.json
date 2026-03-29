@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 4,
-    "tag": "c:gems/diamond"
+    "ingredient": "#c:gems/diamond"
   },
   "mode": "gear",
   "result": {

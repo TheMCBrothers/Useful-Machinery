@@ -3,7 +3,7 @@
   "compactTime": 200,
   "ingredient": {
     "count": 1,
-    "tag": "c:ingots/electrum"
+    "ingredient": "#c:ingots/electrum"
   },
   "mode": "plate",
   "result": {
