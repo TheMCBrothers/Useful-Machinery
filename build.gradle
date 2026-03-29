@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.19'
+    id 'net.neoforged.moddev' version '2.0.141'
     id 'me.shedaniel.unified-publishing' version '0.1.+'
 }
 
@@ -19,8 +19,7 @@ base {
     archivesName = archive_base
 }
 
-// Mojang ships Java 21 to end users in 1.20.5+, so your mod should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     runs {
@@ -53,8 +52,8 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
-        data {
-            type = 'data'
+        clientData {
+            type = 'clientData'
 
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath(), '--existing-mod', 'usefulfoundation'
         }
@@ -78,13 +77,13 @@ dependencies {
     implementation "net.themcbrothers:useful-foundation:$foundation_version"
 
     // JEI
-    compileOnly("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
-    compileOnly("mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version")
-    runtimeOnly("mezz.jei:jei-$minecraft_version-neoforge:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-pre-3-common-api:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-pre-3-neoforge-api:$jei_version")
+    runtimeOnly("mezz.jei:jei-$minecraft_version-pre-3-neoforge:$jei_version")
 
     // TOP
-    compileOnly("mcjty.theoneprobe:theoneprobe:$top_version:api")
-    runtimeOnly("mcjty.theoneprobe:theoneprobe:$top_version")
+    // compileOnly("mcjty.theoneprobe:theoneprobe:$top_version:api")
+    // runtimeOnly("mcjty.theoneprobe:theoneprobe:$top_version")
 
     // Jade
     implementation "curse.maven:jade-324717:$jade_id"
@@ -105,7 +104,7 @@ tasks.withType(ProcessResources).configureEach {
             lib_version_range       : lib_version_range,
             foundation_version_range: foundation_version_range,
             jei_version_range       : jei_version_range,
-            top_version_range       : top_version_range,
+//            top_version_range       : top_version_range,
             jade_version_range      : jade_version_range
     ]
     inputs.properties replaceProperties
@@ -216,4 +215,8 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+compileJava {
+    exclude("net/themcbrothers/**/compat/**")
 }
