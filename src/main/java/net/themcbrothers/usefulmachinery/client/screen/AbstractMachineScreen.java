@@ -28,6 +28,8 @@ public abstract class AbstractMachineScreen<T extends AbstractMachineMenu> exten
     protected static final int BACKGROUND_TEXTURE_WIDTH = 256;
     protected static final int BACKGROUND_TEXTURE_HEIGHT = 256;
 
+    protected abstract Identifier getBackgroundTexture();
+
     public AbstractMachineScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
@@ -73,6 +75,19 @@ public abstract class AbstractMachineScreen<T extends AbstractMachineMenu> exten
                 energyBar.renderToolTip(graphics, mouseX, mouseY);
             }
         }
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+
+        Identifier backgroundTexture = this.getBackgroundTexture();
+        int x = this.leftPos;
+        int y = this.topPos;
+
+        graphics.blit(RenderPipelines.GUI_TEXTURED, backgroundTexture, x, y, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+
+        this.extractUpgradeSlots(graphics);
     }
 
     protected void extractUpgradeSlots(GuiGraphicsExtractor graphics) {

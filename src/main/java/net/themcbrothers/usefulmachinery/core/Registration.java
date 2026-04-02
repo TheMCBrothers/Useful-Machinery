@@ -3,6 +3,8 @@ package net.themcbrothers.usefulmachinery.core;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -22,6 +24,7 @@ public final class Registration {
     public static final DeferredRegister<Identifier> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, UsefulMachinery.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UsefulMachinery.MOD_ID);
+    public static final DeferredRegister<RecipeBookCategory> RECIPE_BOOK_CATEGORIES = DeferredRegister.create(Registries.RECIPE_BOOK_CATEGORY, UsefulMachinery.MOD_ID);
     public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, UsefulMachinery.MOD_ID);
 
     public static void register(IEventBus modEventBus) {
@@ -33,6 +36,7 @@ public final class Registration {
         MachineryStats.init();
         MachineryRecipeTypes.init();
         MachineryRecipeSerializers.init();
+        MachineryRecipeBookCategories.init();
         MachineryDataComponentTypes.init();
 
         BLOCK_ENTITY_TYPES.register(modEventBus);
@@ -43,6 +47,7 @@ public final class Registration {
         CUSTOM_STATS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
+        RECIPE_BOOK_CATEGORIES.register(modEventBus);
         DATA_COMPONENT_TYPES.register(modEventBus);
     }
 }

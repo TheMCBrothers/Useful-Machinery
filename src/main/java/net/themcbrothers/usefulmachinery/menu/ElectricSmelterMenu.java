@@ -118,14 +118,20 @@ public class ElectricSmelterMenu extends AbstractMachineMenu {
         return stack;
     }
 
-    protected boolean canCook(ItemStack stack) {
-        return this.acceptedFurnaceInputs.test(stack) || this.acceptedBlastFurnaceInputs.test(stack);
+    @Override
+    public boolean isProcessing() {
+        return false;
     }
 
-    public int getProgressScaled(int width) {
+    @Override
+    public int getProgressScaled(int size) {
         int cookTime = this.fields.get(4);
         int totalCookTime = this.fields.get(5);
 
-        return cookTime != 0 && totalCookTime != 0 ? cookTime * width / totalCookTime : 0;
+        return cookTime != 0 && totalCookTime != 0 ? cookTime * size / totalCookTime : 0;
+    }
+
+    protected boolean canCook(ItemStack stack) {
+        return this.acceptedFurnaceInputs.test(stack) || this.acceptedBlastFurnaceInputs.test(stack);
     }
 }

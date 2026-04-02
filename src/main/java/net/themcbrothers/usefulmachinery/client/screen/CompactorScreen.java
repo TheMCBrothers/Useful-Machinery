@@ -27,6 +27,11 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
     }
 
     @Override
+    protected Identifier getBackgroundTexture() {
+        return TEXTURE;
+    }
+
+    @Override
     protected void init() {
         super.init();
 
@@ -43,17 +48,13 @@ public class CompactorScreen extends AbstractMachineScreen<CompactorMenu> {
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
 
-        int i = this.leftPos;
-        int j = this.topPos;
-
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        int x = this.leftPos;
+        int y = this.topPos;
 
         // Render arrow
-        int l = this.menu.getProgressScaled(24);
+        int scaledProgress = this.menu.getProgressScaled(24);
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + i, 32 + j, 176, 14, l, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
-
-        this.extractUpgradeSlots(graphics);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + x, 32 + y, 176, 14, scaledProgress, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.themcbrothers.usefulmachinery.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +56,7 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
 
             // Checking if shift clicking stack out of inventory into the machine
             if (index >= invSlotStart) {
-                if (this.isFuel(slotStack)) {
+                if (this.isValidFuel(slotStack)) {
                     // Checking if stack has not been moved into fuel slot
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
@@ -108,20 +109,22 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
         return stack;
     }
 
-    private boolean isFuel(ItemStack itemStack) {
-        return itemStack.getBurnTime(null, this.level.fuelValues()) > 0;
-    }
-
-    public int getBurnTimeScaled() {
-        // Burn time
-        int i = this.fields.get(4);
-        // Total burn time
-        int j = this.fields.get(5);
-
-        return j != 0 ? i * 13 / j : 0;
-    }
-
-    public boolean isBurning() {
+    @Override
+    public boolean isProcessing() {
         return this.fields.get(4) > 0;
+    }
+
+    @Override
+    public int getProgressScaled(int size) {
+        // Burn time
+        int burnTime = this.fields.get(4);
+        // Total burn time
+        int totalBurnTime = this.fields.get(5);
+
+        return totalBurnTime != 0 ? burnTime * size / totalBurnTime : 0;
+    }
+
+    private boolean isValidFuel(ItemStack itemStack) {
+        return itemStack.tags().anyMatch(tag -> tag == ItemTags.COALS);
     }
 }

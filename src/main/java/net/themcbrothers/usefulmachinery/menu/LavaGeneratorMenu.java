@@ -11,10 +11,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import net.themcbrothers.lib.inventory.EnergySlot;
 import net.themcbrothers.lib.util.ContainerHelper;
@@ -65,12 +68,29 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
             ItemStack slotStack = slot.getItem();
             stack = slotStack.copy();
 
+            FluidStacksResourceHandler lavaTankHandler = ((LavaGeneratorBlockEntity) this.blockEntity).getLavaTankHandler();
+            ItemAccess itemAccess = ItemAccess.forStack(slotStack);
+            ResourceHandler<FluidResource> itemFluidHandler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+            boolean isSuccess;
+
+            if (itemFluidHandler == null) {
+                return ItemStack.EMPTY;
+            }
+
+            FluidResource itemFluidResource = itemFluidHandler.getResource(0);
+
             // Checking if shift clicking stack out of inventory into the machine
             if (index >= invSlotStart) {
-                FluidTank lavaTank = ((LavaGeneratorBlockEntity) this.blockEntity).getLavaTank();
-                boolean isLava = FluidUtil.tryEmptyContainer(slotStack, lavaTank, Integer.MAX_VALUE, null, false).isSuccess();
+                try (Transaction transaction = Transaction.openRoot()) {
+                    int itemAmount = itemFluidHandler.getAmountAsInt(0);
+                    int amount = lavaTankHandler.insert(itemFluidResource, itemAmount, transaction);
 
-                if (isLava) {
+                    isSuccess = amount > 0;
+                } catch (Exception e) {
+                    return ItemStack.EMPTY;
+                }
+
+                if (isSuccess) {
                     // Checking if stack has not been moved into fuel slot
                     if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
@@ -123,19 +143,18 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
         return stack;
     }
 
-    public int getBurnTimeScaled() {
-        // Burn time
-        int i = this.fields.get(4);
-        // Total burn time
-        int j = this.fields.get(5);
-
-        return j != 0 ? i * 13 / j : 0;
-    }
-
-    public boolean isBurning() {
+    @Override
+    public boolean isProcessing() {
         return this.fields.get(4) > 0;
     }
 
+    @Override
+    public int getProgressScaled(int size) {
+        int burnTime = this.fields.get(4);
+        int totalBurnTime = this.fields.get(5);
+
+        return totalBurnTime != 0 ? burnTime * size / totalBurnTime : 0;
+    }
 
     public int getFluidAmount() {
         return this.fields.get(6);

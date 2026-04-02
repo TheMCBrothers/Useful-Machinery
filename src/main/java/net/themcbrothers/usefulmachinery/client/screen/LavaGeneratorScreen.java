@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.themcbrothers.lib.client.screen.widgets.FluidTank;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.menu.LavaGeneratorMenu;
@@ -16,6 +15,11 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorMenu
 
     public LavaGeneratorScreen(LavaGeneratorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
+    }
+
+    @Override
+    protected Identifier getBackgroundTexture() {
+        return TEXTURE;
     }
 
     @Override
@@ -29,19 +33,15 @@ public class LavaGeneratorScreen extends AbstractMachineScreen<LavaGeneratorMenu
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
 
-        int i = this.leftPos;
-        int j = this.topPos;
-
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        int x = this.leftPos;
+        int y = this.topPos;
 
         // Render burning flame
-        if (this.menu.isBurning()) {
-            int l = this.menu.getBurnTimeScaled();
+        if (this.menu.isProcessing()) {
+            int scaledBurnTime = this.menu.getProgressScaled(13);
 
-            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 81 + i, 34 + j + 12 - l, 176, 12 - l, 14, l + 1, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 81 + x, 34 + y + 12 - scaledBurnTime, 176, 12 - scaledBurnTime, 14, scaledBurnTime + 1, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         }
-
-        this.extractUpgradeSlots(graphics);
     }
 
     @Override

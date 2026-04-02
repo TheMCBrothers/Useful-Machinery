@@ -36,6 +36,10 @@ public abstract class AbstractMachineMenu extends AbstractContainerMenu implemen
         this.addDataSlots(fields);
     }
 
+    public abstract boolean isProcessing();
+
+    public abstract int getProgressScaled(int size);
+
     @Override
     public boolean stillValid(Player player) {
         return this.getBlockEntity().stillValid(player);

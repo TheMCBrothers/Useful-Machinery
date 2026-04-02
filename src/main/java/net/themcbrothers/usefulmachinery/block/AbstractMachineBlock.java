@@ -21,17 +21,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidActionResult;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.themcbrothers.lib.wrench.WrenchableBlock;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import net.themcbrothers.usefulmachinery.block.entity.LavaGeneratorBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public abstract class AbstractMachineBlock extends BaseEntityBlock implements WrenchableBlock {
@@ -90,11 +86,11 @@ public abstract class AbstractMachineBlock extends BaseEntityBlock implements Wr
 
         if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity blockEntity && player instanceof ServerPlayer) {
             if (blockEntity instanceof LavaGeneratorBlockEntity lavaGeneratorBlockEntity) {
-                FluidTank lavaTank = lavaGeneratorBlockEntity.getLavaTank();
-                IItemHandler itemHandler = IItemHandler.of(Objects.requireNonNull(player.getCapability(Capabilities.Item.ENTITY)));
-                FluidActionResult actionResult = FluidUtil.tryEmptyContainerAndStow(stack, lavaTank, itemHandler, Integer.MAX_VALUE, player, true);
+                FluidStacksResourceHandler lavaTankHandler = lavaGeneratorBlockEntity.getLavaTankHandler();
 
-                if (actionResult.isSuccess()) {
+                boolean isSuccess = FluidUtil.interactWithFluidHandler(player, hand, pos, lavaTankHandler);
+
+                if (isSuccess) {
                     return InteractionResult.SUCCESS;
                 }
             }

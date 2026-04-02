@@ -3,8 +3,11 @@ package net.themcbrothers.usefulmachinery.menu.slot;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import java.util.function.Predicate;
 
@@ -19,8 +22,15 @@ public class FluidItemSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return FluidUtil.getFluidHandler(stack)
-                .map(fluidHandler -> FluidItemSlot.this.validator.test(fluidHandler.getFluidInTank(0)))
-                .orElse(false);
+        ItemAccess itemAccess = ItemAccess.forStack(stack);
+        ResourceHandler<FluidResource> itemAccessCapability = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+
+        if (itemAccessCapability == null) {
+            return false;
+        }
+
+        FluidResource resource = itemAccessCapability.getResource(0);
+
+        return this.validator.test(resource.toStack(itemAccessCapability.getAmountAsInt(0)));
     }
 }

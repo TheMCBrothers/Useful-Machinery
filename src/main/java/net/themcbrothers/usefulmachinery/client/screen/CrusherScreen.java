@@ -16,18 +16,23 @@ public class CrusherScreen extends AbstractMachineScreen<CrusherMenu> {
     }
 
     @Override
+    protected Identifier getBackgroundTexture() {
+        return TEXTURE;
+    }
+
+    @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
 
-        int i = this.leftPos;
-        int j = this.topPos;
+        int x = this.leftPos;
+        int y = this.topPos;
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
         // Render arrow
-        int l = this.menu.getProgressScaled(24);
+        int scaledProgress = this.menu.getProgressScaled(24);
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + i, 34 + j, 176, 14, l, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 58 + x, 34 + y, 176, 14, scaledProgress, 17, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
 
         this.extractUpgradeSlots(graphics);
     }

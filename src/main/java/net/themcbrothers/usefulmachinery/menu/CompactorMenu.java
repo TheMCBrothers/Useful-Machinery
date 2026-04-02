@@ -16,6 +16,7 @@ import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipePropertySet;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
 import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class CompactorMenu extends AbstractMachineMenu {
     public CompactorMenu(int id, Inventory inventory, FriendlyByteBuf buffer) {
@@ -115,6 +116,19 @@ public class CompactorMenu extends AbstractMachineMenu {
         return stack;
     }
 
+    @Override
+    public boolean isProcessing() {
+        return false;
+    }
+
+    @Override
+    public int getProgressScaled(int size) {
+        int compactTime = this.fields.get(4);
+        int totalCompactTime = this.fields.get(5);
+
+        return compactTime != 0 && totalCompactTime != 0 ? compactTime * size / totalCompactTime : 0;
+    }
+
     protected boolean canCompact(ItemStack stack) {
         return this.acceptedInputs.test(stack);
     }
@@ -125,12 +139,5 @@ public class CompactorMenu extends AbstractMachineMenu {
 
     public void setCompactorMode(CompactorMode mode) {
         this.fields.set(6, mode.ordinal());
-    }
-
-    public int getProgressScaled(int width) {
-        int compactTime = this.fields.get(4);
-        int totalCompactTime = this.fields.get(5);
-
-        return compactTime != 0 && totalCompactTime != 0 ? compactTime * width / totalCompactTime : 0;
     }
 }

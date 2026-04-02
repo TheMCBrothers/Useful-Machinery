@@ -5,26 +5,37 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.fluids.*;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.themcbrothers.usefulmachinery.component.MachineContents;
 import net.themcbrothers.usefulmachinery.core.MachineryBlockEntities;
 import net.themcbrothers.usefulmachinery.core.MachineryItems;
 import net.themcbrothers.usefulmachinery.machine.RedstoneMode;
 import net.themcbrothers.usefulmachinery.menu.LavaGeneratorMenu;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 import static net.themcbrothers.usefulmachinery.core.MachineryDataComponentTypes.CONTENTS;
@@ -37,7 +48,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public static final int BASE_TICKING_ENERGY = 150; // TODO evaluate if should be in config
     private int burnTime;
     private int burnTimeTotal;
-    private final FluidTank lavaTank;
+    private final FluidStacksResourceHandler lavaTankHandler;
     private final ContainerData fields = new ContainerData() {
         @Override
         public int getCount() {
@@ -64,9 +75,10 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 case 3 -> LavaGeneratorBlockEntity.this.getUpgradeSlotSize();
                 case 4 -> LavaGeneratorBlockEntity.this.burnTime;
                 case 5 -> LavaGeneratorBlockEntity.this.burnTimeTotal;
-                case 6 -> LavaGeneratorBlockEntity.this.lavaTank.getFluidAmount();
-                case 7 -> LavaGeneratorBlockEntity.this.lavaTank.getCapacity();
-                case 8 -> BuiltInRegistries.FLUID.getId(LavaGeneratorBlockEntity.this.lavaTank.getFluid().getFluid());
+                case 6 -> LavaGeneratorBlockEntity.this.lavaTankHandler.getAmountAsInt(0);
+                case 7 -> LavaGeneratorBlockEntity.this.lavaTankHandler.getCapacityAsInt(0, FluidResource.EMPTY);
+                case 8 ->
+                        BuiltInRegistries.FLUID.getId(LavaGeneratorBlockEntity.this.lavaTankHandler.getResource(0).getFluid());
                 default -> 0;
             };
         }
@@ -75,7 +87,12 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     public LavaGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(MachineryBlockEntities.LAVA_GENERATOR.get(), pos, state, true);
 
-        this.lavaTank = new FluidTank(TANK_CAPACITY, fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA));
+        this.lavaTankHandler = new FluidStacksResourceHandler(1, TANK_CAPACITY) {
+            @Override
+            public boolean isValid(int index, FluidResource resource) {
+                return resource.is(Tags.Fluids.LAVA);
+            }
+        };
     }
 
     @Override
@@ -110,7 +127,10 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         SimpleFluidContent simpleFluidContent = components.get(TANK.get());
 
         if (simpleFluidContent != null) {
-            this.lavaTank.setFluid(simpleFluidContent.copy());
+            int amount = simpleFluidContent.getAmount();
+            FluidResource fluidResource = FluidResource.of(simpleFluidContent.getFluid());
+
+            this.lavaTankHandler.set(0, fluidResource, amount);
         }
     }
 
@@ -127,7 +147,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
                 this.burnTime,
                 this.burnTimeTotal
         ));
-        builder.set(TANK.get(), SimpleFluidContent.copyOf(this.lavaTank.getFluid()));
+        builder.set(TANK.get(), SimpleFluidContent.copyOf(FluidUtil.getStack(this.lavaTankHandler, 0)));
     }
 
     @Override
@@ -163,9 +183,7 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("BurnTimeTotal", this.burnTimeTotal);
 
-        if (!this.lavaTank.getFluid().isEmpty()) {
-            compound.store("Tank", FluidStack.CODEC,  this.lavaTank.getFluid());
-        }
+        compound.store("Tank", FluidStack.OPTIONAL_CODEC, FluidUtil.getStack(this.lavaTankHandler, 0));
     }
 
     @Override
@@ -175,15 +193,19 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
         this.burnTime = input.getIntOr("BurnTime", 0);
         this.burnTimeTotal = input.getIntOr("BurnTimeTotal", 0);
 
-        if (input.child("Tank").isPresent()) {
-            this.lavaTank.setFluid(input.read("Tank", FluidStack.CODEC).orElse(FluidStack.EMPTY));
-        }
+        Optional<FluidStack> tank = input.read("Tank", FluidStack.OPTIONAL_CODEC);
+        int amount = tank.map(FluidStack::amount).orElse(0);
+        Fluid fluid = tank.map(FluidStack::getFluid).orElse(FluidStack.EMPTY.getFluid());
+
+        this.lavaTankHandler.set(0, FluidResource.of(fluid), amount);
     }
 
     @Override
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
-        return index == 0 && FluidUtil.getFluidHandler(stack)
-                .map(handler -> handler.getFluidInTank(0).getFluid().isSame(Fluids.LAVA)).orElse(false);
+        boolean isLavaInputSlot = index == 0;
+        boolean isItemFluidValid = this.lavaTankHandler.isValid(0, FluidResource.of(FluidUtil.getFirstStackContained(stack)));
+
+        return isLavaInputSlot && isItemFluidValid;
     }
 
     @Override
@@ -231,12 +253,31 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
     private void transferFluid() {
         final ItemStack bucketStack = this.getItems().get(0);
 
-        if (!bucketStack.isEmpty()) {
-            FluidActionResult result = FluidUtil.tryEmptyContainer(bucketStack, this.lavaTank, FluidType.BUCKET_VOLUME, null, true);
+        // Temporary single-slot handler seeded with the current stack
+        ResourceHandler<ItemResource> tempHandler = VanillaContainerWrapper.of(new SimpleContainer(bucketStack));
+        ItemAccess itemAccess = ItemAccess.forHandlerIndexStrict(tempHandler, 0);
+        ResourceHandler<FluidResource> itemFluidCapability = itemAccess.getCapability(Capabilities.Fluid.ITEM);
 
-            if (result.isSuccess()) {
+        if (itemFluidCapability == null) {
+            return;
+        }
+
+        FluidResource itemFluidResource = itemFluidCapability.getResource(0);
+
+        if (!bucketStack.isEmpty()) {
+            try (Transaction transaction = Transaction.openRoot()) {
+                int itemAmount = itemFluidCapability.getAmountAsInt(0);
+                int insertedAmount = this.lavaTankHandler.insert(itemFluidResource, itemAmount, transaction);
+
+                // Exit if insertion failed. Most likely when tank is already full.
+                if (insertedAmount != itemAmount) {
+                    return;
+                }
+
+                itemFluidCapability.extract(itemFluidResource, insertedAmount, transaction);
+
                 ItemStack outputSlotStack = this.getItems().get(1);
-                ItemStack resultStack = result.getResult();
+                ItemStack resultStack = tempHandler.getResource(0).toStack();
 
                 if (ItemStack.isSameItem(resultStack, outputSlotStack) && resultStack.getMaxStackSize() > 1 && outputSlotStack.getCount() <= outputSlotStack.getMaxStackSize() - resultStack.getCount()) {
                     outputSlotStack.grow(resultStack.getCount());
@@ -246,24 +287,31 @@ public class LavaGeneratorBlockEntity extends AbstractMachineBlockEntity {
 
                     bucketStack.shrink(1);
                 }
+
+                transaction.commit();
             }
         }
     }
 
     private boolean hasFuel() {
-        return this.lavaTank.getFluidAmount() >= MB_PER_USE;
+        return this.lavaTankHandler.getAmountAsInt(0) >= MB_PER_USE;
     }
 
     private boolean consumeFuel() {
-        FluidStack fluid = this.lavaTank.drain(MB_PER_USE, IFluidHandler.FluidAction.EXECUTE);
+        try (Transaction transaction = Transaction.openRoot()) {
+            FluidResource resource = this.lavaTankHandler.getResource(0);
+            int extractedAmount = this.lavaTankHandler.extract(resource, MB_PER_USE, transaction);
 
-        this.burnTime = this.calcBurnTime(TICKS_PER_MB * fluid.getAmount());
-        this.burnTimeTotal = LavaGeneratorBlockEntity.TICKS_PER_MB * LavaGeneratorBlockEntity.MB_PER_USE;
+            this.burnTime = this.calcBurnTime(TICKS_PER_MB * extractedAmount);
+            this.burnTimeTotal = LavaGeneratorBlockEntity.TICKS_PER_MB * LavaGeneratorBlockEntity.MB_PER_USE;
 
-        return true;
+            transaction.commit();
+
+            return true;
+        }
     }
 
-    public FluidTank getLavaTank() {
-        return this.lavaTank;
+    public FluidStacksResourceHandler getLavaTankHandler() {
+        return this.lavaTankHandler;
     }
 }

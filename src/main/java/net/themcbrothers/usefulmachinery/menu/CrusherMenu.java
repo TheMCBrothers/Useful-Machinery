@@ -15,6 +15,7 @@ import net.themcbrothers.usefulmachinery.block.entity.extension.UpgradeContainer
 import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipePropertySet;
 import net.themcbrothers.usefulmachinery.menu.slot.OutputSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class CrusherMenu extends AbstractMachineMenu {
     public CrusherMenu(int id, Inventory inventory, FriendlyByteBuf buffer) {
@@ -115,14 +116,20 @@ public class CrusherMenu extends AbstractMachineMenu {
         return stack;
     }
 
-    protected boolean canCrush(ItemStack stack) {
-        return this.acceptedInputs.test(stack);
+    @Override
+    public boolean isProcessing() {
+        return false;
     }
 
-    public int getProgressScaled(int width) {
+    @Override
+    public int getProgressScaled(int size) {
         int crustTime = this.fields.get(4);
         int totalCrushTime = this.fields.get(5);
 
-        return crustTime != 0 && totalCrushTime != 0 ? crustTime * width / totalCrushTime : 0;
+        return crustTime != 0 && totalCrushTime != 0 ? crustTime * size / totalCrushTime : 0;
+    }
+
+    protected boolean canCrush(ItemStack stack) {
+        return this.acceptedInputs.test(stack);
     }
 }
