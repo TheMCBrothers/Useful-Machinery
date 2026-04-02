@@ -2,7 +2,7 @@ package net.themcbrothers.usefulmachinery.compat.jei;
 
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.renderer.Rect2i;
 import net.themcbrothers.usefulmachinery.client.screen.AbstractMachineScreen;
 
@@ -16,9 +16,9 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractMachineSc
     private final int yPos;
     private final int width;
     private final int height;
-    private final RecipeType<?>[] recipeTypes;
+    private final IRecipeType<?>[] recipeTypes;
 
-    public MachineGuiHandler(int xPos, int yPos, int width, int height, RecipeType<?>... recipeTypes) {
+    public MachineGuiHandler(int xPos, int yPos, int width, int height, IRecipeType<?>... recipeTypes) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.width = width;

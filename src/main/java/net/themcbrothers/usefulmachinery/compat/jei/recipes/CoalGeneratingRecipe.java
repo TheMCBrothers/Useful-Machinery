@@ -2,6 +2,9 @@ package net.themcbrothers.usefulmachinery.compat.jei.recipes;
 
 import com.google.common.base.Preconditions;
 import mezz.jei.api.recipe.vanilla.IJeiFuelingRecipe;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -12,8 +15,8 @@ public class CoalGeneratingRecipe implements IJeiFuelingRecipe {
     private final List<ItemStack> inputs;
     private final int burnTime;
 
-    public CoalGeneratingRecipe(List<ItemStack> inputs, int burnTime) {
-        Preconditions.checkArgument(burnTime == 1600);
+    public CoalGeneratingRecipe(List<ItemStack> inputs, int burnTime, List<TagKey<Item>> tags) {
+        Preconditions.checkArgument(tags.contains(ItemTags.COALS));
 
         this.inputs = Objects.requireNonNull(inputs);
         this.burnTime = burnTime;

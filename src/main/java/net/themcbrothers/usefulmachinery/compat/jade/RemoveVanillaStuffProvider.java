@@ -1,6 +1,6 @@
 package net.themcbrothers.usefulmachinery.compat.jade;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.block.entity.AbstractMachineBlockEntity;
 import snownee.jade.api.BlockAccessor;
@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum RemoveVanillaStuffProvider implements IBlockComponentProvider {
     INSTANCE;
 
-    private static final ResourceLocation UID = UsefulMachinery.id("remove_vanilla_stuff");
+    private static final Identifier UID = UsefulMachinery.id("remove_vanilla_stuff");
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig pluginConfig) {
@@ -25,7 +25,7 @@ public enum RemoveVanillaStuffProvider implements IBlockComponentProvider {
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public Identifier getUid() {
         return UID;
     }
 

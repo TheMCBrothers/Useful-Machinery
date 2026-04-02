@@ -6,7 +6,9 @@ import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.*;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.client.screen.*;
 import net.themcbrothers.usefulmachinery.compat.jei.categories.CoalGeneratingCategory;
@@ -36,7 +38,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(TIER_UPGRADE.get(), (stack, uidContext) -> stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE).getSerializedName());
+        registration.registerSubtypeInterpreter(TIER_UPGRADE.get(), (stack, _) -> stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE).getSerializedName());
     }
 
     @Override
@@ -51,10 +53,17 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(MachineryJeiRecipeTypes.CRUSHING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING.get()));
-        registration.addRecipes(MachineryJeiRecipeTypes.COMPACTING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING.get()));
-        registration.addRecipes(MachineryJeiRecipeTypes.LAVA_GENERATING, LavaGeneratingRecipeMaker.getLavaGeneratingRecipes(registration.getIngredientManager()));
-        registration.addRecipes(MachineryJeiRecipeTypes.COAL_GENERATING, CoalGeneratingRecipeMaker.getCoalGeneratingRecipes(registration.getIngredientManager()));
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+            return;
+        }
+
+        RecipeManager recipeManager = server.getRecipeManager();
+
+        registration.addRecipes(MachineryJeiRecipeTypes.CRUSHING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING.get(), recipeManager));
+        registration.addRecipes(MachineryJeiRecipeTypes.COMPACTING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING.get(), recipeManager));
+        registration.addRecipes(MachineryJeiRecipeTypes.LAVA_GENERATING, LavaGeneratingRecipeMaker.getRecipes(registration.getIngredientManager()));
+        registration.addRecipes(MachineryJeiRecipeTypes.COAL_GENERATING, CoalGeneratingRecipeMaker.getRecipes(registration.getIngredientManager()));
     }
 
     @Override
@@ -69,11 +78,12 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(COAL_GENERATOR.get()), MachineryJeiRecipeTypes.COAL_GENERATING);
-        registration.addRecipeCatalyst(new ItemStack(CRUSHER.get()), MachineryJeiRecipeTypes.CRUSHING);
-        registration.addRecipeCatalyst(new ItemStack(ELECTRIC_SMELTER.get()), RecipeTypes.SMELTING, RecipeTypes.BLASTING);
-        registration.addRecipeCatalyst(new ItemStack(COMPACTOR.get()), MachineryJeiRecipeTypes.COMPACTING);
-        registration.addRecipeCatalyst(new ItemStack(LAVA_GENERATOR.get()), MachineryJeiRecipeTypes.LAVA_GENERATING);
+        registration.addCraftingStation(MachineryJeiRecipeTypes.COAL_GENERATING, COAL_GENERATOR.get());
+        registration.addCraftingStation(MachineryJeiRecipeTypes.CRUSHING, CRUSHER.get());
+        registration.addCraftingStation(RecipeTypes.SMELTING, ELECTRIC_SMELTER.get());
+        registration.addCraftingStation(RecipeTypes.BLASTING, ELECTRIC_SMELTER.get());
+        registration.addCraftingStation(MachineryJeiRecipeTypes.COMPACTING, COMPACTOR.get());
+        registration.addCraftingStation(MachineryJeiRecipeTypes.LAVA_GENERATING, LAVA_GENERATOR.get());
     }
 
     @Override

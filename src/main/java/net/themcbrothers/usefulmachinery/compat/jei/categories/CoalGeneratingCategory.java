@@ -8,12 +8,12 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.vanilla.IJeiFuelingRecipe;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
@@ -22,7 +22,7 @@ import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe> {
-    private static final ResourceLocation TEXTURES = UsefulMachinery.id("textures/gui/container/coal_generator.png");
+    private static final Identifier TEXTURE = UsefulMachinery.id("textures/gui/container/coal_generator.png");
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated energyBar;
@@ -30,21 +30,22 @@ public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
 
     public CoalGeneratingCategory(IGuiHelper helper) {
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineryBlocks.COAL_GENERATOR.get()));
-        this.background = helper.createDrawable(TEXTURES, 34, 16, 132, 52);
-        this.energyBar = helper.drawableBuilder(TEXTURES, 246, 0, 10, 50)
+        this.background = helper.createDrawable(TEXTURE, 34, 16, 132, 52);
+        this.energyBar = helper.drawableBuilder(TEXTURE, 246, 0, 10, 50)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.BOTTOM, false);
-        this.fire = helper.drawableBuilder(TEXTURES, 176, 0, 14, 14)
+        this.fire = helper.drawableBuilder(TEXTURE, 176, 0, 14, 14)
                 .buildAnimated(400, IDrawableAnimated.StartDirection.TOP, true);
     }
 
     @Override
-    public void draw(IJeiFuelingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(IJeiFuelingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+        this.background.draw(graphics);
         this.energyBar.draw(graphics, 121, 1);
         this.fire.draw(graphics, 20, 18);
     }
 
     @Override
-    public RecipeType<IJeiFuelingRecipe> getRecipeType() {
+    public IRecipeType<IJeiFuelingRecipe> getRecipeType() {
         return MachineryJeiRecipeTypes.COAL_GENERATING;
     }
 
@@ -54,8 +55,13 @@ public class CoalGeneratingCategory implements IRecipeCategory<IJeiFuelingRecipe
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return this.background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return this.background.getHeight();
     }
 
     @Override

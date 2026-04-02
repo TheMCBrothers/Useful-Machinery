@@ -66,6 +66,6 @@ public class CommonSetup {
         event.registerBlockEntity(Capabilities.Energy.BLOCK, CREATIVE_POWER_CELL.get(), (creativePowerCell, context) -> creativePowerCell.getEnergyStorage());
 
         // Fluid
-//        event.registerBlockEntity(Capabilities.Energy.BLOCK, LAVA_GENERATOR.get(), (generator, context) -> generator.getLavaTank());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, LAVA_GENERATOR.get(), (generator, context) -> generator.getLavaTankHandler());
     }
 }

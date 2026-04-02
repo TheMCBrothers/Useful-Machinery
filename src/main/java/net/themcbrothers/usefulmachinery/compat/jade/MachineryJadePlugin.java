@@ -14,12 +14,12 @@ import snownee.jade.api.WailaPlugin;
 public class MachineryJadePlugin implements IWailaPlugin {
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(MachineProvider.INSTANCE, AbstractMachineBlockEntity.class);
+        registration.registerBlockDataProvider(MachineComponentProvider.INSTANCE, AbstractMachineBlockEntity.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(MachineProvider.INSTANCE, AbstractMachineBlock.class);
+        registration.registerBlockComponent(MachineComponentProvider.Client.INSTANCE, AbstractMachineBlock.class);
         registration.registerBlockComponent(RemoveVanillaStuffProvider.INSTANCE, AbstractMachineBlock.class);
     }
 }

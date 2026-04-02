@@ -8,28 +8,28 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.compat.jei.MachineryJeiRecipeTypes;
 import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import net.themcbrothers.usefulmachinery.recipe.CrushingRecipe;
 
-import java.util.Objects;
-
 import static net.themcbrothers.usefulmachinery.UsefulMachinery.TEXT_UTILS;
 
 public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRecipe>> {
     private static final Identifier TEXTURE = UsefulMachinery.id("textures/gui/container/crusher.png");
-
-    private final IDrawable icon, background;
-    private final IDrawableAnimated arrow, energyBar;
+    private final IDrawable background;
+    private final IDrawable icon;
+    private final IDrawableAnimated arrow;
+    private final IDrawableAnimated energyBar;
 
     public CrushingCategory(IGuiHelper helper) {
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineryBlocks.CRUSHER.get()));
@@ -40,6 +40,7 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
 
     @Override
     public void draw(RecipeHolder<CrushingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+        this.background.draw(graphics);
         this.arrow.draw(graphics, 24, 18);
         this.energyBar.draw(graphics, 121, 1);
 
@@ -47,7 +48,7 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
     }
 
     @Override
-    public RecipeType<RecipeHolder<CrushingRecipe>> getRecipeType() {
+    public IRecipeType<RecipeHolder<CrushingRecipe>> getRecipeType() {
         return MachineryJeiRecipeTypes.CRUSHING;
     }
 
@@ -60,7 +61,7 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
             Component text = Component.translatable(secondaryChanceInPercent + "%");
             Minecraft minecraft = Minecraft.getInstance();
 
-            graphics.drawString(minecraft.font, text, 84, 39, 0xFF808080, false);
+            graphics.text(minecraft.font, text, 84, 39, 0xFF808080, false);
         }
     }
 
@@ -70,8 +71,13 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return this.background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return this.background.getHeight();
     }
 
     @Override
@@ -81,8 +87,8 @@ public class CrushingCategory implements IRecipeCategory<RecipeHolder<CrushingRe
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CrushingRecipe> recipe, IFocusGroup focusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 19).addIngredients(recipe.value().getIngredients().get(0));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 8).addItemStack(recipe.value().getResultItem(Objects.requireNonNull(Minecraft.getInstance().level).registryAccess()));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 32).addItemStack(recipe.value().secondaryResult());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 19).add(recipe.value().ingredient());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 8).add(recipe.value().assemble(new SingleRecipeInput(ItemStack.EMPTY)));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 32).add(recipe.value().assembleSecondary());
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.themcbrothers.lib.crafting.CommonRecipe;
 import net.themcbrothers.usefulmachinery.block.entity.extension.Compactor;
+import net.themcbrothers.usefulmachinery.core.MachineryRecipeBookCategories;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeSerializers;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 import net.themcbrothers.usefulmachinery.machine.CompactorMode;
@@ -57,7 +58,7 @@ public record CompactingRecipe(
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return RecipeBookCategories.CRAFTING_MISC; // TODO check how to support custom recipe
+        return MachineryRecipeBookCategories.COMPACTING.get();
     }
 
     @Override

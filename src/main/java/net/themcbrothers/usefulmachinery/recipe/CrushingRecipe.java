@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.themcbrothers.lib.crafting.CommonRecipe;
+import net.themcbrothers.usefulmachinery.core.MachineryRecipeBookCategories;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeSerializers;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 
@@ -60,7 +61,7 @@ public record CrushingRecipe(
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return RecipeBookCategories.CRAFTING_MISC; // TODO check how to support custom recipe
+        return MachineryRecipeBookCategories.CRUSHING.get();
     }
 
     @Override
