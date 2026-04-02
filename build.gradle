@@ -55,7 +55,7 @@ neoForge {
         clientData {
             type = 'clientData'
 
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath(), '--existing-mod', 'usefulfoundation'
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
     }
 
@@ -82,6 +82,7 @@ dependencies {
     runtimeOnly("mezz.jei:jei-$minecraft_version-neoforge:$jei_version")
 
     // TOP
+    // TODO: Implement after version release for 26.1
     // compileOnly("mcjty.theoneprobe:theoneprobe:$top_version:api")
     // runtimeOnly("mcjty.theoneprobe:theoneprobe:$top_version")
 
@@ -218,5 +219,5 @@ idea {
 }
 
 compileJava {
-    exclude("net/themcbrothers/**/compat/**")
+    exclude("net/themcbrothers/**/compat/top")
 }
