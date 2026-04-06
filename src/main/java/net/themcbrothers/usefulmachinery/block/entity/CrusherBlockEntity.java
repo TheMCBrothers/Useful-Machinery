@@ -297,7 +297,7 @@ public class CrusherBlockEntity extends AbstractMachineBlockEntity {
             float secondaryChance = recipe.secondaryChance();
 
             // Checking if machine not in precision mode
-            if (this.precisionAdditionalChance != 1) {
+            if (this.precisionAdditionalChance != 1 || recipe.secondaryResult().isEmpty()) {
                 if (primaryOutputSlot.isEmpty()) {
                     this.getItems().set(1, primaryResultStack.copy());
 

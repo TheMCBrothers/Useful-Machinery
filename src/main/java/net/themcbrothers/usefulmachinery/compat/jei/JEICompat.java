@@ -22,6 +22,7 @@ import net.themcbrothers.usefulmachinery.core.MachineryMenus;
 import net.themcbrothers.usefulmachinery.core.MachineryRecipeTypes;
 import net.themcbrothers.usefulmachinery.machine.MachineTier;
 import net.themcbrothers.usefulmachinery.menu.*;
+import net.themcbrothers.usefulmachinery.util.RecipeHelper;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlocks.*;
 import static net.themcbrothers.usefulmachinery.core.MachineryItems.TIER_UPGRADE;
@@ -53,12 +54,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server == null) {
-            return;
-        }
-
-        RecipeManager recipeManager = server.getRecipeManager();
+        RecipeManager recipeManager = RecipeHelper.getRecipeManager();
 
         registration.addRecipes(MachineryJeiRecipeTypes.CRUSHING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.CRUSHING.get(), recipeManager));
         registration.addRecipes(MachineryJeiRecipeTypes.COMPACTING, UsefulMachineryRecipeValidator.getRecipes(MachineryRecipeTypes.COMPACTING.get(), recipeManager));

@@ -21,9 +21,7 @@ public class RecipeHelper {
                 recipe -> recipe instanceof CrushingRecipe crushingRecipe ? Optional.of(crushingRecipe.ingredient()) : Optional.empty());
         net.themcbrothers.lib.util.RecipeHelper.addPropertySet(MachineryRecipePropertySet.COMPACTOR_INPUT,
                 recipe -> recipe instanceof CompactingRecipe compactingRecipe ? Optional.of(compactingRecipe.sizedIngredient().ingredient()) : Optional.empty());
-
     }
-
 
     public static RecipeManager getRecipeManager() {
         return recipeManager;

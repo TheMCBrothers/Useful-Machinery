@@ -11,12 +11,14 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import net.themcbrothers.lib.util.Version;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
 import net.themcbrothers.usefulmachinery.core.Registration;
 import net.themcbrothers.usefulmachinery.network.MachineryPacketHandler;
+import net.themcbrothers.usefulmachinery.util.RecipeHelper;
 
 import static net.themcbrothers.usefulmachinery.core.MachineryBlockEntities.*;
 
@@ -29,6 +31,9 @@ public class CommonSetup {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::enqueueIMC);
         modEventBus.addListener(this::capabilities);
+
+        // NeoForge event
+        NeoForge.EVENT_BUS.register(new RecipeHelper());
 
         // Networking
         new MachineryPacketHandler(modEventBus, new Version(modContainer));
