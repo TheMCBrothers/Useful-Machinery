@@ -177,7 +177,7 @@ unifiedPublishing {
                 token = curseforgeToken
                 id = curse_project
                 changelog = changes
-                gameVersions.addAll 'Java 21'
+                gameVersions.addAll "Java ${java.toolchain.languageVersion.asInt()}"
 
                 relations {
                     depends "themcbroslib"
