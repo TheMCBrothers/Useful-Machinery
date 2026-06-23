@@ -29,19 +29,5 @@
   "stat.usefulmachinery.interact_with_compactor": "与压缩机交互",
   "stat.usefulmachinery.interact_with_crusher": "与粉碎机交互",
   "stat.usefulmachinery.interact_with_electric_smelter": "与电力熔炉交互",
-  "stat.usefulmachinery.interact_with_lava_generator": "与岩浆发电机交互",
-  "item.usefulmachinery.precision_upgrade": "",
-  "item.usefulmachinery.sustained_upgrade": "",
-  "jei.usefulmachinery.fuel": "",
-  "message.usefulmachinery.upgrade.applied.fail": "",
-  "message.usefulmachinery.upgrade.applied.success": "",
-  "config.jade.plugin_usefulmachinery.machine": "",
-  "item.usefulmachinery.tier_upgrade_basic": "",
-  "item.usefulmachinery.tier_upgrade_factory": "",
-  "tooltip.usefulmachinery.upgrade.header": "",
-  "item.usefulmachinery.tier_upgrade_overkill": "",
-  "item.usefulmachinery.tier_upgrade_reinforced": "",
-  "itemGroup.usefulmachinery.base": "",
-  "item.usefulmachinery.efficiency_upgrade": "",
-  "tooltip.usefulmachinery.upgrade.shift.header": ""
+  "stat.usefulmachinery.interact_with_lava_generator": "与岩浆发电机交互"
 }
