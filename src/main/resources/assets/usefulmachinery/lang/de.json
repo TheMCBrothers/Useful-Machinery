@@ -41,5 +41,6 @@
   "config.jade.plugin_usefulmachinery.machine": "",
   "stat.usefulmachinery.interact_with_lava_generator": "",
   "tooltip.usefulmachinery.upgrade.header": "",
-  "tooltip.usefulmachinery.upgrade.shift.header": ""
+  "tooltip.usefulmachinery.upgrade.shift.header": "",
+  "item.usefulmachinery.battery": "Batterie"
 }
