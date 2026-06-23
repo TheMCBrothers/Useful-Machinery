@@ -8,7 +8,7 @@ on:
       - '.github/**'
       - '**.md'
       - '**.txt'
-      - '**/assets/**/lang'
+      - '**/assets/**/lang/**'
   pull_request:
   workflow_dispatch:
 
