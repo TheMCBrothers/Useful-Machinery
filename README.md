@@ -1,7 +1,7 @@
 Useful Machinery
 ===
 [![Java-CI](https://github.com/TheMCBrothers/Useful-Machinery/actions/workflows/java_ci.yml/badge.svg?branch=26.1)](https://github.com/TheMCBrothers/Useful-Machinery/actions/workflows/java_ci.yml?query=branch:26.1)
-[![Translation status](https://translate.themcbrothers.net/widget/tmcb-mods/useful-machinery/svg-badge.svg)]([https://translate.themcbrothers.net/engage/tmcb-mods/](https://tmcb.me/translate/machinery))
+[![Translation status](https://translate.themcbrothers.net/widget/tmcb-mods/useful-machinery/svg-badge.svg)](https://tmcb.me/translate/machinery)
 
 Useful Machinery is a mod `by TheMCBrothers` developed for [NeoForge]
 
