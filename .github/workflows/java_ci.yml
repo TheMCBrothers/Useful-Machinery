@@ -9,12 +9,6 @@ on:
       - '**.md'
       - '**.txt'
       - '**/assets/**/lang/**'
-  pull_request:
-    paths-ignore:
-      - '.github/**'
-      - '**.md'
-      - '**.txt'
-      - '**/assets/**/lang/**'
   workflow_dispatch:
 
 permissions:
