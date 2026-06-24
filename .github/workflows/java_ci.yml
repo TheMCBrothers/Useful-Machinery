@@ -8,8 +8,13 @@ on:
       - '.github/**'
       - '**.md'
       - '**.txt'
-      - 'src/*/resources/assets/*/lang/**'
+      - '**/assets/**/lang/**'
   pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '**.md'
+      - '**.txt'
+      - '**/assets/**/lang/**'
   workflow_dispatch:
 
 permissions:
