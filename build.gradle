@@ -177,7 +177,7 @@ unifiedPublishing {
                 token = curseforgeToken
                 id = curse_project
                 changelog = changes
-                gameVersions.addAll "Java ${java.toolchain.languageVersion.asInt()}"
+                gameVersions.addAll "Java ${java.toolchain.languageVersion.map(JavaLanguageVersion::toString).getOrElse("N/A")}"
 
                 relations {
                     depends "themcbroslib"
