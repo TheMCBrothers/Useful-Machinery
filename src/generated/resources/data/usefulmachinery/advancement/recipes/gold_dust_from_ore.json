@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_diamond_ore": {
+    "has_gold_ore": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ores/diamond"
+            "items": "#c:ores/gold"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "usefulmachinery:raw_diamond_from_ore"
+        "recipe": "usefulmachinery:gold_dust_from_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_diamond_ore"
+      "has_gold_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_diamond_from_ore"
+      "usefulmachinery:gold_dust_from_ore"
     ]
   }
 }

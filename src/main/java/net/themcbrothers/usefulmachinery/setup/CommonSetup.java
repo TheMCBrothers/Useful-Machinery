@@ -3,19 +3,19 @@ package net.themcbrothers.usefulmachinery.setup;
 import net.minecraft.core.Holder;
 import net.minecraft.stats.Stats;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.transfer.energy.InfiniteEnergyHandler;
 import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import net.themcbrothers.lib.util.Version;
 import net.themcbrothers.usefulmachinery.UsefulMachinery;
+import net.themcbrothers.usefulmachinery.core.MachineryBlocks;
 import net.themcbrothers.usefulmachinery.core.Registration;
 import net.themcbrothers.usefulmachinery.network.MachineryPacketHandler;
 import net.themcbrothers.usefulmachinery.util.RecipeHelper;
@@ -63,14 +63,15 @@ public class CommonSetup {
         event.registerBlockEntity(Capabilities.Item.BLOCK, LAVA_GENERATOR.get(), (sidedContainer, side) -> side == null ? VanillaContainerWrapper.of(sidedContainer) : new WorldlyContainerWrapper(sidedContainer, side));
 
         // Energy
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, COAL_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, COMPACTOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, CRUSHER.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, ELECTRIC_SMELTER.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, LAVA_GENERATOR.get(), (machine, context) -> machine.getEnergyStorage());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, CREATIVE_POWER_CELL.get(), (creativePowerCell, context) -> creativePowerCell.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, COAL_GENERATOR.get(), (machine, _) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, COMPACTOR.get(), (machine, _) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, CRUSHER.get(), (machine, _) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ELECTRIC_SMELTER.get(), (machine, _) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, LAVA_GENERATOR.get(), (machine, _) -> machine.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, CREATIVE_POWER_CELL.get(), (creativePowerCell, _) -> creativePowerCell.getEnergyStorage());
+        event.registerItem(Capabilities.Energy.ITEM, (_, _) -> InfiniteEnergyHandler.INSTANCE, MachineryBlocks.CREATIVE_POWER_CELL.get());
 
         // Fluid
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, LAVA_GENERATOR.get(), (generator, context) -> generator.getLavaTankHandler());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, LAVA_GENERATOR.get(), (generator, _) -> generator.getLavaTankHandler());
     }
 }

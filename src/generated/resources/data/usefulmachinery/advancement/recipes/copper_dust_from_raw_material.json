@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_aluminum_ore": {
+    "has_copper_ore": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ores/aluminum"
+            "items": "#c:ores/copper"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "usefulmachinery:raw_aluminum_from_ore"
+        "recipe": "usefulmachinery:copper_dust_from_raw_material"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_aluminum_ore"
+      "has_copper_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_aluminum_from_ore"
+      "usefulmachinery:copper_dust_from_raw_material"
     ]
   }
 }

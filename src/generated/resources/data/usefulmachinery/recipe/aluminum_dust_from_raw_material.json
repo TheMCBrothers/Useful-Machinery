@@ -1,15 +1,11 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/gold",
+  "ingredient": "#c:raw_materials/aluminum",
   "primary": {
     "count": 2,
-    "id": "minecraft:raw_gold"
+    "id": "usefulfoundation:aluminum_dust"
   },
-  "secondary": {
-    "id": "minecraft:raw_copper"
-  },
-  "secondaryChance": 0.4,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

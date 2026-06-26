@@ -1,15 +1,11 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/lead",
+  "ingredient": "#c:raw_materials/platinum",
   "primary": {
     "count": 2,
-    "id": "usefulfoundation:raw_lead"
+    "id": "usefulfoundation:platinum_dust"
   },
-  "secondary": {
-    "id": "usefulfoundation:raw_silver"
-  },
-  "secondaryChance": 0.08,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

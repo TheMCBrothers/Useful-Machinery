@@ -1,0 +1,13 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": "#c:raw_materials/nickel",
+  "primary": {
+    "count": 2,
+    "id": "usefulfoundation:nickel_dust"
+  },
+  "supportedUpgrades": [
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
+  ]
+}

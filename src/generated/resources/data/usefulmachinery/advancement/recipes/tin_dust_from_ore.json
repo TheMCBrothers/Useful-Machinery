@@ -1,32 +1,32 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_nickel_ore": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "usefulmachinery:tin_dust_from_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tin_ore": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ores/nickel"
+            "items": "#c:ores/tin"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "usefulmachinery:raw_nickel_from_ore"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_nickel_ore"
+      "has_tin_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_nickel_from_ore"
+      "usefulmachinery:tin_dust_from_ore"
     ]
   }
 }

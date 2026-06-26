@@ -1,6 +1,11 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "usefulmachinery:block/lava_generator"
+    "model": "usefulmachinery:block/lava_generator",
+    "tints": [
+      {
+        "type": "usefulmachinery:tier"
+      }
+    ]
   }
 }

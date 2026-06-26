@@ -34,8 +34,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractMachineSc
             int height = 16 + slots * 18;
             int width = 34;
 
-            return List.of(new Rect2i(menuScreen.getGuiLeft() + 179, menuScreen.getGuiTop(), width, height));
-
+            return List.of(new Rect2i(menuScreen.getLeftPos() + 179, menuScreen.getTopPos(), width, height));
         }
 
         return Collections.emptyList();

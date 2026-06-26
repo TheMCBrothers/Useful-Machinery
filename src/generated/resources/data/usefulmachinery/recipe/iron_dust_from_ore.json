@@ -1,0 +1,17 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": "#c:ores/iron",
+  "primary": {
+    "count": 3,
+    "id": "usefulfoundation:iron_dust"
+  },
+  "secondary": {
+    "id": "usefulfoundation:nickel_dust"
+  },
+  "secondaryChance": 0.2,
+  "supportedUpgrades": [
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
+  ]
+}

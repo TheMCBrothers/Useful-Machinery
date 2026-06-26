@@ -1,15 +1,11 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/iron",
+  "ingredient": "#c:raw_materials/tin",
   "primary": {
     "count": 2,
-    "id": "minecraft:raw_iron"
+    "id": "usefulfoundation:tin_dust"
   },
-  "secondary": {
-    "id": "usefulfoundation:raw_nickel"
-  },
-  "secondaryChance": 0.1,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

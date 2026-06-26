@@ -13,7 +13,7 @@ public final class MachineryItems {
     public static final DeferredItem<Item> COMPACTOR_KIT = ITEMS.registerSimpleItem("compactor_kit");
 
     // Special items
-    public static final DeferredItem<BatteryItem> BATTERY = ITEMS.registerItem("battery", BatteryItem::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<BatteryItem> BATTERY = ITEMS.registerItem("battery",  BatteryItem::new, props -> props.stacksTo(1));
     public static final DeferredItem<TierUpgradeItem> TIER_UPGRADE = ITEMS.registerItem("tier_upgrade", props -> new TierUpgradeItem(props, MachineryBlocks.COAL_GENERATOR.get(), MachineryBlocks.COMPACTOR.get(), MachineryBlocks.CRUSHER.get(), MachineryBlocks.ELECTRIC_SMELTER.get(), MachineryBlocks.LAVA_GENERATOR.get()));
     public static final DeferredItem<UpgradeItem> EFFICIENCY_UPGRADE = ITEMS.registerItem("efficiency_upgrade", props -> new UpgradeItem(props, MachineryBlocks.CRUSHER.get()));
     public static final DeferredItem<UpgradeItem> PRECISION_UPGRADE = ITEMS.registerItem("precision_upgrade", props -> new UpgradeItem(props, MachineryBlocks.CRUSHER.get()));

@@ -1,0 +1,13 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": "#c:ores/uranium",
+  "primary": {
+    "count": 3,
+    "id": "usefulfoundation:uranium_dust"
+  },
+  "supportedUpgrades": [
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
+  ]
+}

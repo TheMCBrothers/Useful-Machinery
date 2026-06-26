@@ -1,10 +1,10 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/platinum",
+  "ingredient": "#c:ores/nickel",
   "primary": {
-    "count": 2,
-    "id": "usefulfoundation:raw_platinum"
+    "count": 3,
+    "id": "usefulfoundation:nickel_dust"
   },
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",

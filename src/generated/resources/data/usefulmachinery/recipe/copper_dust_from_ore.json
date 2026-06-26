@@ -1,0 +1,17 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": "#c:ores/copper",
+  "primary": {
+    "count": 3,
+    "id": "usefulfoundation:copper_dust"
+  },
+  "secondary": {
+    "id": "usefulfoundation:gold_dust"
+  },
+  "secondaryChance": 0.1,
+  "supportedUpgrades": [
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
+  ]
+}

@@ -3,15 +3,15 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "usefulmachinery:raw_tin_from_ore"
+        "recipe": "usefulmachinery:uranium_dust_from_raw_material"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
-    "has_tin_ore": {
+    "has_uranium_ore": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ores/tin"
+            "items": "#c:ores/uranium"
           }
         ]
       },
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_tin_ore"
+      "has_uranium_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_tin_from_ore"
+      "usefulmachinery:uranium_dust_from_raw_material"
     ]
   }
 }

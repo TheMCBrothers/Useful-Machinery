@@ -1,11 +1,15 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/tin",
+  "ingredient": "#c:raw_materials/silver",
   "primary": {
     "count": 2,
-    "id": "usefulfoundation:raw_tin"
+    "id": "usefulfoundation:silver_dust"
   },
+  "secondary": {
+    "id": "usefulfoundation:lead_dust"
+  },
+  "secondaryChance": 0.09,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

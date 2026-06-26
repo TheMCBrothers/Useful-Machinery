@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "usefulmachinery:raw_uranium_from_ore"
+        "recipe": "usefulmachinery:uranium_dust_from_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_uranium_from_ore"
+      "usefulmachinery:uranium_dust_from_ore"
     ]
   }
 }

@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -41,7 +40,7 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
 
         this.addSlot(new FluidItemSlot(blockEntity, 0, 26, 17, stack -> stack.getFluid().isSame(Fluids.LAVA)));
         this.addSlot(new OutputSlot(blockEntity, 1, 26, 51));
-        this.addSlot(new EnergySlot(blockEntity, 2, 134, 33));
+        this.addSlot(new EnergySlot(blockEntity, 2, 134, 33, EnergySlot.ItemMode.RECEIVE));
 
         this.addUpgradeSlots(upgradeContainer);
         this.addPlayerSlots(inventory);
@@ -71,23 +70,21 @@ public class LavaGeneratorMenu extends AbstractMachineMenu {
             FluidStacksResourceHandler lavaTankHandler = ((LavaGeneratorBlockEntity) this.blockEntity).getLavaTankHandler();
             ItemAccess itemAccess = ItemAccess.forStack(slotStack);
             ResourceHandler<FluidResource> itemFluidHandler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
-            boolean isSuccess;
-
-            if (itemFluidHandler == null) {
-                return ItemStack.EMPTY;
-            }
-
-            FluidResource itemFluidResource = itemFluidHandler.getResource(0);
+            boolean isSuccess = false;
 
             // Checking if shift clicking stack out of inventory into the machine
             if (index >= invSlotStart) {
-                try (Transaction transaction = Transaction.openRoot()) {
-                    int itemAmount = itemFluidHandler.getAmountAsInt(0);
-                    int amount = lavaTankHandler.insert(itemFluidResource, itemAmount, transaction);
+                if (itemFluidHandler != null) {
+                    FluidResource itemFluidResource = itemFluidHandler.getResource(0);
 
-                    isSuccess = amount > 0;
-                } catch (Exception e) {
-                    return ItemStack.EMPTY;
+                    if (!itemFluidResource.isEmpty()) {
+                        try (Transaction transaction = Transaction.openRoot()) {
+                            int itemAmount = itemFluidHandler.getAmountAsInt(0);
+                            int amount = lavaTankHandler.insert(itemFluidResource, itemAmount, transaction);
+
+                            isSuccess = amount > 0;
+                        }
+                    }
                 }
 
                 if (isSuccess) {

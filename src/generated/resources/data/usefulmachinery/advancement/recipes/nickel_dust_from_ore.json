@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_lead_ore": {
+    "has_nickel_ore": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ores/lead"
+            "items": "#c:ores/nickel"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "usefulmachinery:raw_lead_from_ore"
+        "recipe": "usefulmachinery:nickel_dust_from_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_lead_ore"
+      "has_nickel_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "usefulmachinery:raw_lead_from_ore"
+      "usefulmachinery:nickel_dust_from_ore"
     ]
   }
 }

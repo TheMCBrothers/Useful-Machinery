@@ -1,0 +1,17 @@
+{
+  "type": "usefulmachinery:crushing",
+  "crushTime": 200,
+  "ingredient": "#c:ores/lead",
+  "primary": {
+    "count": 3,
+    "id": "usefulfoundation:lead_dust"
+  },
+  "secondary": {
+    "id": "usefulfoundation:silver_dust"
+  },
+  "secondaryChance": 0.16,
+  "supportedUpgrades": [
+    "usefulmachinery:efficiency_upgrade",
+    "usefulmachinery:precision_upgrade"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "usefulmachinery:tin_dust_from_raw_material"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tin_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ores/tin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tin_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "usefulmachinery:tin_dust_from_raw_material"
+    ]
+  }
+}

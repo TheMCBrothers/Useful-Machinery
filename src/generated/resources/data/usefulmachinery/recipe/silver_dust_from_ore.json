@@ -1,11 +1,15 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/nickel",
+  "ingredient": "#c:ores/silver",
   "primary": {
-    "count": 2,
-    "id": "usefulfoundation:raw_nickel"
+    "count": 3,
+    "id": "usefulfoundation:silver_dust"
   },
+  "secondary": {
+    "id": "usefulfoundation:lead_dust"
+  },
+  "secondaryChance": 0.18,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

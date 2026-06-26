@@ -1,11 +1,15 @@
 {
   "type": "usefulmachinery:crushing",
   "crushTime": 200,
-  "ingredient": "#c:ores/uranium",
+  "ingredient": "#c:raw_materials/gold",
   "primary": {
     "count": 2,
-    "id": "usefulfoundation:raw_uranium"
+    "id": "usefulfoundation:gold_dust"
   },
+  "secondary": {
+    "id": "usefulfoundation:copper_dust"
+  },
+  "secondaryChance": 0.4,
   "supportedUpgrades": [
     "usefulmachinery:efficiency_upgrade",
     "usefulmachinery:precision_upgrade"

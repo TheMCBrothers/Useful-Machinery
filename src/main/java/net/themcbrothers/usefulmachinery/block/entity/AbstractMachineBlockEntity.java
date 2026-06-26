@@ -231,6 +231,10 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
         this.getItems().clear();
     }
 
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+    }
+
     public abstract int[] getInputSlots();
 
     public abstract int[] getOutputSlots();
@@ -276,13 +280,20 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
 
         if (!energyStack.isEmpty()) {
             EnergyUtils.getEnergy(energyStack).ifPresent(energyHandler -> {
+                int maxReceive;
+
                 try (Transaction transaction = Transaction.openRoot()) {
-                    int maxReceive = this.energyStorage.extract(Integer.MAX_VALUE, transaction);
+                    try (Transaction simulationTransaction = Transaction.open(transaction)) {
+                        maxReceive = this.energyStorage.extract(Integer.MAX_VALUE, simulationTransaction);
+                    }
+
                     int accepted = energyHandler.insert(maxReceive, transaction);
 
                     this.energyStorage.extract(accepted, transaction);
 
-                    transaction.commit();
+                    if (accepted > 0) {
+                        transaction.commit();
+                    }
                 }
             });
         }
@@ -293,13 +304,20 @@ public abstract class AbstractMachineBlockEntity extends BaseContainerBlockEntit
 
         if (!energyStack.isEmpty()) {
             EnergyUtils.getEnergy(energyStack).ifPresent(energyHandler -> {
+                int maxExtract;
+
                 try (Transaction transaction = Transaction.openRoot()) {
-                    int maxExtract = this.energyStorage.insert(Integer.MAX_VALUE, transaction);
+                    try (Transaction simulationTransaction = Transaction.open(transaction)) {
+                        maxExtract = this.energyStorage.insert(Integer.MAX_VALUE, simulationTransaction);
+                    }
+
                     int accepted = energyHandler.extract(maxExtract, transaction);
 
                     this.energyStorage.insert(accepted, transaction);
 
-                    transaction.commit();
+                    if (accepted > 0) {
+                        transaction.commit();
+                    }
                 }
             });
         }

@@ -1,6 +1,11 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "usefulmachinery:block/compactor"
+    "model": "usefulmachinery:block/compactor",
+    "tints": [
+      {
+        "type": "usefulmachinery:tier"
+      }
+    ]
   }
 }

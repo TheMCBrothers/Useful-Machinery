@@ -1,6 +1,11 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "usefulmachinery:block/crusher"
+    "model": "usefulmachinery:block/crusher",
+    "tints": [
+      {
+        "type": "usefulmachinery:tier"
+      }
+    ]
   }
 }

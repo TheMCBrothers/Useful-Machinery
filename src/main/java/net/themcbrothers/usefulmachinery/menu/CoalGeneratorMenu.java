@@ -27,7 +27,7 @@ public class CoalGeneratorMenu extends AbstractMachineMenu {
         super(MachineryMenus.COAL_GENERATOR.get(), id, blockEntity, fields, upgradeContainer.getContainerSize(), inventory);
 
         this.addSlot(new Slot(blockEntity, 0, 80, 33));
-        this.addSlot(new EnergySlot(blockEntity, 1, 134, 33));
+        this.addSlot(new EnergySlot(blockEntity, 1, 134, 33, EnergySlot.ItemMode.RECEIVE));
 
         this.addUpgradeSlots(upgradeContainer);
         this.addPlayerSlots(inventory);

@@ -100,21 +100,33 @@ public class MachineryRecipeProvider extends RecipeProvider {
         CompactingRecipeBuilder.compacting(TIN_PLATE, new SizedIngredient(this.tag(INGOTS_TIN), 1), 200, CompactorMode.PLATE).unlockedBy("has_tin", has(INGOTS_TIN)).save(this.output, key("tin_plate_from_compacting"));
         CompactingRecipeBuilder.compacting(URANIUM_PLATE, new SizedIngredient(this.tag(INGOTS_URANIUM), 1), 200, CompactorMode.PLATE).unlockedBy("has_uranium", has(INGOTS_URANIUM)).save(this.output, key("uranium_plate_from_compacting"));
 
-        // Raw Materials
+        // Dusts from ores
         Ingredient upgrades = Ingredient.of(EFFICIENCY_UPGRADE, PRECISION_UPGRADE);
-        CrushingRecipeBuilder.crushing(RAW_ALUMINUM, 2, this.tag(ORES_ALUMINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_aluminum_ore", has(ORES_ALUMINUM)).save(this.output, key("raw_aluminum_from_ore"));
-        CrushingRecipeBuilder.crushing(Items.RAW_COPPER, 2, this.tag(Tags.Items.ORES_COPPER), 200).supportedUpgrades(upgrades).secondary(Items.RAW_GOLD, 0.05F).unlockedBy("has_copper_ore", has(Tags.Items.ORES_COPPER)).save(this.output, key("raw_copper_from_ore"));
-        CrushingRecipeBuilder.crushing(Items.DIAMOND, 2, this.tag(Tags.Items.ORES_DIAMOND), 200).supportedUpgrades(upgrades).unlockedBy("has_diamond_ore", has(Tags.Items.ORES_DIAMOND)).save(this.output, key("raw_diamond_from_ore"));
-        CrushingRecipeBuilder.crushing(Items.RAW_GOLD, 2, this.tag(Tags.Items.ORES_GOLD), 200).supportedUpgrades(upgrades).secondary(Items.RAW_COPPER, 0.4F).unlockedBy("has_gold_ore", has(Tags.Items.ORES_GOLD)).save(this.output, key("raw_gold_from_ore"));
-        CrushingRecipeBuilder.crushing(Items.RAW_IRON, 2, this.tag(Tags.Items.ORES_IRON), 200).supportedUpgrades(upgrades).secondary(RAW_NICKEL, 0.1F).unlockedBy("has_iron_ore", has(Tags.Items.ORES_IRON)).save(this.output, key("raw_iron_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_LEAD, 2, this.tag(ORES_LEAD), 200).supportedUpgrades(upgrades).secondary(RAW_SILVER, 0.08F).unlockedBy("has_lead_ore", has(ORES_LEAD)).save(this.output, key("raw_lead_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_NICKEL, 2, this.tag(ORES_NICKEL), 200).supportedUpgrades(upgrades).unlockedBy("has_nickel_ore", has(ORES_NICKEL)).save(this.output, key("raw_nickel_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_PLATINUM, 2, this.tag(ORES_PLATINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_platinum_ore", has(ORES_PLATINUM)).save(this.output, key("raw_platinum_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_SILVER, 2, this.tag(ORES_SILVER), 200).supportedUpgrades(upgrades).secondary(RAW_LEAD, 0.09F).unlockedBy("has_silver_ore", has(ORES_SILVER)).save(this.output, key("raw_silver_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_TIN, 2, this.tag(ORES_TIN), 200).supportedUpgrades(upgrades).unlockedBy("has_tin_ore", has(ORES_TIN)).save(this.output, key("raw_tin_from_ore"));
-        CrushingRecipeBuilder.crushing(RAW_URANIUM, 2, this.tag(ORES_URANIUM), 200).supportedUpgrades(upgrades).unlockedBy("has_uranium_ore", has(ORES_URANIUM)).save(this.output, key("raw_uranium_from_ore"));
+        CrushingRecipeBuilder.crushing(ALUMINUM_DUST, 3, this.tag(ORES_ALUMINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_aluminum_ore", has(ORES_ALUMINUM)).save(this.output, key("aluminum_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(COPPER_DUST, 3, this.tag(Tags.Items.ORES_COPPER), 200).supportedUpgrades(upgrades).secondary(GOLD_DUST, 0.1F).unlockedBy("has_copper_ore", has(Tags.Items.ORES_COPPER)).save(this.output, key("copper_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(DIAMOND_DUST, 3, this.tag(Tags.Items.ORES_DIAMOND), 200).supportedUpgrades(upgrades).unlockedBy("has_diamond_ore", has(Tags.Items.ORES_DIAMOND)).save(this.output, key("diamond_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(GOLD_DUST, 3, this.tag(Tags.Items.ORES_GOLD), 200).supportedUpgrades(upgrades).secondary(COPPER_DUST, 0.8F).unlockedBy("has_gold_ore", has(Tags.Items.ORES_GOLD)).save(this.output, key("gold_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(IRON_DUST, 3, this.tag(Tags.Items.ORES_IRON), 200).supportedUpgrades(upgrades).secondary(NICKEL_DUST, 0.2F).unlockedBy("has_iron_ore", has(Tags.Items.ORES_IRON)).save(this.output, key("iron_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(LEAD_DUST, 3, this.tag(ORES_LEAD), 200).supportedUpgrades(upgrades).secondary(SILVER_DUST, 0.16F).unlockedBy("has_lead_ore", has(ORES_LEAD)).save(this.output, key("lead_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(NICKEL_DUST, 3, this.tag(ORES_NICKEL), 200).supportedUpgrades(upgrades).unlockedBy("has_nickel_ore", has(ORES_NICKEL)).save(this.output, key("nickel_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(PLATINUM_DUST, 3, this.tag(ORES_PLATINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_platinum_ore", has(ORES_PLATINUM)).save(this.output, key("platinum_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(SILVER_DUST, 3, this.tag(ORES_SILVER), 200).supportedUpgrades(upgrades).secondary(LEAD_DUST, 0.18F).unlockedBy("has_silver_ore", has(ORES_SILVER)).save(this.output, key("silver_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(TIN_DUST, 3, this.tag(ORES_TIN), 200).supportedUpgrades(upgrades).unlockedBy("has_tin_ore", has(ORES_TIN)).save(this.output, key("tin_dust_from_ore"));
+        CrushingRecipeBuilder.crushing(URANIUM_DUST, 3, this.tag(ORES_URANIUM), 200).supportedUpgrades(upgrades).unlockedBy("has_uranium_ore", has(ORES_URANIUM)).save(this.output, key("uranium_dust_from_ore"));
 
-        // Dusts
+        // Dusts from raw materials
+        CrushingRecipeBuilder.crushing(ALUMINUM_DUST, 2, this.tag(RAW_MATERIALS_ALUMINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_aluminum_ore", has(ORES_ALUMINUM)).save(this.output, key("aluminum_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(COPPER_DUST, 2, this.tag(Tags.Items.RAW_MATERIALS_COPPER), 200).supportedUpgrades(upgrades).secondary(GOLD_DUST, 0.05F).unlockedBy("has_copper_ore", has(Tags.Items.ORES_COPPER)).save(this.output, key("copper_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(GOLD_DUST, 2, this.tag(Tags.Items.RAW_MATERIALS_GOLD), 200).supportedUpgrades(upgrades).secondary(COPPER_DUST, 0.4F).unlockedBy("has_gold_ore", has(Tags.Items.ORES_GOLD)).save(this.output, key("gold_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(IRON_DUST, 2, this.tag(Tags.Items.RAW_MATERIALS_IRON), 200).supportedUpgrades(upgrades).secondary(NICKEL_DUST, 0.1F).unlockedBy("has_iron_ore", has(Tags.Items.ORES_IRON)).save(this.output, key("iron_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(LEAD_DUST, 2, this.tag(RAW_MATERIALS_LEAD), 200).supportedUpgrades(upgrades).secondary(SILVER_DUST, 0.08F).unlockedBy("has_lead_ore", has(ORES_LEAD)).save(this.output, key("lead_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(NICKEL_DUST, 2, this.tag(RAW_MATERIALS_NICKEL), 200).supportedUpgrades(upgrades).unlockedBy("has_nickel_ore", has(ORES_NICKEL)).save(this.output, key("nickel_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(PLATINUM_DUST, 2, this.tag(RAW_MATERIALS_PLATINUM), 200).supportedUpgrades(upgrades).unlockedBy("has_platinum_ore", has(ORES_PLATINUM)).save(this.output, key("platinum_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(SILVER_DUST, 2, this.tag(RAW_MATERIALS_SILVER), 200).supportedUpgrades(upgrades).secondary(LEAD_DUST, 0.09F).unlockedBy("has_silver_ore", has(ORES_SILVER)).save(this.output, key("silver_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(TIN_DUST, 2, this.tag(RAW_MATERIALS_TIN), 200).supportedUpgrades(upgrades).unlockedBy("has_tin_ore", has(ORES_TIN)).save(this.output, key("tin_dust_from_raw_material"));
+        CrushingRecipeBuilder.crushing(URANIUM_DUST, 2, this.tag(RAW_MATERIALS_URANIUM), 200).supportedUpgrades(upgrades).unlockedBy("has_uranium_ore", has(ORES_URANIUM)).save(this.output, key("uranium_dust_from_raw_material"));
+
+        // Dusts from ingots
         CrushingRecipeBuilder.crushing(ALUMINUM_DUST, 1, this.tag(INGOTS_ALUMINUM), 200).unlockedBy("has_aluminum", has(INGOTS_ALUMINUM)).save(this.output, key("aluminum_dust_from_crushing"));
         CrushingRecipeBuilder.crushing(BRONZE_DUST, 1, this.tag(INGOTS_BRONZE), 200).unlockedBy("has_bronze", has(INGOTS_BRONZE)).save(this.output, key("bronze_dust_from_crushing"));
         CrushingRecipeBuilder.crushing(COPPER_DUST, 1, this.tag(Tags.Items.INGOTS_COPPER), 200).unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER)).save(this.output, key("copper_dust_from_crushing"));

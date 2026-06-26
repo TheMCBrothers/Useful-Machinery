@@ -7,7 +7,7 @@ plugins {
     id 'me.shedaniel.unified-publishing' version '0.1.+'
 }
 
-version = "$minecraft_version-$mod_version"
+version = "$minecraft_version_displayed-$mod_version"
 group = mod_group_id
 
 repositories {
@@ -161,7 +161,7 @@ publishing {
 
 unifiedPublishing {
     project {
-        displayName = "[$minecraft_version] v$mod_version"
+        displayName = "[$minecraft_version_displayed] v$mod_version"
         releaseType = artifact_type
         gameLoaders = ['neoforge']
         gameVersions.addAll(minecraft_supported_versions.split(","))

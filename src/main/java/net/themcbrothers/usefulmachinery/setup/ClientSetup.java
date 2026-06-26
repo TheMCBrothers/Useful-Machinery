@@ -34,13 +34,6 @@ public class ClientSetup {
 
     private void itemColors(final RegisterColorHandlersEvent.ItemTintSources event) {
         event.register(id("tier"), TierItemTintSource.MAP_CODEC);
-//        event.register((stack, tintIndex) -> {
-//            MachineTier tier = stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE);
-//
-//            return tintIndex == 1 ? tier.getColor() : -1;
-//        }, MachineryItems.TIER_UPGRADE.get());
-//
-//        event.register((stack, tintIndex) -> stack.getOrDefault(MachineryDataComponentTypes.TIER, MachineTier.SIMPLE).getColor(), COAL_GENERATOR, COMPACTOR, CRUSHER, ELECTRIC_SMELTER, LAVA_GENERATOR);
     }
 
     private void blockColors(final RegisterColorHandlersEvent.BlockTintSources event) {
